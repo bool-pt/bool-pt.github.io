@@ -1,0 +1,62 @@
+{
+	"textures": [
+		{
+			"image": "bull.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 118,
+				"h": 36
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "bull-9.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 64,
+						"h": 64
+					},
+					"spriteSourceSize": {
+						"x": 3,
+						"y": 29,
+						"w": 58,
+						"h": 34
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 58,
+						"h": 34
+					}
+				},
+				{
+					"filename": "bull-10.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 64,
+						"h": 64
+					},
+					"spriteSourceSize": {
+						"x": 3,
+						"y": 30,
+						"w": 56,
+						"h": 33
+					},
+					"frame": {
+						"x": 61,
+						"y": 1,
+						"w": 56,
+						"h": 33
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:6de30e4201540704e00419b5cce61806:f91bcb7457019b98d69d9a1c82efad44:3e197d37bfcc0deeba0c594521a42873$"
+	}
+}
