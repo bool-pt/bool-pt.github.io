@@ -12,7 +12,7 @@ function createPathStrings(filename) {
     const sides = ['ft', 'bk', 'up', 'dn', 'rt', 'lf'];
     const pathStings = sides.map(side => {
     //return baseFilename + '_' + side + fileType;
-    return '/img/arena' + '_' + side + fileType;
+    return 'img/arena' + '_' + side + fileType;
   });
 
   return pathStings;
