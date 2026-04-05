@@ -1,0 +1,66 @@
+---
+interface Props {
+  hoverEffect?: 'lift' | 'glow' | 'none';
+  colorScheme?: 'light' | 'dark';
+  tag?: 'article' | 'div';
+  class?: string;
+}
+
+const {
+  hoverEffect = 'lift',
+  colorScheme = 'light',
+  tag: Tag = 'article',
+  class: className,
+} = Astro.props;
+---
+
+<Tag
+  class:list={['hover-card', `hover-card--${hoverEffect}`, `hover-card--${colorScheme}`, className]}
+>
+  <slot />
+</Tag>
+
+<style>
+  .hover-card {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hover-card--light {
+    border: 1px solid var(--color-border);
+    background-color: var(--color-background);
+  }
+
+  .hover-card--dark {
+    border: 1px solid var(--color-border-on-dark);
+    background-color: var(--white-3);
+  }
+
+  /* Lift: translateY + elevated shadow */
+  .hover-card--lift {
+    transition:
+      transform 200ms,
+      box-shadow 200ms;
+  }
+
+  .hover-card--lift:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-elevated);
+  }
+
+  /* Glow: shadow only, no movement */
+  .hover-card--glow {
+    transition: box-shadow 200ms;
+  }
+
+  .hover-card--glow:hover {
+    box-shadow: var(--shadow-hover);
+  }
+
+  /* None: no hover effect */
+  .hover-card--none {
+    transition: none;
+  }
+</style>

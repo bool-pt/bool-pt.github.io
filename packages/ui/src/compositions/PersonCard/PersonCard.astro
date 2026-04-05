@@ -1,0 +1,485 @@
+---
+import { Image } from 'astro:assets';
+import { COMPANY } from '@bool/shared';
+import Icon from '../../primitives/Icon/Icon.astro';
+
+interface Props {
+  name: string;
+  role: string;
+  photo?: ImageMetadata;
+  photoAlt?: string;
+  photoWidth?: number;
+  photoHeight?: number;
+  linkedin?: string;
+  email?: string;
+  colorScheme?: 'light' | 'dark';
+  variant?: 'centered' | 'card';
+  emailAriaPrefix: string;
+  linkedinAriaSuffix: string;
+  detailTitle: string;
+  detailBody: string;
+  class?: string;
+}
+
+const {
+  name,
+  role,
+  photo,
+  photoAlt,
+  photoWidth = 384,
+  photoHeight = 470,
+  linkedin,
+  email = COMPANY.email,
+  colorScheme = 'dark',
+  variant = 'centered',
+  emailAriaPrefix,
+  linkedinAriaSuffix,
+  detailTitle,
+  detailBody,
+  class: className,
+} = Astro.props;
+
+const alt = photoAlt ?? `${name}, ${role}`;
+const isCard = variant === 'card';
+const initials = name
+  .split(' ')
+  .map((n) => n[0])
+  .join('');
+---
+
+{
+  isCard && (
+    <div class:list={['pcv2', `pcv2--${colorScheme}`, className]} data-person-card>
+      <div class="pcv2-photo-wrap">
+        {photo && (
+          <Image
+            src={photo}
+            alt={alt}
+            class="pcv2-photo"
+            width={photoWidth}
+            height={photoHeight}
+            loading="lazy"
+          />
+        )}
+        {!photo && (
+          <span class="pcv2-initials" aria-hidden="true">
+            {initials}
+          </span>
+        )}
+        <div class="pcv2-overlay">
+          <div class="pcv2-overlay-text">
+            <p class="pcv2-name">{name}</p>
+            <p class="pcv2-role">{role}</p>
+          </div>
+          <div class="pcv2-icons">
+            {email && (
+              <a
+                href="#"
+                class="pcv2-icon-link"
+                data-contact={btoa(`mailto:${email}`)}
+                data-label={btoa(email)}
+                aria-label={`${emailAriaPrefix} ${name}`}
+              >
+                <Icon name="mail" size={20} strokeWidth={2} />
+              </a>
+            )}
+            {linkedin && (
+              <a
+                href={linkedin}
+                class="pcv2-icon-link"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${name} ${linkedinAriaSuffix}`}
+              >
+                <Icon name="linkedin" size={20} strokeWidth={2} />
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+      <div class="pcv2-detail" data-person-detail hidden>
+        <h3 class="pcv2-detail-title">{detailTitle}</h3>
+        <p class="pcv2-detail-body">{detailBody}</p>
+      </div>
+    </div>
+  )
+}
+
+{
+  !isCard && (
+    <div class:list={['pc', `pc--${colorScheme}`, className]}>
+      <div class="pc-photo-wrap" aria-hidden={!photo ? 'true' : undefined}>
+        {photo && (
+          <Image
+            src={photo}
+            alt={alt}
+            class="pc-photo"
+            width={photoWidth}
+            height={photoHeight}
+            loading="lazy"
+          />
+        )}
+        {!photo && (
+          <span class="pc-initials" aria-hidden="true">
+            {initials}
+          </span>
+        )}
+      </div>
+      <p class="pc-name">{name}</p>
+      <p class="pc-role">{role}</p>
+      {(email || linkedin) && (
+        <div class="pc-icons">
+          {email && (
+            <a
+              href="#"
+              class="pc-icon-link"
+              data-contact={btoa(`mailto:${email}`)}
+              data-label={btoa(email)}
+              aria-label={`${emailAriaPrefix} ${name}`}
+            >
+              <Icon name="mail" size={20} strokeWidth={2} />
+            </a>
+          )}
+          {linkedin && (
+            <a
+              href={linkedin}
+              class="pc-icon-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${name} ${linkedinAriaSuffix}`}
+            >
+              <Icon name="linkedin" size={20} strokeWidth={2} />
+            </a>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
+<script>
+  function closeAll() {
+    document.querySelectorAll('[data-person-card]').forEach((c) => {
+      c.classList.remove('pcv2--open');
+      c.querySelector('[data-person-detail]')?.setAttribute('hidden', '');
+    });
+  }
+
+  document.querySelectorAll('[data-person-card]').forEach((card) => {
+    const detail = card.querySelector('[data-person-detail]');
+    if (!detail) return;
+
+    card.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('.pcv2-icon-link')) return;
+      e.stopPropagation();
+      const isOpen = card.classList.contains('pcv2--open');
+      closeAll();
+      if (!isOpen) {
+        card.classList.add('pcv2--open');
+        detail.removeAttribute('hidden');
+      }
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!(e.target as HTMLElement).closest('[data-person-card]')) {
+      document.querySelectorAll('[data-person-card]').forEach((c) => {
+        c.classList.remove('pcv2--open');
+        c.querySelector('[data-person-detail]')?.setAttribute('hidden', '');
+      });
+    }
+  });
+
+  document.querySelectorAll('[data-contact]').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      el.setAttribute('href', atob(el.getAttribute('data-contact') || ''));
+      window.location.href = el.getAttribute('href') || '';
+    });
+  });
+</script>
+
+<style>
+  /* ===== Card variant (v2) ===== */
+  .pcv2 {
+    --card-radius: 0.75rem;
+    position: relative;
+    cursor: pointer;
+    border: 2px dashed var(--white-80);
+    border-radius: var(--card-radius);
+    padding: 0;
+  }
+
+  .pcv2-photo-wrap {
+    position: relative;
+    inline-size: 100%;
+    max-inline-size: 384px;
+    aspect-ratio: 384 / 470;
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    background-color: var(--color-surface-charcoal);
+  }
+
+  .pcv2-photo {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  .pcv2-initials {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: var(--font-size-h3);
+    font-weight: 700;
+    color: var(--white-15);
+    user-select: none;
+  }
+
+  .pcv2-overlay {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+    padding: 1rem;
+    background: var(--white-10);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 0 0 11px 11px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    z-index: 1;
+  }
+
+  @media (min-width: 640px) {
+    .pcv2-overlay {
+      padding: 1.75rem 1.5rem;
+    }
+  }
+
+  .pcv2-overlay-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-inline-size: 0;
+  }
+
+  .pcv2-name {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 3vw, 1.375rem);
+    font-weight: 700;
+    color: var(--color-on-dark);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .pcv2-role {
+    font-size: clamp(0.875rem, 2.5vw, 1.125rem);
+    color: var(--color-on-dark-muted);
+    margin: 0;
+  }
+
+  .pcv2-icons {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    align-self: flex-start;
+  }
+
+  .pcv2-icon-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 1.75rem;
+    block-size: 1.75rem;
+    border-radius: 50%;
+    background-color: var(--white-90);
+    color: var(--color-foreground);
+    text-decoration: none;
+    transition: background-color 150ms;
+  }
+
+  .pcv2-icon-link:hover {
+    background-color: var(--color-on-dark);
+  }
+
+  /* ===== Open state (tilt on click) ===== */
+  .pcv2 {
+    transition: transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    perspective: 800px;
+  }
+
+  .pcv2--open {
+    transform: rotate(-5deg) translateY(-120px);
+    z-index: 10;
+  }
+
+  @media (min-width: 640px) {
+    .pcv2--open {
+      transform: rotate(-5deg) translateY(-200px);
+    }
+  }
+
+  /* ===== Detail card (click overlay) ===== */
+  .pcv2-detail {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0.5rem;
+    inline-size: 100%;
+    max-inline-size: 384px;
+    aspect-ratio: 384 / 470;
+    overflow-y: auto;
+    background-color: var(--color-background);
+    border-radius: var(--card-radius);
+    padding: 1.25rem;
+    z-index: 2;
+    box-shadow: var(--shadow-heavy);
+    transform: translateY(120px) rotate(8deg) scale(0.95);
+    opacity: 0;
+    transition:
+      transform 500ms cubic-bezier(0.34, 1.56, 0.64, 1),
+      opacity 400ms ease;
+    pointer-events: none;
+  }
+
+  @media (min-width: 640px) {
+    .pcv2-detail {
+      inset-inline-start: 1.0625rem;
+      padding: 2rem 1.5rem;
+      transform: translateY(190px) rotate(8deg) scale(0.95);
+    }
+  }
+
+  .pcv2--open .pcv2-detail {
+    transform: translateY(120px) rotate(8deg) scale(1);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  @media (min-width: 640px) {
+    .pcv2--open .pcv2-detail {
+      transform: translateY(190px) rotate(8deg) scale(1);
+    }
+  }
+
+  .pcv2-detail[hidden] {
+    display: block;
+  }
+
+  .pcv2-detail-title {
+    font-family: var(--font-display);
+    font-size: var(--font-size-h3);
+    font-weight: 700;
+    color: var(--color-foreground);
+    margin: 0 0 1rem;
+    line-height: 1.2;
+  }
+
+  .pcv2-detail-body {
+    font-size: var(--font-size-body-sm);
+    line-height: 1.6;
+    color: var(--color-foreground);
+    margin: 0;
+  }
+
+  /* ===== Centered variant ===== */
+  .pc {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .pc-photo-wrap {
+    inline-size: 19.875rem;
+    block-size: 19.875rem;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-block-end: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pc-photo {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  .pc-initials {
+    font-family: var(--font-display);
+    font-size: var(--font-size-h3);
+    font-weight: 700;
+    color: var(--white-15);
+    user-select: none;
+  }
+
+  .pc-name {
+    font-size: var(--font-size-body);
+    font-weight: 700;
+    margin: 0 0 0.25rem;
+  }
+
+  .pc--dark .pc-name {
+    color: var(--color-on-dark);
+  }
+
+  .pc--light .pc-name {
+    color: var(--color-foreground);
+  }
+
+  .pc-role {
+    font-size: var(--font-size-body-sm);
+    margin: 0;
+  }
+
+  .pc--dark .pc-role {
+    color: var(--color-on-dark-muted);
+  }
+
+  .pc--light .pc-role {
+    color: var(--color-muted-foreground);
+  }
+
+  .pc-icons {
+    display: flex;
+    gap: 0.5rem;
+    margin-block-start: 0.75rem;
+  }
+
+  .pc-icon-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 2rem;
+    block-size: 2rem;
+    border-radius: 50%;
+    background-color: var(--color-surface-charcoal);
+    color: var(--color-on-dark);
+    text-decoration: none;
+    transition: background-color 150ms;
+  }
+
+  .pc--dark .pc-icon-link {
+    background-color: var(--color-surface-charcoal);
+    color: var(--color-on-dark);
+  }
+
+  .pc--light .pc-icon-link {
+    background-color: var(--color-surface-dark);
+    color: var(--color-on-dark);
+  }
+
+  .pc-icon-link:hover {
+    background-color: var(--color-foreground);
+  }
+</style>

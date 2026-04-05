@@ -1,0 +1,163 @@
+---
+import GradientIcon from '../../primitives/GradientIcon/GradientIcon.astro';
+import type { GradientIconName } from '../../primitives/Icon/icon-data';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+
+interface HowWeWorkCard {
+  subtitle: string;
+  title: string;
+  description: string;
+  bullets: string[];
+  iconName: GradientIconName;
+}
+
+interface Props {
+  heading: string;
+  cards: HowWeWorkCard[];
+}
+
+const { heading, cards } = Astro.props;
+---
+
+<Section background="var(--color-background)" aria-labelledby="how-we-work-heading" paddingBlock="5rem 0">
+  <SectionContainer>
+    <div class="hwwGrid">
+      <h2 id="how-we-work-heading" class="hwwHeading" set:html={heading} />
+
+      {cards.map((card, i) => (
+        <article class={`hwwCard hwwCard--${i + 1}`}>
+          <div class="hwwCardHeader">
+            <div class="hwwCardIconBox">
+              <GradientIcon name={card.iconName} size={28} />
+            </div>
+            <div class="hwwCardTitles">
+              <h3 class="hwwCardTitle">{card.subtitle}</h3>
+              <span class="hwwCardSubtitle">{card.title}</span>
+            </div>
+          </div>
+          <p class="hwwCardDesc">{card.description}</p>
+          <ul class="hwwCardBullets">
+            {card.bullets.map((bullet) => (
+              <li>{bullet}</li>
+            ))}
+          </ul>
+        </article>
+      ))}
+    </div>
+  </SectionContainer>
+</Section>
+
+<style>
+  .hwwGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .hwwGrid {
+      grid-template-columns: repeat(3, 384px);
+      justify-content: center;
+      block-size: 960px;
+      align-content: center;
+    }
+  }
+
+  .hwwHeading {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 5.625rem);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--color-foreground);
+    margin: 0;
+    align-self: start;
+  }
+
+  .hwwHeading :global(strong) {
+    font-weight: 700;
+  }
+
+  .hwwCard {
+    background-color: var(--color-background);
+    border-radius: 8px;
+    box-shadow: var(--shadow-card);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media (min-width: 768px) {
+    .hwwCard {
+      inline-size: 384px;
+      block-size: 384px;
+    }
+  }
+
+  .hwwCardHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-block-end: 1rem;
+  }
+
+  .hwwCardIconBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 3.375rem;
+    block-size: 3.375rem;
+    border-radius: 8px;
+    background-color: var(--primary-30);
+    flex-shrink: 0;
+    filter: blur(0px);
+    backdrop-filter: blur(3px);
+  }
+
+  .hwwCardTitles {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hwwCardTitle {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-foreground);
+    margin: 0;
+  }
+
+  .hwwCardSubtitle {
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--color-foreground);
+    opacity: 0.7;
+    margin-block-start: 0.125rem;
+  }
+
+  .hwwCardDesc {
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.375rem;
+    letter-spacing: -0.04em;
+    color: var(--color-foreground);
+    margin: 0;
+  }
+
+  .hwwCardBullets {
+    list-style: disc;
+    padding-inline-start: 1.25rem;
+    margin: 1rem 0 0;
+    font-size: 0.875rem;
+    line-height: 1.375rem;
+    letter-spacing: -0.04em;
+    color: var(--color-foreground);
+  }
+
+  .hwwCardBullets li {
+    margin-block-end: 0.25rem;
+  }
+</style>

@@ -1,0 +1,70 @@
+---
+import img01 from '@bool/media/images/sections/homepage/home-stock-01.jpg';
+import img02 from '@bool/media/images/sections/homepage/home-stock-02.jpg';
+import img03 from '@bool/media/images/sections/homepage/home-stock-03.jpg';
+import img05 from '@bool/media/images/sections/homepage/home-stock-05.jpg';
+import img07 from '@bool/media/images/sections/homepage/home-stock-07.jpg';
+import img08 from '@bool/media/images/sections/homepage/home-stock-08.jpg';
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+import NewsGrid from './NewsGrid';
+
+interface NewsItem {
+  category: string;
+  date: string;
+  title: string;
+  summary: string;
+  href: string;
+  tags: string[];
+}
+
+interface Props {
+  tag: string;
+  heading: string;
+  body: string;
+  filters: string[];
+  newsItems: NewsItem[];
+  labels: { readMore: string; emptyMessage: string; filterAriaLabel: string };
+}
+
+const { tag, heading, body, filters, newsItems, labels } = Astro.props;
+
+const stockImages = [img01.src, img02.src, img03.src, img05.src, img07.src, img08.src];
+
+const newsWithImages = newsItems.map((item, i) => ({
+  ...item,
+  image: stockImages[i % stockImages.length],
+}));
+---
+
+<Section
+  background="var(--color-muted)"
+  aria-labelledby="news-heading"
+  id="news"
+  class="news-section"
+>
+  <SectionContainer>
+    <SectionIntro
+      headingId="news-heading"
+      align="start"
+      descriptionMaxWidth="42rem"
+      marginBlockEnd="1.5rem"
+      class="news-intro"
+    >
+      <SectionTag slot="tag">{tag}</SectionTag>
+      <Fragment slot="heading">{heading}</Fragment>
+      <Fragment slot="description">{body}</Fragment>
+    </SectionIntro>
+
+    <NewsGrid
+      client:visible
+      items={newsWithImages}
+      filters={filters}
+      labels={labels}
+    />
+  </SectionContainer>
+</Section>
+
+<style></style>

@@ -1,0 +1,87 @@
+---
+import Tag from '../../primitives/Tag/Tag.astro';
+
+interface Props {
+  date: string;
+  tag: string;
+  tagColor?: string;
+  title: string;
+  description: string;
+  descriptionLabel: string;
+  location?: string;
+  url?: string;
+  class?: string;
+}
+
+const { date, tag, tagColor, title, description, descriptionLabel, location, class: className } = Astro.props;
+---
+
+<article class:list={['event-item', className]}>
+  <div class="event-header">
+    <Tag
+      variant="filled"
+      colorScheme="primary"
+      style={tagColor ? `background-color: ${tagColor}` : undefined}>{tag}</Tag
+    >
+    <span class="event-title">{title}</span>
+    <span class="event-date">{date}</span>
+  </div>
+  <p class="event-desc-label">{descriptionLabel}</p>
+  <p class="event-desc">{description}</p>
+  {location && <p class="event-location">{location}</p>}
+</article>
+
+<style>
+  .event-item {
+    padding-block: 1.25rem;
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  .event-item:first-child {
+    padding-block-start: 0;
+  }
+
+  .event-item:last-child {
+    border-block-end: none;
+  }
+
+  .event-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-block-end: 0.5rem;
+  }
+
+  .event-title {
+    font-size: var(--font-size-body);
+    font-weight: 600;
+    color: var(--color-surface-dark);
+  }
+
+  .event-date {
+    font-size: var(--font-size-body-sm);
+    color: var(--color-muted-foreground);
+    margin-inline-start: auto;
+    white-space: nowrap;
+  }
+
+  .event-desc-label {
+    font-size: var(--font-size-body-sm);
+    font-weight: 600;
+    color: var(--color-surface-dark);
+    margin: 0 0 0.25rem;
+  }
+
+  .event-desc {
+    font-size: var(--font-size-body-sm);
+    color: var(--color-foreground);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .event-location {
+    font-size: var(--font-size-body-sm);
+    color: var(--color-foreground);
+    margin: 0.5rem 0 0;
+  }
+</style>

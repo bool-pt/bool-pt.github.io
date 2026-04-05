@@ -1,0 +1,141 @@
+---
+import { getEvents, transformEvent } from '@bool/content';
+import { t, tCollection, tList } from '@bool/i18n';
+import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
+import ContactSection from '@bool/ui/sections/ContactSection.astro';
+import EventsCalendarSection from '@bool/ui/sections/EventsCalendarSection.astro';
+import InsightsCTASection from '@bool/ui/sections/InsightsCTASection.astro';
+import InsightsHeroSection from '@bool/ui/sections/InsightsHeroSection.astro';
+import KnowledgeCenterSection from '@bool/ui/sections/KnowledgeCenterSection.astro';
+import LatestFromBoolSection from '@bool/ui/sections/LatestFromBoolSection.astro';
+import NewsletterCTASection from '@bool/ui/sections/NewsletterCTASection.astro';
+import NewsUpdatesSection from '@bool/ui/sections/NewsUpdatesSection.astro';
+import PressReleasesSection from '@bool/ui/sections/PressReleasesSection.astro';
+import { getHeaderLabels, getFooterLabels, getContactSectionProps, getNewsletterLabels, getCalendarLabels } from '../../labels';
+
+const events = await getEvents();
+const eventItems = events.slice(0, 3).map(transformEvent);
+
+const latestFeatured = tCollection('latestPosts.item', ['category', 'title', 'author', 'readTime', 'date', 'location', 'cta'])
+  .map((item) => ({
+    category: item.category,
+    title: item.title,
+    meta: [item.author, item.readTime, item.date, item.location]
+      .filter((v) => v && !v.startsWith('latestPosts.'))
+      .join(' · '),
+    cta: item.cta,
+    href: '/blog',
+  }));
+
+const knowledgeFilters = tList('knowledgeCenter.filters');
+
+const knowledgeArticles = tCollection('knowledgeCenter.article', [
+  'category', 'title', 'author', 'readTime', 'views', 'subtitle',
+  'challenge', 'solution', 'techStack',
+]).map((a, i) => ({
+  ...a,
+  href: '/blog',
+  tags: t(`knowledgeCenter.tags.${i + 1}`).split(','),
+  metrics: tCollection(`knowledgeCenter.article.${i + 1}.metrics`, ['value', 'label']),
+  techStack: a.techStack.split(','),
+}));
+
+const newsFilters = tList('newsUpdates.filters');
+
+const newsItems = tCollection('newsUpdates.item', ['category', 'date', 'title', 'summary', 'tags'])
+  .map((item) => ({
+    category: item.category,
+    date: item.date,
+    title: item.title,
+    summary: item.summary,
+    href: '/blog',
+    tags: item.tags.split(','),
+  }));
+
+const pressReleases = tCollection('pressReleases.item', ['date', 'title', 'description'])
+  .map((p) => ({ ...p, href: '/blog' }));
+
+const eventCards = tCollection('eventsCalendar.item', ['category', 'title', 'description', 'dateInfo', 'cta'])
+  .map((e) => ({ ...e, href: '/blog' }));
+---
+
+<BaseLayout
+  title={t('pageMeta.blog.title')}
+  description={t('pageMeta.blog.description')}
+  headerLabels={getHeaderLabels()}
+  footerLabels={getFooterLabels()}
+>
+  <InsightsHeroSection
+    tag={t('insightsHero.tag')}
+    heading={t('insightsHero.heading')}
+    body={t('insightsHero.body')}
+    ctaExplore={t('insightsHero.cta.explore')}
+    ctaSubscribe={t('insightsHero.cta.subscribe')}
+  />
+  <LatestFromBoolSection
+    tag={t('latestPosts.tag')}
+    heading={t('latestPosts.heading')}
+    body={t('latestPosts.body')}
+    featured={latestFeatured}
+  />
+  <KnowledgeCenterSection
+    tag={t('knowledgeCenter.tag')}
+    heading={t('knowledgeCenter.heading')}
+    body={t('knowledgeCenter.body')}
+    filters={knowledgeFilters}
+    articles={knowledgeArticles}
+    labels={{
+      close: t('common.close'),
+      readArticle: t('knowledgeCenter.readArticleCta'),
+      readTime: t('knowledgeCenter.readTimeLabel'),
+      views: t('knowledgeCenter.viewsLabel'),
+      emptyMessage: t('knowledgeCenter.emptyState'),
+      filterAriaLabel: t('knowledgeCenter.filter.aria'),
+      challenge: t('knowledgeCenter.modal.challenge'),
+      solution: t('knowledgeCenter.modal.solution'),
+      techStack: t('knowledgeCenter.modal.techStack'),
+      talkToExpert: t('knowledgeCenter.modal.talkToExpert'),
+      backToArticles: t('knowledgeCenter.modal.backToArticles'),
+    }}
+  />
+  <NewsUpdatesSection
+    tag={t('newsUpdates.tag')}
+    heading={t('newsUpdates.heading')}
+    body={t('newsUpdates.body')}
+    filters={newsFilters}
+    newsItems={newsItems}
+    labels={{
+      readMore: t('common.readMore'),
+      emptyMessage: t('newsUpdates.emptyState'),
+      filterAriaLabel: t('newsUpdates.filter.aria'),
+    }}
+  />
+  <PressReleasesSection
+    tag={t('pressReleases.tag')}
+    heading={t('pressReleases.heading')}
+    body={t('pressReleases.body')}
+    viewMoreLabel={t('pressReleases.cta.viewMore')}
+    pressReleases={pressReleases}
+  />
+  <EventsCalendarSection
+    tag={t('eventsCalendar.tag')}
+    heading={t('eventsCalendar.heading')}
+    body={t('eventsCalendar.body')}
+    eventCards={eventCards}
+    calendarLabels={getCalendarLabels()}
+    events={eventItems}
+  />
+  <InsightsCTASection
+    tag={t('insightsCta.tag')}
+    headingLine1={t('insightsCta.heading.line1')}
+    headingLine2={t('insightsCta.heading.line2')}
+    body={t('insightsCta.body')}
+    button={t('insightsCta.button')}
+  />
+  <ContactSection {...getContactSectionProps()} background="var(--color-surface-black)" />
+  <NewsletterCTASection
+    heading={t('newsletterCta.heading')}
+    body={t('newsletterCta.body')}
+    newsletterLabels={getNewsletterLabels()}
+  />
+</BaseLayout>

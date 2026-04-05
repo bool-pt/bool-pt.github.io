@@ -1,0 +1,76 @@
+---
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+import TextBlock from '../../primitives/TextBlock/TextBlock.astro';
+
+interface Props {
+  headingId: string;
+  align?: 'center' | 'start';
+  contentMaxWidth?: string;
+  minHeight?: string;
+  class?: string;
+  style?: string;
+}
+
+const {
+  headingId,
+  align = 'center',
+  contentMaxWidth = '40rem',
+  minHeight = '24rem',
+  class: className,
+  style: extraStyle,
+} = Astro.props;
+
+const baseStyle = `--cta-content-max-width: ${contentMaxWidth}; --cta-min-height: ${minHeight}`;
+const combinedStyle = extraStyle ? `${baseStyle}; ${extraStyle}` : baseStyle;
+---
+
+<section
+  class:list={['cta-section', `cta-section--${align}`, className]}
+  aria-labelledby={headingId}
+  style={combinedStyle}
+>
+  <SectionContainer>
+    <div class="cta-content">
+      <slot name="tag" />
+      <TextBlock
+        headingId={headingId}
+        headingSize="var(--font-size-display)"
+        bodySize="var(--font-size-lead)"
+        colorScheme="dark"
+        spacing="1.25rem"
+      >
+        <slot name="heading" slot="heading" />
+        <p><slot name="body" /></p>
+      </TextBlock>
+      <div class="cta-actions">
+        <slot />
+      </div>
+    </div>
+  </SectionContainer>
+</section>
+
+<style>
+  .cta-section {
+    position: relative;
+    background-color: var(--color-surface-dark);
+    background-size: cover;
+    background-position: center;
+    padding-block: 5rem;
+    min-block-size: var(--cta-min-height);
+    display: flex;
+    align-items: center;
+  }
+
+  .cta-content {
+    max-inline-size: var(--cta-content-max-width);
+  }
+
+  .cta-section--center .cta-content {
+    text-align: center;
+    margin-inline: auto;
+  }
+
+  .cta-actions {
+    margin-block-start: 2.5rem;
+  }
+</style>

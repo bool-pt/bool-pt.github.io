@@ -1,0 +1,134 @@
+---
+import StatItem from '../../primitives/StatItem/StatItem.astro';
+
+interface Props {
+  value: string;
+  label: string;
+  aspectRatio?: string;
+  metallicBorder?: boolean;
+  class?: string;
+}
+
+const {
+  value,
+  label,
+  aspectRatio = '303 / 265',
+  metallicBorder = false,
+  class: className,
+} = Astro.props;
+---
+
+<div class:list={['trapezoid-shadow', className]}>
+  <div
+    class:list={['trapezoid-card', { 'trapezoid-card--metallic': metallicBorder }]}
+    style={`aspect-ratio: ${aspectRatio}`}
+  >
+    <StatItem value={value} label={label} colorScheme="light" class="trapezoid-stat-item" />
+  </div>
+</div>
+
+<style>
+  .trapezoid-shadow {
+    --trapezoid-shadow: drop-shadow(var(--shadow-card));
+    filter: var(--trapezoid-shadow);
+  }
+
+  /* \/ shape: wider top, narrower bottom */
+  .trapezoid-shadow:nth-child(odd) > .trapezoid-card {
+    clip-path: url(#trapezoid-v);
+  }
+
+  /* /\ shape: narrower top, wider bottom */
+  .trapezoid-shadow:nth-child(even) > .trapezoid-card {
+    clip-path: url(#trapezoid-a);
+  }
+
+  .trapezoid-card {
+    --trapezoid-bg: var(--color-background);
+    --trapezoid-radius: 0.75rem;
+    --trapezoid-max-width: 303px;
+    --trapezoid-value-color: var(--color-foreground);
+    --trapezoid-label-color: var(--color-foreground);
+
+    position: relative;
+    background-color: var(--trapezoid-bg);
+    border-radius: var(--trapezoid-radius);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    inline-size: 100%;
+    max-inline-size: var(--trapezoid-max-width);
+    margin-inline: auto;
+    --stat-value-size: clamp(2.25rem, 1.25rem + 3.5vw, 4.375rem);
+    --stat-value-tracking: -0.03em;
+    --stat-gap: clamp(1.5rem, 4vw, 5rem);
+    --stat-label-size: clamp(0.75rem, 0.5rem + 1.25vw, 1.25rem);
+    --stat-label-transform: none;
+    --stat-label-weight: 600;
+    --stat-label-tracking: 0;
+    --color-foreground: var(--trapezoid-value-color);
+    --color-muted-foreground: var(--trapezoid-label-color);
+  }
+
+  .trapezoid-stat-item {
+    align-items: center;
+  }
+
+  /* Top-right L: right half of top edge + top half of right edge */
+  .trapezoid-card--metallic::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--white-35);
+    mask-image:
+      linear-gradient(to right, transparent 50%, white 50%),
+      linear-gradient(to bottom, white 50%, transparent 50%);
+    mask-size:
+      100% 1px,
+      1px 100%;
+    mask-position: top, right;
+    mask-repeat: no-repeat;
+    mask-composite: add;
+    -webkit-mask-image:
+      linear-gradient(to right, transparent 50%, white 50%),
+      linear-gradient(to bottom, white 50%, transparent 50%);
+    -webkit-mask-size:
+      100% 1px,
+      1px 100%;
+    -webkit-mask-position: top, right;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-composite: source-over;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Bottom-left L: left half of bottom edge + bottom half of left edge */
+  .trapezoid-card--metallic::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--white-35);
+    mask-image:
+      linear-gradient(to left, transparent 50%, white 50%),
+      linear-gradient(to top, white 50%, transparent 50%);
+    mask-size:
+      100% 1px,
+      1px 100%;
+    mask-position: bottom, left;
+    mask-repeat: no-repeat;
+    mask-composite: add;
+    -webkit-mask-image:
+      linear-gradient(to left, transparent 50%, white 50%),
+      linear-gradient(to top, white 50%, transparent 50%);
+    -webkit-mask-size:
+      100% 1px,
+      1px 100%;
+    -webkit-mask-position: bottom, left;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-composite: source-over;
+    pointer-events: none;
+    z-index: 2;
+  }
+</style>

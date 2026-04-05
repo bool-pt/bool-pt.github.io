@@ -1,0 +1,109 @@
+---
+import { getPortfolio, transformPortfolioCase } from '@bool/content';
+import { t, tCollection, tList } from '@bool/i18n';
+import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
+import CaseStudyGridSection from '@bool/ui/sections/CaseStudyGridSection.astro';
+import CertificationsSection from '@bool/ui/sections/CertificationsSection.astro';
+import ClientLogosSection from '@bool/ui/sections/ClientLogosSection.astro';
+import ContactSection from '@bool/ui/sections/ContactSection.astro';
+import LetsBuildCTASection from '@bool/ui/sections/LetsBuildCTASection.astro';
+import NewsletterCTASection from '@bool/ui/sections/NewsletterCTASection.astro';
+import PortfolioHeroSection from '@bool/ui/sections/PortfolioHeroSection.astro';
+import PortfolioStatsSection from '@bool/ui/sections/PortfolioStatsSection.astro';
+import TestimonialsCarouselSection from '@bool/ui/sections/TestimonialsCarouselSection.astro';
+import { getHeaderLabels, getFooterLabels, getContactSectionProps, getNewsletterLabels } from '../../labels';
+
+const portfolio = await getPortfolio();
+const caseItems = portfolio.map(transformPortfolioCase);
+
+const sectors = t('portfolioHero.sectors').split(',');
+
+const clientTestimonials = tCollection('clientTestimonials', ['quote', 'name', 'role'])
+  .map((item) => ({ quote: item.quote, company: item.name, designation: item.role }));
+
+const portfolioStats = tCollection('portfolioStats.items', ['value', 'label']);
+
+const recognitionIcons = ['trophy', 'chart', 'shield', 'trophy'] as const;
+const recognitions = tCollection('portfolioStats.recognition', ['title', 'description'])
+  .map((r, i) => ({ ...r, iconName: recognitionIcons[i] ?? ('trophy' as const) }));
+
+const certifications = tCollection('certifications.items', ['name', 'count', 'imageKey'])
+  .map((c) => ({ ...c, label: t('certifications.label'), imageKey: c.imageKey || null }));
+
+const caseStudySectors = tList('caseStudies.sectors');
+const caseStudyTechFilters = tList('caseStudies.techFilters');
+---
+
+<BaseLayout
+  title={t('pageMeta.portfolio.title')}
+  description={t('pageMeta.portfolio.description')}
+  headerLabels={getHeaderLabels()}
+  footerLabels={getFooterLabels()}
+>
+  <PortfolioHeroSection
+    tag={t('portfolioHero.tag')}
+    heading={t('portfolioHero.heading')}
+    body={t('portfolioHero.body')}
+    sectors={sectors}
+    ctaStories={t('portfolioHero.cta.stories')}
+    ctaServices={t('portfolioHero.cta.services')}
+    statsHighlight={{ value: t('portfolioHero.stats.highlight.value'), label: t('portfolioHero.stats.highlight.label') }}
+    stats={portfolioStats}
+  />
+  <CaseStudyGridSection
+    tag={t('caseStudies.tag')}
+    heading={t('caseStudies.heading')}
+    body={t('caseStudies.body')}
+    sectors={caseStudySectors}
+    techFilters={caseStudyTechFilters}
+    labels={{
+      close: t('common.close'),
+      fullCaseStudy: t('caseStudies.fullCaseStudyCta'),
+      emptyMessage: t('caseStudies.emptyState'),
+      filterAriaLabel: t('caseStudies.filter.aria'),
+      challenge: t('common.theChallenge'),
+      solution: t('common.theSolution'),
+      techStack: t('common.technologyStack'),
+      talkToExpert: t('common.talkToExpert'),
+      backToCases: t('caseStudies.backToCases'),
+    }}
+    cases={caseItems}
+  />
+  <TestimonialsCarouselSection
+    tag={t('clientTestimonials.tag')}
+    heading={t('clientTestimonials.heading')}
+    body={t('clientTestimonials.body')}
+    testimonials={clientTestimonials}
+    carouselAriaLabels={{ prev: t('carousel.previous'), next: t('carousel.next') }}
+  />
+  <PortfolioStatsSection
+    tag={t('portfolioStats.tag')}
+    heading={t('portfolioStats.heading')}
+    body={t('portfolioStats.body')}
+    stats={portfolioStats}
+    recognitions={recognitions}
+  />
+  <CertificationsSection
+    tag={t('certifications.tag')}
+    heading={t('certifications.heading')}
+    body={t('certifications.body')}
+    certifications={certifications}
+  />
+  <ClientLogosSection
+    tag={t('clientLogos.tag')}
+    heading={t('clientLogos.heading')}
+    body={t('clientLogos.body')}
+    logoAlt={t('clientLogos.logoAlt')}
+  />
+  <LetsBuildCTASection
+    heading={t('ctaBanner.heading')}
+    body={t('ctaBanner.body')}
+    button={t('ctaBanner.button')}
+  />
+  <ContactSection {...getContactSectionProps()} background="var(--color-surface-black)" />
+  <NewsletterCTASection
+    heading={t('newsletterCta.heading')}
+    body={t('newsletterCta.body')}
+    newsletterLabels={getNewsletterLabels()}
+  />
+</BaseLayout>

@@ -1,0 +1,138 @@
+---
+import { Image } from 'astro:assets';
+import mendixLogo from '@bool/media/images/platform-logos/brand/mendix.jpg';
+import openSourceLogo from '@bool/media/images/platform-logos/brand/open-source.png';
+import outsystemsLogo from '@bool/media/images/platform-logos/brand/outsystems.png';
+import powerPlatformLogo from '@bool/media/images/platform-logos/brand/power-platform.png';
+import ArrowLink from '../../compositions/ArrowLink/ArrowLink.astro';
+import IntroGridSection from '../../compositions/IntroGridSection/IntroGridSection.astro';
+
+interface Props {
+  heading: string;
+  body: string;
+  logoSuffix: string;
+  technologies: Array<{ name: string; color: string; href: string; logoKey: string }>;
+  learnMoreLabel?: string;
+}
+
+const { heading, body, logoSuffix, technologies: techData, learnMoreLabel = 'Learn more' } = Astro.props;
+
+const logoMap: Record<string, ImageMetadata> = {
+  outsystems: outsystemsLogo,
+  mendix: mendixLogo,
+  powerPlatform: powerPlatformLogo,
+  openSource: openSourceLogo,
+};
+
+const technologies = techData.map((tech) => ({
+  ...tech,
+  logo: logoMap[tech.logoKey],
+}));
+---
+
+<div class="featured-tech-wrap">
+  <IntroGridSection
+    headingId="tech-heading"
+    background="var(--color-background)"
+    introAlign="center"
+    headingSize="var(--font-size-display)"
+    descriptionMaxWidth="50rem"
+    introMarginBlockEnd="3.5rem"
+    gridColumns={4}
+  >
+    <Fragment slot="heading">{heading}</Fragment>
+    <Fragment slot="description">{body}</Fragment>
+
+    {
+      technologies.map((tech) => (
+        <article class="tech-card">
+          <div class="tech-logo-wrap">
+            <Image
+              src={tech.logo}
+              alt={`${tech.name} ${logoSuffix}`}
+              width={70}
+              height={70}
+              class="tech-logo-img"
+              loading="lazy"
+            />
+          </div>
+          <h3 class="tech-name" style={`color: ${tech.color}`}>
+            {tech.name}
+          </h3>
+          <ArrowLink href={tech.href} label={learnMoreLabel} colorScheme="light" />
+        </article>
+      ))
+    }
+  </IntroGridSection>
+</div>
+
+<style>
+  .featured-tech-wrap {
+    --color-surface-dark: var(--color-surface-black);
+    --color-muted-foreground: var(--color-surface-black);
+  }
+
+  .featured-tech-wrap :global(.responsive-grid) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 768px) {
+    .featured-tech-wrap :global(.responsive-grid) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .featured-tech-wrap :global(.section-intro--light .section-intro-body) {
+    font-weight: 500;
+  }
+
+  .tech-card {
+    --tech-card-bg: var(--color-background);
+    --tech-card-radius: 0.75rem;
+    --tech-card-padding: clamp(0.75rem, 2vw, 1.5rem);
+    --tech-card-shadow: var(--shadow-card);
+    --tech-card-shadow-hover: var(--shadow-overlay);
+
+    background-color: var(--tech-card-bg);
+    border-radius: var(--tech-card-radius);
+    padding: var(--tech-card-padding);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    inline-size: 100%;
+    aspect-ratio: 1;
+    transition: box-shadow 200ms;
+    box-shadow: var(--tech-card-shadow);
+  }
+
+  .tech-card:hover {
+    box-shadow: var(--tech-card-shadow-hover);
+  }
+
+  .tech-logo-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    block-size: clamp(50px, 10vw, 70px);
+    inline-size: clamp(50px, 10vw, 70px);
+  }
+
+  .tech-logo-img {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: contain;
+    border-radius: 0.75rem;
+  }
+
+  .tech-name {
+    font-family: var(--font-display);
+    font-size: clamp(0.875rem, 2.5vw, var(--font-size-lead));
+    font-weight: 700;
+    margin: 0;
+    margin-block-end: auto;
+    text-align: center;
+  }
+</style>

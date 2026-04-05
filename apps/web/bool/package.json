@@ -1,0 +1,45 @@
+{
+  "name": "@bool/web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "dev:fresh": "node -e \"const fs=require('fs');fs.rmSync('node_modules/.astro',{recursive:true,force:true});fs.rmSync('node_modules/.vite',{recursive:true,force:true})\" && astro dev --force",
+    "build": "astro build",
+    "preview": "astro preview",
+    "lint": "eslint .",
+    "typecheck": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/partytown": "catalog:",
+    "@astrojs/react": "catalog:",
+    "@astrojs/sitemap": "catalog:",
+    "@bool/analytics": "workspace:*",
+    "@bool/api": "workspace:*",
+    "@bool/compliance": "workspace:*",
+    "@bool/content": "workspace:*",
+    "@bool/i18n": "workspace:*",
+    "@bool/seo": "workspace:*",
+    "@bool/shared": "workspace:*",
+    "@bool/ui": "workspace:*",
+    "@tailwindcss/vite": "catalog:",
+    "astro": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "tailwindcss": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@astrojs/check": "catalog:",
+    "@bool/eslint-config": "workspace:*",
+    "@bool/tailwind-preset": "workspace:*",
+    "@bool/tsconfig": "workspace:*",
+    "@bool/vite-config": "workspace:*",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "eslint": "catalog:",
+    "sharp": "catalog:",
+    "typescript": "catalog:"
+  }
+}

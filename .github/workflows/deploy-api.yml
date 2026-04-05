@@ -1,0 +1,44 @@
+name: Deploy API
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/api/**'
+      - 'packages/shared/**'
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: api-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy Lambda API
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: eu-west-1
+
+      - name: Deploy
+        working-directory: apps/api
+        run: npx sst deploy --stage production
+        env:
+          SES_FROM_EMAIL: ${{ vars.SES_FROM_EMAIL }}
+          SES_NOTIFY_EMAIL: ${{ vars.SES_NOTIFY_EMAIL }}
+          SES_CONTACT_LIST: ${{ vars.SES_CONTACT_LIST }}

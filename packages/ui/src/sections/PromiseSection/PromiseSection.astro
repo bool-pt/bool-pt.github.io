@@ -1,0 +1,84 @@
+---
+import { ROUTES } from '@bool/shared';
+import ArrowLink from '../../compositions/ArrowLink/ArrowLink.astro';
+import IconFeatureCard from '../../compositions/IconFeatureCard/IconFeatureCard.astro';
+import SplitLayout from '../../compositions/SplitLayout/SplitLayout.astro';
+import TextBlockWithActions from '../../compositions/TextBlockWithActions/TextBlockWithActions.astro';
+import ButtonLink from '../../primitives/ButtonLink/ButtonLink.astro';
+import GradientIcon from '../../primitives/GradientIcon/GradientIcon.astro';
+import ResponsiveGrid from '../../primitives/ResponsiveGrid/ResponsiveGrid.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+
+interface ModelItem {
+  icon: string;
+  title: string;
+  subtitle?: string;
+  href?: string;
+}
+
+interface Props {
+  heading: string;
+  body1: string;
+  body2: string;
+  cta: string;
+  models?: ModelItem[];
+  learnMoreLabel?: string;
+}
+
+const { heading, body1, body2, cta, models = [], learnMoreLabel = 'Learn more' } = Astro.props;
+---
+
+<Section background="var(--color-background)" aria-labelledby="promise-heading">
+  <SectionContainer>
+    <div class="promise-section">
+      <SplitLayout ratio="1fr 1fr" gap="3rem" alignItems="start">
+        <TextBlockWithActions
+          slot="start"
+          headingId="promise-heading"
+          headingSize="var(--font-size-display)"
+          headingWeight="400"
+          bodySize="var(--font-size-sub)"
+          bodyLineHeight="1.27"
+          spacing="2rem"
+          actionsSpacing="3rem"
+        >
+          <Fragment slot="heading" set:html={heading} />
+          <p>{body1}</p>
+          <p>{body2}</p>
+          <ButtonLink slot="actions" href={ROUTES.about} variant="primary">{cta}</ButtonLink>
+        </TextBlockWithActions>
+
+        <ResponsiveGrid slot="end" columns={2} collapseAt="sm" class="promise-models">
+          {
+            models.map((model) => (
+              <IconFeatureCard title={model.title} description={model.subtitle} align="center">
+                <GradientIcon slot="icon" name={model.icon} size={32} />
+                {model.href && <ArrowLink slot="footer" href={model.href} label={learnMoreLabel} colorScheme="dark" />}
+              </IconFeatureCard>
+            ))
+          }
+        </ResponsiveGrid>
+      </SplitLayout>
+    </div>
+  </SectionContainer>
+</Section>
+
+<style>
+  .promise-models {
+    justify-content: center;
+  }
+
+  :global(.promise-models) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .promise-section :global(.text-block--light .text-block-body p) {
+    color: var(--color-foreground);
+    margin-block-end: 1.25rem;
+  }
+
+  .promise-section :global(.text-block--light .text-block-body p:last-child) {
+    margin-block-end: 0;
+  }
+</style>

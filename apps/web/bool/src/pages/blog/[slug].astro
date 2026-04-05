@@ -1,0 +1,42 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import { blogPostingJsonLd } from '@bool/seo';
+import { SITE_URL } from '@bool/shared';
+import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
+import { getHeaderLabels, getFooterLabels } from '../../labels';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts
+    .filter((p: CollectionEntry<'blog'>) => !p.data.draft)
+    .map((post: CollectionEntry<'blog'>) => ({
+      params: { slug: post.id },
+      props: { post },
+    }));
+}
+
+const { post } = Astro.props as { post: CollectionEntry<'blog'> };
+const { Content } = await render(post);
+
+const jsonLd = blogPostingJsonLd({
+  title: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.date.toISOString(),
+  author: post.data.author,
+  image: post.data.image,
+  url: `${SITE_URL}/blog/${post.id}`,
+});
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  headerLabels={getHeaderLabels()}
+  footerLabels={getFooterLabels()}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <article>
+    <Content />
+  </article>
+</BaseLayout>

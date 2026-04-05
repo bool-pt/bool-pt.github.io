@@ -1,0 +1,111 @@
+---
+import { Image } from 'astro:assets';
+import boolLogo from '@bool/media/images/bool-logo-text.svg';
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+
+interface Props {
+  tag: string;
+  heading: string;
+  body: string;
+  logoAlt: string;
+}
+
+const { tag, heading, body, logoAlt } = Astro.props;
+
+const logosPerRow = 20;
+---
+
+<Section
+  background="var(--color-background)"
+  aria-labelledby="client-logos-heading"
+  class="logos-section"
+  paddingBlock="4rem 0"
+>
+  <SectionContainer>
+    <SectionIntro
+      headingId="client-logos-heading"
+      colorScheme="light"
+      align="start"
+      descriptionMaxWidth="60rem"
+      class="logos-intro"
+    >
+      <SectionTag slot="tag" tagColor="primary">{tag}</SectionTag>
+      <Fragment slot="heading">{heading}</Fragment>
+      <Fragment slot="description">{body}</Fragment>
+    </SectionIntro>
+  </SectionContainer>
+
+  <div class="logos-rows">
+    <div class="logos-row">
+      {
+        Array.from({ length: logosPerRow }).map(() => (
+          <div class="logo-cell">
+            <Image
+              src={boolLogo}
+              alt={logoAlt}
+              width={107}
+              height={49}
+              class="logo-img"
+              loading="lazy"
+            />
+          </div>
+        ))
+      }
+    </div>
+    <div class="logos-row" style="margin-inline-start: -3rem">
+      {
+        Array.from({ length: logosPerRow }).map(() => (
+          <div class="logo-cell">
+            <Image
+              src={boolLogo}
+              alt={logoAlt}
+              width={107}
+              height={49}
+              class="logo-img"
+              loading="lazy"
+            />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</Section>
+
+<style>
+  :global(.logos-intro .section-intro-heading) {
+    max-inline-size: 38rem;
+  }
+
+  .logos-section {
+    overflow: hidden;
+    block-size: 543px;
+  }
+
+  .logos-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-block-end: 4rem;
+  }
+
+  .logos-row {
+    display: flex;
+    gap: 2.5rem;
+  }
+
+  .logo-cell {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logo-img {
+    inline-size: 107px;
+    block-size: auto;
+    user-select: none;
+  }
+</style>

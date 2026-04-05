@@ -1,0 +1,150 @@
+---
+import GoogleAnalytics from '@bool/analytics/GoogleAnalytics.astro';
+import { CookieBanner } from '@bool/compliance';
+import { organizationJsonLd, websiteJsonLd } from '@bool/seo';
+import SecurityHeaders from '@bool/seo/SecurityHeaders.astro';
+import SEOHead from '@bool/seo/SEOHead.astro';
+import Footer from '../Footer/Footer.astro';
+import Header from '../Header/Header.astro';
+import '@bool/ui/styles';
+
+interface MobileNavLabels {
+  open: string;
+  title: string;
+  navAria: string;
+  linkLabels: Record<string, string>;
+}
+
+interface LocaleOption {
+  code: string;
+  flag: string;
+  name: string;
+}
+
+interface LanguageSelectLabels {
+  ariaLabel: string;
+  currentLocale: string;
+  defaultLocale: string;
+  locales: LocaleOption[];
+}
+
+interface HeaderLabels {
+  navAria: string;
+  logoAria: string;
+  ctaLabel: string;
+  linkLabels: Record<string, string>;
+  mobileNavLabels: MobileNavLabels;
+  languageSelectLabels: LanguageSelectLabels;
+}
+
+interface FooterLabels {
+  tagline: string;
+  socialAria: string;
+  socialLabels: Record<string, string>;
+  quickLinksHeading: string;
+  legalLinksHeading: string;
+  findUsHeading: string;
+  address: string;
+  copyright: string;
+  companyName: string;
+  companyEmail: string;
+  companyPhone: string;
+  linkLabels: Record<string, string>;
+  cookiePreferencesLabel: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalUrl?: string;
+  ogImage?: string;
+  noindex?: boolean;
+  locale?: string;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  headerLabels: HeaderLabels;
+  footerLabels: FooterLabels;
+}
+
+const { title, description, canonicalUrl, ogImage, noindex, locale = 'en', jsonLd, headerLabels, footerLabels } = Astro.props;
+
+const globalJsonLd = [organizationJsonLd(), websiteJsonLd()];
+const pageJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+const allJsonLd = [...globalJsonLd, ...pageJsonLd];
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <script is:inline>
+      (function () {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://js.hcaptcha.com" crossorigin />
+    <meta name="generator" content={Astro.generator} />
+    <SecurityHeaders />
+    <SEOHead
+      title={title}
+      description={description}
+      canonicalUrl={canonicalUrl}
+      ogImage={ogImage}
+      noindex={noindex}
+    />
+    {allJsonLd.map((ld) => (
+      <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+    ))}
+    <GoogleAnalytics />
+    <script>
+      import { initSentry } from '@bool/analytics';
+      import { CONSENT_STORAGE_KEY } from '@bool/compliance';
+
+      const dsn = import.meta.env.PUBLIC_SENTRY_DSN;
+
+      if (dsn) {
+        function hasAnalyticsConsent(): boolean {
+          try {
+            const stored = localStorage.getItem(CONSENT_STORAGE_KEY);
+            if (!stored) return false;
+            const consent = JSON.parse(stored);
+            return consent?.analytics === true;
+          } catch {
+            return false;
+          }
+        }
+
+        if (hasAnalyticsConsent()) {
+          void initSentry(dsn);
+        } else {
+          window.addEventListener('bool:consent-granted', function handler(e: Event) {
+            const detail = (e as CustomEvent).detail;
+            if (detail?.analytics === true) {
+              void initSentry(dsn);
+              window.removeEventListener('bool:consent-granted', handler);
+            }
+          });
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <Header
+      navAria={headerLabels.navAria}
+      logoAria={headerLabels.logoAria}
+      ctaLabel={headerLabels.ctaLabel}
+      linkLabels={headerLabels.linkLabels}
+      mobileNavLabels={headerLabels.mobileNavLabels}
+      languageSelectLabels={headerLabels.languageSelectLabels}
+    />
+    <main>
+      <slot />
+    </main>
+    <Footer labels={footerLabels} />
+    <CookieBanner client:load />
+  </body>
+</html>

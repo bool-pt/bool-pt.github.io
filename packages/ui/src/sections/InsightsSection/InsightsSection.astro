@@ -1,0 +1,83 @@
+---
+import blogImg1 from '@bool/media/images/sections/homepage/insight-01.jpg';
+import blogImg2 from '@bool/media/images/sections/homepage/insight-02.jpg';
+import blogImg3 from '@bool/media/images/sections/homepage/insight-03.jpg';
+import ArrowLink from '../../compositions/ArrowLink/ArrowLink.astro';
+import ImageOverlayCard from '../../compositions/ImageOverlayCard/ImageOverlayCard.astro';
+import IntroGridSection from '../../compositions/IntroGridSection/IntroGridSection.astro';
+import AuthorMeta from '../../primitives/AuthorMeta/AuthorMeta.astro';
+import CardImageBg from '../../primitives/CardImageBg/CardImageBg.astro';
+import CardTitle from '../../primitives/CardTitle/CardTitle.astro';
+
+const blogImages = [blogImg1, blogImg2, blogImg3];
+
+interface PostItem {
+  slug: string;
+  title: string;
+  author: string;
+  date: string;
+}
+
+interface Props {
+  heading: string;
+  description: string;
+  posts?: PostItem[];
+  readMoreLabel?: string;
+}
+
+const { heading, description, posts = [], readMoreLabel = 'Read more' } = Astro.props;
+---
+
+<div class="insights-wrap">
+  <IntroGridSection
+    headingId="insights-heading"
+    headingSize="var(--font-size-display)"
+    background="var(--color-background)"
+    gridColumns={3}
+    gridCollapseAt="md"
+    paddingBlock="4rem"
+  >
+    <Fragment slot="heading">{heading}</Fragment>
+    <Fragment slot="description">{description}</Fragment>
+
+    {
+      posts.map((post, i) => (
+        <ImageOverlayCard
+          aspectRatio="384/470"
+          gradient="linear-gradient(to top, var(--black-75) 0%, var(--black-20) 50%, transparent 70%)"
+          hoverEffect="lift"
+        >
+          <CardImageBg slot="image" src={blogImages[i % blogImages.length].src} />
+          <AuthorMeta
+            author={post.author}
+            date={post.date}
+            colorScheme="dark"
+            class="insight-card-meta"
+          />
+          <CardTitle colorScheme="dark" class="insight-card-title">
+            {post.title}
+          </CardTitle>
+          <ArrowLink href={`/blog/${post.slug}`} label={readMoreLabel} colorScheme="dark" />
+        </ImageOverlayCard>
+      ))
+    }
+  </IntroGridSection>
+</div>
+
+<style>
+  .insights-wrap :global(.insight-card-meta) {
+    margin-block-end: 1rem;
+  }
+
+  .insights-wrap :global(.insight-card-title) {
+    margin-block-end: 2rem;
+  }
+
+  .insights-wrap :global(.section-intro) {
+    margin-block-end: 4rem;
+  }
+
+  .insights-wrap :global(.arrow-link--dark) {
+    color: var(--color-on-dark) !important;
+  }
+</style>

@@ -1,0 +1,154 @@
+---
+import { Image } from 'astro:assets';
+import Icon from '../../primitives/Icon/Icon.astro';
+
+interface Props {
+  name: string;
+  role: string;
+  photo: ImageMetadata;
+  photoAlt?: string;
+  email?: string;
+  linkedin?: string;
+  colorScheme?: 'light' | 'dark';
+  emailAriaPrefix: string;
+  linkedinAriaSuffix: string;
+  class?: string;
+}
+
+const {
+  name,
+  role,
+  photo,
+  photoAlt,
+  email,
+  linkedin,
+  colorScheme = 'dark',
+  emailAriaPrefix,
+  linkedinAriaSuffix,
+  class: className,
+} = Astro.props;
+
+const alt = photoAlt ?? `${name}, ${role}`;
+---
+
+<div class:list={['ep', `ep--${colorScheme}`, className]}>
+  <div class="ep-photo-wrap">
+    <Image
+      src={photo}
+      alt={alt}
+      class="ep-photo"
+      width={318}
+      height={318}
+      loading="lazy"
+    />
+  </div>
+  <p class="ep-name">{name}</p>
+  <p class="ep-role">{role}</p>
+  {(email || linkedin) && (
+    <div class="ep-icons">
+      {email && (
+        <a
+          href={`mailto:${email}`}
+          class="ep-icon-link"
+          aria-label={`${emailAriaPrefix} ${name}`}
+        >
+          <Icon name="mail" size={24} strokeWidth={2} />
+        </a>
+      )}
+      {linkedin && (
+        <a
+          href={linkedin}
+          class="ep-icon-link"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`${name} ${linkedinAriaSuffix}`}
+        >
+          <Icon name="linkedin" size={24} strokeWidth={2} />
+        </a>
+      )}
+    </div>
+  )}
+</div>
+
+<style>
+  .ep {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .ep-photo-wrap {
+    inline-size: 19.875rem;
+    block-size: 19.875rem;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-block-end: 1rem;
+    flex-shrink: 0;
+  }
+
+  .ep-photo {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  .ep-name {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 0.25rem;
+  }
+
+  .ep--dark .ep-name {
+    color: var(--color-on-dark);
+  }
+
+  .ep--light .ep-name {
+    color: var(--color-foreground);
+  }
+
+  .ep-role {
+    font-size: 1.375rem;
+    margin: 0;
+  }
+
+  .ep--dark .ep-role {
+    color: var(--color-on-dark);
+  }
+
+  .ep--light .ep-role {
+    color: var(--color-foreground);
+  }
+
+  .ep-icons {
+    display: flex;
+    gap: 0.5rem;
+    margin-block-start: 1.25rem;
+  }
+
+  .ep-icon-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 2.5rem;
+    block-size: 2.5rem;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: opacity 150ms;
+  }
+
+  .ep-icon-link:hover {
+    opacity: 0.8;
+  }
+
+  .ep--dark .ep-icon-link {
+    background-color: var(--color-on-dark);
+    color: var(--color-foreground);
+  }
+
+  .ep--light .ep-icon-link {
+    background-color: var(--color-surface-warm-dark);
+    color: var(--color-on-dark);
+  }
+</style>

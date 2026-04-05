@@ -1,0 +1,199 @@
+/* Flip card */
+.flipCard {
+  perspective: 1000px;
+  cursor: pointer;
+  inline-size: 100%;
+  border: none;
+  border-radius: 0;
+  aspect-ratio: 480 / 298;
+}
+
+.flipCardInner {
+  position: relative;
+  inline-size: 100%;
+  aspect-ratio: 480 / 298;
+  transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.flipCard:hover .flipCardInner,
+.flipCardInnerFlipped {
+  transform: rotateY(180deg);
+}
+
+.flipCardFace {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+  border-radius: 0;
+}
+
+/* Front face */
+.flipCardFront {
+  background-color: var(--color-surface-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.frontImage {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  filter: grayscale(1);
+}
+
+.frontOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--black-70) 0%, var(--black-10) 50%);
+}
+
+.frontContent {
+  position: relative;
+  z-index: 1;
+  margin-block-start: auto;
+  padding: 1.5rem;
+  inline-size: 100%;
+}
+
+.frontIcon {
+  color: var(--color-muted-foreground);
+}
+
+.frontLabel {
+  font-size: var(--font-size-caption);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-on-dark);
+}
+
+.frontTitle {
+  font-family: var(--font-display);
+  font-size: var(--font-size-body);
+  font-weight: 600;
+  color: var(--color-on-dark);
+  margin-block-start: 0.25rem;
+}
+
+/* Back face */
+.flipCardBack {
+  transform: rotateY(180deg);
+  background-color: var(--color-primary);
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.25rem, 4vw, 2rem);
+  padding-block-end: clamp(1.5rem, 4vw, 2rem);
+  pointer-events: none;
+}
+
+.flipCard:hover .flipCardBack,
+.flipCardInnerFlipped .flipCardBack {
+  pointer-events: auto;
+}
+
+.flipCard:hover .flipCardFront,
+.flipCardInnerFlipped .flipCardFront {
+  pointer-events: none;
+}
+
+.backOverlay {
+  display: none;
+}
+
+.backContent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.backTag {
+  font-family: var(--font-display);
+  font-size: clamp(0.8125rem, 2vw, 16px);
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--color-on-dark);
+  margin-block-end: 0.375rem;
+}
+
+.backTitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.125rem, 3vw, 20px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-on-dark);
+  margin-block-end: clamp(1rem, 3vw, 2rem);
+}
+
+/* Metrics */
+.metricsStrip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  margin-block-end: clamp(0.75rem, 2vw, 1rem);
+}
+
+.metricValue {
+  font-family: var(--font-display);
+  font-size: clamp(1.125rem, 3vw, 20px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-on-dark);
+  margin-block-end: 0.25rem;
+}
+
+.metricLabel {
+  font-family: var(--font-display);
+  font-size: clamp(0.8125rem, 2vw, 16px);
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: 0;
+  color: var(--color-on-dark);
+}
+
+/* CTA */
+.backCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-block-start: auto;
+  block-size: clamp(40px, 6vw, 48px);
+  padding-inline: clamp(1.25rem, 3vw, 1.5rem);
+  border: none;
+  border-radius: var(--radius-full);
+  background-color: var(--color-on-dark);
+  color: var(--color-primary);
+  font-family: var(--font-display);
+  font-size: clamp(0.875rem, 2.5vw, 16px);
+  font-weight: 700;
+  line-height: 20px;
+  text-decoration: none;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  transition:
+    background-color 150ms,
+    color 150ms,
+    transform 150ms;
+  align-self: flex-start;
+}
+
+.backCta:hover {
+  background-color: transparent;
+  color: var(--color-on-dark);
+  border: 2px solid var(--color-on-dark);
+  transform: scale(1.05);
+}

@@ -1,0 +1,18 @@
+export const shadows = {
+  sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+  md: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+  lg: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+  xl: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+  card: '2px 4px 10px rgba(0, 0, 0, 0.15)',
+  subtle: '0 4px 4px rgba(0, 0, 0, 0.10)',
+  soft: '4px 4px 4px rgba(0, 0, 0, 0.06)',
+  'dark-card': '2px 4px 10px rgba(43, 41, 38, 0.25)',
+  hover: '0 4px 24px rgba(0, 0, 0, 0.08)',
+  elevated: '0 8px 24px rgba(0, 0, 0, 0.08)',
+  heavy: '0 12px 32px rgba(0, 0, 0, 0.15)',
+  overlay: '0 12px 32px rgba(0, 0, 0, 0.2)',
+  testimonial: '4px 8px 24px rgba(0, 0, 0, 0.12)',
+  'primary-button': '2px 4px 5px rgba(231, 69, 58, 0.25)',
+  'primary-button-subtle': '2px 4px 5px rgba(231, 69, 58, 0.10)',
+  'primary-button-hover': '0 6px 10px rgba(231, 69, 58, 0.25)',
+} as const;

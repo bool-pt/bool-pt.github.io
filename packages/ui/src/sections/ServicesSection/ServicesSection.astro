@@ -1,0 +1,36 @@
+---
+import serviceImg1 from '@bool/media/images/sections/homepage/tech-card-01.png';
+import serviceImg2 from '@bool/media/images/sections/homepage/tech-card-02.jpg';
+import serviceImg3 from '@bool/media/images/sections/homepage/tech-card-03.jpg';
+import serviceImg4 from '@bool/media/images/sections/homepage/tech-card-04.jpg';
+import DottedLineCardGrid from '../../compositions/DottedLineCardGrid/DottedLineCardGrid.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+
+const serviceImages = [serviceImg1, serviceImg2, serviceImg3, serviceImg4];
+
+interface ServiceItem {
+  title: string;
+  description: string;
+  href?: string;
+}
+
+interface Props {
+  heading: string;
+  services?: ServiceItem[];
+  learnMoreLabel?: string;
+}
+
+const { heading, services = [], learnMoreLabel = 'Learn more' } = Astro.props;
+---
+
+<Section
+  background="var(--color-muted)"
+  aria-labelledby="services-heading"
+  paddingBlock="5rem 10rem"
+>
+  <SectionContainer>
+    <h2 id="services-heading" class="sr-only">{heading}</h2>
+    <DottedLineCardGrid cards={services} images={serviceImages} learnMoreLabel={learnMoreLabel} />
+  </SectionContainer>
+</Section>

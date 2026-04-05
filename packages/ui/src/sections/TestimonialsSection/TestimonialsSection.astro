@@ -1,0 +1,49 @@
+---
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+import TestimonialsCarousel from '../../compositions/TestimonialsCarousel/TestimonialsCarousel';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+
+interface TestimonialItem {
+  quote: string;
+  company: string;
+  designation: string;
+}
+
+interface Props {
+  heading: string;
+  description: string;
+  testimonials?: TestimonialItem[];
+}
+
+const { heading, description, testimonials = [] } = Astro.props;
+---
+
+<Section
+  aria-labelledby="testimonials-heading"
+  background="var(--black-16)"
+  paddingBlock="3rem"
+  style="min-block-size: 652px"
+>
+  <SectionContainer>
+    <div class="testimonials-section">
+      <SectionIntro
+        headingId="testimonials-heading"
+        colorScheme="light"
+        descriptionMaxWidth="63rem"
+      >
+        <Fragment slot="heading">{heading}</Fragment>
+        <Fragment slot="description">{description}</Fragment>
+      </SectionIntro>
+      <div class="testimonials-carousel-wrap">
+        <TestimonialsCarousel testimonials={testimonials} variant="light" client:visible />
+      </div>
+    </div>
+  </SectionContainer>
+</Section>
+
+<style>
+  .testimonials-carousel-wrap {
+    padding-inline: 0;
+  }
+</style>

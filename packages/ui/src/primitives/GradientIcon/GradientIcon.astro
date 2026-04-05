@@ -1,0 +1,100 @@
+---
+import { gradientIconPaths, type GradientIconName } from '../Icon/icon-data';
+
+interface Props {
+  name: GradientIconName;
+  size?: number;
+  class?: string;
+}
+
+const { name, size = 24, class: className } = Astro.props;
+
+const uid = globalThis.crypto.randomUUID().slice(0, 8);
+const icon = gradientIconPaths[name];
+---
+
+<svg
+  width={size}
+  height={size}
+  viewBox={icon.viewBox}
+  fill="none"
+  aria-hidden="true"
+  class={className}
+>
+  <defs>
+    <linearGradient id={`grad-${uid}`} x1="14" y1="0" x2="14" y2="28" gradientUnits="userSpaceOnUse">
+      <stop style="stop-color: var(--color-primary)" />
+      <stop offset="1" style="stop-color: var(--color-primary-gradient-end)" />
+    </linearGradient>
+    {icon.clipPath && <clipPath id={`clip-${uid}`}><rect width={icon.clipPath.width} height={icon.clipPath.height} fill="white" /></clipPath>}
+    {icon.groups.map((group, gi) => (
+      group.type === 'masked' && (
+        <mask
+          id={`mask-${uid}-${gi}`}
+          style={group.mask.style}
+          maskUnits="userSpaceOnUse"
+          x={group.mask.x}
+          y={group.mask.y}
+          width={group.mask.width}
+          height={group.mask.height}
+        >
+          <path fill-rule="evenodd" clip-rule="evenodd" d={group.mask.rectPath} fill="white" />
+        </mask>
+      )
+    ))}
+  </defs>
+
+  {icon.clipPath ? (
+    <g clip-path={`url(#clip-${uid})`}>
+      {icon.groups.map((group, gi) => {
+        if (group.type === 'masked') {
+          return (
+            <g mask={`url(#mask-${uid}-${gi})`}>
+              {group.paths.map((p) => (
+                <path
+                  fill-rule={p.fillRule}
+                  clip-rule={p.clipRule}
+                  d={p.d}
+                  fill={`url(#grad-${uid})`}
+                />
+              ))}
+            </g>
+          );
+        }
+        return group.paths.map((p) => (
+          <path
+            fill-rule={p.fillRule}
+            clip-rule={p.clipRule}
+            d={p.d}
+            fill={`url(#grad-${uid})`}
+          />
+        ));
+      })}
+    </g>
+  ) : (
+    icon.groups.map((group, gi) => {
+      if (group.type === 'masked') {
+        return (
+          <g mask={`url(#mask-${uid}-${gi})`}>
+            {group.paths.map((p) => (
+              <path
+                fill-rule={p.fillRule}
+                clip-rule={p.clipRule}
+                d={p.d}
+                fill={`url(#grad-${uid})`}
+              />
+            ))}
+          </g>
+        );
+      }
+      return group.paths.map((p) => (
+        <path
+          fill-rule={p.fillRule}
+          clip-rule={p.clipRule}
+          d={p.d}
+          fill={`url(#grad-${uid})`}
+        />
+      ));
+    })
+  )}
+</svg>

@@ -1,0 +1,129 @@
+---
+import BoolLettersOverlay from '../../compositions/BoolLettersOverlay/BoolLettersOverlay.astro';
+import ContactForm from '../../compositions/ContactForm/ContactForm';
+import ContactInfo from '../../compositions/ContactInfo/ContactInfo.astro';
+import SplitWithForm from '../../compositions/SplitWithForm/SplitWithForm.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+
+interface ContactFormLabels {
+  formAria: string;
+  name: string;
+  namePlaceholder: string;
+  firstName: string;
+  firstNamePlaceholder: string;
+  lastName: string;
+  lastNamePlaceholder: string;
+  phone: string;
+  phonePlaceholder: string;
+  email: string;
+  emailPlaceholder: string;
+  message: string;
+  messagePlaceholder: string;
+  submit: string;
+  submitting: string;
+  success: string;
+  error: string;
+  captchaRequired: string;
+}
+
+interface Props {
+  heading: string;
+  body: string;
+  addressLabel: string;
+  addressLines: string[];
+  contactEmail: string;
+  formLabels: ContactFormLabels;
+}
+
+const { heading, body, addressLabel, addressLines, contactEmail, formLabels } = Astro.props;
+---
+
+<Section
+  background="var(--color-surface-dark)"
+  aria-labelledby="contacts-hero-heading"
+  contentVisibility={false}
+  minBlockSize="799px"
+  paddingBlock="9rem 3rem"
+  class="contacts-hero"
+>
+  <div class="contacts-letters">
+    <BoolLettersOverlay opacity={0.2} />
+  </div>
+  <SectionContainer>
+    <SplitWithForm gap="3rem">
+      <ContactInfo
+        slot="info"
+        colorScheme="dark"
+        headingLevel="h1"
+        addressLabel={addressLabel}
+        addressLines={addressLines}
+        email={contactEmail}
+      >
+        <Fragment slot="heading" set:html={heading} />
+        <Fragment slot="body">{body}</Fragment>
+      </ContactInfo>
+      <ContactForm
+        slot="form"
+        client:visible
+        variant="dark"
+        layout="simple"
+        captchaSiteKey={import.meta.env.PUBLIC_HCAPTCHA_SITE_KEY ?? ''}
+        labels={formLabels}
+      />
+    </SplitWithForm>
+  </SectionContainer>
+</Section>
+
+<style>
+  :global(.contacts-hero) {
+    position: relative;
+    min-block-size: 100dvh;
+    block-size: auto;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    :global(.contacts-hero) {
+      min-block-size: 799px;
+    }
+  }
+
+  :global(.contacts-hero .contacts-letters) {
+    position: absolute;
+    inset: 0;
+    inset-block-start: 16rem;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+    color: var(--color-on-dark);
+    filter: blur(1px);
+  }
+
+  :global(.contacts-hero .section-container) {
+    position: relative;
+    z-index: 2;
+  }
+
+  :global(.contacts-hero .text-block-body) {
+    margin-block-start: 2.5rem;
+  }
+
+  :global(.contacts-hero .split-layout-end) {
+    padding-block-start: 4rem;
+  }
+
+  :global(.contacts-hero .contact-info--dark) {
+    padding-inline-end: 2.5rem;
+    color: var(--color-on-dark);
+  }
+
+  :global(.contacts-hero .text-block--dark .text-block-body p),
+  :global(.contacts-hero .contact-info-address p),
+  :global(.contacts-hero .contact-info-address-label),
+  :global(.contacts-hero .contact-info-link),
+  :global(.contacts-hero .label),
+  :global(.contacts-hero .text-block-heading) {
+    color: var(--color-on-dark);
+  }
+</style>

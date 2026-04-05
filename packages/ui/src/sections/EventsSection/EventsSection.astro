@@ -1,0 +1,131 @@
+---
+import { ROUTES } from '@bool/shared';
+import type { EventItem } from '@bool/shared';
+import CalendarEventLayout from '../../compositions/CalendarEventLayout/CalendarEventLayout.astro';
+import EventListCard from '../../compositions/EventListCard/EventListCard.astro';
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+import ButtonLink from '../../primitives/ButtonLink/ButtonLink.astro';
+import Section from '../../primitives/Section/Section.astro';
+
+interface CalendarLabels {
+  prevMonth: string;
+  nextMonth: string;
+  dayNames: string[];
+  monthNames: string[];
+  eventPrefix: string;
+}
+
+interface Props {
+  heading: string;
+  description: string;
+  cardHeading: string;
+  cta: string;
+  calendarLabels: CalendarLabels;
+  events?: EventItem[];
+}
+
+const { heading, description, cardHeading, cta, calendarLabels, events = [] } = Astro.props;
+
+const calendarEvents = events.map((e) => ({
+  date: e.rawDate ?? e.date,
+  tag: e.tag,
+  tagColor: e.tagColor,
+  title: e.title,
+  description: e.description,
+}));
+---
+
+<Section
+  background="var(--color-surface-muted)"
+  aria-labelledby="events-heading"
+  paddingBlock="3rem"
+>
+  <div class="events-container">
+    <SectionIntro
+      headingId="events-heading"
+      headingSize="var(--font-size-display)"
+      bodySize="var(--font-size-lead)"
+      colorScheme="light"
+    >
+      <Fragment slot="heading">{heading}</Fragment>
+      <Fragment slot="description">{description}</Fragment>
+    </SectionIntro>
+
+    <CalendarEventLayout events={calendarEvents} calendarHydration="load" calendarLabels={calendarLabels}>
+      <div class="events-card">
+        <h3 class="events-card-heading">{cardHeading}</h3>
+        <div class="events-list">
+          {
+            events.map((event) => (
+              <EventListCard
+                date={event.date}
+                tag={event.tag}
+                tagColor={event.tagColor}
+                title={event.title}
+                description={event.description}
+                location={event.location}
+                url={event.url}
+              />
+            ))
+          }
+        </div>
+        <div class="events-cta-wrap">
+          <ButtonLink href={ROUTES.events} variant="primary">{cta}</ButtonLink>
+        </div>
+      </div>
+    </CalendarEventLayout>
+  </div>
+</Section>
+
+<style>
+  .events-container {
+    max-inline-size: 1440px;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .events-container {
+      padding-inline: 3rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .events-container {
+      padding-inline: 7rem;
+    }
+  }
+
+  .events-card {
+    --events-card-bg: var(--color-background);
+    --events-card-radius: 0.5rem;
+
+    background: var(--events-card-bg);
+    border-radius: var(--events-card-radius);
+    padding: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .events-card {
+      padding: 2rem;
+    }
+  }
+
+  .events-card-heading {
+    font-size: var(--font-size-h4);
+    font-weight: 700;
+    color: var(--color-surface-dark);
+    margin: 0 0 1.5rem;
+  }
+
+  .events-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .events-cta-wrap {
+    padding-block-start: 1.5rem;
+    display: flex;
+    justify-content: center;
+  }
+</style>

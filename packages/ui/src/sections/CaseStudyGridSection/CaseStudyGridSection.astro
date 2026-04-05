@@ -1,0 +1,100 @@
+---
+import img01 from '@bool/media/images/sections/homepage/home-stock-01.jpg';
+import img02 from '@bool/media/images/sections/homepage/home-stock-02.jpg';
+import img03 from '@bool/media/images/sections/homepage/home-stock-03.jpg';
+import img05 from '@bool/media/images/sections/homepage/home-stock-05.jpg';
+import img07 from '@bool/media/images/sections/homepage/home-stock-07.jpg';
+import img08 from '@bool/media/images/sections/homepage/home-stock-08.jpg';
+import { ROUTES } from '@bool/shared';
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+import CaseStudyGrid from './CaseStudyGrid';
+
+interface CaseItem {
+  title: string;
+  description: string;
+  client: string;
+  tags: string[];
+  image: string;
+  metrics?: Array<{ value: string; label: string }>;
+  challenge?: string;
+  solution?: string;
+  techStack?: string[];
+}
+
+interface Props {
+  tag: string;
+  heading: string;
+  body: string;
+  sectors: string[];
+  techFilters: string[];
+  labels: {
+    close: string;
+    fullCaseStudy: string;
+    emptyMessage: string;
+    filterAriaLabel: string;
+    challenge: string;
+    solution: string;
+    techStack: string;
+    talkToExpert: string;
+    backToCases: string;
+  };
+  cases: CaseItem[];
+}
+
+const { tag, heading, body, sectors, techFilters, labels, cases } = Astro.props;
+
+const frontImages = [img01.src, img02.src, img03.src, img05.src, img07.src, img08.src];
+const casesWithImages = cases.map((c, i) => ({
+  ...c,
+  frontImage: frontImages[i % frontImages.length],
+}));
+---
+
+<Section
+  background="var(--color-background)"
+  aria-labelledby="case-studies-heading"
+  id="case-studies"
+  paddingBlock="4rem 0"
+  class="case-studies-section"
+>
+  <SectionContainer>
+    <SectionIntro
+      headingId="case-studies-heading"
+      align="start"
+      descriptionMaxWidth="42rem"
+      marginBlockEnd="1.5rem"
+      headingSize="48px"
+      bodySize="22px"
+      bodyWeight="500"
+      bodyLineHeight="28px"
+      class="case-studies-intro"
+    >
+      <SectionTag slot="tag" tagColor="primary">{tag}</SectionTag>
+      <Fragment slot="heading">{heading}</Fragment>
+      <Fragment slot="description">{body}</Fragment>
+    </SectionIntro>
+
+    <CaseStudyGrid
+      client:visible
+      cases={casesWithImages}
+      sectors={sectors}
+      techFilters={techFilters}
+      labels={{ ...labels, ctaHref: ROUTES.contacts }}
+    />
+  </SectionContainer>
+</Section>
+
+<style>
+  .case-studies-section {
+    block-size: 1006px;
+    overflow: hidden;
+  }
+
+  :global(.case-studies-intro .section-intro-heading) {
+    margin-block-start: 0;
+    line-height: 54px;
+  }
+</style>

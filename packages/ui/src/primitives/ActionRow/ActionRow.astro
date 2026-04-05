@@ -1,0 +1,21 @@
+---
+interface Props {
+  gap?: string;
+  class?: string;
+}
+
+const { gap, class: className } = Astro.props;
+const style = gap ? `--action-row-gap: ${gap}` : undefined;
+---
+
+<div class:list={['action-row', className]} style={style}>
+  <slot />
+</div>
+
+<style>
+  .action-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--action-row-gap, 1rem);
+  }
+</style>

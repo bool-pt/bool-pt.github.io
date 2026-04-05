@@ -1,0 +1,25 @@
+---
+interface Props {
+  colorScheme?: 'light' | 'dark';
+  class?: string;
+}
+
+const { colorScheme = 'dark', class: className } = Astro.props;
+---
+
+<div class:list={['dashed-card', `dashed-card--${colorScheme}`, className]}>
+  <slot />
+</div>
+
+<style>
+  .dashed-card {
+    border: 2px dashed var(--border-warm-dark);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+  }
+
+  .dashed-card--dark {
+    border-color: var(--color-on-dark-muted);
+  }
+</style>

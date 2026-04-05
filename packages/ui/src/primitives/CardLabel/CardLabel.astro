@@ -1,0 +1,30 @@
+---
+interface Props {
+  colorScheme?: 'primary' | 'on-dark';
+  class?: string;
+}
+
+const { colorScheme = 'primary', class: className } = Astro.props;
+---
+
+<span class:list={['card-label', `card-label--${colorScheme}`, className]}>
+  <slot />
+</span>
+
+<style>
+  .card-label {
+    display: block;
+    font-size: var(--font-size-caption);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .card-label--primary {
+    color: var(--color-primary);
+  }
+
+  .card-label--on-dark {
+    color: var(--color-on-dark-muted);
+  }
+</style>

@@ -1,0 +1,33 @@
+---
+interface Props {
+  class?: string;
+  overflow?: 'hidden' | 'visible';
+}
+
+const { class: className, overflow = 'hidden' } = Astro.props;
+---
+
+<div
+  class:list={[
+    'decorative-overlay',
+    { 'decorative-overlay--visible': overflow === 'visible' },
+    className,
+  ]}
+  aria-hidden="true"
+>
+  <slot />
+</div>
+
+<style>
+  /* Parent must have position: relative for containment (Section.astro provides this). */
+  .decorative-overlay {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .decorative-overlay--visible {
+    overflow: visible;
+  }
+</style>

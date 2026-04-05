@@ -1,0 +1,45 @@
+---
+import peopleTeam from '@bool/media/images/sections/people-team.png';
+import { ROUTES } from '@bool/shared';
+import ImageTextBanner from '../../compositions/ImageTextBanner/ImageTextBanner.astro';
+import TextBlockWithActions from '../../compositions/TextBlockWithActions/TextBlockWithActions.astro';
+import ActionRow from '../../primitives/ActionRow/ActionRow.astro';
+import ButtonLink from '../../primitives/ButtonLink/ButtonLink.astro';
+import Section from '../../primitives/Section/Section.astro';
+
+interface Props {
+  imageAlt: string;
+  heading: string;
+  body: string;
+  ctaJoin: string;
+  ctaMeet: string;
+}
+
+const { imageAlt, heading, body, ctaJoin, ctaMeet } = Astro.props;
+---
+
+<Section
+  background="var(--color-surface-warm-dark)"
+  aria-labelledby="people-heading"
+  paddingBlock="0"
+>
+  <ImageTextBanner image={peopleTeam} imageAlt={imageAlt} height="396px" contentPadding="0 4rem 0 8rem">
+    <TextBlockWithActions
+      headingId="people-heading"
+      headingSize="var(--font-size-display)"
+      headingWeight="400"
+      bodySize="var(--font-size-lead)"
+      colorScheme="dark"
+      bodyMaxWidth="29rem"
+      spacing="1.25rem"
+      actionsSpacing="2rem"
+    >
+      <Fragment slot="heading" set:html={heading} />
+      <p>{body}</p>
+      <ActionRow slot="actions">
+        <ButtonLink href={ROUTES.careers} variant="primary">{ctaJoin}</ButtonLink>
+        <ButtonLink href={ROUTES.people} variant="outline">{ctaMeet}</ButtonLink>
+      </ActionRow>
+    </TextBlockWithActions>
+  </ImageTextBanner>
+</Section>

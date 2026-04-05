@@ -1,0 +1,91 @@
+---
+interface Props {
+  variant?: 'outline' | 'filled' | 'ghost';
+  colorScheme?: 'primary' | 'on-dark' | 'muted';
+  class?: string;
+}
+
+const { variant = 'outline', colorScheme = 'muted', class: className } = Astro.props;
+---
+
+<span class:list={['tag', `tag--${variant}`, `tag--${colorScheme}`, className]}>
+  <slot />
+</span>
+
+<style>
+  .tag {
+    display: inline-block;
+    font-size: var(--font-size-caption);
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    border-radius: var(--radius-full);
+    padding-inline: 0.625rem;
+    padding-block: 0.25rem;
+    white-space: nowrap;
+    border: 1px solid transparent;
+  }
+
+  /* variant: outline */
+  .tag--outline {
+    background-color: transparent;
+  }
+
+  /* variant: filled */
+  .tag--filled {
+    border-color: transparent;
+  }
+
+  /* variant: ghost */
+  .tag--ghost {
+    border-color: transparent;
+  }
+
+  /* colorScheme: primary */
+  .tag--outline.tag--primary {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  .tag--filled.tag--primary {
+    color: var(--color-on-dark);
+    background-color: var(--color-primary);
+  }
+
+  .tag--ghost.tag--primary {
+    color: var(--color-primary);
+    background-color: var(--color-primary-tint);
+  }
+
+  /* colorScheme: on-dark */
+  .tag--outline.tag--on-dark {
+    color: var(--color-on-dark-muted);
+    border-color: var(--white-15);
+  }
+
+  .tag--filled.tag--on-dark {
+    color: var(--color-on-dark);
+    background-color: var(--white-12);
+  }
+
+  .tag--ghost.tag--on-dark {
+    color: var(--color-on-dark-muted);
+    background-color: var(--white-6);
+  }
+
+  /* colorScheme: muted */
+  .tag--outline.tag--muted {
+    color: var(--color-on-dark-muted);
+    border-color: var(--color-border-on-dark);
+  }
+
+  .tag--filled.tag--muted {
+    color: var(--color-muted-foreground);
+    background-color: var(--color-surface-muted);
+  }
+
+  .tag--ghost.tag--muted {
+    color: var(--color-muted-foreground);
+    background-color: var(--color-surface-muted);
+  }
+</style>

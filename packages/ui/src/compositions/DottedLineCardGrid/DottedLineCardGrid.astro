@@ -1,0 +1,287 @@
+---
+import { Image } from 'astro:assets';
+import ArrowLink from '../ArrowLink/ArrowLink.astro';
+
+interface CardItem {
+  title: string;
+  description: string;
+  href?: string;
+}
+
+interface Props {
+  cards: CardItem[];
+  images: ImageMetadata[];
+  learnMoreLabel?: string;
+}
+
+const { cards, images, learnMoreLabel = 'Learn more' } = Astro.props;
+---
+
+<div class="card-grid">
+  {
+    cards.map((card, i) => (
+      <article class="card">
+        <div class="card-inner">
+          <div class="card-image">
+            <Image
+              src={images[i % images.length]}
+              alt={card.title}
+              class="card-img"
+              loading="lazy"
+              width={600}
+              height={400}
+            />
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">{card.title}</h3>
+            <p class="card-desc">{card.description}</p>
+            {card.href && <ArrowLink href={card.href} label={learnMoreLabel} colorScheme="light" />}
+          </div>
+        </div>
+      </article>
+    ))
+  }
+</div>
+
+<style>
+  .card-grid {
+    --card-height: 480px;
+    --stagger: 2rem;
+    --col-gap: 2rem;
+    --row-gap: 2rem;
+    --line-color: var(--muted-45);
+    --line-width: 2px;
+    --dash: 5px;
+    --dash-gap: 5px;
+    --dash-total: calc(var(--dash) + var(--dash-gap));
+    --h-dash: repeating-linear-gradient(
+      to right,
+      var(--line-color) 0 var(--dash),
+      transparent var(--dash) var(--dash-total)
+    );
+    --v-dash: repeating-linear-gradient(
+      to bottom,
+      var(--line-color) 0 var(--dash),
+      transparent var(--dash) var(--dash-total)
+    );
+    --edge-reach: 7rem;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--row-gap);
+    position: relative;
+    overflow: visible;
+  }
+
+  @media (min-width: 640px) {
+    .card-grid {
+      --card-height: clamp(480px, calc(320px + 25vw), 640px);
+      --stagger: clamp(2rem, 5vw, 4rem);
+      grid-template-columns: repeat(2, 1fr);
+      grid-auto-rows: var(--card-height);
+      column-gap: var(--col-gap);
+      row-gap: var(--row-gap);
+      align-items: start;
+    }
+  }
+
+  .card {
+    position: relative;
+    min-inline-size: 0;
+  }
+
+  /* Stagger: left column offset down */
+  @media (min-width: 640px) {
+    .card:nth-child(odd) {
+      margin-block-start: var(--stagger);
+    }
+  }
+
+  /* Dashed connector lines */
+  @media (min-width: 640px) {
+    /* L-shape (┌): top-left of stagger space above card 1 */
+    .card:nth-child(1)::before {
+      content: '';
+      position: absolute;
+      top: calc(-1 * var(--stagger) / 2);
+      right: calc(-1 * var(--col-gap));
+      width: min(36rem, calc(100% + var(--col-gap)));
+      height: calc(var(--stagger) / 2);
+      background-image: var(--h-dash), var(--v-dash);
+      background-size:
+        100% var(--line-width),
+        var(--line-width) 100%;
+      background-position:
+        top left,
+        left top;
+      background-repeat: no-repeat;
+      pointer-events: none;
+    }
+
+    /* Vertical line: card 1 bottom → card 3 top (left column) */
+    .card:nth-child(1)::after {
+      content: '';
+      position: absolute;
+      bottom: calc(-1 * var(--row-gap));
+      left: 2rem;
+      width: var(--line-width);
+      height: var(--row-gap);
+      background-image: var(--v-dash);
+      background-size: var(--line-width) 100%;
+      background-repeat: no-repeat;
+      pointer-events: none;
+    }
+
+    /* Horizontal line between card 3 and card 4 at 60% */
+    .card:nth-child(3)::after {
+      content: '';
+      position: absolute;
+      top: 60%;
+      right: calc(-1 * var(--col-gap));
+      width: var(--col-gap);
+      height: var(--line-width);
+      background-image: var(--h-dash);
+      background-size: 100% var(--line-width);
+      background-repeat: no-repeat;
+      pointer-events: none;
+    }
+
+    /* Horizontal line from section left edge → card 3 at 60% */
+    .card:nth-child(3)::before {
+      content: '';
+      position: absolute;
+      top: 60%;
+      left: calc(-1 * var(--edge-reach));
+      width: var(--edge-reach);
+      height: var(--line-width);
+      background-image: var(--h-dash);
+      background-size: 100% var(--line-width);
+      background-repeat: no-repeat;
+      pointer-events: none;
+    }
+
+    /* Vertical line: card 2 bottom → card 4 top at 95% */
+    .card:nth-child(2)::before {
+      content: '';
+      position: absolute;
+      bottom: calc(-1 * var(--row-gap));
+      left: 95%;
+      width: var(--line-width);
+      height: var(--row-gap);
+      background-image: var(--v-dash);
+      background-size: var(--line-width) 100%;
+      background-repeat: no-repeat;
+      pointer-events: none;
+    }
+
+    /* Vertical line: card 2 bottom → card 4 top at 20% */
+    .card:nth-child(2)::after {
+      content: '';
+      position: absolute;
+      bottom: calc(-1 * var(--row-gap));
+      left: 20%;
+      width: var(--line-width);
+      height: var(--row-gap);
+      background-image: var(--v-dash);
+      background-size: var(--line-width) 100%;
+      background-repeat: no-repeat;
+      pointer-events: none;
+    }
+
+    /* Horizontal line from section left edge → card 1 at 60% */
+    .card-grid::before {
+      content: '';
+      position: absolute;
+      top: calc(var(--stagger) + var(--card-height) * 0.6);
+      left: calc(-1 * var(--edge-reach));
+      width: var(--edge-reach);
+      height: var(--line-width);
+      background-image: var(--h-dash);
+      background-size: 100% var(--line-width);
+      background-repeat: no-repeat;
+      pointer-events: none;
+    }
+
+    /* Horizontal line between card 1 and card 2 at same Y */
+    .card-grid::after {
+      content: '';
+      position: absolute;
+      top: calc(var(--stagger) + var(--card-height) * 0.6);
+      left: calc(50% - var(--col-gap) / 2);
+      width: var(--col-gap);
+      height: var(--line-width);
+      background-image: var(--h-dash);
+      background-size: 100% var(--line-width);
+      background-repeat: no-repeat;
+      pointer-events: none;
+    }
+
+    /* L-shape (┘): below card 4 */
+    .card:nth-child(4)::before {
+      content: '';
+      position: absolute;
+      bottom: calc(-1 * var(--stagger) / 2);
+      left: calc(-1 * var(--col-gap));
+      width: min(36rem, calc(100% + var(--col-gap)));
+      height: calc(var(--stagger) / 2);
+      background-image: var(--h-dash), var(--v-dash);
+      background-size:
+        100% var(--line-width),
+        var(--line-width) 100%;
+      background-position:
+        bottom right,
+        right bottom;
+      background-repeat: no-repeat;
+      pointer-events: none;
+    }
+  }
+
+  .card-inner {
+    position: relative;
+    z-index: 1;
+    block-size: var(--card-height);
+    background-color: var(--color-background);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-image {
+    aspect-ratio: 528 / 420;
+    overflow: hidden;
+    margin: 2rem 2rem 0;
+    border-radius: 0.5rem;
+  }
+
+  .card-img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    border-radius: 0.5rem;
+  }
+
+  .card-body {
+    padding: 1.5rem 2rem 2rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-title {
+    font-size: var(--font-size-lead);
+    font-weight: 700;
+    color: var(--color-surface-dark);
+    margin: 0 0 0.75rem;
+  }
+
+  .card-desc {
+    font-size: var(--font-size-body);
+    font-weight: 500;
+    color: var(--color-foreground);
+    line-height: 1.375;
+    margin: 0 0 1.25rem;
+    flex: 1;
+  }
+</style>

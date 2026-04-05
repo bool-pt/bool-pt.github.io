@@ -1,0 +1,50 @@
+---
+import ctaBg from '@bool/media/images/sections/cta-background.jpg';
+import { ROUTES } from '@bool/shared';
+import CTASection from '../../compositions/CTASection/CTASection.astro';
+import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
+import ButtonLink from '../../primitives/ButtonLink/ButtonLink.astro';
+
+interface Props {
+  tag: string;
+  headingLine1: string;
+  headingLine2: string;
+  body: string;
+  button: string;
+}
+
+const { tag, headingLine1, headingLine2, body, button } = Astro.props;
+---
+
+<div class="insights-cta">
+  <CTASection
+    headingId="insights-cta-heading"
+    align="start"
+    contentMaxWidth="36rem"
+    minHeight="28rem"
+    style={`background-image: linear-gradient(var(--overlay-image), var(--overlay-image)), url(${ctaBg.src})`}
+  >
+    <SectionTag slot="tag">{tag}</SectionTag>
+    <Fragment slot="heading">
+      <span class="heading-light">{headingLine1}</span><br />
+      <span class="heading-bold">{headingLine2}</span>
+    </Fragment>
+    <Fragment slot="body">{body}</Fragment>
+    <ButtonLink href={ROUTES.contacts} variant="primary">{button}</ButtonLink>
+  </CTASection>
+</div>
+
+<style>
+  .heading-light {
+    font-weight: 400;
+  }
+
+  .heading-bold {
+    font-weight: 700;
+  }
+
+  .insights-cta :global(p) {
+    color: var(--color-on-dark) !important;
+    max-inline-size: 28rem;
+  }
+</style>

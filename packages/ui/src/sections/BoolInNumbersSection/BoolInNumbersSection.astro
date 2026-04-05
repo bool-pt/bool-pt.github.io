@@ -1,0 +1,137 @@
+---
+import { Image } from 'astro:assets';
+import numbersImg from '@bool/media/images/sections/about/about-09.png';
+import SkewedCard from '../../compositions/SkewedCard/SkewedCard.astro';
+import TrapezoidStatsRow from '../../compositions/TrapezoidStatsRow/TrapezoidStatsRow.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+import TextBlock from '../../primitives/TextBlock/TextBlock.astro';
+
+interface Props {
+  heading: string;
+  body: string;
+  imageAlt: string;
+  stats: Array<{ number: string; label: string }>;
+}
+
+const { heading, body, imageAlt, stats } = Astro.props;
+---
+
+<Section
+  aria-labelledby="numbers-heading"
+  background="var(--color-background)"
+  contentVisibility={false}
+  paddingBlock="clamp(3rem, 6vw, 5rem)"
+>
+  <SectionContainer>
+    <div class="numbers-wrap">
+      <TextBlock
+        headingId="numbers-heading"
+        headingSize="var(--font-size-display)"
+        headingWeight="400"
+        spacing="clamp(1.5rem, 4vw, 3rem)"
+      >
+        <Fragment slot="heading" set:html={heading} />
+      </TextBlock>
+
+      <div class="numbers-stats-row">
+        <TrapezoidStatsRow stats={stats.map((s) => ({ value: s.number, label: s.label }))} />
+      </div>
+
+      <div class="numbers-bottom-card">
+        <SkewedCard position="lean-left">
+          <p slot="start" class="numbers-description">
+            {body}
+          </p>
+          <div slot="end" class="bottom-image">
+            <div class="bottom-image-inner">
+              <Image
+                src={numbersImg}
+                alt={imageAlt}
+                width={900}
+                height={265}
+                loading="lazy"
+                class="numbers-image"
+              />
+            </div>
+          </div>
+        </SkewedCard>
+      </div>
+    </div>
+  </SectionContainer>
+</Section>
+
+<style>
+  .numbers-stats-row {
+    margin-block-end: 1.5rem;
+  }
+
+  .numbers-stats-row :global(.responsive-grid) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 768px) {
+    .numbers-stats-row :global(.responsive-grid) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .numbers-bottom-card {
+    block-size: auto;
+  }
+
+  @media (min-width: 768px) {
+    .numbers-bottom-card {
+      block-size: 265px;
+    }
+
+    .numbers-bottom-card > :global(*) {
+      block-size: 100%;
+    }
+  }
+
+  .numbers-description {
+    --numbers-desc-font: var(--font-display);
+    --numbers-desc-size: clamp(1rem, 0.7rem + 1.5vw, 1.5rem);
+    --numbers-desc-weight: 600;
+    --numbers-desc-line-height: 1.3;
+    --numbers-desc-color: var(--color-foreground);
+    --numbers-desc-max-width: 384px;
+
+    font-family: var(--numbers-desc-font);
+    font-size: var(--numbers-desc-size);
+    font-weight: var(--numbers-desc-weight);
+    line-height: var(--numbers-desc-line-height);
+    letter-spacing: 0;
+    color: var(--numbers-desc-color);
+    margin: 0;
+    max-inline-size: 100%;
+  }
+
+  .bottom-image {
+    position: relative;
+    block-size: 100%;
+  }
+
+  .bottom-image-inner {
+    position: relative;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    block-size: 100%;
+  }
+
+  .numbers-image {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  @media (min-width: 768px) {
+    .numbers-image {
+      position: absolute;
+      inset: 0;
+    }
+  }
+</style>

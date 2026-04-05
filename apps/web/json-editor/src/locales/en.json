@@ -1,0 +1,68 @@
+{
+  "app.title": "JSON Editor",
+  "app.backToUpload": "Back to upload",
+
+  "upload.title": "JSON Editor",
+  "upload.titleDragOver": "Drop it!",
+  "upload.subtitle": "Drag & drop your JSON file here, or click to browse.",
+  "upload.chooseFile": "Choose File",
+  "upload.backToEditor": "Back to editor",
+  "upload.error.notJson": "Please upload a .json file",
+  "upload.error.notObject": "JSON must be a flat object with string values",
+  "upload.error.notStrings": "All values in the JSON must be strings",
+  "upload.error.invalid": "Invalid JSON file",
+  "upload.error.readFailed": "Failed to read file",
+  "upload.error.dangerous": "File contains unsafe keys",
+
+  "topBar.search.placeholder": "Search",
+  "topBar.keys": "keys",
+  "topBar.changed": "changed",
+  "topBar.undo": "Undo (Ctrl+Z)",
+  "topBar.redo": "Redo (Ctrl+Shift+Z)",
+  "topBar.preview": "Toggle preview",
+  "topBar.themeLight": "Switch to light mode",
+  "topBar.themeDark": "Switch to dark mode",
+  "topBar.download": "Download JSON",
+
+  "sidebar.pages": "Pages",
+  "sidebar.sections": "Sections",
+  "sidebar.shared": "Shared",
+  "sidebar.other": "Other",
+  "sidebar.sharedTag": "shared",
+  "sidebar.expand": "Expand sidebar",
+  "sidebar.collapse": "Collapse sidebar",
+
+  "editor.fields": "FIELDS",
+  "editor.keys": "keys",
+  "editor.changed": "changed",
+  "editor.select": "Select a section from the sidebar",
+  "editor.noResults": "No results for",
+  "editor.searchResults": "Search Results",
+  "editor.matches": "matches",
+  "editor.emptyValue": "Empty value",
+
+  "shared.banner": "This section is shared across multiple pages.",
+  "shared.editLink": "Edit in Shared",
+
+  "repeatingGroup.items": "items",
+  "repeatingGroup.add": "Add",
+  "repeatingGroup.removeItem": "Remove item",
+  "repeatingGroup.confirmRemove": "Remove this item?",
+  "repeatingGroup.confirmYes": "Remove",
+  "repeatingGroup.confirmCancel": "Cancel",
+
+  "preview.title": "How to Preview",
+  "preview.heading": "Preview your changes",
+  "preview.step1.before": "Click ",
+  "preview.step1.bold": "Download JSON",
+  "preview.step1.after": " in the top bar to save your edited file.",
+  "preview.step2": "Replace the original JSON file in your project with the downloaded version.",
+  "preview.step3": "Restart or refresh your dev server to see the changes live.",
+  "preview.tip": "Most dev servers hot-reload automatically when a JSON file changes. No manual restart needed.",
+
+  "confirm.unsavedChanges": "You have unsaved changes. Go back to upload?",
+
+  "error.heading": "Something went wrong",
+  "error.message": "An unexpected error occurred. Please try reloading the page.",
+  "error.reload": "Reload"
+}

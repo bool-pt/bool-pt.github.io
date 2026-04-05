@@ -1,0 +1,71 @@
+---
+import type { EventItem } from '@bool/shared';
+import CalendarEventLayout from '../../compositions/CalendarEventLayout/CalendarEventLayout.astro';
+import EventDetailCard from '../../compositions/EventDetailCard/EventDetailCard.astro';
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+
+interface CalendarLabels {
+  prevMonth: string;
+  nextMonth: string;
+  dayNames: string[];
+  monthNames: string[];
+  eventPrefix: string;
+}
+
+interface Props {
+  tag: string;
+  heading: string;
+  body: string;
+  eventCards: Array<{ category: string; title: string; description: string; dateInfo: string; cta: string; href: string }>;
+  calendarLabels: CalendarLabels;
+  events?: EventItem[];
+}
+
+const { tag, heading, body, eventCards, calendarLabels, events = [] } = Astro.props;
+
+const calendarEvents = events.map((e) => ({
+  date: e.rawDate ?? e.date,
+  tag: e.tag,
+  tagColor: e.tagColor,
+  title: e.title,
+  description: e.description,
+}));
+---
+
+<Section background="var(--color-muted)" aria-labelledby="blog-events-heading">
+  <SectionContainer>
+    <SectionIntro headingId="blog-events-heading" align="start" descriptionMaxWidth="42rem">
+      <SectionTag slot="tag">{tag}</SectionTag>
+      <Fragment slot="heading">{heading}</Fragment>
+      <Fragment slot="description">{body}</Fragment>
+    </SectionIntro>
+
+    <CalendarEventLayout events={calendarEvents} calendarLabels={calendarLabels}>
+      <div class="events-cards">
+        {
+          eventCards.map((event) => (
+            <EventDetailCard
+              category={event.category}
+              title={event.title}
+              description={event.description}
+              dateInfo={event.dateInfo}
+              ctaLabel={event.cta}
+              href={event.href}
+            />
+          ))
+        }
+      </div>
+    </CalendarEventLayout>
+  </SectionContainer>
+</Section>
+
+<style>
+  .events-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+</style>

@@ -1,0 +1,33 @@
+# Auto-detect text files and normalise line endings (LF in repo)
+* text=auto eol=lf
+
+# Explicit text
+*.astro text
+*.ts text
+*.tsx text
+*.js text
+*.mjs text
+*.cjs text
+*.json text
+*.css text
+*.html text
+*.md text
+*.mdx text
+*.yaml text
+*.yml text
+*.toml text
+*.svg text
+
+# Binaries
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.avif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.pdf binary

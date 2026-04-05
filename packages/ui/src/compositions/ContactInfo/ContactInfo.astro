@@ -1,0 +1,108 @@
+---
+import ObfuscatedLink from '../../primitives/ObfuscatedLink/ObfuscatedLink.astro';
+import TextBlock from '../../primitives/TextBlock/TextBlock.astro';
+
+interface Props {
+  colorScheme?: 'light' | 'dark';
+  headingLevel?: 'h1' | 'h2' | 'h3';
+  addressLabel: string;
+  addressLines: string[];
+  email: string;
+  class?: string;
+}
+
+const { colorScheme = 'dark', headingLevel = 'h2', addressLabel, addressLines, email, class: className } = Astro.props;
+
+const headingSize = colorScheme === 'light' ? 'var(--font-size-hero)' : 'var(--font-size-display)';
+---
+
+<div class:list={['contact-info', `contact-info--${colorScheme}`, className]}>
+  <TextBlock
+    headingLevel={headingLevel}
+    headingSize={headingSize}
+    headingWeight="400"
+    colorScheme={colorScheme}
+    spacing="1.25rem"
+    bodySize="1.125rem"
+    bodyLineHeight="1.22"
+  >
+    <slot name="heading" slot="heading" />
+    <p><slot name="body" /></p>
+  </TextBlock>
+  <div class="contact-info-address">
+    <h3 class="contact-info-address-label">{addressLabel}</h3>
+    <address>
+      <p>
+        {addressLines.map((line, i) => <>{i > 0 && <br />}{line}</>)}
+      </p>
+      <ObfuscatedLink
+        href={`mailto:${email}`}
+        label={email}
+        class="contact-info-link"
+      />
+    </address>
+  </div>
+</div>
+
+<style>
+  .contact-info-address {
+    margin-block-start: 1.5rem;
+  }
+
+  .contact-info-address-label {
+    font-size: var(--font-size-body-lg);
+    font-weight: 700;
+    color: var(--color-on-dark);
+    margin: 1.5rem 0;
+  }
+
+  .contact-info-address address {
+    font-style: normal;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .contact-info-address p {
+    font-size: var(--font-size-body);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .contact-info-link {
+    font-size: var(--font-size-body);
+    text-decoration: none;
+    display: block;
+    transition: color 150ms;
+  }
+
+  /* Dark color scheme */
+  .contact-info--dark .contact-info-address p {
+    color: var(--color-on-dark-muted);
+  }
+
+  .contact-info--dark .contact-info-link {
+    color: var(--color-on-dark-muted);
+  }
+
+  .contact-info--dark .contact-info-link:hover {
+    color: var(--color-on-dark);
+  }
+
+  /* Light color scheme */
+  .contact-info--light .contact-info-address-label {
+    color: var(--color-surface-dark);
+  }
+
+  .contact-info--light .contact-info-address p {
+    color: var(--color-muted-foreground);
+  }
+
+  .contact-info--light .contact-info-link {
+    color: var(--color-muted-foreground);
+  }
+
+  .contact-info--light .contact-info-link:hover {
+    color: var(--color-surface-dark);
+  }
+</style>

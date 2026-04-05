@@ -1,0 +1,25 @@
+{
+  "name": "@bool/content",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@bool/shared": "workspace:*",
+    "zod": "catalog:",
+    "astro": "catalog:"
+  },
+  "devDependencies": {
+    "@bool/tsconfig": "workspace:*",
+    "@bool/vitest-config": "workspace:*",
+    "eslint": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

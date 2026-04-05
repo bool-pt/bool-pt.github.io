@@ -1,0 +1,12 @@
+.backTagPrimary {
+  color: var(--color-primary);
+}
+
+.backMeta {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: var(--color-on-dark-muted);
+  margin-block-end: 1.5rem;
+}

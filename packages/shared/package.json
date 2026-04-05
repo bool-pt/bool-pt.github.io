@@ -1,0 +1,27 @@
+{
+  "name": "@bool/shared",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./index.ts",
+    "./tokens": "./src/tokens/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "clsx": "catalog:",
+    "tailwind-merge": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@bool/tsconfig": "workspace:*",
+    "@bool/vitest-config": "workspace:*",
+    "eslint": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

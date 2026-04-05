@@ -1,0 +1,153 @@
+---
+interface Props {
+  headingId: string;
+  colorScheme?: 'light' | 'dark';
+  align?: 'center' | 'start';
+  descriptionMaxWidth?: string;
+  headingLevel?: 'h1' | 'h2' | 'h3';
+  size?: 'default' | 'lg';
+  headingSize?: string;
+  headingWeight?: string;
+  bodySize?: string;
+  bodyWeight?: string;
+  bodyLineHeight?: string;
+  bodyColor?: string;
+  marginBlockEnd?: string;
+  class?: string;
+}
+
+const sizePresets = {
+  default: {},
+  lg: { headingSize: 'var(--font-size-display)', bodySize: 'var(--font-size-lead)' },
+};
+
+const {
+  headingId,
+  colorScheme = 'light',
+  align = 'center',
+  descriptionMaxWidth,
+  headingLevel = 'h2',
+  size = 'default',
+  headingSize: headingSizeProp,
+  headingWeight,
+  bodySize: bodySizeProp,
+  bodyWeight,
+  bodyLineHeight,
+  bodyColor,
+  marginBlockEnd,
+  class: className,
+} = Astro.props;
+
+const headingSize = headingSizeProp ?? sizePresets[size].headingSize;
+const bodySize = bodySizeProp ?? sizePresets[size].bodySize;
+
+const HeadingTag = headingLevel;
+
+const hasDescription = Astro.slots.has('description');
+const hasAction = Astro.slots.has('action');
+
+const wrapperStyle =
+  [
+    headingSize ? `--si-heading-size: ${headingSize}` : null,
+    headingWeight ? `--si-heading-weight: ${headingWeight}` : null,
+    bodySize ? `--si-body-size: ${bodySize}` : null,
+    bodyWeight ? `--si-body-weight: ${bodyWeight}` : null,
+    bodyLineHeight ? `--si-body-line-height: ${bodyLineHeight}` : null,
+    bodyColor ? `--si-body-color: ${bodyColor}` : null,
+    marginBlockEnd ? `--si-margin-block-end: ${marginBlockEnd}` : null,
+  ]
+    .filter(Boolean)
+    .join('; ') || undefined;
+---
+
+<div
+  class:list={[
+    'section-intro',
+    `section-intro--${colorScheme}`,
+    `section-intro--${align}`,
+    className,
+  ]}
+  style={wrapperStyle}
+>
+  <slot name="tag" />
+  <HeadingTag id={headingId} class="section-intro-heading">
+    <slot name="heading" />
+  </HeadingTag>
+  {
+    hasDescription && (
+      <p
+        class="section-intro-body"
+        style={descriptionMaxWidth ? `max-inline-size: ${descriptionMaxWidth}` : undefined}
+      >
+        <slot name="description" />
+      </p>
+    )
+  }
+  {
+    hasAction && (
+      <div class="section-intro-action">
+        <slot name="action" />
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .section-intro {
+    margin-block-end: var(--si-margin-block-end, 3rem);
+  }
+
+  .section-intro--center {
+    text-align: center;
+  }
+
+  .section-intro--start {
+    text-align: start;
+  }
+
+  .section-intro-heading {
+    font-family: var(--font-display);
+    font-size: var(--si-heading-size, var(--font-size-display));
+    font-weight: var(--si-heading-weight, 700);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0 0 1rem;
+  }
+
+  .section-intro-heading :global(strong) {
+    font-weight: 700;
+  }
+
+  .section-intro-body {
+    font-family: var(--font-display);
+    font-size: var(--si-body-size, var(--font-size-lead));
+    font-weight: var(--si-body-weight, 500);
+    line-height: var(--si-body-line-height, 1.65);
+    max-inline-size: 50rem;
+    margin-block: 0;
+  }
+
+  .section-intro--center .section-intro-body {
+    margin-inline: auto;
+  }
+
+  .section-intro-action {
+    margin-block-start: 1.5rem;
+  }
+
+  .section-intro--light .section-intro-heading {
+    color: var(--color-surface-dark);
+  }
+
+  .section-intro--light .section-intro-body {
+    color: var(--si-body-color, var(--color-foreground));
+  }
+
+  .section-intro--dark .section-intro-heading {
+    color: var(--color-on-dark);
+  }
+
+  .section-intro--dark .section-intro-body {
+    color: var(--si-body-color, var(--color-on-dark));
+  }
+</style>

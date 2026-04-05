@@ -1,0 +1,47 @@
+---
+import portraitPlaceholder from '@bool/media/images/placeholders/portrait.png';
+import IntroGridSection from '../../compositions/IntroGridSection/IntroGridSection.astro';
+import PersonCard from '../../compositions/PersonCard/PersonCard.astro';
+
+interface Props {
+  heading: string;
+  body: string;
+  team: Array<{ name: string; role: string; image: string; linkedin?: string }>;
+}
+
+const { heading, body, team } = Astro.props;
+---
+
+<IntroGridSection
+  headingId="team-heading"
+  background="var(--color-surface-warm-dark)"
+  colorScheme="dark"
+  introAlign="center"
+  descriptionMaxWidth="38rem"
+  paddingBlock="5rem"
+  class="team-section"
+>
+  <Fragment slot="heading">{heading}</Fragment>
+  <Fragment slot="description">{body}</Fragment>
+
+  {
+    team.map((member) => (
+      <PersonCard
+        name={member.name}
+        role={member.role}
+        photo={portraitPlaceholder}
+        linkedin={member.linkedin}
+        colorScheme="dark"
+        variant="card"
+      />
+    ))
+  }
+</IntroGridSection>
+
+<style>
+  @media (min-width: 1024px) {
+    :global(.team-section) {
+      min-block-size: 1808px;
+    }
+  }
+</style>

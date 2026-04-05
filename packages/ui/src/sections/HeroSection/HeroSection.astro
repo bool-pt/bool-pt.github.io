@@ -1,0 +1,70 @@
+---
+import heroBg from '@bool/media/images/sections/homepage/home-hero-01.png';
+import BoolLettersOverlay from '../../compositions/BoolLettersOverlay/BoolLettersOverlay.astro';
+import HeroCarousel from './HeroCarousel';
+
+interface Props {
+  ariaLabel: string;
+  slides: Array<{
+    title: string;
+    subtitle: string;
+    ctas: {
+      primary: { label: string; href: string };
+      secondary: { label: string; href: string };
+    };
+  }>;
+  carouselAriaLabels: { slideIndicators: string; slide: string };
+}
+
+const { ariaLabel, slides, carouselAriaLabels } = Astro.props;
+---
+
+<section class="hero" aria-label={ariaLabel}>
+  <HeroCarousel
+    client:load
+    slides={slides}
+    backgroundImage={heroBg.src}
+    ariaLabels={carouselAriaLabels}
+  />
+
+  <div class="hero-letters-scaler">
+    <div class="hero-letters-wrap">
+      <BoolLettersOverlay />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-block-size: 100dvh;
+    background-color: var(--color-surface-dark);
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .hero {
+      min-block-size: 60rem;
+    }
+  }
+
+  .hero-letters-scaler {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+    block-size: 0;
+    z-index: 1;
+    pointer-events: none;
+    color: var(--color-on-dark);
+    container-type: inline-size;
+  }
+
+  .hero-letters-wrap {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-end: 0;
+    inline-size: 100cqi;
+    aspect-ratio: 1440 / 518;
+    overflow: visible;
+  }
+</style>

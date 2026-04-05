@@ -1,0 +1,57 @@
+---
+import TextBlock from '../../primitives/TextBlock/TextBlock.astro';
+
+interface Props {
+  headingLevel?: 'h1' | 'h2' | 'h3' | 'h4' | 'p';
+  headingId?: string;
+  headingSize?: string;
+  headingWeight?: string;
+  bodySize?: string;
+  bodyMaxWidth?: string;
+  bodyLineHeight?: string;
+  spacing?: string;
+  colorScheme?: 'light' | 'dark';
+  actionsSpacing?: string;
+  class?: string;
+}
+
+const {
+  headingLevel,
+  headingId,
+  headingSize,
+  headingWeight,
+  bodySize,
+  bodyMaxWidth,
+  bodyLineHeight,
+  spacing,
+  colorScheme = 'light',
+  actionsSpacing = '2.5rem',
+  class: className,
+} = Astro.props;
+
+const hasActions = Astro.slots.has('actions');
+---
+
+<div class:list={['text-block-with-actions', className]}>
+  <TextBlock
+    headingLevel={headingLevel}
+    headingId={headingId}
+    headingSize={headingSize}
+    headingWeight={headingWeight}
+    bodySize={bodySize}
+    bodyMaxWidth={bodyMaxWidth}
+    bodyLineHeight={bodyLineHeight}
+    spacing={spacing}
+    colorScheme={colorScheme}
+  >
+    <slot name="heading" slot="heading" />
+    <slot />
+  </TextBlock>
+  {
+    hasActions && (
+      <div class="text-block-actions" style={`margin-block-start: ${actionsSpacing}`}>
+        <slot name="actions" />
+      </div>
+    )
+  }
+</div>

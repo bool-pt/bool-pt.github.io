@@ -1,0 +1,72 @@
+---
+import IntroGridSection from '../../compositions/IntroGridSection/IntroGridSection.astro';
+import NumberedCard from '../../compositions/NumberedCard/NumberedCard.astro';
+import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
+
+interface Props {
+  tag: string;
+  heading: string;
+  subtitle: string;
+  values: Array<{ number: string; title: string; body: string }>;
+}
+
+const { tag, heading, subtitle, values } = Astro.props;
+---
+
+<div class="values-wrap">
+  <IntroGridSection
+    headingId="values-heading"
+    introAlign="start"
+    headingSize="clamp(2rem, 6vw, 58px)"
+    bodySize="clamp(1rem, 2.5vw, 22px)"
+    descriptionMaxWidth="32rem"
+    gridColumns={4}
+    gridCollapseAt="md"
+    gridGap="0"
+    gridRole="list"
+  >
+    <SectionTag slot="tag" tagColor="primary">{tag}</SectionTag>
+    <Fragment slot="heading">{heading}</Fragment>
+    <Fragment slot="description">{subtitle}</Fragment>
+
+    {
+      values.map((value) => (
+        <NumberedCard
+          number={value.number}
+          title={value.title}
+          body={value.body}
+        />
+      ))
+    }
+  </IntroGridSection>
+</div>
+
+<style>
+  .values-wrap :global(.hover-card) {
+    border: none;
+    border-radius: 0;
+    border-block-end: 1px solid var(--white-20);
+  }
+
+  @media (min-width: 768px) {
+    .values-wrap :global(section) {
+      block-size: 600px;
+    }
+
+    .values-wrap :global(.hover-card) {
+      border-block-end: none;
+      border-inline-end: 1px solid var(--white-20);
+    }
+  }
+
+  .values-wrap :global(.hover-card:last-child) {
+    border-inline-end: none;
+    border-block-end: none;
+  }
+
+  @media (min-width: 768px) {
+    .values-wrap :global(.hover-card:first-child .numbered-card-inner) {
+      padding-inline-start: 0;
+    }
+  }
+</style>

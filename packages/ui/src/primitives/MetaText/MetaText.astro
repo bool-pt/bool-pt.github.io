@@ -1,0 +1,28 @@
+---
+interface Props {
+  colorScheme?: 'light' | 'dark';
+  class?: string;
+}
+
+const { colorScheme = 'dark', class: className } = Astro.props;
+---
+
+<p class:list={['meta-text', `meta-text--${colorScheme}`, className]}>
+  <slot />
+</p>
+
+<style>
+  .meta-text {
+    font-size: var(--font-size-body-sm);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .meta-text--dark {
+    color: var(--color-on-dark-muted);
+  }
+
+  .meta-text--light {
+    color: var(--color-muted-foreground);
+  }
+</style>

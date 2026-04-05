@@ -1,0 +1,99 @@
+---
+import { t, tCollection, tList } from '@bool/i18n';
+import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
+import ContactSection from '@bool/ui/sections/ContactSection.astro';
+import HowWeWorkSection from '@bool/ui/sections/HowWeWorkSection.astro';
+import LetsBuildCTASection from '@bool/ui/sections/LetsBuildCTASection.astro';
+import NewsletterCTASection from '@bool/ui/sections/NewsletterCTASection.astro';
+import PowerAISection from '@bool/ui/sections/PowerAISection.astro';
+import ServicesHeroSection from '@bool/ui/sections/ServicesHeroSection.astro';
+import SolutionsROISection from '@bool/ui/sections/SolutionsROISection.astro';
+import StatsBannerSection from '@bool/ui/sections/StatsBannerSection.astro';
+import TechStackSection from '@bool/ui/sections/TechStackSection.astro';
+import { getHeaderLabels, getFooterLabels, getContactSectionProps, getNewsletterLabels } from '../labels';
+
+const solutions = tCollection('solutionsRoi', ['name', 'result']);
+
+const platformKeys = ['outsystems', 'powerplatform', 'mendix', 'opensource'] as const;
+const platforms = tCollection('techStack.platforms', ['name', 'expert', 'role', 'body'])
+  .map((p, i) => ({
+    key: platformKeys[i] ?? '',
+    ...p,
+    features: tList(`techStack.platforms.${i + 1}.features`),
+  }));
+
+const iconNames = ['shield', 'chart', 'trophy', 'rocket', 'document'] as const;
+const howWeWorkCards = tCollection('howWeWork.cards', ['subtitle', 'title', 'description', 'bullet1', 'bullet2', 'bullet3'])
+  .map((card, i) => ({
+    subtitle: card.subtitle,
+    title: card.title,
+    description: card.description,
+    bullets: [card.bullet1, card.bullet2, card.bullet3],
+    iconName: iconNames[i] ?? 'shield' as const,
+  }));
+---
+
+<BaseLayout
+  title={t('pageMeta.services.title')}
+  description={t('pageMeta.services.description')}
+  headerLabels={getHeaderLabels()}
+  footerLabels={getFooterLabels()}
+>
+  <ServicesHeroSection
+    heading={t('servicesHero.heading')}
+    body1={t('servicesHero.body1')}
+    body2={t('servicesHero.body2')}
+  />
+  <PowerAISection
+    showCta={false}
+    minBlockSize="401px"
+    imageWidth={486}
+    imageHeight={241}
+    heading={t('aiPitch.heading')}
+    body1={t('aiPitch.body1')}
+    body2={t('aiPitch.body2')}
+    cta={t('powerAi.cta')}
+    imageAlt={t('powerAi.image.alt')}
+  />
+  <SolutionsROISection
+    heading={t('solutionsRoi.heading')}
+    colSolutions={t('solutionsRoi.colSolutions')}
+    colResults={t('solutionsRoi.colResults')}
+    ariaLabel={t('solutionsRoi.aria')}
+    solutions={solutions}
+  />
+  <StatsBannerSection
+    ariaLabel={t('statsBanner.aiAdoption.aria')}
+    imageAlt={t('statsBanner.image.alt')}
+    quote={t('statsBanner.quote')}
+    tagline={t('statsBanner.tagline')}
+  />
+  <TechStackSection
+    readinessExpertName={t('aiReadiness.expertName')}
+    readinessExpertRole={t('aiReadiness.expertRole')}
+    readinessHeading={t('aiReadiness.heading')}
+    readinessBody={t('aiReadiness.body')}
+    readinessChecks={tList('aiReadiness.checks')}
+    readinessCta={t('aiReadiness.cta')}
+    techHeading={t('techStack.heading')}
+    techBody={t('techStack.body')}
+    availableConsultation={t('techStack.availableConsultation')}
+    contactExpert={t('techStack.contactExpert')}
+    platforms={platforms}
+  />
+  <HowWeWorkSection
+    heading={t('howWeWork.heading')}
+    cards={howWeWorkCards}
+  />
+  <LetsBuildCTASection
+    heading={t('ctaBanner.heading')}
+    body={t('ctaBanner.body')}
+    button={t('ctaBanner.button')}
+  />
+  <ContactSection {...getContactSectionProps()} background="var(--color-surface-black)" />
+  <NewsletterCTASection
+    heading={t('newsletterCta.heading')}
+    body={t('newsletterCta.body')}
+    newsletterLabels={getNewsletterLabels()}
+  />
+</BaseLayout>

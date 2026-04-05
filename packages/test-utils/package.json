@@ -1,0 +1,34 @@
+{
+  "name": "@bool/test-utils",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": "./index.ts",
+    "./react": "./react.tsx",
+    "./http": "./http.ts"
+  },
+  "peerDependencies": {
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "@testing-library/react": "catalog:",
+    "@testing-library/user-event": "catalog:",
+    "vitest": "catalog:"
+  },
+  "peerDependenciesMeta": {
+    "react": { "optional": true },
+    "react-dom": { "optional": true },
+    "@testing-library/react": { "optional": true },
+    "@testing-library/user-event": { "optional": true }
+  },
+  "devDependencies": {
+    "@bool/tsconfig": "workspace:*",
+    "@testing-library/react": "catalog:",
+    "@testing-library/user-event": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "vitest": "catalog:",
+    "typescript": "catalog:"
+  }
+}

@@ -1,0 +1,27 @@
+---
+interface Props {
+  href: string;
+  label: string;
+  class?: string;
+}
+
+const { href, label, class: className } = Astro.props;
+---
+
+<a
+  href="#"
+  class:list={['obfuscated-link', className]}
+  data-contact={btoa(href)}
+  data-label={btoa(label)}></a>
+
+<script>
+  document.querySelectorAll('.obfuscated-link[data-contact]').forEach((el) => {
+    const label = atob(el.getAttribute('data-label') || '');
+    el.textContent = label;
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      el.setAttribute('href', atob(el.getAttribute('data-contact') || ''));
+      window.location.href = el.getAttribute('href') || '';
+    });
+  });
+</script>

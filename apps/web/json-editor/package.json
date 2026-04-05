@@ -1,0 +1,38 @@
+{
+  "name": "@bool/json-editor",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:fresh": "node -e \"const fs=require('fs');fs.rmSync('node_modules/.vite',{recursive:true,force:true})\" && vite --force",
+    "build": "vite build",
+    "build:analyze": "ANALYZE=true vite build",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@bool/analytics": "workspace:*",
+    "@bool/json-editor-core": "workspace:*",
+    "@bool/shared": "workspace:*",
+    "clsx": "catalog:",
+    "lucide-react": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "tailwind-merge": "catalog:",
+    "tailwindcss": "catalog:"
+  },
+  "devDependencies": {
+    "@bool/eslint-config": "workspace:*",
+    "@bool/tsconfig": "workspace:*",
+    "@bool/vite-config": "workspace:*",
+    "@tailwindcss/vite": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "eslint": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  }
+}

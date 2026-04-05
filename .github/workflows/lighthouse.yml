@@ -1,0 +1,38 @@
+name: Lighthouse CI
+
+on:
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: lighthouse-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lighthouse:
+    name: Lighthouse Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Build site
+        run: pnpm build
+        env:
+          PUBLIC_CONTACT_API_URL: ${{ vars.PUBLIC_CONTACT_API_URL }}
+          PUBLIC_NEWSLETTER_API_URL: ${{ vars.PUBLIC_NEWSLETTER_API_URL }}
+          PUBLIC_HCAPTCHA_SITE_KEY: ${{ vars.PUBLIC_HCAPTCHA_SITE_KEY }}
+          PUBLIC_GA_MEASUREMENT_ID: ${{ vars.PUBLIC_GA_MEASUREMENT_ID }}
+
+      - name: Run Lighthouse
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          configPath: tooling/lighthouse/.lighthouserc.json
+          uploadArtifacts: true
+          temporaryPublicStorage: true

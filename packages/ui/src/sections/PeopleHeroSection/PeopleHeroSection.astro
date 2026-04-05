@@ -1,0 +1,109 @@
+---
+import heroBg from '@bool/media/images/sections/homepage/home-hero-01.png';
+import { ROUTES } from '@bool/shared';
+import BoolLettersOverlay from '../../compositions/BoolLettersOverlay/BoolLettersOverlay.astro';
+import DarkPageHero from '../../compositions/DarkPageHero/DarkPageHero.astro';
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
+import TrapezoidStatsRow from '../../compositions/TrapezoidStatsRow/TrapezoidStatsRow.astro';
+import ActionRow from '../../primitives/ActionRow/ActionRow.astro';
+import ButtonLink from '../../primitives/ButtonLink/ButtonLink.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+
+interface Props {
+  tag: string;
+  heading: string;
+  body: string;
+  ctaMeet: string;
+  ctaJoin: string;
+  stats: Array<{ value: string; label: string }>;
+}
+
+const { tag, heading, body, ctaMeet, ctaJoin, stats } = Astro.props;
+---
+
+<DarkPageHero
+  backgroundImage={heroBg.src}
+  gradientOverlay="var(--overlay-image-heavy), var(--overlay-image-light)"
+  paddingBlock="10rem 5rem"
+  minBlockSize="960px"
+  aria-labelledby="people-hero-heading"
+  class="people-hero"
+>
+  <div class="people-letters-container">
+    <BoolLettersOverlay opacity={0.25} />
+  </div>
+  <SectionContainer>
+    <SectionIntro
+      headingId="people-hero-heading"
+      headingSize="58px"
+      headingWeight="300"
+      bodySize="22px"
+      bodyWeight="400"
+      bodyLineHeight="1.6"
+      colorScheme="dark"
+      headingLevel="h1"
+      align="start"
+      class="hero-top"
+    >
+      <SectionTag slot="tag" tagColor="primary">{tag}</SectionTag>
+      <Fragment slot="heading"><Fragment set:html={heading} /></Fragment>
+      <Fragment slot="description">{body}</Fragment>
+    </SectionIntro>
+    <ActionRow class="hero-content-actions">
+      <ButtonLink href="#team" variant="primary">{ctaMeet}</ButtonLink>
+      <ButtonLink href={ROUTES.contacts} variant="outline">{ctaJoin}</ButtonLink>
+    </ActionRow>
+
+    <div class="hero-stats">
+      <TrapezoidStatsRow stats={stats} metallicBorder />
+    </div>
+  </SectionContainer>
+</DarkPageHero>
+
+<style>
+  :global(.people-hero .hero-top) {
+    max-inline-size: 48rem;
+    margin-block-end: 2.5rem;
+  }
+
+  :global(.people-hero .hero-top .section-intro-body) {
+    max-inline-size: 592px;
+  }
+
+  :global(.people-hero .hero-content-actions) {
+    margin-block-end: 6rem;
+  }
+
+  :global(.people-hero .people-letters-container) {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: 50%;
+    inset-block-end: 0;
+    z-index: 0;
+    pointer-events: none;
+    color: var(--color-on-dark);
+    overflow: hidden;
+    filter: blur(1.5px);
+  }
+
+  :global(.people-hero .hero-stats .responsive-grid) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 768px) {
+    :global(.people-hero .hero-stats .responsive-grid) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  :global(.people-hero .hero-stats .trapezoid-card) {
+    background-color: var(--white-6);
+    --trapezoid-value-color: var(--color-on-dark);
+    --trapezoid-label-color: var(--color-on-dark-muted);
+  }
+
+  :global(.people-hero .hero-stats .trapezoid-shadow) {
+    filter: none;
+  }
+</style>

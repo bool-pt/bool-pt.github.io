@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "files": [],
+  "references": [
+    { "path": "packages/shared" },
+    { "path": "packages/i18n" },
+    { "path": "packages/api" },
+    { "path": "packages/seo" },
+    { "path": "packages/analytics" },
+    { "path": "packages/compliance" },
+    { "path": "packages/content" },
+    { "path": "packages/media" },
+    { "path": "packages/ui" },
+    { "path": "packages/json-editor" }
+  ]
+}

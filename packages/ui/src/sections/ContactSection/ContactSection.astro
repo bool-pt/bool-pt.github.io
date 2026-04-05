@@ -1,0 +1,85 @@
+---
+import ContactForm from '../../compositions/ContactForm/ContactForm';
+import ContactInfo from '../../compositions/ContactInfo/ContactInfo.astro';
+import SplitWithForm from '../../compositions/SplitWithForm/SplitWithForm.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+
+interface ContactFormLabels {
+  formAria: string;
+  name: string;
+  namePlaceholder: string;
+  firstName: string;
+  firstNamePlaceholder: string;
+  lastName: string;
+  lastNamePlaceholder: string;
+  phone: string;
+  phonePlaceholder: string;
+  email: string;
+  emailPlaceholder: string;
+  message: string;
+  messagePlaceholder: string;
+  submit: string;
+  submitting: string;
+  success: string;
+  error: string;
+  captchaRequired: string;
+}
+
+interface Props {
+  heading: string;
+  body: string;
+  background?: string;
+  addressLabel: string;
+  addressLines: string[];
+  contactEmail: string;
+  formLabels: ContactFormLabels;
+}
+
+const {
+  heading,
+  body,
+  background = 'var(--color-surface-dark)',
+  addressLabel,
+  addressLines,
+  contactEmail,
+  formLabels,
+} = Astro.props;
+---
+
+<Section
+  background={background}
+  aria-labelledby="contact-heading"
+  style="min-block-size: 588px; block-size: auto"
+  class="contact-section"
+>
+  <SectionContainer>
+    <SplitWithForm>
+      <ContactInfo
+        slot="info"
+        colorScheme="dark"
+        headingLevel="h2"
+        addressLabel={addressLabel}
+        addressLines={addressLines}
+        email={contactEmail}
+      >
+        <Fragment slot="heading">{heading}</Fragment>
+        <Fragment slot="body">{body}</Fragment>
+      </ContactInfo>
+      <ContactForm
+        slot="form"
+        client:load
+        captchaSiteKey={import.meta.env.PUBLIC_HCAPTCHA_SITE_KEY ?? ''}
+        labels={formLabels}
+      />
+    </SplitWithForm>
+  </SectionContainer>
+</Section>
+
+<style>
+  @media (min-width: 768px) {
+    :global(.contact-section .split-layout-start) {
+      padding-inline-end: 5.5rem;
+    }
+  }
+</style>

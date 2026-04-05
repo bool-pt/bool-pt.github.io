@@ -1,0 +1,30 @@
+---
+import Tag from '../../primitives/Tag/Tag.astro';
+
+interface Props {
+  tags: string[];
+  variant?: 'outline' | 'filled' | 'ghost';
+  colorScheme?: 'primary' | 'on-dark' | 'muted';
+  class?: string;
+}
+
+const { tags, variant = 'outline', colorScheme = 'muted', class: className } = Astro.props;
+---
+
+<div class:list={['tag-group', className]}>
+  {
+    tags.map((tag) => (
+      <Tag variant={variant} colorScheme={colorScheme}>
+        {tag}
+      </Tag>
+    ))
+  }
+</div>
+
+<style>
+  .tag-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+  }
+</style>

@@ -1,0 +1,66 @@
+---
+import { CONSENT_STORAGE_KEY } from '@bool/compliance';
+import { GA_MEASUREMENT_ID } from './config';
+
+// GA4 via Partytown — runs off main thread.
+// Scripts are injected only after the user grants analytics consent.
+// On page load, checks localStorage for existing consent.
+// If none, listens for the 'bool:consent-granted' event from @bool/compliance.
+---
+
+{GA_MEASUREMENT_ID && (
+  <Fragment>
+  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+  <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
+  <script
+    define:vars={{ GA_MEASUREMENT_ID, CONSENT_STORAGE_KEY }}
+  >
+    (function () {
+      function hasAnalyticsConsent() {
+        try {
+          var stored = localStorage.getItem(CONSENT_STORAGE_KEY);
+          if (!stored) return false;
+          var consent = JSON.parse(stored);
+          return consent && consent.analytics === true;
+        } catch {
+          return false;
+        }
+      }
+
+      function injectGA() {
+        if (document.querySelector('script[data-ga-injected]')) return;
+
+        var gtagScript = document.createElement('script');
+        gtagScript.async = true;
+        gtagScript.type = 'text/partytown';
+        gtagScript.src =
+          'https://www.googletagmanager.com/gtag/js?id=' + GA_MEASUREMENT_ID;
+        gtagScript.setAttribute('data-ga-injected', 'true');
+        document.head.appendChild(gtagScript);
+
+        var inlineScript = document.createElement('script');
+        inlineScript.type = 'text/partytown';
+        inlineScript.textContent =
+          'window.dataLayer=window.dataLayer||[];' +
+          'function gtag(){dataLayer.push(arguments);}' +
+          "gtag('js',new Date());" +
+          "gtag('config','" +
+          GA_MEASUREMENT_ID +
+          "',{anonymize_ip:true});";
+        document.head.appendChild(inlineScript);
+      }
+
+      if (hasAnalyticsConsent()) {
+        injectGA();
+      } else {
+        window.addEventListener('bool:consent-granted', function handler(e) {
+          if (e.detail && e.detail.analytics === true) {
+            injectGA();
+            window.removeEventListener('bool:consent-granted', handler);
+          }
+        });
+      }
+    })();
+  </script>
+  </Fragment>
+)}

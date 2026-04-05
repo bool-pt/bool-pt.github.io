@@ -1,0 +1,70 @@
+/* Mobile-first */
+.layout {
+  display: flex;
+  flex: 1;
+  inline-size: 100%;
+  padding-block-start: 56px;
+  background: var(--color-surface-dark, #0a0a0a);
+}
+
+.content {
+  flex: 1;
+  padding: 1rem;
+  min-block-size: calc(100dvh - 56px);
+  background: var(--editor-bg);
+  border-start-start-radius: 0;
+  transition: margin-inline-start 200ms, margin-inline-end 300ms;
+}
+
+.contentWithPreview {
+  margin-inline-end: 50%;
+}
+
+/* Mobile: content takes full width, sidebar is an overlay */
+.mobileMenuButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  border: 1px solid var(--color-border-on-dark, rgba(255, 255, 255, 0.08));
+  border-radius: var(--radius-md, 0.375rem);
+  background: none;
+  color: var(--color-on-dark-muted, rgba(255, 255, 255, 0.7));
+  cursor: pointer;
+  transition: background-color 150ms, color 150ms;
+}
+
+.mobileMenuButton:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-on-dark, #fff);
+}
+
+/* ── Tablet+ (768px) ── */
+@media (min-width: 768px) {
+  .layout {
+    padding-block-start: 64px;
+  }
+
+  .content {
+    padding: 1.5rem 2rem 1.5rem 4rem;
+    min-block-size: calc(100dvh - 64px);
+    margin-inline-start: var(--sidebar-width, 220px);
+    border-start-start-radius: var(--radius-2xl, 1rem);
+  }
+
+  .mobileMenuButton {
+    display: none;
+  }
+}
+
+/* ── Desktop (1024px) ── */
+@media (min-width: 1024px) {
+  .layout {
+    padding-block-start: 72px;
+  }
+
+  .content {
+    min-block-size: calc(100dvh - 72px);
+  }
+}

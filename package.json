@@ -1,0 +1,64 @@
+{
+  "name": "bool",
+  "private": true,
+  "scripts": {
+    "dev": "turbo dev --filter=@bool/web",
+    "dev:json-editor": "turbo dev --filter=@bool/json-editor",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "turbo test",
+    "test:e2e": "playwright test --config e2e/playwright.config.ts",
+    "typecheck": "turbo typecheck",
+    "changeset": "changeset",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@bool/eslint-config": "workspace:*",
+    "@bool/prettier-config": "workspace:*",
+    "@commitlint/cli": "catalog:",
+    "@commitlint/config-conventional": "catalog:",
+    "eslint": "catalog:",
+    "husky": "catalog:",
+    "lint-staged": "catalog:",
+    "@axe-core/playwright": "catalog:",
+    "@changesets/changelog-github": "catalog:",
+    "@changesets/cli": "catalog:",
+    "@playwright/test": "catalog:",
+    "playwright": "catalog:",
+    "prettier": "catalog:",
+    "turbo": "catalog:",
+    "typescript": "catalog:"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,astro,js,cjs,mjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yaml,yml,css}": [
+      "prettier --write"
+    ]
+  },
+  "pnpm": {
+    "overrides": {
+      "flatted": ">=3.4.2",
+      "picomatch": ">=4.0.4",
+      "h3": ">=1.15.9",
+      "smol-toml": ">=1.6.1",
+      "brace-expansion": ">=5.0.5",
+      "yaml": ">=2.8.3",
+      "tsconfck": ">=3.1.6"
+    },
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "typescript": ">=6.0.0"
+      }
+    }
+  },
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.15.4"
+}

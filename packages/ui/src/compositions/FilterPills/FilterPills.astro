@@ -1,0 +1,63 @@
+---
+interface Props {
+  items: string[];
+  activeIndex?: number;
+  ariaLabel: string;
+  class?: string;
+}
+
+const { items, activeIndex = -1, ariaLabel, class: className } = Astro.props;
+---
+
+<div class:list={['filter-pills', className]} role="tablist" aria-label={ariaLabel}>
+  {
+    items.map((item, i) => (
+      <button
+        type="button"
+        class:list={['filter-pill', { 'filter-pill--active': i === activeIndex }]}
+        role="tab"
+        aria-selected={i === activeIndex ? 'true' : 'false'}
+      >
+        {item}
+      </button>
+    ))
+  }
+</div>
+
+<style>
+  .filter-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .filter-pill {
+    display: inline-block;
+    padding-inline: 1.25rem;
+    padding-block: 0.4375rem;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--color-border);
+    background-color: transparent;
+    color: var(--color-muted-foreground);
+    font-size: var(--font-size-caption);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+      background-color 150ms,
+      color 150ms,
+      border-color 150ms;
+  }
+
+  .filter-pill:hover {
+    border-color: var(--color-foreground);
+    color: var(--color-foreground);
+  }
+
+  .filter-pill--active {
+    background-color: var(--color-primary);
+    color: var(--color-on-dark);
+    border-color: var(--color-primary);
+  }
+</style>

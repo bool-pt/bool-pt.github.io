@@ -1,0 +1,38 @@
+---
+import ResponsiveGrid from '../../primitives/ResponsiveGrid/ResponsiveGrid.astro';
+import TrapezoidStatCard from '../TrapezoidStatCard/TrapezoidStatCard.astro';
+
+interface Props {
+  stats: Array<{ value: string; label: string }>;
+  ariaLabel: string;
+  metallicBorder?: boolean;
+  class?: string;
+}
+
+const { stats, ariaLabel, metallicBorder = false, class: className } = Astro.props;
+---
+
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <defs>
+    <clipPath id="trapezoid-v" clipPathUnits="objectBoundingBox">
+      <path
+        d="M 0 0.06 Q 0 0 0.05 0 L 0.95 0 Q 1 0 1 0.06 L 0.9 0.94 Q 0.89 1 0.85 1 L 0.15 1 Q 0.11 1 0.1 0.94 Z"
+      ></path>
+    </clipPath>
+    <clipPath id="trapezoid-a" clipPathUnits="objectBoundingBox">
+      <path
+        d="M 0.1 0.06 Q 0.11 0 0.15 0 L 0.85 0 Q 0.89 0 0.9 0.06 L 1 0.94 Q 1 1 0.95 1 L 0.05 1 Q 0 1 0 0.94 Z"
+      ></path>
+    </clipPath>
+  </defs>
+</svg>
+
+<div class:list={['trapezoid-stats-row', className]}>
+  <ResponsiveGrid columns={4} collapseAt="md" role="list" aria-label={ariaLabel}>
+    {
+      stats.map((stat) => (
+        <TrapezoidStatCard value={stat.value} label={stat.label} metallicBorder={metallicBorder} />
+      ))
+    }
+  </ResponsiveGrid>
+</div>

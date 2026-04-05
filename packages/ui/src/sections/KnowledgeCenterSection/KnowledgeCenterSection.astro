@@ -1,0 +1,99 @@
+---
+import img01 from '@bool/media/images/sections/homepage/insight-01.jpg';
+import img02 from '@bool/media/images/sections/homepage/insight-02.jpg';
+import img03 from '@bool/media/images/sections/homepage/insight-03.jpg';
+import { ROUTES } from '@bool/shared';
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+import KnowledgeGrid from './KnowledgeGrid';
+
+interface ArticleItem {
+  category: string;
+  title: string;
+  author: string;
+  readTime: string;
+  views: string;
+  subtitle: string;
+  challenge: string;
+  solution: string;
+  href: string;
+  tags: string[];
+  metrics: Array<{ value: string; label: string }>;
+  techStack: string[];
+}
+
+interface Props {
+  tag: string;
+  heading: string;
+  body: string;
+  filters: string[];
+  articles: ArticleItem[];
+  labels: {
+    close: string;
+    readArticle: string;
+    readTime: string;
+    views: string;
+    emptyMessage: string;
+    filterAriaLabel: string;
+    challenge: string;
+    solution: string;
+    techStack: string;
+    talkToExpert: string;
+    backToArticles: string;
+  };
+}
+
+const { tag, heading, body, filters, articles, labels } = Astro.props;
+
+const frontImages = [img01.src, img02.src, img03.src];
+
+const articlesWithImages = articles.map((a, i) => ({
+  ...a,
+  frontImage: frontImages[i % frontImages.length],
+}));
+---
+
+<Section
+  background="var(--color-background)"
+  aria-labelledby="knowledge-heading"
+  id="knowledge"
+  class="knowledge-section"
+  style="padding-block-end: 0"
+>
+  <SectionContainer>
+    <SectionIntro
+      headingId="knowledge-heading"
+      align="start"
+      descriptionMaxWidth="42rem"
+      marginBlockEnd="1.5rem"
+      headingSize="48px"
+      bodySize="22px"
+      bodyWeight="500"
+      class="knowledge-intro"
+    >
+      <SectionTag slot="tag">{tag}</SectionTag>
+      <Fragment slot="heading">{heading}</Fragment>
+      <Fragment slot="description">{body}</Fragment>
+    </SectionIntro>
+
+    <KnowledgeGrid
+      client:visible
+      articles={articlesWithImages}
+      filters={filters}
+      labels={{ ...labels, ctaHref: ROUTES.contacts }}
+    />
+  </SectionContainer>
+</Section>
+
+<style>
+  .knowledge-section {
+    overflow: hidden;
+    padding-block-end: 0 !important;
+  }
+
+  .knowledge-section :global(.section-intro p) {
+    line-height: 1.3;
+  }
+</style>

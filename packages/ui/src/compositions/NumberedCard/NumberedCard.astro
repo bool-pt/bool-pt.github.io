@@ -1,0 +1,55 @@
+---
+import HoverCard from '../../primitives/HoverCard/HoverCard.astro';
+import NumberedLabel from '../../primitives/NumberedLabel/NumberedLabel.astro';
+
+interface Props {
+  number: number | string;
+  title: string;
+  body: string;
+  class?: string;
+}
+
+const { number, title, body, class: className } = Astro.props;
+---
+
+<HoverCard hoverEffect="none" colorScheme="light" class:list={['numbered-card', className]}>
+  <div class="numbered-card-inner">
+    <NumberedLabel number={number} class="numbered-card-number" />
+    <h3 class="numbered-card-title">{title}</h3>
+    <p class="numbered-card-body">{body}</p>
+  </div>
+</HoverCard>
+
+<style>
+  .numbered-card-inner {
+    padding: 2rem;
+  }
+
+  .numbered-card-inner :global(.numbered-card-number) {
+    margin-block-end: 1.25rem;
+  }
+
+  .numbered-card-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 4vw, 36px);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--color-foreground);
+    margin: 0 0 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .numbered-card-title {
+      margin: 0 0 1.5rem;
+    }
+  }
+
+  .numbered-card-body {
+    font-family: var(--font-display);
+    font-size: clamp(0.9375rem, 2vw, 18px);
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--color-foreground);
+    margin: 0;
+  }
+</style>

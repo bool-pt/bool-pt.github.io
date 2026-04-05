@@ -1,0 +1,137 @@
+.banner {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  width: 90%;
+  max-width: 480px;
+  background-color: var(--color-surface-charcoal);
+  color: var(--color-on-dark);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.message {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin: 0 0 1.25rem;
+  color: var(--color-on-dark-muted);
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.acceptButton {
+  flex: 1;
+  padding: 0.625rem 1rem;
+  border-radius: 9999px;
+  border: none;
+  background-color: var(--color-primary);
+  color: var(--color-on-dark);
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.rejectButton {
+  flex: 1;
+  padding: 0.625rem 1rem;
+  border-radius: 9999px;
+  border: 1.5px solid var(--color-on-dark-subtle);
+  background-color: transparent;
+  color: var(--color-on-dark);
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.categories {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-block-end: 1.25rem;
+}
+
+.category {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  cursor: pointer;
+}
+
+.categoryInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.categoryLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-on-dark);
+}
+
+.categoryDescription {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--color-on-dark-muted);
+}
+
+.toggle {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 1.375rem;
+  appearance: none;
+  border-radius: 9999px;
+  border: 1.5px solid var(--color-on-dark-subtle);
+  background-color: transparent;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 150ms, border-color 150ms;
+}
+
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 50%;
+  background-color: var(--color-on-dark-subtle);
+  transition: transform 150ms, background-color 150ms;
+}
+
+.toggle:checked {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.toggle:checked::after {
+  transform: translateX(1.125rem);
+  background-color: var(--color-on-dark);
+}
+
+.toggle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.preferencesButton {
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}

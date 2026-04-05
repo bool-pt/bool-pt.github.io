@@ -1,0 +1,29 @@
+{
+  "name": "@bool/analytics",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts",
+    "./GoogleAnalytics.astro": "./src/GoogleAnalytics.astro"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@bool/shared": "workspace:*",
+    "@bool/compliance": "workspace:*",
+    "@sentry/react": "catalog:"
+  },
+  "devDependencies": {
+    "@bool/eslint-config": "workspace:*",
+    "@bool/tsconfig": "workspace:*",
+    "@bool/vitest-config": "workspace:*",
+    "eslint": "catalog:",
+    "typescript": "catalog:",
+    "astro": "catalog:",
+    "vitest": "catalog:",
+    "jsdom": "catalog:"
+  }
+}
