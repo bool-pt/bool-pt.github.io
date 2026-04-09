@@ -1,5 +1,6 @@
 ---
 import { t } from '@bool/i18n';
+import { ROUTES } from '@bool/shared';
 import DarkPageHero from '@bool/ui/compositions/DarkPageHero.astro';
 import SectionIntro from '@bool/ui/compositions/SectionIntro.astro';
 import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
@@ -39,7 +40,7 @@ import { getHeaderLabels, getFooterLabels } from '../labels';
         <p>All content on the Website — including text, images, logos, designs, and code — is the property of Bool, Lda. or its licensors and is protected by copyright and intellectual property laws. You may not reproduce, distribute, or create derivative works without our prior written consent.</p>
 
         <h2>4. Contact Form and Newsletter</h2>
-        <p>When you submit information through our contact form or subscribe to our newsletter, you represent that the information you provide is accurate. We process this data in accordance with our <a href="/privacy">Privacy Policy</a>.</p>
+        <p>When you submit information through our contact form or subscribe to our newsletter, you represent that the information you provide is accurate. We process this data in accordance with our <a href={ROUTES.privacy}>Privacy Policy</a>.</p>
 
         <h2>5. Third-Party Links</h2>
         <p>The Website may contain links to third-party websites. We are not responsible for the content, privacy practices, or availability of these sites. Accessing them is at your own risk.</p>

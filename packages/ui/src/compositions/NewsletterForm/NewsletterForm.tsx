@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { trackEvent } from '@bool/analytics';
 import { submitNewsletter } from '@bool/api';
-import { newsletterSchema } from '@bool/shared';
+import { newsletterSchema, ROUTES } from '@bool/shared';
 import { InlineInputButton } from '../../primitives/InlineInputButton/InlineInputButton';
 import Captcha from '../Captcha/Captcha';
 import type { CaptchaHandle } from '../Captcha/Captcha';
@@ -112,7 +112,7 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
           }}
           style={{ marginBlockStart: '0.125rem', flexShrink: 0 }}
         />
-        <span>{labels.consentBefore}<a href="/privacy" style={{ color: 'inherit', textDecoration: 'underline', textUnderlineOffset: '2px' }}>{labels.consentLinkText}</a>{labels.consentAfter}</span>
+        <span>{labels.consentBefore}<a href={ROUTES.privacy} style={{ color: 'inherit', textDecoration: 'underline', textUnderlineOffset: '2px' }}>{labels.consentLinkText}</a>{labels.consentAfter}</span>
       </label>
       {status === 'consent-needed' && (
         <p

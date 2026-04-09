@@ -17,10 +17,11 @@ interface MobileNavLabels {
 interface MobileNavProps {
   links: readonly NavLink[];
   logoSrc: string;
+  homeHref: string;
   labels: MobileNavLabels;
 }
 
-export default function MobileNav({ links, logoSrc, labels }: MobileNavProps) {
+export default function MobileNav({ links, logoSrc, homeHref, labels }: MobileNavProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -38,7 +39,7 @@ export default function MobileNav({ links, logoSrc, labels }: MobileNavProps) {
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent side="left" id="mobile-nav" className="bg-surface-dark text-on-dark">
           <SheetTitle className="sr-only">{labels.title}</SheetTitle>
-          <a href="/" onClick={() => setOpen(false)}>
+          <a href={homeHref} onClick={() => setOpen(false)}>
             <img src={logoSrc} alt="Bool" width={40} height={40} />
           </a>
           <nav aria-label={labels.navAria}>

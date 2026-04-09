@@ -7,6 +7,7 @@ import { submitContactForm } from '@bool/api';
 import {
   contactFormSchema,
   contactFormSimpleSchema,
+  ROUTES,
   type ContactFormInput,
   type ContactFormSimpleInput,
 } from '@bool/shared';
@@ -145,7 +146,7 @@ export default function ContactForm({
   const privacyNotice = (
     <p className={styles.privacyNotice}>
       {labels.privacyNoticeBefore}
-      <a href="/privacy" className={styles.privacyLink}>{labels.privacyNoticeLinkText}</a>
+      <a href={ROUTES.privacy} className={styles.privacyLink}>{labels.privacyNoticeLinkText}</a>
       {labels.privacyNoticeAfter}
     </p>
   );

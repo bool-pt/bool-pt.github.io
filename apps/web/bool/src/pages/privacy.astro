@@ -1,5 +1,6 @@
 ---
 import { t } from '@bool/i18n';
+import { ROUTES } from '@bool/shared';
 import DarkPageHero from '@bool/ui/compositions/DarkPageHero.astro';
 import SectionIntro from '@bool/ui/compositions/SectionIntro.astro';
 import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
@@ -81,7 +82,7 @@ import { getHeaderLabels, getFooterLabels } from '../labels';
         <p>To exercise any of these rights, contact us at <a href="mailto:info@bool.pt">info@bool.pt</a>. We will respond within 30 days.</p>
 
         <h2>8. Cookies</h2>
-        <p>For detailed information about the cookies we use, please see our <a href="/cookies">Cookie Policy</a>.</p>
+        <p>For detailed information about the cookies we use, please see our <a href={ROUTES.cookies}>Cookie Policy</a>.</p>
 
         <h2>9. International Transfers</h2>
         <p>Some of our processors are based in the United States. Transfers are protected by EU Standard Contractual Clauses or the EU-US Data Privacy Framework, as applicable.</p>

@@ -1,4 +1,5 @@
 export const SITE_URL = 'https://bool.pt';
+export const BASE_PATH = '/bool';
 export const SITE_NAME = 'Bool';
 export const SITE_DESCRIPTION =
   'Critical software built fast and built to last. With 15 years of Low-Code expertise and the power of AI, we turn your toughest challenges into measurable results.';
@@ -20,19 +21,21 @@ export const SOCIAL = {
   youtube: 'https://youtube.com/@bool-pt',
 } as const;
 
+const route = (path: string) => `${BASE_PATH}${path}` as const;
+
 export const ROUTES = {
-  home: '/',
-  about: '/about',
-  services: '/services',
-  people: '/people',
-  portfolio: '/portfolio',
-  blog: '/blog',
-  contacts: '/contacts',
-  events: '/events',
-  careers: '/careers',
-  privacy: '/privacy',
-  terms: '/terms',
-  cookies: '/cookies',
+  home: route('/'),
+  about: route('/about'),
+  services: route('/services'),
+  people: route('/people'),
+  portfolio: route('/portfolio'),
+  blog: route('/blog'),
+  contacts: route('/contacts'),
+  events: route('/events'),
+  careers: route('/careers'),
+  privacy: route('/privacy'),
+  terms: route('/terms'),
+  cookies: route('/cookies'),
 } as const;
 
 export const NAV_LINKS = [
