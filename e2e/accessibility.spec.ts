@@ -1,13 +1,14 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { ROUTES } from '@bool/shared';
 
 const criticalPages = [
-  { path: '/', name: 'Home' },
-  { path: '/about', name: 'About' },
-  { path: '/services', name: 'Services' },
-  { path: '/contacts', name: 'Contacts' },
-  { path: '/portfolio', name: 'Portfolio' },
-  { path: '/blog', name: 'Blog' },
+  { path: ROUTES.home, name: 'Home' },
+  { path: ROUTES.about, name: 'About' },
+  { path: ROUTES.services, name: 'Services' },
+  { path: ROUTES.contacts, name: 'Contacts' },
+  { path: ROUTES.portfolio, name: 'Portfolio' },
+  { path: ROUTES.blog, name: 'Blog' },
 ];
 
 for (const { path, name } of criticalPages) {

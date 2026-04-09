@@ -10,6 +10,7 @@ const defaultProps = {
     { label: 'Services', href: '/services' },
   ] as const,
   logoSrc: '/logo.svg',
+  homeHref: '/',
   labels: {
     open: 'Open menu',
     title: 'Navigation',

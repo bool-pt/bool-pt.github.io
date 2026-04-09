@@ -1,18 +1,19 @@
 import { test, expect } from '@playwright/test';
+import { ROUTES } from '@bool/shared';
 
 const pages = [
-  { path: '/', title: 'Bool' },
-  { path: '/about', title: 'About' },
-  { path: '/services', title: 'Services' },
-  { path: '/people', title: 'People' },
-  { path: '/contacts', title: 'Contacts' },
-  { path: '/portfolio', title: 'Portfolio' },
-  { path: '/blog', title: 'Insights' },
-  { path: '/events', title: 'Events' },
-  { path: '/careers', title: 'Careers' },
-  { path: '/privacy', title: 'Privacy' },
-  { path: '/terms', title: 'Terms' },
-  { path: '/cookies', title: 'Cookie' },
+  { path: ROUTES.home, title: 'Bool' },
+  { path: ROUTES.about, title: 'About' },
+  { path: ROUTES.services, title: 'Services' },
+  { path: ROUTES.people, title: 'People' },
+  { path: ROUTES.contacts, title: 'Contacts' },
+  { path: ROUTES.portfolio, title: 'Portfolio' },
+  { path: ROUTES.blog, title: 'Insights' },
+  { path: ROUTES.events, title: 'Events' },
+  { path: ROUTES.careers, title: 'Careers' },
+  { path: ROUTES.privacy, title: 'Privacy' },
+  { path: ROUTES.terms, title: 'Terms' },
+  { path: ROUTES.cookies, title: 'Cookie' },
 ];
 
 for (const { path, title } of pages) {
@@ -33,9 +34,9 @@ test('homepage has navigation links', async ({ page }) => {
   await page.goto('/');
   const nav = page.locator('nav');
   await expect(nav).toBeVisible();
-  await expect(nav.locator('a[href="/about"]')).toBeVisible();
-  await expect(nav.locator('a[href="/services"]')).toBeVisible();
-  await expect(nav.locator('a[href="/contacts"]')).toBeVisible();
+  await expect(nav.locator(`a[href="${ROUTES.about}"]`)).toBeVisible();
+  await expect(nav.locator(`a[href="${ROUTES.services}"]`)).toBeVisible();
+  await expect(nav.locator(`a[href="${ROUTES.contacts}"]`)).toBeVisible();
 });
 
 test('homepage has cookie consent banner or it was dismissed', async ({ page }) => {

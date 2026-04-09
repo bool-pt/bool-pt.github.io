@@ -1,20 +1,21 @@
 import { test, expect } from '@playwright/test';
+import { ROUTES } from '@bool/shared';
 
 test.describe('Navigation', () => {
   test('desktop navigation links work', async ({ page }) => {
     await page.goto('/');
     const nav = page.locator('nav');
 
-    await nav.locator('a[href="/about"]').click();
-    await expect(page).toHaveURL('/about');
+    await nav.locator(`a[href="${ROUTES.about}"]`).click();
+    await expect(page).toHaveURL(ROUTES.about);
     await expect(page).toHaveTitle(/About/i);
 
-    await nav.locator('a[href="/services"]').click();
-    await expect(page).toHaveURL('/services');
+    await nav.locator(`a[href="${ROUTES.services}"]`).click();
+    await expect(page).toHaveURL(ROUTES.services);
     await expect(page).toHaveTitle(/Services/i);
 
-    await nav.locator('a[href="/contacts"]').click();
-    await expect(page).toHaveURL('/contacts');
+    await nav.locator(`a[href="${ROUTES.contacts}"]`).click();
+    await expect(page).toHaveURL(ROUTES.contacts);
     await expect(page).toHaveTitle(/Contacts/i);
   });
 
@@ -29,11 +30,11 @@ test.describe('Navigation', () => {
 
       // Mobile nav should show links
       const mobileNav = page.locator('[role="dialog"], [data-mobile-nav], nav');
-      await expect(mobileNav.locator('a[href="/about"]')).toBeVisible();
+      await expect(mobileNav.locator(`a[href="${ROUTES.about}"]`)).toBeVisible();
 
       // Navigate via mobile nav
-      await mobileNav.locator('a[href="/about"]').click();
-      await expect(page).toHaveURL('/about');
+      await mobileNav.locator(`a[href="${ROUTES.about}"]`).click();
+      await expect(page).toHaveURL(ROUTES.about);
     }
   });
 });
@@ -84,7 +85,7 @@ test.describe('Cookie Consent', () => {
 
 test.describe('Contact Form', () => {
   test('shows validation errors on empty submit', async ({ page }) => {
-    await page.goto('/contacts');
+    await page.goto(ROUTES.contacts);
 
     // Find and submit the form
     const submitButton = page.locator('button[type="submit"]');
@@ -98,7 +99,7 @@ test.describe('Contact Form', () => {
   });
 
   test('accepts valid input in form fields', async ({ page }) => {
-    await page.goto('/contacts');
+    await page.goto(ROUTES.contacts);
 
     // Fill in form fields
     const nameInput = page.locator('input[name="name"], input[name="firstName"]');
@@ -127,15 +128,15 @@ test.describe('Footer', () => {
 
     const footer = page.locator('footer');
     await expect(footer).toBeVisible();
-    await expect(footer.locator('a[href="/privacy"]')).toBeVisible();
-    await expect(footer.locator('a[href="/terms"]')).toBeVisible();
-    await expect(footer.locator('a[href="/cookies"]')).toBeVisible();
+    await expect(footer.locator(`a[href="${ROUTES.privacy}"]`)).toBeVisible();
+    await expect(footer.locator(`a[href="${ROUTES.terms}"]`)).toBeVisible();
+    await expect(footer.locator(`a[href="${ROUTES.cookies}"]`)).toBeVisible();
   });
 });
 
 test.describe('Portfolio', () => {
   test('portfolio page loads and displays cases', async ({ page }) => {
-    const response = await page.goto('/portfolio');
+    const response = await page.goto(ROUTES.portfolio);
     expect(response?.status()).toBe(200);
 
     // Should have at least one portfolio card or case study
@@ -146,7 +147,7 @@ test.describe('Portfolio', () => {
 
 test.describe('Blog', () => {
   test('blog page loads with article list', async ({ page }) => {
-    const response = await page.goto('/blog');
+    const response = await page.goto(ROUTES.blog);
     expect(response?.status()).toBe(200);
 
     const content = page.locator('main');
