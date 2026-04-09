@@ -10,6 +10,7 @@ import { baseViteConfig } from '@bool/vite-config/base';
 
 export default defineConfig({
   site: SITE_URL,
+  base: '/bool/',
   output: 'static',
   integrations: [
     react(),
