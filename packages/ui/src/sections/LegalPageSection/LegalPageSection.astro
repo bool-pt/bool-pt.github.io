@@ -1,0 +1,83 @@
+---
+import DarkPageHero from '../../compositions/DarkPageHero/DarkPageHero.astro';
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+
+interface Props {
+  headingId: string;
+  ariaLabel: string;
+  heading: string;
+  subtitle?: string;
+}
+
+const { headingId, ariaLabel, heading, subtitle } = Astro.props;
+---
+
+<DarkPageHero minBlockSize="20rem" aria-label={ariaLabel}>
+  <SectionIntro headingId={headingId} headingLevel="h1" colorScheme="dark">
+    <Fragment slot="heading">{heading}</Fragment>
+    {subtitle && <p>{subtitle}</p>}
+  </SectionIntro>
+</DarkPageHero>
+<Section>
+  <SectionContainer>
+    <article class="legal-content">
+      <slot />
+    </article>
+  </SectionContainer>
+</Section>
+
+<style>
+  .legal-content {
+    max-inline-size: 48rem;
+    margin-inline: auto;
+    padding-block: 3rem;
+    line-height: 1.8;
+  }
+
+  .legal-content :global(h2) {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-block: 2rem 0.75rem;
+  }
+
+  .legal-content :global(h3) {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    margin-block: 1.5rem 0.5rem;
+  }
+
+  .legal-content :global(ul) {
+    padding-inline-start: 1.5rem;
+  }
+
+  .legal-content :global(li) {
+    margin-block-end: 0.5rem;
+  }
+
+  .legal-content :global(a) {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .legal-content :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin-block: 1rem;
+    font-size: 0.875rem;
+  }
+
+  .legal-content :global(th),
+  .legal-content :global(td) {
+    padding: 0.625rem 0.75rem;
+    border: 1px solid var(--color-border);
+    text-align: start;
+  }
+
+  .legal-content :global(th) {
+    background-color: var(--color-surface-muted);
+    font-weight: 600;
+  }
+</style>

@@ -8,7 +8,7 @@ export function getCorsHeaders(origin: string | undefined): Record<string, strin
   const allowed = origin && isAllowedOrigin(origin);
   return {
     'Access-Control-Allow-Origin': allowed ? origin : PRODUCTION_ORIGIN,
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
   };
 }

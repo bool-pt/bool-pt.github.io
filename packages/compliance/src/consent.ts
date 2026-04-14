@@ -3,12 +3,24 @@ import { CONSENT_STORAGE_KEY } from './config';
 
 const DEFAULT_MAX_AGE_MS = 365 * 24 * 60 * 60 * 1000;
 
+function isValidConsent(value: unknown): value is ConsentState {
+  if (!value || typeof value !== 'object') return false;
+  const obj = value as Record<string, unknown>;
+  return (
+    typeof obj.analytics === 'boolean' &&
+    typeof obj.marketing === 'boolean' &&
+    typeof obj.timestamp === 'number' &&
+    Number.isFinite(obj.timestamp)
+  );
+}
+
 export function getConsent(): ConsentState | null {
   if (typeof localStorage === 'undefined') return null;
   const stored = localStorage.getItem(CONSENT_STORAGE_KEY);
   if (!stored) return null;
   try {
-    return JSON.parse(stored) as ConsentState;
+    const parsed: unknown = JSON.parse(stored);
+    return isValidConsent(parsed) ? parsed : null;
   } catch {
     return null;
   }
@@ -30,7 +42,7 @@ export function clearConsent(): void {
 
 export function isConsentExpired(
   consent: ConsentState,
-  maxAgeMs: number = DEFAULT_MAX_AGE_MS,
+  maxAgeMs: number = DEFAULT_MAX_AGE_MS
 ): boolean {
   return Date.now() - consent.timestamp > maxAgeMs;
 }

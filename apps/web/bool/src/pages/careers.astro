@@ -1,9 +1,8 @@
 ---
 import { t } from '@bool/i18n';
-import DarkPageHero from '@bool/ui/compositions/DarkPageHero.astro';
-import SectionIntro from '@bool/ui/compositions/SectionIntro.astro';
 import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
 import CareersCtaSection from '@bool/ui/sections/CareersCtaSection.astro';
+import CareersHeroSection from '@bool/ui/sections/CareersHeroSection.astro';
 import { getHeaderLabels, getFooterLabels } from '../labels';
 ---
 
@@ -13,12 +12,12 @@ import { getHeaderLabels, getFooterLabels } from '../labels';
   headerLabels={getHeaderLabels()}
   footerLabels={getFooterLabels()}
 >
-  <DarkPageHero aria-label={t('careers.heading')}>
-    <SectionIntro headingId="careers-heading" headingLevel="h1" colorScheme="dark">
-      <Fragment slot="heading">{t('careers.heading')}</Fragment>
-      <p>{t('careers.description')}</p>
-    </SectionIntro>
-  </DarkPageHero>
+  <CareersHeroSection
+    headingId="careers-heading"
+    ariaLabel={t('careers.heading')}
+    heading={t('careers.heading')}
+    description={t('careers.description')}
+  />
   <CareersCtaSection
     tag={t('careersCta.tag')}
     heading={t('careersCta.heading')}

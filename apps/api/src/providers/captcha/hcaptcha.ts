@@ -12,17 +12,25 @@ export class HCaptchaProvider implements CaptchaProvider {
       ...(remoteIp && { remoteip: remoteIp }),
     });
 
-    const res = await fetch(VERIFY_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: params.toString(),
-    });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5_000);
 
-    if (!res.ok) {
-      throw new Error(`hCaptcha verification request failed with status ${res.status}`);
+    try {
+      const res = await fetch(VERIFY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: params.toString(),
+        signal: controller.signal,
+      });
+
+      if (!res.ok) {
+        throw new Error(`hCaptcha verification request failed with status ${res.status}`);
+      }
+
+      const data = (await res.json()) as { success: boolean };
+      return { success: data.success };
+    } finally {
+      clearTimeout(timeout);
     }
-
-    const data = (await res.json()) as { success: boolean };
-    return { success: data.success };
   }
 }

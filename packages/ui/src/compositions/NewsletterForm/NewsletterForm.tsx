@@ -128,7 +128,7 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
         <p className={styles.consentError}>{labels.consentRequired}</p>
       )}
       {captchaSiteKey && (
-        <div style={{ marginBlockStart: '0.75rem' }}>
+        <div className={styles.captchaWrapper}>
           <Captcha
             ref={captchaRef}
             siteKey={captchaSiteKey}
@@ -138,27 +138,9 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
             size="compact"
           />
           {status === 'captcha-needed' && (
-            <p
-              style={{
-                color: 'var(--color-primary)',
-                fontSize: 'var(--font-size-body-sm)',
-                margin: '0.5rem 0 0',
-              }}
-            >
-              {labels.captchaRequired}
-            </p>
+            <p className={styles.consentError}>{labels.captchaRequired}</p>
           )}
-          {status === 'error' && (
-            <p
-              style={{
-                color: 'var(--color-primary)',
-                fontSize: 'var(--font-size-body-sm)',
-                margin: '0.5rem 0 0',
-              }}
-            >
-              {labels.error}
-            </p>
-          )}
+          {status === 'error' && <p className={styles.consentError}>{labels.error}</p>}
         </div>
       )}
     </div>

@@ -11,13 +11,17 @@ const unsubscribeSchema = z.object({
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   const origin = getOrigin(event);
 
-  const validation = parseAndValidate(event, unsubscribeSchema);
-  if (!validation.success) {
-    return error(400, validation.error, origin);
+  try {
+    const validation = parseAndValidate(event, unsubscribeSchema);
+    if (!validation.success) {
+      return error(400, validation.error, origin);
+    }
+
+    const store = createNewsletterStore();
+    await store.unsubscribe(validation.data.email);
+
+    return ok(origin);
+  } catch {
+    return error(500, 'Internal server error', origin);
   }
-
-  const store = createNewsletterStore();
-  await store.unsubscribe(validation.data.email);
-
-  return ok(origin);
 };

@@ -1,18 +1,19 @@
 import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createCaptchaProvider } from '../../providers/captcha/index.ts';
-import { createNewsletterStore } from '../../providers/newsletter/index.ts';
+import { createEmailProvider } from '../../providers/email/index.ts';
 import { handler } from '../newsletter.ts';
 
 vi.mock('../../providers/captcha/index.ts', () => ({
   createCaptchaProvider: vi.fn(),
 }));
-vi.mock('../../providers/newsletter/index.ts', () => ({
-  createNewsletterStore: vi.fn(),
+vi.mock('../../providers/email/index.ts', () => ({
+  createEmailProvider: vi.fn(),
 }));
 vi.mock('../../config.ts', () => ({
   getConfig: () => ({
     hcaptchaSecret: 'test-secret',
+    newsletterTokenSecret: 'test-newsletter-secret',
     sesFromEmail: 'from@bool.pt',
     sesNotifyEmail: 'notify@bool.pt',
     sesContactList: 'test-list',
@@ -30,38 +31,55 @@ function makeEvent(body: unknown, origin = 'https://bool.pt'): APIGatewayProxyEv
 
 describe('newsletter handler', () => {
   const mockVerify = vi.fn();
-  const mockSubscribe = vi.fn();
+  const mockSend = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(createCaptchaProvider).mockReturnValue({ verify: mockVerify });
-    vi.mocked(createNewsletterStore).mockReturnValue({
-      subscribe: mockSubscribe,
-      unsubscribe: vi.fn(),
-      delete: vi.fn(),
-    });
+    vi.mocked(createEmailProvider).mockReturnValue({ send: mockSend });
   });
 
-  it('returns 200 on valid subscription', async () => {
+  it('sends confirmation email on valid submission', async () => {
     mockVerify.mockResolvedValue({ success: true });
-    mockSubscribe.mockResolvedValue(undefined);
+    mockSend.mockResolvedValue(undefined);
 
     const result = await handler(
       makeEvent({ email: 'user@example.com', captchaToken: 'valid-token' }),
       {} as never,
-      {} as never,
+      {} as never
     );
 
     expect(result).toMatchObject({ statusCode: 200 });
     expect(JSON.parse((result as { body: string }).body)).toEqual({ success: true });
-    expect(mockSubscribe).toHaveBeenCalledWith('user@example.com');
+    expect(mockSend).toHaveBeenCalledWith(
+      expect.objectContaining({
+        to: 'user@example.com',
+        from: 'from@bool.pt',
+        subject: 'Confirm your Bool newsletter subscription',
+      })
+    );
+  });
+
+  it('includes confirmation link in email html', async () => {
+    mockVerify.mockResolvedValue({ success: true });
+    mockSend.mockResolvedValue(undefined);
+
+    await handler(
+      makeEvent({ email: 'user@example.com', captchaToken: 'valid-token' }),
+      {} as never,
+      {} as never
+    );
+
+    const sentEmail = mockSend.mock.calls[0][0];
+    expect(sentEmail.html).toContain('https://bool.pt/newsletter/confirm?token=');
+    expect(sentEmail.html).toContain('Confirm subscription');
   });
 
   it('returns 400 on invalid email', async () => {
     const result = await handler(
       makeEvent({ email: 'not-an-email', captchaToken: 'token' }),
       {} as never,
-      {} as never,
+      {} as never
     );
 
     expect(result).toMatchObject({ statusCode: 400 });
@@ -73,10 +91,27 @@ describe('newsletter handler', () => {
     const result = await handler(
       makeEvent({ email: 'user@example.com', captchaToken: 'bad-token' }),
       {} as never,
-      {} as never,
+      {} as never
     );
 
     expect(result).toMatchObject({ statusCode: 403 });
-    expect(mockSubscribe).not.toHaveBeenCalled();
+    expect(mockSend).not.toHaveBeenCalled();
+  });
+
+  it('returns 500 when email provider throws', async () => {
+    mockVerify.mockResolvedValue({ success: true });
+    mockSend.mockRejectedValue(new Error('SES failure'));
+
+    const result = await handler(
+      makeEvent({ email: 'user@example.com', captchaToken: 'valid-token' }),
+      {} as never,
+      {} as never
+    );
+
+    expect(result).toMatchObject({ statusCode: 500 });
+    expect(JSON.parse((result as { body: string }).body)).toEqual({
+      success: false,
+      error: 'Internal server error',
+    });
   });
 });

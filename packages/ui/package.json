@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "sideEffects": ["*.css"],
+  "sideEffects": [
+    "*.css"
+  ],
   "exports": {
     ".": "./index.ts",
     "./styles": "./styles/globals.css",
@@ -96,6 +98,8 @@
     "./sections/BoolInNumbersSection.astro": "./src/sections/BoolInNumbersSection/BoolInNumbersSection.astro",
     "./sections/FromPortugalSection.astro": "./src/sections/FromPortugalSection/FromPortugalSection.astro",
     "./sections/InsightsCTASection.astro": "./src/sections/InsightsCTASection/InsightsCTASection.astro",
+    "./sections/LegalPageSection.astro": "./src/sections/LegalPageSection/LegalPageSection.astro",
+    "./sections/CareersHeroSection.astro": "./src/sections/CareersHeroSection/CareersHeroSection.astro",
     "./sections/SolutionsROISection.astro": "./src/sections/SolutionsROISection/SolutionsROISection.astro"
   },
   "dependencies": {
@@ -115,10 +119,6 @@
     "@radix-ui/react-slot": "catalog:",
     "@radix-ui/react-dialog": "catalog:",
     "@radix-ui/react-dropdown-menu": "catalog:",
-    "@radix-ui/react-label": "catalog:",
-    "@radix-ui/react-navigation-menu": "catalog:",
-    "@radix-ui/react-separator": "catalog:",
-    "@radix-ui/react-toast": "catalog:",
     "react-hook-form": "catalog:",
     "@hookform/resolvers": "catalog:",
     "@hcaptcha/react-hcaptcha": "catalog:"

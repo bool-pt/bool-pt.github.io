@@ -13,6 +13,7 @@ vi.mock('../../providers/email/index.ts', () => ({
 vi.mock('../../config.ts', () => ({
   getConfig: () => ({
     hcaptchaSecret: 'test-secret',
+    newsletterTokenSecret: 'test-newsletter-secret',
     sesFromEmail: 'from@bool.pt',
     sesNotifyEmail: 'notify@bool.pt',
     sesContactList: 'test-list',
@@ -50,7 +51,7 @@ describe('contact handler', () => {
         captchaToken: 'valid-token',
       }),
       {} as never,
-      {} as never,
+      {} as never
     );
 
     expect(result).toMatchObject({ statusCode: 200 });
@@ -62,16 +63,36 @@ describe('contact handler', () => {
         from: 'from@bool.pt',
         replyTo: 'john@example.com',
         subject: 'Contact form: John Doe',
-      }),
+      })
     );
   });
 
-  it('returns 400 on missing fields', async () => {
-    const result = await handler(
-      makeEvent({ name: 'J', email: 'bad' }),
+  it('escapes HTML in email body and subject', async () => {
+    mockVerify.mockResolvedValue({ success: true });
+    mockSend.mockResolvedValue(undefined);
+
+    await handler(
+      makeEvent({
+        name: '<script>alert("xss")</script>',
+        email: 'attacker@example.com',
+        message: 'Hello <img src=x onerror="steal()">',
+        captchaToken: 'valid-token',
+      }),
       {} as never,
-      {} as never,
+      {} as never
     );
+
+    const sentEmail = mockSend.mock.calls[0][0];
+    expect(sentEmail.html).toContain('&lt;script&gt;');
+    expect(sentEmail.html).not.toContain('<script>');
+    expect(sentEmail.html).toContain('&lt;img src=x onerror=');
+    expect(sentEmail.html).not.toContain('<img');
+    expect(sentEmail.subject).toContain('&lt;script&gt;');
+    expect(sentEmail.subject).not.toContain('<script>');
+  });
+
+  it('returns 400 on missing fields', async () => {
+    const result = await handler(makeEvent({ name: 'J', email: 'bad' }), {} as never, {} as never);
 
     expect(result).toMatchObject({ statusCode: 400 });
     expect(JSON.parse((result as { body: string }).body).success).toBe(false);
@@ -88,7 +109,7 @@ describe('contact handler', () => {
         captchaToken: 'invalid-token',
       }),
       {} as never,
-      {} as never,
+      {} as never
     );
 
     expect(result).toMatchObject({ statusCode: 403 });
@@ -104,5 +125,44 @@ describe('contact handler', () => {
 
     const result = await handler(event, {} as never, {} as never);
     expect(result).toMatchObject({ statusCode: 400 });
+  });
+
+  it('returns 500 when email provider throws', async () => {
+    mockVerify.mockResolvedValue({ success: true });
+    mockSend.mockRejectedValue(new Error('SES failure'));
+
+    const result = await handler(
+      makeEvent({
+        name: 'John Doe',
+        email: 'john@example.com',
+        message: 'Hello, this is a test message.',
+        captchaToken: 'valid-token',
+      }),
+      {} as never,
+      {} as never
+    );
+
+    expect(result).toMatchObject({ statusCode: 500 });
+    expect(JSON.parse((result as { body: string }).body)).toEqual({
+      success: false,
+      error: 'Internal server error',
+    });
+  });
+
+  it('returns 500 when captcha provider throws', async () => {
+    mockVerify.mockRejectedValue(new Error('Network error'));
+
+    const result = await handler(
+      makeEvent({
+        name: 'John Doe',
+        email: 'john@example.com',
+        message: 'Hello, this is a test message.',
+        captchaToken: 'valid-token',
+      }),
+      {} as never,
+      {} as never
+    );
+
+    expect(result).toMatchObject({ statusCode: 500 });
   });
 });

@@ -19,9 +19,11 @@ export class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: unknown, info: React.ErrorInfo) {
     console.error('[JsonEditor] uncaught render error:', error, info.componentStack);
-    void import('@bool/analytics').then(({ captureError }) => {
-      captureError(error, { componentStack: info.componentStack });
-    });
+    void import('@bool/analytics')
+      .then(({ captureError }) => {
+        captureError(error, { componentStack: info.componentStack });
+      })
+      .catch(() => {});
   }
 
   render() {

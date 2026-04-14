@@ -23,15 +23,19 @@ export async function initSentry(dsn: string, options?: Partial<BrowserOptions>)
 export function captureError(error: unknown, context?: Record<string, unknown>): void {
   if (!initialized || typeof window === 'undefined') return;
 
-  void import('@sentry/react').then((Sentry) => {
-    Sentry.captureException(error, { extra: context });
-  });
+  void import('@sentry/react')
+    .then((Sentry) => {
+      Sentry.captureException(error, { extra: context });
+    })
+    .catch(() => {});
 }
 
 export function setUser(id: string, email?: string): void {
   if (!initialized || typeof window === 'undefined') return;
 
-  void import('@sentry/react').then((Sentry) => {
-    Sentry.setUser({ id, email });
-  });
+  void import('@sentry/react')
+    .then((Sentry) => {
+      Sentry.setUser({ id, email });
+    })
+    .catch(() => {});
 }

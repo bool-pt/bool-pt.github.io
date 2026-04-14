@@ -11,7 +11,6 @@
     "test": "turbo test",
     "test:e2e": "pnpm -F @bool/e2e e2e",
     "typecheck": "turbo typecheck",
-    "changeset": "changeset",
     "prepare": "husky"
   },
   "devDependencies": {
@@ -23,8 +22,6 @@
     "husky": "catalog:",
     "lint-staged": "catalog:",
     "@axe-core/playwright": "catalog:",
-    "@changesets/changelog-github": "catalog:",
-    "@changesets/cli": "catalog:",
     "@playwright/test": "catalog:",
     "playwright": "catalog:",
     "prettier": "catalog:",
