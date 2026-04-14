@@ -53,7 +53,15 @@ function CaseFlipCard({
     <FlipCard
       frontContent={
         <>
-          <img src={item.coverImageSrc} alt="" className={styles.frontImage} loading="lazy" />
+          <img
+            src={item.coverImageSrc}
+            alt={item.client}
+            className={styles.frontImage}
+            loading="lazy"
+            decoding="async"
+            width={600}
+            height={400}
+          />
           <div className={styles.frontOverlay} />
           <div className={styles.frontContent}>
             <span className={styles.frontLabel}>{item.client.toUpperCase()}</span>

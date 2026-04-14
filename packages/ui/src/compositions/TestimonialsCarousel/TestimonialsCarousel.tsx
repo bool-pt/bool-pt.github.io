@@ -62,9 +62,12 @@ export default function TestimonialsCarousel({
               <div className={styles.avatar}>
                 <img
                   src={item.avatar ?? avatarSrc}
-                  alt=""
+                  alt={item.company}
                   className={styles.avatarImg}
                   loading="lazy"
+                  decoding="async"
+                  width={48}
+                  height={48}
                 />
               </div>
               <p className={styles.quote}>{item.quote}</p>

@@ -58,7 +58,15 @@ function ArticleFlipCard({
       frontContent={
         item.frontImage ? (
           <>
-            <img src={item.frontImage} alt="" className={styles.frontImage} loading="lazy" />
+            <img
+              src={item.frontImage}
+              alt={item.title}
+              className={styles.frontImage}
+              loading="lazy"
+              decoding="async"
+              width={600}
+              height={400}
+            />
             <div className={styles.frontOverlay} />
             <div className={styles.frontContent}>
               <span className={styles.frontLabel}>{item.category}</span>

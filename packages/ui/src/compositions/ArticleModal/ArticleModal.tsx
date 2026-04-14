@@ -71,7 +71,15 @@ export default function ArticleModal({ article, open, onClose, labels }: Props) 
 
             {article.frontImage && (
               <div className={styles.imageWrap}>
-                <img src={article.frontImage} alt="" className={styles.image} loading="lazy" />
+                <img
+                  src={article.frontImage}
+                  alt={article.title}
+                  className={styles.image}
+                  loading="lazy"
+                  decoding="async"
+                  width={1200}
+                  height={400}
+                />
               </div>
             )}
 

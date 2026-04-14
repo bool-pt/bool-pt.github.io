@@ -28,7 +28,15 @@ function NewsCard({ item, readMoreLabel }: { item: NewsItem; readMoreLabel: stri
       <a href={item.href} className={styles.card}>
         {item.image && (
           <div className={styles.cardImageWrap}>
-            <img src={item.image} alt="" className={styles.cardImage} loading="lazy" />
+            <img
+              src={item.image}
+              alt={item.title}
+              className={styles.cardImage}
+              loading="lazy"
+              decoding="async"
+              width={600}
+              height={400}
+            />
           </div>
         )}
         <div className={styles.cardBody}>

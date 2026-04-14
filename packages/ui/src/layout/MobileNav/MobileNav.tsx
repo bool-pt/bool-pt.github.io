@@ -31,7 +31,7 @@ export default function MobileNav({ links, logoSrc, homeHref, labels }: MobileNa
         aria-label={labels.open}
         aria-expanded={open}
         aria-controls="mobile-nav"
-        className="hover:bg-muted focus-visible:ring-ring rounded-md p-2 focus-visible:outline-none focus-visible:ring-2 text-white"
+        className="hover:bg-muted focus-visible:ring-ring rounded-md p-2 text-white focus-visible:ring-2 focus-visible:outline-none"
       >
         <Menu className="h-6 w-6" aria-hidden="true" />
       </button>
@@ -40,7 +40,7 @@ export default function MobileNav({ links, logoSrc, homeHref, labels }: MobileNa
         <SheetContent side="left" id="mobile-nav" className="bg-surface-dark text-on-dark">
           <SheetTitle className="sr-only">{labels.title}</SheetTitle>
           <a href={homeHref} onClick={() => setOpen(false)}>
-            <img src={logoSrc} alt="Bool" width={40} height={40} />
+            <img src={logoSrc} alt="Bool" width={40} height={40} decoding="async" />
           </a>
           <nav aria-label={labels.navAria}>
             <ul className="mt-6 flex flex-col gap-1" role="list">
@@ -49,7 +49,7 @@ export default function MobileNav({ links, logoSrc, homeHref, labels }: MobileNa
                   <a
                     href={href}
                     onClick={() => setOpen(false)}
-                    className="hover:bg-surface-charcoal focus-visible:ring-ring flex items-center rounded-md px-3 py-2 text-sm font-medium text-on-dark focus-visible:outline-none focus-visible:ring-2"
+                    className="hover:bg-surface-charcoal focus-visible:ring-ring text-on-dark flex items-center rounded-md px-3 py-2 text-sm font-medium focus-visible:ring-2 focus-visible:outline-none"
                   >
                     {labels.linkLabels[label] ?? label}
                   </a>

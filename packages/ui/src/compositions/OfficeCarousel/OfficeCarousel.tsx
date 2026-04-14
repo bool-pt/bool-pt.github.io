@@ -113,7 +113,15 @@ export default function OfficeCarousel({
                 <div
                   key={`${office.city}-${i}`}
                   className={cn(styles.card, isColor && styles.cardActive)}
+                  role="button"
+                  tabIndex={0}
                   onClick={() => handleCardClick(i)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleCardClick(i);
+                    }
+                  }}
                   onMouseEnter={() => setHoveredIndex(i)}
                   onMouseLeave={() => setHoveredIndex(null)}
                 >
@@ -129,6 +137,9 @@ export default function OfficeCarousel({
                       alt={`${office.city} ${ariaLabels?.imageAlt ?? ''}`}
                       className={styles.cardImage}
                       loading="lazy"
+                      decoding="async"
+                      width={400}
+                      height={300}
                     />
                   </div>
                   <div className={cn(styles.overlay, isColor && styles.overlayVisible)}>
