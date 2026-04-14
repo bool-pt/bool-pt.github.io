@@ -19,47 +19,47 @@ Opinionated reference for building new UI. For architecture rules, layer hierarc
 
 ### 2.1 Brand Palette
 
-| Token | Hex | Role |
-|-------|-----|------|
-| `--color-primary` | `#e7453a` | Brand red — buttons, links, accents |
-| `--color-primary-hover` | `#c42020` | Primary interactive hover state |
-| `--color-primary-light` | `#f28075` | Lighter primary for subtle accents |
-| `--color-primary-tint` | `#fdecea` | Primary background tint (cards, badges) |
-| `--color-primary-gradient-end` | `#812720` | Gradient end for icon fills |
+| Token                          | Hex       | Role                                    |
+| ------------------------------ | --------- | --------------------------------------- |
+| `--color-primary`              | `#e7453a` | Brand red — buttons, links, accents     |
+| `--color-primary-hover`        | `#c42020` | Primary interactive hover state         |
+| `--color-primary-light`        | `#f28075` | Lighter primary for subtle accents      |
+| `--color-primary-tint`         | `#fdecea` | Primary background tint (cards, badges) |
+| `--color-primary-gradient-end` | `#812720` | Gradient end for icon fills             |
 
 ### 2.2 Neutrals
 
-| Token | Hex | Use |
-|-------|-----|-----|
-| `--color-background` | `#ffffff` | Page background |
-| `--color-foreground` | `#0a0a0a` | Primary text |
-| `--color-muted` | `#f5f5f5` | Muted backgrounds |
+| Token                      | Hex       | Use                      |
+| -------------------------- | --------- | ------------------------ |
+| `--color-background`       | `#ffffff` | Page background          |
+| `--color-foreground`       | `#0a0a0a` | Primary text             |
+| `--color-muted`            | `#f5f5f5` | Muted backgrounds        |
 | `--color-muted-foreground` | `#737373` | Secondary text, captions |
-| `--color-border` | `#e5e5e5` | Default borders |
+| `--color-border`           | `#e5e5e5` | Default borders          |
 
 ### 2.3 Surfaces
 
 Use these for section backgrounds and cards on dark areas:
 
-| Token | Hex | When to use |
-|-------|-----|-------------|
-| `--color-surface-dark` | `#0a0a0a` | Dark section backgrounds (heroes, footers) |
-| `--color-surface-charcoal` | `#1a1a1a` | Slightly lighter dark surfaces |
-| `--color-surface-black` | `#000000` | Pure black backgrounds |
-| `--color-surface-light` | `#f8f8f8` | Subtle off-white sections |
-| `--color-surface-mid` | `#f3f3f3` | Mid-tone light backgrounds |
-| `--color-surface-muted` | `#e5e5e5` | Muted divider backgrounds |
+| Token                      | Hex       | When to use                                |
+| -------------------------- | --------- | ------------------------------------------ |
+| `--color-surface-dark`     | `#0a0a0a` | Dark section backgrounds (heroes, footers) |
+| `--color-surface-charcoal` | `#1a1a1a` | Slightly lighter dark surfaces             |
+| `--color-surface-black`    | `#000000` | Pure black backgrounds                     |
+| `--color-surface-light`    | `#f8f8f8` | Subtle off-white sections                  |
+| `--color-surface-mid`      | `#f3f3f3` | Mid-tone light backgrounds                 |
+| `--color-surface-muted`    | `#e5e5e5` | Muted divider backgrounds                  |
 
 ### 2.4 On-Dark Colors
 
 For text and borders placed on dark surfaces:
 
-| Token | Value | Use |
-|-------|-------|-----|
-| `--color-on-dark` | `#ffffff` | Primary text on dark |
-| `--color-on-dark-muted` | `rgba(255,255,255,0.7)` | Secondary text on dark |
+| Token                    | Value                    | Use                        |
+| ------------------------ | ------------------------ | -------------------------- |
+| `--color-on-dark`        | `#ffffff`                | Primary text on dark       |
+| `--color-on-dark-muted`  | `rgba(255,255,255,0.7)`  | Secondary text on dark     |
 | `--color-on-dark-subtle` | `rgba(255,255,255,0.45)` | Tertiary/hint text on dark |
-| `--color-border-on-dark` | `rgba(255,255,255,0.08)` | Borders on dark surfaces |
+| `--color-border-on-dark` | `rgba(255,255,255,0.08)` | Borders on dark surfaces   |
 
 ### 2.5 Opacity Scales
 
@@ -74,13 +74,13 @@ Use these instead of writing `rgba()` manually. Example: `background: var(--whit
 
 Reserved for data visualization, tags, and differentiation — not for primary UI:
 
-| Token | Hex |
-|-------|-----|
-| `--color-accent-blue` | `#146ff4` |
-| `--color-accent-teal` | `#019380` |
-| `--color-accent-purple` | `#6e61d2` |
-| `--color-accent-orange` | `#f22800` |
-| `--color-accent-navy` | `#003781` |
+| Token                       | Hex       |
+| --------------------------- | --------- |
+| `--color-accent-blue`       | `#146ff4` |
+| `--color-accent-teal`       | `#019380` |
+| `--color-accent-purple`     | `#6e61d2` |
+| `--color-accent-orange`     | `#f22800` |
+| `--color-accent-navy`       | `#003781` |
 | `--color-accent-dark-green` | `#006134` |
 
 ### 2.7 Decision Rules
@@ -97,11 +97,11 @@ Reserved for data visualization, tags, and differentiation — not for primary U
 
 ### 3.1 Font Families
 
-| Family | CSS Variable | Weights Available | Use |
-|--------|-------------|-------------------|-----|
-| **Degular** | `--font-display` / `font-sans` | 300, 400, 500, 600, 700, 900 | All headings and body text (primary typeface) |
-| **Oxanium** | `font-accent` | 400, 500, 600, 700 | Accent/display text, tech-themed labels |
-| **JetBrains Mono** | `font-mono` | — | Code snippets, technical content |
+| Family             | CSS Variable                   | Weights Available            | Use                                           |
+| ------------------ | ------------------------------ | ---------------------------- | --------------------------------------------- |
+| **Degular**        | `--font-display` / `font-sans` | 300, 400, 500, 600, 700, 900 | All headings and body text (primary typeface) |
+| **Oxanium**        | `font-accent`                  | 400, 500, 600, 700           | Accent/display text, tech-themed labels       |
+| **JetBrains Mono** | `font-mono`                    | —                            | Code snippets, technical content              |
 
 ### 3.2 Fluid Type Scale
 
@@ -109,56 +109,57 @@ All sizes use `clamp(min, preferred, max)` for smooth scaling. Use these CSS var
 
 **Body & Small:**
 
-| Token | Range | Use |
-|-------|-------|-----|
-| `--font-size-caption` | 12px → 14px | Labels, timestamps, metadata |
+| Token                 | Range       | Use                                |
+| --------------------- | ----------- | ---------------------------------- |
+| `--font-size-caption` | 12px → 14px | Labels, timestamps, metadata       |
 | `--font-size-body-sm` | 13px → 14px | Small body text, ghost button text |
-| `--font-size-body` | 14px → 16px | Default body copy |
+| `--font-size-body`    | 14px → 16px | Default body copy                  |
 | `--font-size-body-lg` | 16px → 18px | Emphasized body, card descriptions |
 
 **Headings:**
 
-| Token | Range | Use |
-|-------|-------|-----|
+| Token              | Range       | Use                                |
+| ------------------ | ----------- | ---------------------------------- |
 | `--font-size-lead` | 18px → 20px | Lead paragraphs, SectionIntro body |
-| `--font-size-sub` | 20px → 22px | Subtitles |
-| `--font-size-h4` | 20px → 24px | Card titles, subsection headings |
-| `--font-size-h3` | 24px → 32px | Section sub-headings |
-| `--font-size-h2` | 28px → 36px | Section headings |
-| `--font-size-h1` | 32px → 40px | Page-level headings |
+| `--font-size-sub`  | 20px → 22px | Subtitles                          |
+| `--font-size-h4`   | 20px → 24px | Card titles, subsection headings   |
+| `--font-size-h3`   | 24px → 32px | Section sub-headings               |
+| `--font-size-h2`   | 28px → 36px | Section headings                   |
+| `--font-size-h1`   | 32px → 40px | Page-level headings                |
 
 **Display:**
 
-| Token | Range | Use |
-|-------|-------|-----|
+| Token                 | Range       | Use                             |
+| --------------------- | ----------- | ------------------------------- |
 | `--font-size-display` | 36px → 48px | SectionIntro headings (default) |
-| `--font-size-hero` | 44px → 58px | Hero section headings |
-| `--font-size-stat` | 48px → 76px | Large stat numbers |
-| `--font-size-mega` | 58px → 90px | Oversized display text |
+| `--font-size-hero`    | 44px → 58px | Hero section headings           |
+| `--font-size-stat`    | 48px → 76px | Large stat numbers              |
+| `--font-size-mega`    | 58px → 90px | Oversized display text          |
 
 ### 3.3 Weight Rules
 
-| Weight | Value | When |
-|--------|-------|------|
-| Regular | 400 | Body text, descriptions |
-| Medium | 500 | SectionIntro body, emphasized text |
-| Semibold | 600 | Buttons, labels, card titles |
-| Bold | 700 | Section headings, SectionIntro headings |
-| Extrabold | 800 | Hero text (rare) |
+| Weight    | Value | When                                    |
+| --------- | ----- | --------------------------------------- |
+| Regular   | 400   | Body text, descriptions                 |
+| Medium    | 500   | SectionIntro body, emphasized text      |
+| Semibold  | 600   | Buttons, labels, card titles            |
+| Bold      | 700   | Section headings, SectionIntro headings |
+| Extrabold | 800   | Hero text (rare)                        |
 
 ### 3.4 Line Heights
 
-| Token | Value | Pairing |
-|-------|-------|---------|
-| `tight` | 1.25 | Display/heading text |
-| `snug` | 1.375 | Sub-headings |
-| `normal` | 1.5 | Body text (default) |
+| Token     | Value | Pairing                      |
+| --------- | ----- | ---------------------------- |
+| `tight`   | 1.25  | Display/heading text         |
+| `snug`    | 1.375 | Sub-headings                 |
+| `normal`  | 1.5   | Body text (default)          |
 | `relaxed` | 1.625 | Long-form body, descriptions |
-| `loose` | 2 | Spacious text, large blocks |
+| `loose`   | 2     | Spacious text, large blocks  |
 
 ### 3.5 Heading Anatomy
 
 SectionIntro headings use:
+
 - `font-family: var(--font-display)` (Degular)
 - `font-size: var(--font-size-display)` (default) — overridable via `headingSize` prop
 - `font-weight: 700`
@@ -173,27 +174,27 @@ SectionIntro headings use:
 
 Standard Tailwind-compatible scale (1 unit = 4px):
 
-| Class | Value | Common use |
-|-------|-------|------------|
-| `1` | 4px | Micro gaps |
-| `2` | 8px | Icon gaps, tight padding |
-| `3` | 12px | Small card padding |
-| `4` | 16px | Default gap, inline padding |
-| `6` | 24px | Card padding, grid gap |
-| `8` | 32px | Section internal gaps |
-| `10` | 40px | Large component spacing |
-| `12` | 48px | Section content spacing |
-| `16` | 64px | Major section breaks |
-| `20` | 80px | Section padding-block |
-| `24` | 96px | Large section padding |
+| Class | Value | Common use                  |
+| ----- | ----- | --------------------------- |
+| `1`   | 4px   | Micro gaps                  |
+| `2`   | 8px   | Icon gaps, tight padding    |
+| `3`   | 12px  | Small card padding          |
+| `4`   | 16px  | Default gap, inline padding |
+| `6`   | 24px  | Card padding, grid gap      |
+| `8`   | 32px  | Section internal gaps       |
+| `10`  | 40px  | Large component spacing     |
+| `12`  | 48px  | Section content spacing     |
+| `16`  | 64px  | Major section breaks        |
+| `20`  | 80px  | Section padding-block       |
+| `24`  | 96px  | Large section padding       |
 
 ### 4.2 Section Padding
 
 Every section wraps content in `<Section>` which applies:
 
 ```css
-padding-block: 5rem;        /* 80px top and bottom */
-content-visibility: auto;   /* performance optimization */
+padding-block: 5rem; /* 80px top and bottom */
+content-visibility: auto; /* performance optimization */
 ```
 
 Override via the `paddingBlock` prop: `<Section paddingBlock="3rem 0">`.
@@ -205,10 +206,10 @@ Override via the `paddingBlock` prop: `<Section paddingBlock="3rem 0">`.
 ```css
 max-inline-size: 1440px;
 margin-inline: auto;
-padding-inline: 1.5rem;     /* 24px on mobile */
+padding-inline: 1.5rem; /* 24px on mobile */
 
 @media (min-width: 640px) {
-  padding-inline: 7rem;      /* 112px on tablet+ */
+  padding-inline: 7rem; /* 112px on tablet+ */
 }
 ```
 
@@ -216,24 +217,24 @@ padding-inline: 1.5rem;     /* 24px on mobile */
 
 **ResponsiveGrid** — use for card grids:
 
-| Columns | Collapse | Behavior |
-|---------|----------|----------|
-| 2 | sm (640px) | 1 col → 2 cols |
-| 3 | sm (640px) | 1 col → 2 cols → 3 cols at 1024px |
-| 3 | md (768px) | 1 col → 3 cols |
-| 4 | sm (640px) | 1 col → 2 cols → 4 cols at 1024px |
+| Columns | Collapse   | Behavior                          |
+| ------- | ---------- | --------------------------------- |
+| 2       | sm (640px) | 1 col → 2 cols                    |
+| 3       | sm (640px) | 1 col → 2 cols → 3 cols at 1024px |
+| 3       | md (768px) | 1 col → 3 cols                    |
+| 4       | sm (640px) | 1 col → 2 cols → 4 cols at 1024px |
 
 Default gap: `1.5rem`. Override with the `gap` prop.
 
 **SplitLayout** — use for two-column content:
 
-| Prop | Default | Options |
-|------|---------|---------|
-| `ratio` | `1fr 1fr` | Any grid-template value: `7fr 5fr`, `2fr 1fr` |
-| `collapseAt` | `md` | `sm` / `md` / `lg` |
-| `gap` | `0` | Any CSS length |
-| `alignItems` | `stretch` | `start` / `center` / `stretch` |
-| `reverseOnMobile` | `false` | Swap column order below collapse point |
+| Prop              | Default   | Options                                       |
+| ----------------- | --------- | --------------------------------------------- |
+| `ratio`           | `1fr 1fr` | Any grid-template value: `7fr 5fr`, `2fr 1fr` |
+| `collapseAt`      | `md`      | `sm` / `md` / `lg`                            |
+| `gap`             | `0`       | Any CSS length                                |
+| `alignItems`      | `stretch` | `start` / `center` / `stretch`                |
+| `reverseOnMobile` | `false`   | Swap column order below collapse point        |
 
 ### 4.5 Spacing Decisions
 
@@ -266,6 +267,7 @@ Every section follows the same skeleton:
 ```
 
 **Rules:**
+
 - Always pass `aria-labelledby` to `<Section>` matching the `headingId` on `<SectionIntro>`
 - Use `colorScheme="dark"` when the section has a dark background
 - `SectionTag` goes in the `tag` slot when the section needs a category label above the heading
@@ -275,16 +277,17 @@ Every section follows the same skeleton:
 
 `<ButtonLink>` — Astro component, 4 variants:
 
-| Variant | Background | Border | Text | Use |
-|---------|------------|--------|------|-----|
-| `primary` | `--color-primary` | primary | white | Primary CTA — one per section max |
-| `outline` | transparent | primary | primary | Secondary actions |
-| `ghost` | `--color-border-on-dark` | `--white-12` | `--color-on-dark-muted` | Tertiary actions on dark surfaces |
-| `on-dark` | transparent | white | white | Actions on dark backgrounds |
+| Variant   | Background               | Border       | Text                    | Use                               |
+| --------- | ------------------------ | ------------ | ----------------------- | --------------------------------- |
+| `primary` | `--color-primary`        | primary      | white                   | Primary CTA — one per section max |
+| `outline` | transparent              | primary      | primary                 | Secondary actions                 |
+| `ghost`   | `--color-border-on-dark` | `--white-12` | `--color-on-dark-muted` | Tertiary actions on dark surfaces |
+| `on-dark` | transparent              | white        | white                   | Actions on dark backgrounds       |
 
 All buttons: `height: 48px`, `border-radius: 28px` (pill), `font-weight: 600`, `padding-inline: 2rem`.
 
 Hover behavior:
+
 - **primary**: darkens to `--color-primary-hover`, shadow lifts
 - **outline**: fills with primary, text flips to white
 - **ghost**: background lightens, text brightens
@@ -316,16 +319,16 @@ Three CTA approaches by prominence:
 
 SectionIntro accepts CSS variable overrides via props:
 
-| Prop | CSS Variable | Default |
-|------|-------------|---------|
-| `headingSize` | `--si-heading-size` | `var(--font-size-display)` |
-| `headingWeight` | `--si-heading-weight` | `700` |
-| `bodySize` | `--si-body-size` | `var(--font-size-lead)` |
-| `bodyWeight` | `--si-body-weight` | `500` |
-| `bodyLineHeight` | `--si-body-line-height` | `1.65` |
-| `bodyColor` | `--si-body-color` | foreground / on-dark (by scheme) |
-| `marginBlockEnd` | `--si-margin-block-end` | `3rem` |
-| `descriptionMaxWidth` | inline style | `50rem` |
+| Prop                  | CSS Variable            | Default                          |
+| --------------------- | ----------------------- | -------------------------------- |
+| `headingSize`         | `--si-heading-size`     | `var(--font-size-display)`       |
+| `headingWeight`       | `--si-heading-weight`   | `700`                            |
+| `bodySize`            | `--si-body-size`        | `var(--font-size-lead)`          |
+| `bodyWeight`          | `--si-body-weight`      | `500`                            |
+| `bodyLineHeight`      | `--si-body-line-height` | `1.65`                           |
+| `bodyColor`           | `--si-body-color`       | foreground / on-dark (by scheme) |
+| `marginBlockEnd`      | `--si-margin-block-end` | `3rem`                           |
+| `descriptionMaxWidth` | inline style            | `50rem`                          |
 
 Shortcut: `size="lg"` sets heading to `display` size and body to `lead` size.
 
@@ -335,24 +338,24 @@ Shortcut: `size="lg"` sets heading to `display` size and body to `lead` size.
 
 ### 6.1 Shadow Scale
 
-| Token | Value | Use |
-|-------|-------|-----|
-| `--shadow-soft` | `4px 4px 4px rgba(0,0,0,0.06)` | Subtle depth on light cards |
-| `--shadow-subtle` | `0 4px 4px rgba(0,0,0,0.10)` | Default card shadow |
-| `--shadow-card` | `2px 4px 10px rgba(0,0,0,0.15)` | Standard card elevation |
-| `--shadow-hover` | `0 4px 24px rgba(0,0,0,0.08)` | Card hover state |
-| `--shadow-elevated` | `0 8px 24px rgba(0,0,0,0.08)` | Lifted elements (dropdowns, popovers) |
-| `--shadow-heavy` | `0 12px 32px rgba(0,0,0,0.15)` | Modals, overlays |
-| `--shadow-overlay` | `0 12px 32px rgba(0,0,0,0.2)` | Full overlay panels |
-| `--shadow-testimonial` | `4px 8px 24px rgba(0,0,0,0.12)` | Testimonial cards |
+| Token                  | Value                           | Use                                   |
+| ---------------------- | ------------------------------- | ------------------------------------- |
+| `--shadow-soft`        | `4px 4px 4px rgba(0,0,0,0.06)`  | Subtle depth on light cards           |
+| `--shadow-subtle`      | `0 4px 4px rgba(0,0,0,0.10)`    | Default card shadow                   |
+| `--shadow-card`        | `2px 4px 10px rgba(0,0,0,0.15)` | Standard card elevation               |
+| `--shadow-hover`       | `0 4px 24px rgba(0,0,0,0.08)`   | Card hover state                      |
+| `--shadow-elevated`    | `0 8px 24px rgba(0,0,0,0.08)`   | Lifted elements (dropdowns, popovers) |
+| `--shadow-heavy`       | `0 12px 32px rgba(0,0,0,0.15)`  | Modals, overlays                      |
+| `--shadow-overlay`     | `0 12px 32px rgba(0,0,0,0.2)`   | Full overlay panels                   |
+| `--shadow-testimonial` | `4px 8px 24px rgba(0,0,0,0.12)` | Testimonial cards                     |
 
 ### 6.2 Primary Button Shadows
 
-| Token | Use |
-|-------|-----|
+| Token                            | Use                                     |
+| -------------------------------- | --------------------------------------- |
 | `--shadow-primary-button-subtle` | Default button rest state (10% opacity) |
-| `--shadow-primary-button` | Emphasized button (25% opacity) |
-| `--shadow-primary-button-hover` | Button hover — lifts shadow |
+| `--shadow-primary-button`        | Emphasized button (25% opacity)         |
+| `--shadow-primary-button-hover`  | Button hover — lifts shadow             |
 
 ### 6.3 Glass Effect
 
@@ -393,14 +396,24 @@ background: var(--overlay-dark); /* rgba(0,0,0,0.8) */
 ```css
 /* Fade in */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Zoom in */
 @keyframes zoomIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 ```
 
@@ -416,13 +429,13 @@ background: var(--overlay-dark); /* rgba(0,0,0,0.8) */
 
 ### 8.1 Breakpoints
 
-| Token | Width | Role |
-|-------|-------|------|
-| `sm` | 640px | Mobile → tablet. Grid collapses, container padding expands |
-| `md` | 768px | Navigation shows, split layouts expand |
-| `lg` | 1024px | Full grid columns, large layouts |
-| `xl` | 1280px | Wide content |
-| `2xl` | 1536px | Max breakpoint |
+| Token | Width  | Role                                                       |
+| ----- | ------ | ---------------------------------------------------------- |
+| `sm`  | 640px  | Mobile → tablet. Grid collapses, container padding expands |
+| `md`  | 768px  | Navigation shows, split layouts expand                     |
+| `lg`  | 1024px | Full grid columns, large layouts                           |
+| `xl`  | 1280px | Wide content                                               |
+| `2xl` | 1536px | Max breakpoint                                             |
 
 **Max content width**: 1440px (set on `<body>` and `<SectionContainer>`)
 
@@ -437,9 +450,9 @@ background: var(--overlay-dark); /* rgba(0,0,0,0.8) */
 ### 8.3 Container Padding
 
 | Breakpoint | Inline Padding |
-|------------|---------------|
-| < 640px | 1.5rem (24px) |
-| >= 640px | 7rem (112px) |
+| ---------- | -------------- |
+| < 640px    | 1.5rem (24px)  |
+| >= 640px   | 7rem (112px)   |
 
 Header/Footer use `4rem` inline padding at 640px+.
 
@@ -453,14 +466,14 @@ Toggled via `.dark` class on `<html>`. Managed by `ThemeToggle` component + loca
 
 ### 9.2 Key Overrides
 
-| Token | Light | Dark |
-|-------|-------|------|
-| `--color-primary` | `#e7453a` | `#ec5547` (slightly brighter) |
-| `--color-background` | `#ffffff` | `#0a0a0a` |
-| `--color-foreground` | `#0a0a0a` | `#fafafa` |
-| `--color-muted` | `#f5f5f5` | `#262626` |
-| `--color-muted-foreground` | `#737373` | `#a3a3a3` |
-| `--color-border` | `#e5e5e5` | `#404040` |
+| Token                      | Light     | Dark                          |
+| -------------------------- | --------- | ----------------------------- |
+| `--color-primary`          | `#e7453a` | `#ec5547` (slightly brighter) |
+| `--color-background`       | `#ffffff` | `#0a0a0a`                     |
+| `--color-foreground`       | `#0a0a0a` | `#fafafa`                     |
+| `--color-muted`            | `#f5f5f5` | `#262626`                     |
+| `--color-muted-foreground` | `#737373` | `#a3a3a3`                     |
+| `--color-border`           | `#e5e5e5` | `#404040`                     |
 
 ### 9.3 Shadow Adjustments
 
@@ -514,9 +527,7 @@ import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
     </SectionIntro>
 
     <ResponsiveGrid columns={3} collapseAt="sm" gap="1.5rem">
-      {items.map(item => (
-        <MyCard {...item} />
-      ))}
+      {items.map((item) => <MyCard {...item} />)}
     </ResponsiveGrid>
   </SectionContainer>
 </Section>
@@ -578,27 +589,28 @@ import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
 
 ### 10.6 Choosing a Hydration Directive
 
-| Need | Directive |
-|------|-----------|
-| Must work on page load (nav, cookie banner) | `client:load` |
-| Interactive but can wait until scrolled to | `client:visible` |
-| No interactivity needed | No directive (static Astro) |
+| Need                                        | Directive                   |
+| ------------------------------------------- | --------------------------- |
+| Must work on page load (nav, cookie banner) | `client:load`               |
+| Interactive but can wait until scrolled to  | `client:visible`            |
+| No interactivity needed                     | No directive (static Astro) |
 
 ---
 
 ## 11. Border Radius
 
-| Token | Value | Use |
-|-------|-------|-----|
-| `--radius-xs` | 4px | Small badges, tags |
-| `--radius-sm` | 2px | Subtle rounding |
-| `--radius-md` | 6px | Default card corners |
-| `--radius-lg` | 8px | Larger cards |
-| `--radius-xl` | 12px | Prominent cards |
-| `--radius-2xl` | 16px | Large panels |
-| `--radius-3xl` | 24px | Rounded panels |
-| `--radius-4xl` | 28px | Buttons (pill shape) |
-| `--radius-full` | 9999px | Circles, pills |
+| Token           | Value  | Use                        |
+| --------------- | ------ | -------------------------- |
+| `--radius-xs`   | 4px    | Small badges, tags         |
+| `--radius-sm`   | 2px    | Subtle rounding            |
+| `--radius-md`   | 6px    | Default card corners       |
+| `--radius-lg`   | 8px    | Larger cards               |
+| `--radius-xl`   | 12px   | Prominent cards            |
+| `--radius-2xl`  | 16px   | Large panels               |
+| `--radius-3xl`  | 24px   | Rounded panels             |
+| `--radius-4xl`  | 28px   | Buttons (pill shape)       |
+| `--radius-5xl`  | 72px   | Extra-large rounded panels |
+| `--radius-full` | 9999px | Circles, pills             |
 
 **Button radius**: `28px` (pill shape) — consistent across all variants.
 
@@ -629,14 +641,14 @@ import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
 
 ## Quick Reference: Token Source Files
 
-| Tokens | File |
-|--------|------|
-| Colors | `packages/shared/src/tokens/colors.ts` |
-| Typography | `packages/shared/src/tokens/typography.ts` |
-| Spacing | `packages/shared/src/tokens/spacing.ts` |
-| Border Radius | `packages/shared/src/tokens/radii.ts` |
-| Shadows | `packages/shared/src/tokens/shadows.ts` |
-| Breakpoints | `packages/shared/src/tokens/breakpoints.ts` |
-| CSS Custom Properties | `packages/ui/styles/globals.css` |
-| Tailwind Config | `tooling/tailwind/preset.ts` |
-| Component Map | `documentation/component-map.md` |
+| Tokens                | File                                        |
+| --------------------- | ------------------------------------------- |
+| Colors                | `packages/shared/src/tokens/colors.ts`      |
+| Typography            | `packages/shared/src/tokens/typography.ts`  |
+| Spacing               | `packages/shared/src/tokens/spacing.ts`     |
+| Border Radius         | `packages/shared/src/tokens/radii.ts`       |
+| Shadows               | `packages/shared/src/tokens/shadows.ts`     |
+| Breakpoints           | `packages/shared/src/tokens/breakpoints.ts` |
+| CSS Custom Properties | `packages/ui/styles/globals.css`            |
+| Tailwind Config       | `tooling/tailwind/preset.ts`                |
+| Component Map         | `documentation/component-map.md`            |
