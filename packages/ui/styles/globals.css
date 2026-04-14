@@ -1,7 +1,7 @@
 @import 'tailwindcss';
-@source "../../ui/src/**/*.{ts,tsx,astro}";
-@source "../../compliance/src/**/*.{ts,tsx}";
-@source "../../shared/src/**/*.{ts,tsx}";
+@source '../../ui/src/**/*.{ts,tsx,astro}';
+@source '../../compliance/src/**/*.{ts,tsx}';
+@source '../../shared/src/**/*.{ts,tsx}';
 
 @font-face {
   font-family: 'Degular';
@@ -388,10 +388,24 @@
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-surface-muted);
 }
 
-html {
-  background-color: var(--color-surface-muted);
+html.with-scroll-bars-hidden,
+html.with-scroll-bars-hidden.with-scroll-bars-hidden {
+  overflow: visible !important;
+  padding-right: 0 !important;
+}
+
+body[data-scroll-locked],
+body[data-scroll-locked][data-scroll-locked] {
+  overflow: hidden !important;
+  overscroll-behavior: contain;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-top: 0 !important;
 }
 
 body {

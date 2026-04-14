@@ -1,18 +1,14 @@
-const localeModules = import.meta.glob<Record<string, string>>(
-  './locales/*.json',
-  { eager: true, import: 'default' },
-);
+import en from './locales/en.json' with { type: 'json' };
 
-function extractLocaleCode(path: string): string {
-  return path.replace('./locales/', '').replace('.json', '');
-}
+const localeModules: Record<string, Record<string, string>> = {
+  en,
+};
 
 const discoveredTranslations: Record<string, Record<string, string>> = {};
 const discoveredMeta: Record<string, { flag: string; name: string }> = {};
 const discoveredLocales: string[] = [];
 
-for (const [path, mod] of Object.entries(localeModules)) {
-  const code = extractLocaleCode(path);
+for (const [code, mod] of Object.entries(localeModules)) {
   const flag = mod['_locale.flag'];
   const name = mod['_locale.name'];
 
@@ -32,10 +28,8 @@ for (const [path, mod] of Object.entries(localeModules)) {
 export const defaultLocale = 'en';
 export const locales: string[] = discoveredLocales;
 export type Locale = string;
-export const LOCALE_META: Record<string, { flag: string; name: string }> =
-  discoveredMeta;
-export const translations: Record<string, Record<string, string>> =
-  discoveredTranslations;
+export const LOCALE_META: Record<string, { flag: string; name: string }> = discoveredMeta;
+export const translations: Record<string, Record<string, string>> = discoveredTranslations;
 
 export function isValidLocale(value: string): value is Locale {
   return locales.includes(value);

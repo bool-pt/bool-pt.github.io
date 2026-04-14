@@ -7,8 +7,8 @@ import { collectArray, collectNestedList } from './sections.ts';
 
 const itemSchema = z.object({
   client: z.string().min(1, 'client required'),
-  title: z.string().min(1, 'title required'),
-  subtitle: z.string().min(1, 'subtitle required'),
+  title: z.string().default(''),
+  subtitle: z.string().default(''),
   coverImage: z.string().min(1, 'coverImage required'),
   sector: z.string().min(1, 'sector required'),
   tech: z.string().min(1, 'tech required'),
@@ -75,7 +75,7 @@ function buildMetrics(parsed: z.infer<typeof itemSchema>): CaseStudyMetric[] {
 function validateAgainstList(field: string, value: string, allowed: string[]): void {
   if (!allowed.some((a) => a.toUpperCase() === value.toUpperCase())) {
     throw new Error(
-      `[@bool/content] caseStudies item has ${field}="${value}" which is not in caseStudies.${field === 'sector' ? 'sectors' : 'techFilters'}.*. Allowed: ${allowed.join(', ')}`,
+      `[@bool/content] caseStudies item has ${field}="${value}" which is not in caseStudies.${field === 'sector' ? 'sectors' : 'techFilters'}.*. Allowed: ${allowed.join(', ')}`
     );
   }
 }
@@ -110,7 +110,7 @@ export function getCaseStudies(locale: Locale = defaultLocale): CaseStudiesPaylo
     const parseResult = itemSchema.safeParse(raw);
     if (!parseResult.success) {
       throw new Error(
-        `[@bool/content] caseStudies.items[${idx + 1}] failed validation: ${parseResult.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join('; ')}`,
+        `[@bool/content] caseStudies.items[${idx + 1}] failed validation: ${parseResult.error.issues.map((i) => `${i.path.join('.')}: ${i.message}`).join('; ')}`
       );
     }
     const parsed = parseResult.data;

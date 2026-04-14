@@ -1,5 +1,5 @@
-import { translations, defaultLocale } from './config';
-import type { Locale } from './config';
+import { translations, defaultLocale } from './config.ts';
+import type { Locale } from './config.ts';
 import type en from './locales/en.json';
 
 export type TranslationKey = keyof typeof en;

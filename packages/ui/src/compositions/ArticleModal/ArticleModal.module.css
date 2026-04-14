@@ -3,7 +3,7 @@
   inset: 0;
   z-index: 9998;
   background-color: var(--overlay-dark);
-  animation: fadeIn 200ms ease-out;
+  animation: fadeIn 300ms ease;
 }
 
 .dialog {
@@ -21,7 +21,7 @@
   border-radius: 12px;
   background: transparent;
   overflow: visible;
-  animation: zoomIn 200ms ease-out;
+  animation: zoomIn 300ms ease;
 }
 
 @media (max-width: 640px) {
@@ -285,10 +285,10 @@
 @keyframes zoomIn {
   from {
     opacity: 0;
-    transform: scale(0.95);
+    transform: translate(-50%, -50%) scale(0.97);
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: translate(-50%, -50%) scale(1);
   }
 }

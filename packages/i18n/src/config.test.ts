@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { defaultLocale, locales, isValidLocale, LOCALE_META } from './config';
+import { defaultLocale, locales, isValidLocale, LOCALE_META } from './config.ts';
 
 describe('i18n config', () => {
   it('has en as default locale', () => {

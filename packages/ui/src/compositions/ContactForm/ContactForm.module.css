@@ -108,15 +108,11 @@
   color: var(--color-on-dark);
   border: none;
   cursor: pointer;
-  box-shadow: var(--shadow-primary-button-subtle);
-  transition:
-    background-color 150ms,
-    box-shadow 150ms;
+  transition: background-color 150ms;
 }
 
 .submitBtn:hover {
   background-color: var(--color-primary-hover);
-  box-shadow: var(--shadow-primary-button-hover);
 }
 
 .submitBtn:disabled {

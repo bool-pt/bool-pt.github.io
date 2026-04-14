@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { t } from './t';
+import { t } from './t.ts';
 
 describe('t', () => {
   it('returns translated string for known key', () => {
@@ -19,5 +19,4 @@ describe('t', () => {
     const result = t('nav.about', 'en');
     expect(result).toBe('About');
   });
-
 });

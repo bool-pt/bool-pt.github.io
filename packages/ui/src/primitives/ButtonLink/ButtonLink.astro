@@ -19,17 +19,9 @@ import Icon from '../Icon/Icon.astro';
 ---
 
 <a href={href} class:list={['btn-link', `btn-link--${variant}`, className]}>
-  {
-    iconLeft && (
-      <Icon name="arrow-left" size={18} strokeWidth={2.5} class="btn-link-icon" />
-    )
-  }
+  {iconLeft && <Icon name="arrow-left" size={18} strokeWidth={2.5} class="btn-link-icon" />}
   <slot />
-  {
-    iconRight && (
-      <Icon name="arrow-right" size={18} strokeWidth={2.5} class="btn-link-icon" />
-    )
-  }
+  {iconRight && <Icon name="arrow-right" size={18} strokeWidth={2.5} class="btn-link-icon" />}
 </a>
 
 <style>
@@ -58,13 +50,11 @@ import Icon from '../Icon/Icon.astro';
     background-color: var(--color-primary);
     color: var(--color-on-dark);
     border: 2px solid var(--color-primary);
-    box-shadow: var(--shadow-primary-button-subtle);
   }
 
   .btn-link--primary:hover {
     background-color: var(--color-primary-hover);
     border-color: var(--color-primary-hover);
-    box-shadow: var(--shadow-primary-button-hover);
   }
 
   .btn-link--outline {

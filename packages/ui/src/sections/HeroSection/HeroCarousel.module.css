@@ -93,13 +93,11 @@
   background-color: var(--color-primary);
   color: var(--color-on-dark);
   border: 2px solid var(--color-primary);
-  box-shadow: var(--shadow-primary-button-subtle);
 }
 
 .ctaPrimary:hover {
   background-color: var(--color-primary-hover);
   border-color: var(--color-primary-hover);
-  box-shadow: var(--shadow-primary-button-hover);
 }
 
 .ctaOutline {
