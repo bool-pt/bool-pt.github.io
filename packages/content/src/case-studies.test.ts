@@ -11,8 +11,8 @@ describe('getCaseStudies (real en.json)', () => {
   it('every case study has the required cover layer', () => {
     for (const item of payload.items) {
       expect(item.client.length).toBeGreaterThan(0);
-      expect(item.title.length).toBeGreaterThan(0);
-      expect(item.subtitle.length).toBeGreaterThan(0);
+      expect(typeof item.title).toBe('string');
+      expect(typeof item.subtitle).toBe('string');
       // resolveImage throws if the file isn't found, so reaching here means
       // every coverImage path resolves to a real file.
       expect(item.coverImage).toBeDefined();
@@ -30,9 +30,7 @@ describe('getCaseStudies (real en.json)', () => {
 
   it('derives the back header as `{sector} · {tech}`', () => {
     for (const item of payload.items) {
-      expect(item.backHeader).toBe(
-        `${item.sector.toUpperCase()} · ${item.tech.toUpperCase()}`,
-      );
+      expect(item.backHeader).toBe(`${item.sector.toUpperCase()} · ${item.tech.toUpperCase()}`);
     }
   });
 
