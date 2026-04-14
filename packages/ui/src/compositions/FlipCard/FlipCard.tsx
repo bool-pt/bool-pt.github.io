@@ -11,22 +11,33 @@ interface Props {
 export default function FlipCard({ frontContent, backContent, className }: Props) {
   const [flipped, setFlipped] = useState(false);
 
+  const toggle = () => setFlipped((f) => !f);
+
   return (
-    <div
-      className={cn(styles.flipCard, className)}
-      role="button"
-      tabIndex={0}
-      onClick={() => setFlipped((f) => !f)}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          setFlipped((f) => !f);
-        }
-      }}
-    >
+    <div className={cn(styles.flipCard, className)}>
       <div className={cn(styles.flipCardInner, flipped && styles.flipCardInnerFlipped)}>
-        <div className={cn(styles.flipCardFace, styles.flipCardFront)}>{frontContent}</div>
-        <div className={cn(styles.flipCardFace, styles.flipCardBack)}>{backContent}</div>
+        <div
+          className={cn(styles.flipCardFace, styles.flipCardFront)}
+          role="button"
+          tabIndex={0}
+          onClick={toggle}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              toggle();
+            }
+          }}
+        >
+          {frontContent}
+        </div>
+        <div
+          className={cn(styles.flipCardFace, styles.flipCardBack)}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) toggle();
+          }}
+        >
+          {backContent}
+        </div>
       </div>
     </div>
   );
