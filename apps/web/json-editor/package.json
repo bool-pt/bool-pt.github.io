@@ -15,7 +15,9 @@
   "dependencies": {
     "@bool/analytics": "workspace:*",
     "@bool/json-editor-core": "workspace:*",
+    "@bool/media": "workspace:*",
     "@bool/shared": "workspace:*",
+    "@bool/ui": "workspace:*",
     "clsx": "catalog:",
     "lucide-react": "catalog:",
     "react": "catalog:",

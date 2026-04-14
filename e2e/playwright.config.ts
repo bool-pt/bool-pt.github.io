@@ -13,6 +13,7 @@ export default defineConfig({
   },
   webServer: {
     command: 'pnpm --filter @bool/web preview',
+    cwd: '..',
     url: 'http://localhost:4321/bool/',
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

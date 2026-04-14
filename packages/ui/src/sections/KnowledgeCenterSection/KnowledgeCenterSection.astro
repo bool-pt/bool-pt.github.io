@@ -1,7 +1,4 @@
 ---
-import img01 from '@bool/media/images/sections/homepage/insight-01.jpg';
-import img02 from '@bool/media/images/sections/homepage/insight-02.jpg';
-import img03 from '@bool/media/images/sections/homepage/insight-03.jpg';
 import { ROUTES } from '@bool/shared';
 import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
 import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
@@ -22,6 +19,7 @@ interface ArticleItem {
   tags: string[];
   metrics: Array<{ value: string; label: string }>;
   techStack: string[];
+  frontImage: string;
 }
 
 interface Props {
@@ -46,13 +44,6 @@ interface Props {
 }
 
 const { tag, heading, body, filters, articles, labels } = Astro.props;
-
-const frontImages = [img01.src, img02.src, img03.src];
-
-const articlesWithImages = articles.map((a, i) => ({
-  ...a,
-  frontImage: frontImages[i % frontImages.length],
-}));
 ---
 
 <Section
@@ -80,7 +71,7 @@ const articlesWithImages = articles.map((a, i) => ({
 
     <KnowledgeGrid
       client:visible
-      articles={articlesWithImages}
+      articles={articles}
       filters={filters}
       labels={{ ...labels, ctaHref: ROUTES.contacts }}
     />

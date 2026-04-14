@@ -1,5 +1,5 @@
 ---
-import bannerImg from '@bool/media/images/sections/services/services-banner.jpg';
+import bannerImgFallback from '@bool/media/images/backgrounds/services-banner.jpg';
 import ImageTextBanner from '../../compositions/ImageTextBanner/ImageTextBanner.astro';
 import Section from '../../primitives/Section/Section.astro';
 
@@ -8,9 +8,10 @@ interface Props {
   imageAlt: string;
   quote: string;
   tagline: string;
+  backgroundImage?: ImageMetadata;
 }
 
-const { ariaLabel, imageAlt, quote, tagline } = Astro.props;
+const { ariaLabel, imageAlt, quote, tagline, backgroundImage = bannerImgFallback } = Astro.props;
 ---
 
 <Section
@@ -19,7 +20,7 @@ const { ariaLabel, imageAlt, quote, tagline } = Astro.props;
   paddingBlock="0"
 >
   <ImageTextBanner
-    image={bannerImg}
+    image={backgroundImage}
     imageAlt={imageAlt}
     height="330px"
     grayscale

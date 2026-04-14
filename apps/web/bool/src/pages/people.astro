@@ -1,4 +1,5 @@
 ---
+import { resolveImage } from '@bool/content';
 import { t, tCollection } from '@bool/i18n';
 import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
 import BeyondSprintSection from '@bool/ui/sections/BeyondSprintSection.astro';
@@ -11,15 +12,21 @@ import TestimonialsCarouselSection from '@bool/ui/sections/TestimonialsCarouselS
 import ValuesSection from '@bool/ui/sections/ValuesSection.astro';
 import { getHeaderLabels, getFooterLabels, getContactSectionProps, getNewsletterLabels } from '../labels';
 
-const peopleTestimonials = tCollection('teamTestimonials', ['quote', 'name', 'role'])
-  .map((item) => ({ quote: item.quote, company: item.name, designation: item.role }));
+const peopleTestimonials = tCollection('teamTestimonials', ['quote', 'name', 'role', 'avatar'])
+  .map((item) => ({
+    quote: item.quote,
+    company: item.name,
+    designation: item.role,
+    avatar: resolveImage(item.avatar).src,
+  }));
 
 const heroStats = tCollection('peopleHero.stats', ['value', 'label']);
 
 const coreValues = tCollection('coreValues', ['title', 'body'])
   .map((v, i) => ({ ...v, number: String(i + 1).padStart(2, '0') }));
 
-const beyondCards = tCollection('beyondWork.cards', ['label', 'title', 'body']);
+const beyondCards = tCollection('beyondWork.cards', ['label', 'title', 'body', 'image'])
+  .map((c) => ({ label: c.label, title: c.title, body: c.body, image: resolveImage(c.image) }));
 ---
 
 <BaseLayout
@@ -35,6 +42,7 @@ const beyondCards = tCollection('beyondWork.cards', ['label', 'title', 'body']);
     ctaMeet={t('peopleHero.cta.meet')}
     ctaJoin={t('peopleHero.cta.join')}
     stats={heroStats}
+    backgroundImage={resolveImage(t('peopleHero.backgroundImage'))}
   />
   <ValuesSection
     tag={t('coreValues.tag')}
@@ -54,6 +62,7 @@ const beyondCards = tCollection('beyondWork.cards', ['label', 'title', 'body']);
     body={t('photoGallery.body')}
     galleryAria={t('photoGallery.gallery.aria')}
     galleryAlts={tCollection('photoGallery.gallery', ['alt']).map((g) => g.alt)}
+    images={tCollection('photoGallery.gallery', ['image']).map((g) => resolveImage(g.image))}
   />
   <TestimonialsCarouselSection
     tag={t('teamTestimonials.tag')}

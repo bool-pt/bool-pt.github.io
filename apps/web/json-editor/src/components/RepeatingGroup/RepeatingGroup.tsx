@@ -5,6 +5,7 @@ import { useEditor } from '../../context/EditorContext.tsx';
 import { cn } from '../../lib/cn.ts';
 import { l } from '../../locales/index.ts';
 import FieldEditor from '../FieldEditor/FieldEditor.tsx';
+import NestedRepeatingGroup from '../NestedRepeatingGroup/NestedRepeatingGroup.tsx';
 import styles from './RepeatingGroup.module.css';
 
 const previewStyle: React.CSSProperties = { fontWeight: 400, opacity: 0.6, marginInlineStart: '0.5rem' };
@@ -148,6 +149,14 @@ export default function RepeatingGroup({ group }: RepeatingGroupProps) {
                 <div className={styles.itemBody}>
                   {item.fields.map((field) => (
                     <FieldEditor key={field.key} field={field} />
+                  ))}
+                  {item.nestedGroups?.map((nested) => (
+                    <NestedRepeatingGroup
+                      key={nested.prefix}
+                      parentGroupPrefix={group.prefix}
+                      parentIndex={item.index}
+                      group={nested}
+                    />
                   ))}
                 </div>
               )}

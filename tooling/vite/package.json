@@ -8,6 +8,9 @@
     "./react-app": "./src/react-app.ts",
     "./analyze": "./src/analyze.ts"
   },
+  "devDependencies": {
+    "@bool/tsconfig": "workspace:*"
+  },
   "dependencies": {
     "@tailwindcss/vite": "catalog:",
     "@vitejs/plugin-react": "catalog:",

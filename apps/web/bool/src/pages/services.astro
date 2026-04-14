@@ -1,4 +1,5 @@
 ---
+import { resolveImage } from '@bool/content';
 import { t, tCollection, tList } from '@bool/i18n';
 import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
 import ContactSection from '@bool/ui/sections/ContactSection.astro';
@@ -43,6 +44,7 @@ const howWeWorkCards = tCollection('howWeWork.cards', ['subtitle', 'title', 'des
     heading={t('servicesHero.heading')}
     body1={t('servicesHero.body1')}
     body2={t('servicesHero.body2')}
+    backgroundImage={resolveImage(t('servicesHero.backgroundImage'))}
   />
   <PowerAISection
     showCta={false}
@@ -54,6 +56,7 @@ const howWeWorkCards = tCollection('howWeWork.cards', ['subtitle', 'title', 'des
     body2={t('aiPitch.body2')}
     cta={t('powerAi.cta')}
     imageAlt={t('powerAi.image.alt')}
+    image={resolveImage(t('powerAi.image'))}
   />
   <SolutionsROISection
     heading={t('solutionsRoi.heading')}
@@ -67,6 +70,7 @@ const howWeWorkCards = tCollection('howWeWork.cards', ['subtitle', 'title', 'des
     imageAlt={t('statsBanner.image.alt')}
     quote={t('statsBanner.quote')}
     tagline={t('statsBanner.tagline')}
+    backgroundImage={resolveImage(t('statsBanner.backgroundImage'))}
   />
   <TechStackSection
     readinessExpertName={t('aiReadiness.expertName')}
@@ -89,6 +93,7 @@ const howWeWorkCards = tCollection('howWeWork.cards', ['subtitle', 'title', 'des
     heading={t('ctaBanner.heading')}
     body={t('ctaBanner.body')}
     button={t('ctaBanner.button')}
+    backgroundImage={resolveImage(t('ctaBanner.backgroundImage'))}
   />
   <ContactSection {...getContactSectionProps()} background="var(--color-surface-black)" />
   <NewsletterCTASection

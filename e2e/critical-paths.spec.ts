@@ -1,91 +1,106 @@
 import { test, expect } from '@playwright/test';
 import { ROUTES } from '@bool/shared';
+import { dismissCookieBanner, getHydratedRoot } from './helpers';
 
 test.describe('Navigation', () => {
   test('desktop navigation links work', async ({ page }) => {
-    await page.goto('/');
-    const nav = page.locator('nav');
+    await page.goto(ROUTES.home);
+    await dismissCookieBanner(page);
+    const nav = page.locator('header nav').first();
 
-    await nav.locator(`a[href="${ROUTES.about}"]`).click();
+    await nav.locator(`a.nav-link[href="${ROUTES.about}"]`).click();
     await expect(page).toHaveURL(ROUTES.about);
     await expect(page).toHaveTitle(/About/i);
 
-    await nav.locator(`a[href="${ROUTES.services}"]`).click();
+    await nav.locator(`a.nav-link[href="${ROUTES.services}"]`).click();
     await expect(page).toHaveURL(ROUTES.services);
     await expect(page).toHaveTitle(/Services/i);
 
-    await nav.locator(`a[href="${ROUTES.contacts}"]`).click();
+    await nav.locator(`a.nav-link[href="${ROUTES.contacts}"]`).click();
     await expect(page).toHaveURL(ROUTES.contacts);
     await expect(page).toHaveTitle(/Contacts/i);
   });
 
   test('mobile navigation opens and closes', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
-    await page.goto('/');
+    await page.goto(ROUTES.home);
+    await dismissCookieBanner(page);
+    // Wait for the React island to hydrate before any interaction.
+    await getHydratedRoot(page, 'MobileNav');
 
-    // Look for mobile menu trigger
-    const menuButton = page.locator('button[aria-label*="menu" i], button[aria-label*="nav" i]');
-    if (await menuButton.count() > 0) {
-      await menuButton.first().click();
+    // MobileNav uses Sheet with aria-controls="mobile-nav" on the trigger.
+    const menuButton = page.locator('button[aria-controls="mobile-nav"]');
+    if ((await menuButton.count()) === 0) return; // Site has no mobile menu
 
-      // Mobile nav should show links
-      const mobileNav = page.locator('[role="dialog"], [data-mobile-nav], nav');
-      await expect(mobileNav.locator(`a[href="${ROUTES.about}"]`)).toBeVisible();
+    // Poll until the click is reflected in the open state. This survives
+    // the rare race where the click lands a tick before React's onClick is
+    // attached, by re-clicking inside expect.poll until aria-expanded flips.
+    await expect
+      .poll(
+        async () => {
+          if ((await menuButton.getAttribute('aria-expanded')) === 'true') return 'open';
+          await menuButton.click();
+          return menuButton.getAttribute('aria-expanded');
+        },
+        { timeout: 10_000, intervals: [200, 400, 600, 800, 1000] },
+      )
+      .toBe('open');
 
-      // Navigate via mobile nav
-      await mobileNav.locator(`a[href="${ROUTES.about}"]`).click();
-      await expect(page).toHaveURL(ROUTES.about);
-    }
+    // Sheet (Radix Dialog) mounts in a portal at <body>. Match the dialog
+    // containing the nav links so we don't pick up the cookie banner dialog
+    // or the dialog backdrop alone.
+    const mobileNav = page
+      .locator(`[role="dialog"]:has(a[href="${ROUTES.about}"])`)
+      .first();
+    await expect(mobileNav).toBeVisible({ timeout: 5_000 });
+    await mobileNav.locator(`a[href="${ROUTES.about}"]`).first().click();
+    await expect(page).toHaveURL(ROUTES.about);
   });
 });
 
 test.describe('Cookie Consent', () => {
-  test('accept cookies hides banner', async ({ page }) => {
-    // Clear any existing consent
-    await page.goto('/');
+  test('accept cookies hides banner and persists across reload', async ({ page }) => {
+    await page.goto(ROUTES.home);
     await page.evaluate(() => localStorage.clear());
     await page.reload();
 
-    const banner = page.locator('[role="dialog"]');
-    if (await banner.count() > 0) {
-      await expect(banner.first()).toBeVisible();
+    const banner = page.locator('[role="dialog"]').first();
+    if (await banner.isVisible().catch(() => false)) {
+      await dismissCookieBanner(page);
+      await expect(banner).toBeHidden();
 
-      // Click accept button
-      const acceptButton = banner.locator('button').first();
-      await acceptButton.click();
-
-      // Banner should disappear
-      await expect(banner).not.toBeVisible();
-
-      // Reload — banner should stay hidden
       await page.reload();
       await page.waitForLoadState('networkidle');
-      await expect(banner).not.toBeVisible();
+      // Either gone from DOM or still hidden — both acceptable.
+      const stillVisible = await banner.isVisible().catch(() => false);
+      expect(stillVisible).toBe(false);
     }
   });
 
-  test('reject cookies hides banner', async ({ page }) => {
-    await page.goto('/');
+  test('"Manage" opens the preferences view (does not auto-dismiss)', async ({ page }) => {
+    // The CookieBanner has two buttons in initial view: Accept (closes) and
+    // Manage (opens the preferences panel). There is no "reject all" CTA;
+    // instead the user enters preferences and saves with categories off.
+    await page.goto(ROUTES.home);
     await page.evaluate(() => localStorage.clear());
     await page.reload();
 
-    const banner = page.locator('[role="dialog"]');
-    if (await banner.count() > 0) {
-      await expect(banner.first()).toBeVisible();
+    const banner = page.locator('[role="dialog"]').first();
+    if (!(await banner.isVisible().catch(() => false))) return;
 
-      // Click reject button (second button)
-      const buttons = banner.locator('button');
-      const rejectButton = buttons.last();
-      await rejectButton.click();
+    const manageButton = banner.locator('button').last();
+    await manageButton.click();
 
-      await expect(banner).not.toBeVisible();
-    }
+    // Preferences view shows category checkboxes — at least one role="checkbox"
+    // or one labelled toggle should now be visible inside the dialog.
+    await expect(banner.locator('input[type="checkbox"], [role="switch"]').first()).toBeVisible();
   });
 });
 
 test.describe('Contact Form', () => {
   test('shows validation errors on empty submit', async ({ page }) => {
     await page.goto(ROUTES.contacts);
+    await dismissCookieBanner(page);
 
     // Find and submit the form
     const submitButton = page.locator('button[type="submit"]');
@@ -100,6 +115,7 @@ test.describe('Contact Form', () => {
 
   test('accepts valid input in form fields', async ({ page }) => {
     await page.goto(ROUTES.contacts);
+    await dismissCookieBanner(page);
 
     // Fill in form fields
     const nameInput = page.locator('input[name="name"], input[name="firstName"]');
@@ -124,7 +140,8 @@ test.describe('Contact Form', () => {
 
 test.describe('Footer', () => {
   test('footer contains legal links', async ({ page }) => {
-    await page.goto('/');
+    await page.goto(ROUTES.home);
+    await dismissCookieBanner(page);
 
     const footer = page.locator('footer');
     await expect(footer).toBeVisible();
@@ -134,23 +151,5 @@ test.describe('Footer', () => {
   });
 });
 
-test.describe('Portfolio', () => {
-  test('portfolio page loads and displays cases', async ({ page }) => {
-    const response = await page.goto(ROUTES.portfolio);
-    expect(response?.status()).toBe(200);
-
-    // Should have at least one portfolio card or case study
-    const content = page.locator('main');
-    await expect(content).toBeVisible();
-  });
-});
-
-test.describe('Blog', () => {
-  test('blog page loads with article list', async ({ page }) => {
-    const response = await page.goto(ROUTES.blog);
-    expect(response?.status()).toBe(200);
-
-    const content = page.locator('main');
-    await expect(content).toBeVisible();
-  });
-});
+// Portfolio + Blog page-load assertions are covered in depth by
+// e2e/case-studies.spec.ts and e2e/images-no-broken.spec.ts.

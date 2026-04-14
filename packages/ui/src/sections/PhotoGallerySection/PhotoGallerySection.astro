@@ -1,10 +1,10 @@
 ---
 import { Image } from 'astro:assets';
-import gallery01 from '@bool/media/images/people/gallery/gallery-02.png';
-import gallery02 from '@bool/media/images/people/gallery/gallery-03.jpg';
-import gallery03 from '@bool/media/images/people/gallery/gallery-04.jpg';
-import gallery04 from '@bool/media/images/people/gallery/gallery-05.jpg';
-import gallery05 from '@bool/media/images/people/gallery/gallery-06.jpg';
+import gallery01Fallback from '@bool/media/images/gallery/gallery-02.png';
+import gallery02Fallback from '@bool/media/images/gallery/gallery-03.jpg';
+import gallery03Fallback from '@bool/media/images/gallery/gallery-04.jpg';
+import gallery04Fallback from '@bool/media/images/gallery/gallery-05.jpg';
+import gallery05Fallback from '@bool/media/images/gallery/gallery-06.jpg';
 import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
 import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
 import Section from '../../primitives/Section/Section.astro';
@@ -16,9 +16,21 @@ interface Props {
   body: string;
   galleryAria: string;
   galleryAlts: string[];
+  /** Five image slots (large + four small). Falls back to gallery placeholders if omitted. */
+  images?: ImageMetadata[];
 }
 
-const { tag, heading, body, galleryAria, galleryAlts } = Astro.props;
+const { tag, heading, body, galleryAria, galleryAlts, images } = Astro.props;
+const fallbackImages: ImageMetadata[] = [
+  gallery01Fallback,
+  gallery02Fallback,
+  gallery03Fallback,
+  gallery04Fallback,
+  gallery05Fallback,
+];
+const resolvedImages: ImageMetadata[] = [0, 1, 2, 3, 4].map(
+  (i) => images?.[i] ?? (fallbackImages[i] as ImageMetadata),
+);
 ---
 
 <Section aria-labelledby="photo-gallery-heading" paddingBlock="3rem 0">
@@ -39,54 +51,19 @@ const { tag, heading, body, galleryAria, galleryAlts } = Astro.props;
   </SectionContainer>
   <div class="gallery-grid" role="group" aria-label={galleryAria}>
     <div class="gallery-item gallery-item--large">
-      <Image
-        src={gallery01}
-        alt={galleryAlts[0]}
-        class="gallery-img"
-        width={720}
-        height={520}
-        loading="lazy"
-      />
+      <Image src={resolvedImages[0] as ImageMetadata} alt={galleryAlts[0]} class="gallery-img" width={720} height={520} loading="lazy" />
     </div>
     <div class="gallery-item gallery-item--small">
-      <Image
-        src={gallery02}
-        alt={galleryAlts[1]}
-        class="gallery-img"
-        width={360}
-        height={256}
-        loading="lazy"
-      />
+      <Image src={resolvedImages[1] as ImageMetadata} alt={galleryAlts[1]} class="gallery-img" width={360} height={256} loading="lazy" />
     </div>
     <div class="gallery-item gallery-item--small">
-      <Image
-        src={gallery03}
-        alt={galleryAlts[2]}
-        class="gallery-img"
-        width={360}
-        height={256}
-        loading="lazy"
-      />
+      <Image src={resolvedImages[2] as ImageMetadata} alt={galleryAlts[2]} class="gallery-img" width={360} height={256} loading="lazy" />
     </div>
     <div class="gallery-item gallery-item--small">
-      <Image
-        src={gallery04}
-        alt={galleryAlts[3]}
-        class="gallery-img"
-        width={360}
-        height={256}
-        loading="lazy"
-      />
+      <Image src={resolvedImages[3] as ImageMetadata} alt={galleryAlts[3]} class="gallery-img" width={360} height={256} loading="lazy" />
     </div>
     <div class="gallery-item gallery-item--small">
-      <Image
-        src={gallery05}
-        alt={galleryAlts[4]}
-        class="gallery-img"
-        width={360}
-        height={256}
-        loading="lazy"
-      />
+      <Image src={resolvedImages[4] as ImageMetadata} alt={galleryAlts[4]} class="gallery-img" width={360} height={256} loading="lazy" />
     </div>
   </div>
 </Section>

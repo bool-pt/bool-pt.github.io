@@ -1,5 +1,5 @@
 ---
-import ctaBg from '@bool/media/images/sections/cta-background.jpg';
+import ctaBgFallback from '@bool/media/images/backgrounds/cta-background.jpg';
 import { ROUTES } from '@bool/shared';
 import CTASection from '../../compositions/CTASection/CTASection.astro';
 import ButtonLink from '../../primitives/ButtonLink/ButtonLink.astro';
@@ -8,9 +8,10 @@ interface Props {
   heading: string;
   body: string;
   button: string;
+  backgroundImage?: ImageMetadata;
 }
 
-const { heading, body, button } = Astro.props;
+const { heading, body, button, backgroundImage = ctaBgFallback } = Astro.props;
 ---
 
 <CTASection
@@ -19,7 +20,7 @@ const { heading, body, button } = Astro.props;
   minHeight="355px"
   contentMaxWidth="50rem"
   class="lets-build"
-  style={`--cta-bg-image: url(${ctaBg.src})`}
+  style={`--cta-bg-image: url(${backgroundImage.src})`}
 >
   <Fragment slot="heading">{heading}</Fragment>
   <Fragment slot="body">{body}</Fragment>

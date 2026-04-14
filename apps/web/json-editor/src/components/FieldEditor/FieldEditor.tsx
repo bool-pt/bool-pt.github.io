@@ -4,6 +4,8 @@ import type { TranslationField } from '@bool/json-editor-core';
 import { useEditor } from '../../context/EditorContext.tsx';
 import { cn } from '../../lib/cn.ts';
 import { l } from '../../locales/index.ts';
+import IconPicker from '../IconPicker/IconPicker.tsx';
+import MediaPicker from '../MediaPicker/MediaPicker.tsx';
 import styles from './FieldEditor.module.css';
 
 interface FieldEditorProps {
@@ -49,14 +51,25 @@ export default function FieldEditor({ field, disabled = false }: FieldEditorProp
     [localValue],
   );
 
+  const handleSpecializedChange = useCallback(
+    (next: string) => {
+      setLocalValue(next);
+      if (next !== field.value) {
+        dispatch({ type: 'UPDATE_FIELD', payload: { key: field.key, value: next } });
+      }
+    },
+    [dispatch, field.key, field.value],
+  );
+
   const useTextarea = isLongValue(field.value) || isLongValue(localValue);
+  const kind = field.kind ?? 'text';
 
   return (
     <div
       className={cn(
         styles.field,
         field.isDirty && styles.fieldDirty,
-        isEmpty && !disabled && styles.fieldEmpty,
+        isEmpty && !disabled && kind === 'text' && styles.fieldEmpty,
         disabled && styles.fieldDisabled,
       )}
     >
@@ -64,7 +77,20 @@ export default function FieldEditor({ field, disabled = false }: FieldEditorProp
         {getShortKey(field.key)}
       </label>
       <div>
-        {useTextarea ? (
+        {kind === 'media' ? (
+          <MediaPicker
+            fieldKey={field.key}
+            value={disabled ? field.value : localValue}
+            onChange={handleSpecializedChange}
+            disabled={disabled}
+          />
+        ) : kind === 'icon' ? (
+          <IconPicker
+            value={disabled ? field.value : localValue}
+            onChange={handleSpecializedChange}
+            disabled={disabled}
+          />
+        ) : useTextarea ? (
           <textarea
             className={cn(styles.input, styles.textarea, disabled && styles.inputDisabled)}
             value={disabled ? field.value : localValue}
@@ -84,7 +110,7 @@ export default function FieldEditor({ field, disabled = false }: FieldEditorProp
             disabled={disabled}
           />
         )}
-        {isEmpty && !disabled && (
+        {isEmpty && !disabled && kind === 'text' && (
           <span className={styles.emptyWarning}>
             <AlertCircle size={12} />
             {l('editor.emptyValue')}

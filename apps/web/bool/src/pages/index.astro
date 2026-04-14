@@ -1,15 +1,8 @@
 ---
 import {
-  getServices,
-  getEngagementModels,
   getEvents,
-  getTestimonials,
-  getBlogPosts,
+  resolveImage,
   transformEvent,
-  transformService,
-  transformModel,
-  transformTestimonial,
-  transformBlogPost,
 } from '@bool/content';
 import { t, tCollection, isValidLocale, defaultLocale } from '@bool/i18n';
 import type { Locale } from '@bool/i18n';
@@ -30,19 +23,36 @@ import { getHeaderLabels, getFooterLabels, getContactSectionProps, getNewsletter
 const rawLocale = Astro.currentLocale ?? defaultLocale;
 const locale: Locale = isValidLocale(rawLocale) ? rawLocale : 'en';
 
-const [services, models, events, testimonials, blogPosts] = await Promise.all([
-  getServices(),
-  getEngagementModels(),
-  getEvents(),
-  getTestimonials(),
-  getBlogPosts(),
-]);
-
-const serviceItems = services.map(transformService);
-const modelItems = models.map(transformModel);
+const events = await getEvents();
 const eventItems = events.slice(0, 3).map(transformEvent);
-const testimonialItems = testimonials.map(transformTestimonial);
-const postItems = blogPosts.slice(0, 3).map(transformBlogPost);
+
+const postItems = tCollection('insightsPreview.posts', ['slug', 'title', 'author', 'date', 'image'])
+  .map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    author: p.author,
+    date: p.date,
+    image: resolveImage(p.image).src,
+  }));
+
+const serviceItems = tCollection('serviceCards.items', ['title', 'description', 'href', 'image'])
+  .map((s) => ({
+    title: s.title,
+    description: s.description,
+    href: s.href,
+    image: resolveImage(s.image),
+  }));
+
+const modelItems = tCollection('ourPromise.items', ['title', 'subtitle', 'iconName', 'href'])
+  .map((m) => ({ title: m.title, subtitle: m.subtitle, icon: m.iconName, href: m.href }));
+
+const testimonialItems = tCollection('testimonials.items', ['quote', 'company', 'designation', 'avatar'])
+  .map((t) => ({
+    quote: t.quote,
+    company: t.company,
+    designation: t.designation,
+    avatar: resolveImage(t.avatar).src,
+  }));
 
 const heroSlides = tCollection(
   'hero.slides',
@@ -68,6 +78,7 @@ const heroSlides = tCollection(
   <HeroSection
     ariaLabel={t('hero.aria', locale)}
     slides={heroSlides}
+    backgroundImage={resolveImage(t('hero.backgroundImage', locale))}
     carouselAriaLabels={{ slideIndicators: t('carousel.slideIndicators.aria', locale), slide: t('carousel.slideN.aria', locale) }}
   />
   <NewsletterBarSection
@@ -82,6 +93,7 @@ const heroSlides = tCollection(
     body2={t('powerAi.body2', locale)}
     cta={t('powerAi.cta', locale)}
     imageAlt={t('powerAi.image.alt', locale)}
+    image={resolveImage(t('powerAi.image', locale))}
   />
   <ServicesSection heading={t('serviceCards.heading', locale)} services={serviceItems} learnMoreLabel={t('common.learnMore', locale)} />
   <PromiseSection
@@ -103,6 +115,7 @@ const heroSlides = tCollection(
     body={t('teamPreview.body', locale)}
     ctaJoin={t('teamPreview.cta.join', locale)}
     ctaMeet={t('teamPreview.cta.meet', locale)}
+    image={resolveImage(t('teamPreview.image', locale))}
   />
   <InsightsSection
     heading={t('insightsPreview.heading', locale)}

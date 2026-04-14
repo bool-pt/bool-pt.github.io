@@ -6,15 +6,18 @@ interface CardItem {
   title: string;
   description: string;
   href?: string;
+  /** Per-card image. Falls back to the indexed `images` array. */
+  image?: ImageMetadata;
 }
 
 interface Props {
   cards: CardItem[];
-  images: ImageMetadata[];
+  /** Optional fallback image set used when a card has no `image` of its own. */
+  images?: ImageMetadata[];
   learnMoreLabel?: string;
 }
 
-const { cards, images, learnMoreLabel = 'Learn more' } = Astro.props;
+const { cards, images = [], learnMoreLabel = 'Learn more' } = Astro.props;
 ---
 
 <div class="card-grid">
@@ -24,7 +27,7 @@ const { cards, images, learnMoreLabel = 'Learn more' } = Astro.props;
         <div class="card-inner">
           <div class="card-image">
             <Image
-              src={images[i % images.length]}
+              src={card.image ?? images[i % images.length] ?? (images[0] as ImageMetadata)}
               alt={card.title}
               class="card-img"
               loading="lazy"
@@ -260,6 +263,12 @@ const { cards, images, learnMoreLabel = 'Learn more' } = Astro.props;
     block-size: 100%;
     object-fit: cover;
     border-radius: 0.5rem;
+    filter: grayscale(1);
+    transition: filter 300ms;
+  }
+
+  .card-inner:hover .card-img {
+    filter: grayscale(0);
   }
 
   .card-body {

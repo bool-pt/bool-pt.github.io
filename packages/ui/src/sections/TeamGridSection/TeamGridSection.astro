@@ -1,15 +1,14 @@
 ---
-import portraitPlaceholder from '@bool/media/images/placeholders/portrait.png';
+import type { TeamGridPayload } from '@bool/content';
 import IntroGridSection from '../../compositions/IntroGridSection/IntroGridSection.astro';
 import PersonCard from '../../compositions/PersonCard/PersonCard.astro';
 
 interface Props {
-  heading: string;
-  body: string;
-  team: Array<{ name: string; role: string; image: string; linkedin?: string }>;
+  payload: TeamGridPayload;
 }
 
-const { heading, body, team } = Astro.props;
+const { payload } = Astro.props;
+const { labels, members } = payload;
 ---
 
 <IntroGridSection
@@ -21,16 +20,22 @@ const { heading, body, team } = Astro.props;
   paddingBlock="5rem"
   class="team-section"
 >
-  <Fragment slot="heading">{heading}</Fragment>
-  <Fragment slot="description">{body}</Fragment>
+  <Fragment slot="heading">{labels.heading}</Fragment>
+  <Fragment slot="description">{labels.body}</Fragment>
 
   {
-    team.map((member) => (
+    members.map((member) => (
       <PersonCard
         name={member.name}
         role={member.role}
-        photo={portraitPlaceholder}
+        photo={member.image}
         linkedin={member.linkedin}
+        email={member.email}
+        bio={member.bio}
+        quote={member.quote}
+        tags={member.tags}
+        emailAriaPrefix={labels.emailAriaPrefix}
+        linkedinAriaSuffix={labels.linkedinAriaSuffix}
         colorScheme="dark"
         variant="card"
       />

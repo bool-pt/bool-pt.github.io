@@ -4,6 +4,7 @@ interface Props {
   description?: string;
   colorScheme?: 'light' | 'dark';
   align?: 'start' | 'center';
+  iconShape?: 'circle' | 'square';
   class?: string;
 }
 
@@ -12,6 +13,7 @@ const {
   description,
   colorScheme = 'light',
   align = 'center',
+  iconShape = 'circle',
   class: className,
 } = Astro.props;
 
@@ -20,7 +22,7 @@ const hasFooter = Astro.slots.has('footer');
 
 <article class:list={['icon-card', `icon-card--${align}`, `icon-card--${colorScheme}`, className]}>
   <div class="icon-card-content">
-    <div class="icon-card-icon">
+    <div class:list={['icon-card-icon', `icon-card-icon--${iconShape}`]}>
       <slot name="icon" />
     </div>
     <h3 class="icon-card-title">{title}</h3>
@@ -88,10 +90,17 @@ const hasFooter = Astro.slots.has('footer');
     justify-content: center;
     inline-size: 3.375rem;
     block-size: 3.375rem;
-    border-radius: var(--radius-full);
     background-color: var(--primary-30);
     color: var(--color-primary);
     margin-block-end: 1.25rem;
+  }
+
+  .icon-card-icon--circle {
+    border-radius: var(--radius-full);
+  }
+
+  .icon-card-icon--square {
+    border-radius: var(--radius-lg);
   }
 
   .icon-card-footer {

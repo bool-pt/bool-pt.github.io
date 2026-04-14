@@ -1,8 +1,6 @@
 ---
-import office1 from '@bool/media/images/sections/about/about-02.jpg';
-import office3 from '@bool/media/images/sections/about/about-02.jpg';
-import office2 from '@bool/media/images/sections/about/about-03.jpg';
-import office4 from '@bool/media/images/sections/about/about-03.jpg';
+import office1Fallback from '@bool/media/images/gallery/about-02.jpg';
+import office2Fallback from '@bool/media/images/gallery/about-03.jpg';
 import OfficeCarousel from '../../compositions/OfficeCarousel/OfficeCarousel';
 import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
 import Section from '../../primitives/Section/Section.astro';
@@ -11,17 +9,17 @@ import SectionContainer from '../../primitives/SectionContainer/SectionContainer
 interface Props {
   heading: string;
   description: string;
-  offices: Array<{ city: string; building: string; address: string }>;
+  offices: Array<{ city: string; building: string; address: string; image?: string }>;
   carouselAriaLabels: { prev: string; next: string; imageAlt: string };
 }
 
 const { heading, description, offices: officeData, carouselAriaLabels } = Astro.props;
 
-const officeImages = [office1.src, office2.src, office3.src, office4.src];
+const fallbackImages = [office1Fallback.src, office2Fallback.src, office1Fallback.src, office2Fallback.src];
 
 const offices = officeData.map((office, i) => ({
   ...office,
-  image: officeImages[i % officeImages.length],
+  image: office.image ?? (fallbackImages[i % fallbackImages.length] as string),
 }));
 ---
 

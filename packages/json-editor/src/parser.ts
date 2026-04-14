@@ -1,5 +1,8 @@
 import { detectRepeatingGroups } from './detector';
+import { classifyField } from './field-kinds';
 import type {
+  NestedRepeatingGroup,
+  NestedRepeatingItem,
   PageMeta,
   ParsedTree,
   RepeatingGroup,
@@ -111,6 +114,15 @@ export function parseFlatJson(json: Record<string, string>): ParsedTree {
         for (const field of item.fields) {
           repeatingKeys.add(field.key);
         }
+        if (item.nestedGroups) {
+          for (const nested of item.nestedGroups) {
+            for (const innerItem of nested.items) {
+              for (const field of innerItem.fields) {
+                repeatingKeys.add(field.key);
+              }
+            }
+          }
+        }
       }
     }
 
@@ -120,6 +132,7 @@ export function parseFlatJson(json: Record<string, string>): ParsedTree {
         key: k,
         value: json[k] ?? '',
         isDirty: false,
+        kind: classifyField(k),
       }));
 
     sections.push({
@@ -185,6 +198,7 @@ function buildRepeatingGroups(
         key,
         value: json[key] ?? '',
         isDirty: false,
+        kind: classifyField(key),
       });
     }
 
@@ -195,17 +209,25 @@ function buildRepeatingGroups(
       return a[0].localeCompare(b[0]);
     });
 
-    const items: RepeatingGroupItem[] = sortedEntries.map(([index, fields]) => ({
-      index,
-      fields: fields.sort((a, b) => {
+    const items: RepeatingGroupItem[] = sortedEntries.map(([index, fields]) => {
+      const sortedFields = fields.sort((a, b) => {
         const aSuffix = a.key.slice(template.prefix.length + index.length + 2);
         const bSuffix = b.key.slice(template.prefix.length + index.length + 2);
         return (
           template.fieldSuffixes.indexOf(aSuffix) -
           template.fieldSuffixes.indexOf(bSuffix)
         );
-      }),
-    }));
+      });
+      const nestedGroups = buildNestedGroups(
+        template,
+        index,
+        keys,
+        json,
+      );
+      return nestedGroups.length > 0
+        ? { index, fields: sortedFields, nestedGroups }
+        : { index, fields: sortedFields };
+    });
 
     if (items.length > 0) {
       groups.push({
@@ -218,4 +240,66 @@ function buildRepeatingGroups(
   }
 
   return groups;
+}
+
+function buildNestedGroups(
+  parentTemplate: RepeatingGroupTemplate,
+  parentIndex: string,
+  allKeys: string[],
+  json: Record<string, string>,
+): NestedRepeatingGroup[] {
+  const nestedTemplates = parentTemplate.nestedTemplates ?? [];
+  if (nestedTemplates.length === 0) return [];
+
+  const result: NestedRepeatingGroup[] = [];
+
+  for (const nestedTemplate of nestedTemplates) {
+    const innerPrefix = `${parentTemplate.prefix}.${parentIndex}.${nestedTemplate.innerPrefix}`;
+    const innerDot = `${innerPrefix}.`;
+    const itemMap = new Map<string, TranslationField[]>();
+
+    for (const key of allKeys) {
+      if (!key.startsWith(innerDot)) continue;
+      const rest = key.slice(innerDot.length);
+      const segments = rest.split('.');
+      const innerIndex = segments[0];
+      if (!innerIndex || !NUMERIC_RE.test(innerIndex)) continue;
+      const innerSuffix = segments.slice(1).join('.');
+      if (!nestedTemplate.fieldSuffixes.includes(innerSuffix)) continue;
+
+      let fields = itemMap.get(innerIndex);
+      if (!fields) {
+        fields = [];
+        itemMap.set(innerIndex, fields);
+      }
+      fields.push({
+        key,
+        value: json[key] ?? '',
+        isDirty: false,
+        kind: classifyField(key),
+      });
+    }
+
+    const sortedEntries = [...itemMap.entries()].sort(
+      (a, b) => Number(a[0]) - Number(b[0]),
+    );
+
+    const items: NestedRepeatingItem[] = sortedEntries.map(([index, fields]) => ({
+      index,
+      fields: fields.sort((a, b) => {
+        const aSuffix = a.key.slice(innerDot.length + index.length + (nestedTemplate.fieldSuffixes.includes('') ? 0 : 1));
+        const bSuffix = b.key.slice(innerDot.length + index.length + (nestedTemplate.fieldSuffixes.includes('') ? 0 : 1));
+        return nestedTemplate.fieldSuffixes.indexOf(aSuffix) - nestedTemplate.fieldSuffixes.indexOf(bSuffix);
+      }),
+    }));
+
+    result.push({
+      prefix: innerPrefix,
+      innerPrefix: nestedTemplate.innerPrefix,
+      template: nestedTemplate,
+      items,
+    });
+  }
+
+  return result;
 }

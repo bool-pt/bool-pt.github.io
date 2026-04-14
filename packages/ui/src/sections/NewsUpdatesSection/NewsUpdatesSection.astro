@@ -1,10 +1,4 @@
 ---
-import img01 from '@bool/media/images/sections/homepage/home-stock-01.jpg';
-import img02 from '@bool/media/images/sections/homepage/home-stock-02.jpg';
-import img03 from '@bool/media/images/sections/homepage/home-stock-03.jpg';
-import img05 from '@bool/media/images/sections/homepage/home-stock-05.jpg';
-import img07 from '@bool/media/images/sections/homepage/home-stock-07.jpg';
-import img08 from '@bool/media/images/sections/homepage/home-stock-08.jpg';
 import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
 import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
 import Section from '../../primitives/Section/Section.astro';
@@ -18,6 +12,7 @@ interface NewsItem {
   summary: string;
   href: string;
   tags: string[];
+  image: string;
 }
 
 interface Props {
@@ -30,13 +25,6 @@ interface Props {
 }
 
 const { tag, heading, body, filters, newsItems, labels } = Astro.props;
-
-const stockImages = [img01.src, img02.src, img03.src, img05.src, img07.src, img08.src];
-
-const newsWithImages = newsItems.map((item, i) => ({
-  ...item,
-  image: stockImages[i % stockImages.length],
-}));
 ---
 
 <Section
@@ -60,7 +48,7 @@ const newsWithImages = newsItems.map((item, i) => ({
 
     <NewsGrid
       client:visible
-      items={newsWithImages}
+      items={newsItems}
       filters={filters}
       labels={labels}
     />

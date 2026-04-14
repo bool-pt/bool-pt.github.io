@@ -10,7 +10,7 @@
 @media (min-width: 640px) {
   .wrapper {
     display: block;
-    padding-inline: 6.5rem;
+    padding-inline: 6.9rem;
   }
 }
 
@@ -81,7 +81,9 @@
 
 .viewport {
   overflow: hidden;
-  padding: 1.5rem 0.5rem;
+  padding-block: 2rem;
+  margin-inline: -2rem;
+  padding-inline: 2rem;
   order: 1;
   flex: 0 0 100%;
 }
@@ -90,6 +92,7 @@
   .viewport {
     order: unset;
     flex: unset;
+    mask-image: linear-gradient(to right, transparent, black 2rem, black calc(100% - 2rem), transparent);
   }
 }
 
@@ -130,17 +133,19 @@
   }
 }
 
-.iconCircle {
-  width: 48px;
-  height: 48px;
+.avatar {
+  inline-size: 48px;
+  block-size: 48px;
   flex-shrink: 0;
   border-radius: var(--radius-full);
-  background: var(--color-neutral-300);
-  color: var(--color-surface-dark);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
   margin-block-end: 1.5rem;
+}
+
+.avatarImg {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
 }
 
 .quote {

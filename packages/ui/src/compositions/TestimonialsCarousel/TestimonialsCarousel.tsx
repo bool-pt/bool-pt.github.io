@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Users } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useCallback } from 'react';
 import { useSwipe } from '../../lib/useSwipe';
 import { cn } from '../../lib/utils';
@@ -8,16 +8,20 @@ interface TestimonialItem {
   quote: string;
   company: string;
   designation: string;
+  /** Optional per-item avatar URL. Falls back to `avatarSrc`. */
+  avatar?: string;
 }
 
 interface Props {
   testimonials?: TestimonialItem[];
   variant?: 'light' | 'dark';
+  /** Default avatar shown when an item has no `avatar`. */
+  avatarSrc?: string;
   prevLabel: string;
   nextLabel: string;
 }
 
-export default function TestimonialsCarousel({ testimonials = [], variant = 'dark', prevLabel, nextLabel }: Props) {
+export default function TestimonialsCarousel({ testimonials = [], variant = 'dark', avatarSrc, prevLabel, nextLabel }: Props) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const scrollPrev = useCallback(() => {
@@ -49,8 +53,8 @@ export default function TestimonialsCarousel({ testimonials = [], variant = 'dar
         >
           {testimonials.map((item) => (
             <div key={item.company} className={styles.card}>
-              <div className={styles.iconCircle}>
-                <Users size={22} strokeWidth={2} aria-hidden="true" />
+              <div className={styles.avatar}>
+                <img src={item.avatar ?? avatarSrc} alt="" className={styles.avatarImg} loading="lazy" />
               </div>
               <p className={styles.quote}>{item.quote}</p>
               <p className={styles.company}>{item.company}</p>

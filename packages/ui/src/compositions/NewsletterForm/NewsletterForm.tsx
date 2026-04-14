@@ -2,9 +2,11 @@ import { useState, useRef } from 'react';
 import { trackEvent } from '@bool/analytics';
 import { submitNewsletter } from '@bool/api';
 import { newsletterSchema, ROUTES } from '@bool/shared';
+import { cn } from '../../lib/utils';
 import { InlineInputButton } from '../../primitives/InlineInputButton/InlineInputButton';
 import Captcha from '../Captcha/Captcha';
 import type { CaptchaHandle } from '../Captcha/Captcha';
+import styles from './NewsletterForm.module.css';
 
 interface NewsletterLabels {
   subscribed: string;
@@ -102,7 +104,7 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
         type="email"
         variant={isBar ? 'light' : 'dark'}
       />
-      <label style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', marginBlockStart: '0.75rem', fontSize: 'var(--font-size-body-sm)', lineHeight: '1.4', color: isBar ? 'inherit' : 'var(--color-on-dark-muted)' }}>
+      <label className={cn(styles.consentLabel, isBar ? styles.consentLabelBar : styles.consentLabelCta)}>
         <input
           type="checkbox"
           checked={marketingConsent}
@@ -110,18 +112,12 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
             setMarketingConsent(e.target.checked);
             if (e.target.checked && status === 'consent-needed') setStatus('idle');
           }}
-          style={{ marginBlockStart: '0.125rem', flexShrink: 0 }}
+          className={styles.checkbox}
         />
-        <span>{labels.consentBefore}<a href={ROUTES.privacy} style={{ color: 'inherit', textDecoration: 'underline', textUnderlineOffset: '2px' }}>{labels.consentLinkText}</a>{labels.consentAfter}</span>
+        <span>{labels.consentBefore}<a href={ROUTES.privacy} className={styles.consentLink}>{labels.consentLinkText}</a>{labels.consentAfter}</span>
       </label>
       {status === 'consent-needed' && (
-        <p
-          style={{
-            color: 'var(--color-primary)',
-            fontSize: 'var(--font-size-body-sm)',
-            margin: '0.5rem 0 0',
-          }}
-        >
+        <p className={styles.consentError}>
           {labels.consentRequired}
         </p>
       )}

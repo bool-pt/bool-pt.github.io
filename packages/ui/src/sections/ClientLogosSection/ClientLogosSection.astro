@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import boolLogo from '@bool/media/images/bool-logo-text.svg';
+import boolLogoFallback from '@bool/media/images/logos/brand/bool-logo-text.svg';
 import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
 import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
 import Section from '../../primitives/Section/Section.astro';
@@ -11,9 +11,11 @@ interface Props {
   heading: string;
   body: string;
   logoAlt: string;
+  /** Logo to repeat as the decorative background of the section. */
+  logo?: ImageMetadata;
 }
 
-const { tag, heading, body, logoAlt } = Astro.props;
+const { tag, heading, body, logoAlt, logo = boolLogoFallback } = Astro.props;
 
 const logosPerRow = 20;
 ---
@@ -44,7 +46,7 @@ const logosPerRow = 20;
         Array.from({ length: logosPerRow }).map(() => (
           <div class="logo-cell">
             <Image
-              src={boolLogo}
+              src={logo}
               alt={logoAlt}
               width={107}
               height={49}
@@ -60,7 +62,7 @@ const logosPerRow = 20;
         Array.from({ length: logosPerRow }).map(() => (
           <div class="logo-cell">
             <Image
-              src={boolLogo}
+              src={logo}
               alt={logoAlt}
               width={107}
               height={49}

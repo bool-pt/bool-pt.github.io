@@ -1,9 +1,9 @@
 ---
 import { Image } from 'astro:assets';
-import cultureImg1 from '@bool/media/images/people/gallery/gallery-01.png';
-import cultureImg2 from '@bool/media/images/people/gallery/gallery-03.jpg';
-import cultureImg3 from '@bool/media/images/people/gallery/gallery-04.jpg';
-import cultureImg4 from '@bool/media/images/people/gallery/gallery-05.jpg';
+import cultureImg1 from '@bool/media/images/gallery/gallery-01.png';
+import cultureImg2 from '@bool/media/images/gallery/gallery-03.jpg';
+import cultureImg3 from '@bool/media/images/gallery/gallery-04.jpg';
+import cultureImg4 from '@bool/media/images/gallery/gallery-05.jpg';
 import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
 import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
 import Section from '../../primitives/Section/Section.astro';
@@ -13,12 +13,12 @@ interface Props {
   tag: string;
   heading: string;
   body: string;
-  cards: Array<{ label: string; title: string; body: string }>;
+  cards: Array<{ label: string; title: string; body: string; image?: ImageMetadata }>;
 }
 
 const { tag, heading, body, cards } = Astro.props;
 
-const cultureImages = [cultureImg1, cultureImg2, cultureImg3, cultureImg4];
+const fallbackImages = [cultureImg1, cultureImg2, cultureImg3, cultureImg4];
 ---
 
 <Section background="var(--color-surface-warm-dark)" aria-labelledby="beyond-sprint-heading">
@@ -41,7 +41,7 @@ const cultureImages = [cultureImg1, cultureImg2, cultureImg3, cultureImg4];
           <div class:list={['beyond-row', i % 2 !== 0 && 'beyond-row--reversed']}>
             <div class="beyond-image">
               <Image
-                src={cultureImages[i]}
+                src={card.image ?? (fallbackImages[i % fallbackImages.length] as ImageMetadata)}
                 alt={card.title}
                 class="culture-img"
                 loading="lazy"

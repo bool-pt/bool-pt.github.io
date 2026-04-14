@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import heroBg from '@bool/media/images/sections/homepage/home-hero-01.png';
+import heroBgFallback from '@bool/media/images/backgrounds/hero-background.jpg';
 import BoolLettersOverlay from '../../compositions/BoolLettersOverlay/BoolLettersOverlay.astro';
 import DarkPageHero from '../../compositions/DarkPageHero/DarkPageHero.astro';
 import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
@@ -16,14 +16,25 @@ interface Props {
   missionBody: string;
   visionTitle: string;
   visionBody: string;
+  backgroundImage?: ImageMetadata;
 }
 
-const { heading, body1, body2, missionTitle, missionBody, visionTitle, visionBody } = Astro.props;
+const {
+  heading,
+  body1,
+  body2,
+  missionTitle,
+  missionBody,
+  visionTitle,
+  visionBody,
+  backgroundImage = heroBgFallback,
+} = Astro.props;
 ---
 
 <DarkPageHero minBlockSize="960px" paddingBlock="10rem 6rem" aria-labelledby="about-hero-heading">
   <div class="about-hero-bg">
-    <Image src={heroBg} alt="" aria-hidden="true" class="about-hero-bg-img" loading="eager" />
+    <Image src={backgroundImage} alt="" aria-hidden="true" class="about-hero-bg-img" loading="eager" />
+    <div class="about-hero-overlay" aria-hidden="true"></div>
   </div>
 
   <div class="about-hero-letters-scaler">
@@ -92,13 +103,19 @@ const { heading, body1, body2, missionTitle, missionBody, visionTitle, visionBod
 
   .about-hero-bg-img {
     --hero-bg-opacity: 0.7;
-    --hero-bg-blur: 2px;
+    --hero-bg-blur: 1.5px;
 
     inline-size: 100%;
     block-size: 100%;
     object-fit: cover;
     filter: grayscale(1) blur(var(--hero-bg-blur));
     opacity: var(--hero-bg-opacity);
+  }
+
+  .about-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgb(0 0 0 / 0.8);
   }
 
   .about-hero-letters-scaler {
@@ -110,6 +127,7 @@ const { heading, body1, body2, missionTitle, missionBody, visionTitle, visionBod
     pointer-events: none;
     color: var(--color-on-dark);
     opacity: 0.4;
+    filter: blur(1.5px);
     container-type: inline-size;
   }
 

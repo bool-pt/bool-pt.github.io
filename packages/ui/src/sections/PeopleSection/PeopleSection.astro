@@ -1,5 +1,5 @@
 ---
-import peopleTeam from '@bool/media/images/sections/people-team.png';
+import peopleTeamFallback from '@bool/media/images/backgrounds/people-team.png';
 import { ROUTES } from '@bool/shared';
 import ImageTextBanner from '../../compositions/ImageTextBanner/ImageTextBanner.astro';
 import TextBlockWithActions from '../../compositions/TextBlockWithActions/TextBlockWithActions.astro';
@@ -13,9 +13,10 @@ interface Props {
   body: string;
   ctaJoin: string;
   ctaMeet: string;
+  image?: ImageMetadata;
 }
 
-const { imageAlt, heading, body, ctaJoin, ctaMeet } = Astro.props;
+const { imageAlt, heading, body, ctaJoin, ctaMeet, image = peopleTeamFallback } = Astro.props;
 ---
 
 <Section
@@ -23,7 +24,7 @@ const { imageAlt, heading, body, ctaJoin, ctaMeet } = Astro.props;
   aria-labelledby="people-heading"
   paddingBlock="0"
 >
-  <ImageTextBanner image={peopleTeam} imageAlt={imageAlt} height="396px" contentPadding="0 4rem 0 8rem">
+  <ImageTextBanner image={image} imageAlt={imageAlt} height="396px" contentPadding="0 4rem 0 8rem">
     <TextBlockWithActions
       headingId="people-heading"
       headingSize="var(--font-size-display)"

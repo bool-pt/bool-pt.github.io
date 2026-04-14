@@ -1,7 +1,7 @@
 ---
-import blogImg1 from '@bool/media/images/sections/homepage/insight-01.jpg';
-import blogImg2 from '@bool/media/images/sections/homepage/insight-02.jpg';
-import blogImg3 from '@bool/media/images/sections/homepage/insight-03.jpg';
+import blogImg1Fallback from '@bool/media/images/covers/insight-01.jpg';
+import blogImg2Fallback from '@bool/media/images/covers/insight-02.jpg';
+import blogImg3Fallback from '@bool/media/images/covers/insight-03.jpg';
 import ArrowLink from '../../compositions/ArrowLink/ArrowLink.astro';
 import ImageOverlayCard from '../../compositions/ImageOverlayCard/ImageOverlayCard.astro';
 import IntroGridSection from '../../compositions/IntroGridSection/IntroGridSection.astro';
@@ -9,13 +9,14 @@ import AuthorMeta from '../../primitives/AuthorMeta/AuthorMeta.astro';
 import CardImageBg from '../../primitives/CardImageBg/CardImageBg.astro';
 import CardTitle from '../../primitives/CardTitle/CardTitle.astro';
 
-const blogImages = [blogImg1, blogImg2, blogImg3];
+const fallbackImages = [blogImg1Fallback, blogImg2Fallback, blogImg3Fallback];
 
 interface PostItem {
   slug: string;
   title: string;
   author: string;
   date: string;
+  image?: string;
 }
 
 interface Props {
@@ -47,7 +48,7 @@ const { heading, description, posts = [], readMoreLabel = 'Read more' } = Astro.
           gradient="linear-gradient(to top, var(--black-75) 0%, var(--black-20) 50%, transparent 70%)"
           hoverEffect="lift"
         >
-          <CardImageBg slot="image" src={blogImages[i % blogImages.length].src} />
+          <CardImageBg slot="image" src={post.image ?? (fallbackImages[i % fallbackImages.length] as ImageMetadata).src} />
           <AuthorMeta
             author={post.author}
             date={post.date}

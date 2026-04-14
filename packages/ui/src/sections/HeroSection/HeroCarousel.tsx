@@ -14,14 +14,13 @@ interface SlideData {
 
 interface Props {
   slides: SlideData[];
-  backgroundImage: string;
   className?: string;
   ariaLabels?: { slideIndicators: string; slide: string };
 }
 
 const AUTOPLAY_INTERVAL = 8000;
 
-export default function HeroCarousel({ slides, backgroundImage, className, ariaLabels }: Props) {
+export default function HeroCarousel({ slides, className, ariaLabels }: Props) {
   const [activeIndex, setActiveIndex] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const count = slides.length;
@@ -73,10 +72,6 @@ export default function HeroCarousel({ slides, backgroundImage, className, ariaL
 
   const swipeHandlers = useSwipe(swipeNext, swipePrev);
 
-  const bgStyle: React.CSSProperties = {
-    backgroundImage: `linear-gradient(to right, var(--overlay-image-light) 35%, var(--black-20) 100%), url(${backgroundImage})`,
-  };
-
   return (
     <div
       className={cn(styles.carousel, className)}
@@ -92,7 +87,6 @@ export default function HeroCarousel({ slides, backgroundImage, className, ariaL
           role="group"
           aria-roledescription="slide"
           aria-label={`${ariaLabels?.slide ?? ''} ${i + 1}`}
-          style={bgStyle}
         >
           <div className={styles.slideInner}>
             <div className={styles.slideLayout}>

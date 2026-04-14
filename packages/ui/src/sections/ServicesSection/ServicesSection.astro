@@ -1,18 +1,19 @@
 ---
-import serviceImg1 from '@bool/media/images/sections/homepage/tech-card-01.png';
-import serviceImg2 from '@bool/media/images/sections/homepage/tech-card-02.jpg';
-import serviceImg3 from '@bool/media/images/sections/homepage/tech-card-03.jpg';
-import serviceImg4 from '@bool/media/images/sections/homepage/tech-card-04.jpg';
+import serviceImg1Fallback from '@bool/media/images/covers/tech-card-01.png';
+import serviceImg2Fallback from '@bool/media/images/covers/tech-card-02.jpg';
+import serviceImg3Fallback from '@bool/media/images/covers/tech-card-03.jpg';
+import serviceImg4Fallback from '@bool/media/images/covers/tech-card-04.jpg';
 import DottedLineCardGrid from '../../compositions/DottedLineCardGrid/DottedLineCardGrid.astro';
 import Section from '../../primitives/Section/Section.astro';
 import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
 
-const serviceImages = [serviceImg1, serviceImg2, serviceImg3, serviceImg4];
+const fallbackImages = [serviceImg1Fallback, serviceImg2Fallback, serviceImg3Fallback, serviceImg4Fallback];
 
 interface ServiceItem {
   title: string;
   description: string;
   href?: string;
+  image?: ImageMetadata;
 }
 
 interface Props {
@@ -31,6 +32,6 @@ const { heading, services = [], learnMoreLabel = 'Learn more' } = Astro.props;
 >
   <SectionContainer>
     <h2 id="services-heading" class="sr-only">{heading}</h2>
-    <DottedLineCardGrid cards={services} images={serviceImages} learnMoreLabel={learnMoreLabel} />
+    <DottedLineCardGrid cards={services} images={fallbackImages} learnMoreLabel={learnMoreLabel} />
   </SectionContainer>
 </Section>

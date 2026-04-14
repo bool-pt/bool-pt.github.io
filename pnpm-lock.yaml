@@ -376,9 +376,15 @@ importers:
       '@bool/json-editor-core':
         specifier: workspace:*
         version: link:../../../packages/json-editor
+      '@bool/media':
+        specifier: workspace:*
+        version: link:../../../packages/media
       '@bool/shared':
         specifier: workspace:*
         version: link:../../../packages/shared
+      '@bool/ui':
+        specifier: workspace:*
+        version: link:../../../packages/ui
       clsx:
         specifier: 'catalog:'
         version: 2.1.1
@@ -428,6 +434,24 @@ importers:
       vite:
         specifier: 'catalog:'
         version: 8.0.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3)
+
+  e2e:
+    devDependencies:
+      '@axe-core/playwright':
+        specifier: 'catalog:'
+        version: 4.11.1(playwright-core@1.59.1)
+      '@bool/i18n':
+        specifier: workspace:*
+        version: link:../packages/i18n
+      '@bool/shared':
+        specifier: workspace:*
+        version: link:../packages/shared
+      '@playwright/test':
+        specifier: 'catalog:'
+        version: 1.59.1
+      playwright:
+        specifier: 'catalog:'
+        version: 1.59.1
 
   packages/analytics:
     dependencies:
@@ -539,6 +563,12 @@ importers:
 
   packages/content:
     dependencies:
+      '@bool/i18n':
+        specifier: workspace:*
+        version: link:../i18n
+      '@bool/media':
+        specifier: workspace:*
+        version: link:../media
       '@bool/shared':
         specifier: workspace:*
         version: link:../shared
@@ -905,6 +935,10 @@ importers:
       vite:
         specifier: 'catalog:'
         version: 8.0.3(@emnapi/core@1.9.2)(@emnapi/runtime@1.9.2)(@types/node@25.5.2)(esbuild@0.27.7)(jiti@2.6.1)(tsx@4.21.0)(yaml@2.8.3)
+    devDependencies:
+      '@bool/tsconfig':
+        specifier: workspace:*
+        version: link:../typescript
 
   tooling/vitest:
     dependencies:

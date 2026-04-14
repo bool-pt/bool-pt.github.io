@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import numbersImg from '@bool/media/images/sections/about/about-09.png';
+import numbersImgFallback from '@bool/media/images/backgrounds/about-09.png';
 import SkewedCard from '../../compositions/SkewedCard/SkewedCard.astro';
 import TrapezoidStatsRow from '../../compositions/TrapezoidStatsRow/TrapezoidStatsRow.astro';
 import Section from '../../primitives/Section/Section.astro';
@@ -12,9 +12,10 @@ interface Props {
   body: string;
   imageAlt: string;
   stats: Array<{ number: string; label: string }>;
+  image?: ImageMetadata;
 }
 
-const { heading, body, imageAlt, stats } = Astro.props;
+const { heading, body, imageAlt, stats, image = numbersImgFallback } = Astro.props;
 ---
 
 <Section
@@ -46,7 +47,7 @@ const { heading, body, imageAlt, stats } = Astro.props;
           <div slot="end" class="bottom-image">
             <div class="bottom-image-inner">
               <Image
-                src={numbersImg}
+                src={image}
                 alt={imageAlt}
                 width={900}
                 height={265}

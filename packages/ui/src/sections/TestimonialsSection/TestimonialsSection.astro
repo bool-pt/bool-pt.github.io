@@ -1,4 +1,5 @@
 ---
+import avatarFallback from '@bool/media/images/portraits/portrait.png';
 import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
 import TestimonialsCarousel from '../../compositions/TestimonialsCarousel/TestimonialsCarousel';
 import Section from '../../primitives/Section/Section.astro';
@@ -8,21 +9,27 @@ interface TestimonialItem {
   quote: string;
   company: string;
   designation: string;
+  /** Optional per-testimonial avatar (path to image). Falls back to defaultAvatar then portrait placeholder. */
+  avatar?: string;
 }
 
 interface Props {
   heading: string;
   description: string;
   testimonials?: TestimonialItem[];
+  /** Default avatar shown when an item has no `avatar` of its own. */
+  defaultAvatar?: ImageMetadata;
 }
 
-const { heading, description, testimonials = [] } = Astro.props;
+const { heading, description, testimonials = [], defaultAvatar = avatarFallback } = Astro.props;
+const fallbackSrc = defaultAvatar.src;
+const enrichedTestimonials = testimonials.map((t) => ({ ...t, avatar: t.avatar ?? fallbackSrc }));
 ---
 
 <Section
   aria-labelledby="testimonials-heading"
   background="var(--black-16)"
-  paddingBlock="3rem"
+  paddingBlock="5rem 3rem"
   style="min-block-size: 652px"
 >
   <SectionContainer>
@@ -31,18 +38,27 @@ const { heading, description, testimonials = [] } = Astro.props;
         headingId="testimonials-heading"
         colorScheme="light"
         descriptionMaxWidth="63rem"
+        bodyLineHeight="1.35"
       >
         <Fragment slot="heading">{heading}</Fragment>
         <Fragment slot="description">{description}</Fragment>
       </SectionIntro>
       <div class="testimonials-carousel-wrap">
-        <TestimonialsCarousel testimonials={testimonials} variant="light" client:visible />
+        <TestimonialsCarousel testimonials={enrichedTestimonials} variant="light" avatarSrc={fallbackSrc} client:visible />
       </div>
     </div>
   </SectionContainer>
 </Section>
 
 <style>
+  .testimonials-section :global(.section-intro-heading) {
+    margin-block-end: 1.75rem;
+  }
+
+  .testimonials-section :global(.section-intro) {
+    margin-block-end: 1rem;
+  }
+
   .testimonials-carousel-wrap {
     padding-inline: 0;
   }

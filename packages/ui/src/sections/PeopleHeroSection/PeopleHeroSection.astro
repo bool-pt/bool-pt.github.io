@@ -1,5 +1,5 @@
 ---
-import heroBg from '@bool/media/images/sections/homepage/home-hero-01.png';
+import heroBgFallback from '@bool/media/images/backgrounds/home-hero-01.png';
 import { ROUTES } from '@bool/shared';
 import BoolLettersOverlay from '../../compositions/BoolLettersOverlay/BoolLettersOverlay.astro';
 import DarkPageHero from '../../compositions/DarkPageHero/DarkPageHero.astro';
@@ -17,13 +17,14 @@ interface Props {
   ctaMeet: string;
   ctaJoin: string;
   stats: Array<{ value: string; label: string }>;
+  backgroundImage?: ImageMetadata;
 }
 
-const { tag, heading, body, ctaMeet, ctaJoin, stats } = Astro.props;
+const { tag, heading, body, ctaMeet, ctaJoin, stats, backgroundImage = heroBgFallback } = Astro.props;
 ---
 
 <DarkPageHero
-  backgroundImage={heroBg.src}
+  backgroundImage={backgroundImage.src}
   gradientOverlay="var(--overlay-image-heavy), var(--overlay-image-light)"
   paddingBlock="10rem 5rem"
   minBlockSize="960px"

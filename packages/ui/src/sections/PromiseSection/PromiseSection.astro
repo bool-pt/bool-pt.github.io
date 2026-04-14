@@ -51,9 +51,9 @@ const { heading, body1, body2, cta, models = [], learnMoreLabel = 'Learn more' }
 
         <ResponsiveGrid slot="end" columns={2} collapseAt="sm" class="promise-models">
           {
-            models.map((model) => (
-              <IconFeatureCard title={model.title} description={model.subtitle} align="center">
-                <GradientIcon slot="icon" name={model.icon} size={32} />
+            models.map((model, i) => (
+              <IconFeatureCard title={model.title} description={model.subtitle} align="center" iconShape={i === 1 || i === 2 ? 'square' : 'circle'}>
+                <GradientIcon slot="icon" name={model.icon} size={model.icon === 'shield' ? 28 : 32} />
                 {model.href && <ArrowLink slot="footer" href={model.href} label={learnMoreLabel} colorScheme="dark" />}
               </IconFeatureCard>
             ))

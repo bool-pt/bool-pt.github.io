@@ -1,7 +1,7 @@
 ---
-import img01 from '@bool/media/images/sections/homepage/insight-01.jpg';
-import img02 from '@bool/media/images/sections/homepage/insight-02.jpg';
-import img03 from '@bool/media/images/sections/homepage/insight-03.jpg';
+import img01Fallback from '@bool/media/images/covers/insight-01.jpg';
+import img02Fallback from '@bool/media/images/covers/insight-02.jpg';
+import img03Fallback from '@bool/media/images/covers/insight-03.jpg';
 import ArrowLink from '../../compositions/ArrowLink/ArrowLink.astro';
 import ImageOverlayCard from '../../compositions/ImageOverlayCard/ImageOverlayCard.astro';
 import IntroGridSection from '../../compositions/IntroGridSection/IntroGridSection.astro';
@@ -14,12 +14,12 @@ interface Props {
   tag: string;
   heading: string;
   body: string;
-  featured: Array<{ category: string; title: string; meta: string; cta: string; href: string }>;
+  featured: Array<{ category: string; title: string; meta: string; cta: string; href: string; image?: string }>;
 }
 
 const { tag, heading, body, featured } = Astro.props;
 
-const cardImages = [img01, img02, img03];
+const fallbackImages = [img01Fallback, img02Fallback, img03Fallback];
 ---
 
 <IntroGridSection
@@ -41,7 +41,7 @@ const cardImages = [img01, img02, img03];
         gradient="linear-gradient(to top, var(--black-75) 0%, var(--black-20) 50%, transparent 70%)"
         hoverEffect="lift"
       >
-        <CardImageBg slot="image" src={cardImages[i % cardImages.length].src} />
+        <CardImageBg slot="image" src={item.image ?? (fallbackImages[i % fallbackImages.length] as ImageMetadata).src} />
         <CardLabel colorScheme="on-dark" class="latest-card-label">
           {item.category}
         </CardLabel>

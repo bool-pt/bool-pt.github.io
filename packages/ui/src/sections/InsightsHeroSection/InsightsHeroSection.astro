@@ -1,5 +1,5 @@
 ---
-import heroBg from '@bool/media/images/sections/homepage/home-hero-01.png';
+import heroBgFallback from '@bool/media/images/backgrounds/home-hero-01.png';
 import BoolLettersOverlay from '../../compositions/BoolLettersOverlay/BoolLettersOverlay.astro';
 import DarkPageHero from '../../compositions/DarkPageHero/DarkPageHero.astro';
 import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
@@ -14,13 +14,14 @@ interface Props {
   body: string;
   ctaExplore: string;
   ctaSubscribe: string;
+  backgroundImage?: ImageMetadata;
 }
 
-const { tag, heading, body, ctaExplore, ctaSubscribe } = Astro.props;
+const { tag, heading, body, ctaExplore, ctaSubscribe, backgroundImage = heroBgFallback } = Astro.props;
 ---
 
 <DarkPageHero
-  backgroundImage={heroBg.src}
+  backgroundImage={backgroundImage.src}
   gradientOverlay="var(--overlay-image-heavy), var(--overlay-image-light)"
   paddingBlock="clamp(12rem, 30vw, 18rem) clamp(3rem, 6vw, 5rem)"
   minBlockSize="959px"

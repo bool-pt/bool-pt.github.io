@@ -1,10 +1,5 @@
 ---
-import img01 from '@bool/media/images/sections/homepage/home-stock-01.jpg';
-import img02 from '@bool/media/images/sections/homepage/home-stock-02.jpg';
-import img03 from '@bool/media/images/sections/homepage/home-stock-03.jpg';
-import img05 from '@bool/media/images/sections/homepage/home-stock-05.jpg';
-import img07 from '@bool/media/images/sections/homepage/home-stock-07.jpg';
-import img08 from '@bool/media/images/sections/homepage/home-stock-08.jpg';
+import type { CaseStudiesPayload } from '@bool/content';
 import { ROUTES } from '@bool/shared';
 import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
 import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
@@ -12,44 +7,30 @@ import Section from '../../primitives/Section/Section.astro';
 import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
 import CaseStudyGrid from './CaseStudyGrid';
 
-interface CaseItem {
-  title: string;
-  description: string;
-  client: string;
-  tags: string[];
-  image: string;
-  metrics?: Array<{ value: string; label: string }>;
-  challenge?: string;
-  solution?: string;
-  techStack?: string[];
-}
-
 interface Props {
-  tag: string;
-  heading: string;
-  body: string;
-  sectors: string[];
-  techFilters: string[];
-  labels: {
-    close: string;
-    fullCaseStudy: string;
-    emptyMessage: string;
-    filterAriaLabel: string;
-    challenge: string;
-    solution: string;
-    techStack: string;
-    talkToExpert: string;
-    backToCases: string;
-  };
-  cases: CaseItem[];
+  payload: CaseStudiesPayload;
 }
 
-const { tag, heading, body, sectors, techFilters, labels, cases } = Astro.props;
+const { payload } = Astro.props;
+const { labels, sectors, techFilters, items } = payload;
 
-const frontImages = [img01.src, img02.src, img03.src, img05.src, img07.src, img08.src];
-const casesWithImages = cases.map((c, i) => ({
-  ...c,
-  frontImage: frontImages[i % frontImages.length],
+// Resolve ImageMetadata to a URL string for the React island (which uses <img src>).
+const cases = items.map((item) => ({
+  client: item.client,
+  title: item.title,
+  subtitle: item.subtitle,
+  coverImageSrc: item.coverImage.src,
+  sector: item.sector,
+  tech: item.tech,
+  backHeader: item.backHeader,
+  modalSubheading: item.modalSubheading,
+  metrics: item.metrics,
+  challenge: item.challenge,
+  solution: item.solution,
+  benefits: item.benefits,
+  team: item.team,
+  duration: item.duration,
+  tags: item.tags,
 }));
 ---
 
@@ -72,17 +53,28 @@ const casesWithImages = cases.map((c, i) => ({
       bodyLineHeight="28px"
       class="case-studies-intro"
     >
-      <SectionTag slot="tag" tagColor="primary">{tag}</SectionTag>
-      <Fragment slot="heading">{heading}</Fragment>
-      <Fragment slot="description">{body}</Fragment>
+      <SectionTag slot="tag" tagColor="primary">{labels.tag}</SectionTag>
+      <Fragment slot="heading">{labels.heading}</Fragment>
+      <Fragment slot="description">{labels.body}</Fragment>
     </SectionIntro>
 
     <CaseStudyGrid
       client:visible
-      cases={casesWithImages}
+      cases={cases}
       sectors={sectors}
       techFilters={techFilters}
-      labels={{ ...labels, ctaHref: ROUTES.contacts }}
+      labels={{
+        close: labels.close,
+        fullCaseStudy: labels.fullCaseStudyCta,
+        emptyMessage: labels.emptyState,
+        filterAriaLabel: labels.filterAriaLabel,
+        challenge: labels.challengeLabel,
+        solution: labels.solutionLabel,
+        techStack: labels.techStackLabel,
+        talkToExpert: labels.talkToExpertCta,
+        backToCases: labels.backToCases,
+        ctaHref: ROUTES.contacts,
+      }}
     />
   </SectionContainer>
 </Section>

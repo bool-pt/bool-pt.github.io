@@ -1,6 +1,6 @@
 ---
-import { getPortfolio, transformPortfolioCase } from '@bool/content';
-import { t, tCollection, tList } from '@bool/i18n';
+import { getCaseStudies, resolveImage } from '@bool/content';
+import { t, tCollection } from '@bool/i18n';
 import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
 import CaseStudyGridSection from '@bool/ui/sections/CaseStudyGridSection.astro';
 import CertificationsSection from '@bool/ui/sections/CertificationsSection.astro';
@@ -13,13 +13,17 @@ import PortfolioStatsSection from '@bool/ui/sections/PortfolioStatsSection.astro
 import TestimonialsCarouselSection from '@bool/ui/sections/TestimonialsCarouselSection.astro';
 import { getHeaderLabels, getFooterLabels, getContactSectionProps, getNewsletterLabels } from '../../labels';
 
-const portfolio = await getPortfolio();
-const caseItems = portfolio.map(transformPortfolioCase);
+const caseStudiesPayload = getCaseStudies();
 
 const sectors = t('portfolioHero.sectors').split(',');
 
-const clientTestimonials = tCollection('clientTestimonials', ['quote', 'name', 'role'])
-  .map((item) => ({ quote: item.quote, company: item.name, designation: item.role }));
+const clientTestimonials = tCollection('clientTestimonials', ['quote', 'name', 'role', 'avatar'])
+  .map((item) => ({
+    quote: item.quote,
+    company: item.name,
+    designation: item.role,
+    avatar: resolveImage(item.avatar).src,
+  }));
 
 const portfolioStats = tCollection('portfolioStats.items', ['value', 'label']);
 
@@ -27,11 +31,13 @@ const recognitionIcons = ['trophy', 'chart', 'shield', 'trophy'] as const;
 const recognitions = tCollection('portfolioStats.recognition', ['title', 'description'])
   .map((r, i) => ({ ...r, iconName: recognitionIcons[i] ?? ('trophy' as const) }));
 
-const certifications = tCollection('certifications.items', ['name', 'count', 'imageKey'])
-  .map((c) => ({ ...c, label: t('certifications.label'), imageKey: c.imageKey || null }));
-
-const caseStudySectors = tList('caseStudies.sectors');
-const caseStudyTechFilters = tList('caseStudies.techFilters');
+const certifications = tCollection('certifications.items', ['name', 'count', 'logo'])
+  .map((c) => ({
+    name: c.name,
+    count: c.count,
+    label: t('certifications.label'),
+    logo: c.logo ? resolveImage(c.logo) : null,
+  }));
 ---
 
 <BaseLayout
@@ -49,26 +55,9 @@ const caseStudyTechFilters = tList('caseStudies.techFilters');
     ctaServices={t('portfolioHero.cta.services')}
     statsHighlight={{ value: t('portfolioHero.stats.highlight.value'), label: t('portfolioHero.stats.highlight.label') }}
     stats={portfolioStats}
+    backgroundImage={resolveImage(t('portfolioHero.backgroundImage'))}
   />
-  <CaseStudyGridSection
-    tag={t('caseStudies.tag')}
-    heading={t('caseStudies.heading')}
-    body={t('caseStudies.body')}
-    sectors={caseStudySectors}
-    techFilters={caseStudyTechFilters}
-    labels={{
-      close: t('common.close'),
-      fullCaseStudy: t('caseStudies.fullCaseStudyCta'),
-      emptyMessage: t('caseStudies.emptyState'),
-      filterAriaLabel: t('caseStudies.filter.aria'),
-      challenge: t('common.theChallenge'),
-      solution: t('common.theSolution'),
-      techStack: t('common.technologyStack'),
-      talkToExpert: t('common.talkToExpert'),
-      backToCases: t('caseStudies.backToCases'),
-    }}
-    cases={caseItems}
-  />
+  <CaseStudyGridSection payload={caseStudiesPayload} />
   <TestimonialsCarouselSection
     tag={t('clientTestimonials.tag')}
     heading={t('clientTestimonials.heading')}
@@ -94,11 +83,13 @@ const caseStudyTechFilters = tList('caseStudies.techFilters');
     heading={t('clientLogos.heading')}
     body={t('clientLogos.body')}
     logoAlt={t('clientLogos.logoAlt')}
+    logo={resolveImage(t('clientLogos.logo'))}
   />
   <LetsBuildCTASection
     heading={t('ctaBanner.heading')}
     body={t('ctaBanner.body')}
     button={t('ctaBanner.button')}
+    backgroundImage={resolveImage(t('ctaBanner.backgroundImage'))}
   />
   <ContactSection {...getContactSectionProps()} background="var(--color-surface-black)" />
   <NewsletterCTASection

@@ -93,4 +93,54 @@ describe('detectRepeatingGroups', () => {
     const result = detectRepeatingGroups(keys, 'nav');
     expect(result).toHaveLength(0);
   });
+
+  describe('nested numeric groups (prefix.N.inner.M)', () => {
+    it('detects bare-value inner lists like tags.M', () => {
+      const keys = [
+        'caseStudies.items.1.client',
+        'caseStudies.items.1.tags.1',
+        'caseStudies.items.1.tags.2',
+        'caseStudies.items.1.tags.3',
+        'caseStudies.items.2.client',
+        'caseStudies.items.2.tags.1',
+      ];
+
+      const [parent] = detectRepeatingGroups(keys, 'caseStudies');
+      expect(parent).toBeDefined();
+      expect(parent?.prefix).toBe('caseStudies.items');
+      // tags.1, tags.2, tags.3 should be promoted to nested template, not flat fields
+      expect(parent?.fieldSuffixes).toEqual(['client']);
+      expect(parent?.nestedTemplates).toEqual([
+        { innerPrefix: 'tags', fieldSuffixes: [''] },
+      ]);
+    });
+
+    it('detects nested object-shaped inner items (inner.M.suffix)', () => {
+      const keys = [
+        'section.items.1.title',
+        'section.items.1.metrics.1.value',
+        'section.items.1.metrics.1.label',
+        'section.items.1.metrics.2.value',
+        'section.items.1.metrics.2.label',
+        'section.items.2.title',
+      ];
+
+      const [parent] = detectRepeatingGroups(keys, 'section');
+      expect(parent?.fieldSuffixes).toEqual(['title']);
+      expect(parent?.nestedTemplates).toEqual([
+        { innerPrefix: 'metrics', fieldSuffixes: ['label', 'value'] },
+      ]);
+    });
+
+    it('returns no nestedTemplates when there are no inner numeric groups', () => {
+      const keys = [
+        'section.items.1.title',
+        'section.items.1.body',
+        'section.items.2.title',
+      ];
+
+      const [parent] = detectRepeatingGroups(keys, 'section');
+      expect(parent?.nestedTemplates).toBeUndefined();
+    });
+  });
 });

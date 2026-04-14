@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import heroBg from '@bool/media/images/sections/homepage/home-hero-01.png';
+import heroBgFallback from '@bool/media/images/backgrounds/home-hero-01.png';
 import { ROUTES } from '@bool/shared';
 import BoolLettersOverlay from '../../compositions/BoolLettersOverlay/BoolLettersOverlay.astro';
 import DarkPageHero from '../../compositions/DarkPageHero/DarkPageHero.astro';
@@ -20,9 +20,20 @@ interface Props {
   ctaServices: string;
   statsHighlight: { value: string; label: string };
   stats: Array<{ value: string; label: string }>;
+  backgroundImage?: ImageMetadata;
 }
 
-const { tag, heading, body, sectors, ctaStories, ctaServices, statsHighlight, stats } = Astro.props;
+const {
+  tag,
+  heading,
+  body,
+  sectors,
+  ctaStories,
+  ctaServices,
+  statsHighlight,
+  stats,
+  backgroundImage = heroBgFallback,
+} = Astro.props;
 ---
 
 <DarkPageHero
@@ -31,7 +42,7 @@ const { tag, heading, body, sectors, ctaStories, ctaServices, statsHighlight, st
   aria-labelledby="portfolio-hero-heading"
 >
   <div class="portfolio-hero-bg">
-    <Image src={heroBg} alt="" aria-hidden="true" class="portfolio-hero-bg-img" loading="eager" />
+    <Image src={backgroundImage} alt="" aria-hidden="true" class="portfolio-hero-bg-img" loading="eager" />
   </div>
 
   <div class="portfolio-hero-letters-scaler">

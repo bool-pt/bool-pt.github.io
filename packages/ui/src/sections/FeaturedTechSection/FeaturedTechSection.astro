@@ -1,9 +1,5 @@
 ---
 import { Image } from 'astro:assets';
-import mendixLogo from '@bool/media/images/platform-logos/brand/mendix.jpg';
-import openSourceLogo from '@bool/media/images/platform-logos/brand/open-source.png';
-import outsystemsLogo from '@bool/media/images/platform-logos/brand/outsystems.png';
-import powerPlatformLogo from '@bool/media/images/platform-logos/brand/power-platform.png';
 import ArrowLink from '../../compositions/ArrowLink/ArrowLink.astro';
 import IntroGridSection from '../../compositions/IntroGridSection/IntroGridSection.astro';
 
@@ -11,23 +7,11 @@ interface Props {
   heading: string;
   body: string;
   logoSuffix: string;
-  technologies: Array<{ name: string; color: string; href: string; logoKey: string }>;
+  technologies: Array<{ name: string; color: string; href: string; logo: ImageMetadata }>;
   learnMoreLabel?: string;
 }
 
-const { heading, body, logoSuffix, technologies: techData, learnMoreLabel = 'Learn more' } = Astro.props;
-
-const logoMap: Record<string, ImageMetadata> = {
-  outsystems: outsystemsLogo,
-  mendix: mendixLogo,
-  powerPlatform: powerPlatformLogo,
-  openSource: openSourceLogo,
-};
-
-const technologies = techData.map((tech) => ({
-  ...tech,
-  logo: logoMap[tech.logoKey],
-}));
+const { heading, body, logoSuffix, technologies, learnMoreLabel = 'Learn more' } = Astro.props;
 ---
 
 <div class="featured-tech-wrap">

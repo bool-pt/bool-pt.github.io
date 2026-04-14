@@ -1,5 +1,6 @@
 import astroPlugin from 'eslint-plugin-astro';
 import globals from 'globals';
+import tseslint from 'typescript-eslint';
 import baseConfig from './base.js';
 
 export default [
@@ -11,6 +12,28 @@ export default [
         ...globals.browser,
         ImageMetadata: 'readonly',
       },
+    },
+  },
+  // .astro frontmatter is TypeScript: astro-eslint-parser (bundled by
+  // eslint-plugin-astro) delegates the `---` block to a sub-parser. Set
+  // @typescript-eslint/parser as that sub-parser so `interface`, `as const`,
+  // and other TS-only syntax parse correctly.
+  // Type-checked rules require parserOptions.project to be forwarded — astro
+  // parser doesn't do that today, so they crash without override. Disable
+  // them just for .astro files; .ts/.tsx files alongside still get the full
+  // type-checked ruleset.
+  {
+    files: ['**/*.astro'],
+    languageOptions: {
+      parserOptions: {
+        parser: tseslint.parser,
+        extraFileExtensions: ['.astro'],
+      },
+    },
+    rules: {
+      ...tseslint.configs.disableTypeChecked.rules,
+      '@typescript-eslint/consistent-type-imports': 'off',
+      '@typescript-eslint/prefer-nullish-coalescing': 'off',
     },
   },
 ];

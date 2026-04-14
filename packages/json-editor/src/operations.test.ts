@@ -1,5 +1,13 @@
 import { describe, it, expect } from 'vitest';
-import { updateField, addItem, removeItem, reorderItem } from './operations';
+import {
+  updateField,
+  addItem,
+  removeItem,
+  reorderItem,
+  addNestedItem,
+  removeNestedItem,
+  reorderNestedItem,
+} from './operations';
 import { parseFlatJson } from './parser';
 
 const testJson: Record<string, string> = {
@@ -150,5 +158,89 @@ describe('reorderItem', () => {
     expect(updatedSection?.repeatingGroups[0]?.items.length).toBe(
       originalSection?.repeatingGroups[0]?.items.length,
     );
+  });
+});
+
+/* ------------------------------------------------------------------ */
+/*  Nested-group operations                                            */
+/* ------------------------------------------------------------------ */
+
+const nestedJson: Record<string, string> = {
+  'caseStudies.items.1.client': 'ACME',
+  'caseStudies.items.1.title': 'Demo',
+  'caseStudies.items.1.tags.1': 'Mendix',
+  'caseStudies.items.1.tags.2': 'REST APIs',
+  'caseStudies.items.2.client': 'Globex',
+  'caseStudies.items.2.title': 'Other',
+  'caseStudies.items.2.tags.1': 'OutSystems',
+};
+
+function nestedSections() {
+  return parseFlatJson(nestedJson).sections;
+}
+
+function findNested(sections: ReturnType<typeof nestedSections>, parentIndex: string) {
+  const section = sections.find((s) => s.name === 'caseStudies');
+  const group = section?.repeatingGroups.find((g) => g.prefix === 'caseStudies.items');
+  const item = group?.items.find((it) => it.index === parentIndex);
+  return item?.nestedGroups?.find((ng) => ng.innerPrefix === 'tags');
+}
+
+describe('addNestedItem', () => {
+  it('appends an empty inner item with the next sequential index', () => {
+    const sections = nestedSections();
+    const updated = addNestedItem(sections, 'caseStudies.items', '1', 'tags');
+    const nested = findNested(updated, '1');
+    expect(nested?.items.map((it) => it.index)).toEqual(['1', '2', '3']);
+    const newItem = nested?.items.find((it) => it.index === '3');
+    expect(newItem?.fields).toHaveLength(1);
+    expect(newItem?.fields[0]?.key).toBe('caseStudies.items.1.tags.3');
+    expect(newItem?.fields[0]?.value).toBe('');
+    expect(newItem?.fields[0]?.isDirty).toBe(true);
+  });
+
+  it('does not affect other parent items', () => {
+    const sections = nestedSections();
+    const updated = addNestedItem(sections, 'caseStudies.items', '1', 'tags');
+    const item2 = findNested(updated, '2');
+    expect(item2?.items.map((it) => it.index)).toEqual(['1']);
+  });
+});
+
+describe('removeNestedItem', () => {
+  it('removes and renumbers the remaining inner items', () => {
+    const sections = nestedSections();
+    const updated = removeNestedItem(sections, 'caseStudies.items', '1', 'tags', '1');
+    const nested = findNested(updated, '1');
+    expect(nested?.items.map((it) => it.index)).toEqual(['1']);
+    expect(nested?.items[0]?.fields[0]?.key).toBe('caseStudies.items.1.tags.1');
+    expect(nested?.items[0]?.fields[0]?.value).toBe('REST APIs');
+  });
+});
+
+describe('reorderNestedItem', () => {
+  it('moves an inner item and renumbers keys', () => {
+    const sections = nestedSections();
+    const updated = reorderNestedItem(sections, 'caseStudies.items', '1', 'tags', 0, 1);
+    const nested = findNested(updated, '1');
+    expect(nested?.items[0]?.fields[0]?.value).toBe('REST APIs');
+    expect(nested?.items[1]?.fields[0]?.value).toBe('Mendix');
+  });
+
+  it('returns sections unchanged for out-of-bounds positions', () => {
+    const sections = nestedSections();
+    const updated = reorderNestedItem(sections, 'caseStudies.items', '1', 'tags', 0, 99);
+    expect(updated).toEqual(sections);
+  });
+});
+
+describe('updateField (nested)', () => {
+  it('updates a nested-group field by full key and marks dirty', () => {
+    const sections = nestedSections();
+    const updated = updateField(sections, 'caseStudies.items.1.tags.2', 'GraphQL');
+    const nested = findNested(updated, '1');
+    const tag2 = nested?.items.find((it) => it.index === '2');
+    expect(tag2?.fields[0]?.value).toBe('GraphQL');
+    expect(tag2?.fields[0]?.isDirty).toBe(true);
   });
 });

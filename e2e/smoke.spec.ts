@@ -25,22 +25,25 @@ for (const { path, title } of pages) {
 }
 
 test('404 page renders for unknown routes', async ({ page }) => {
-  const response = await page.goto('/this-does-not-exist');
+  // Use a path under the site's base so Astro's 404 page is served.
+  const response = await page.goto(`${ROUTES.home}this-does-not-exist`);
   expect(response?.status()).toBe(404);
   await expect(page.locator('h1')).toContainText('404');
 });
 
 test('homepage has navigation links', async ({ page }) => {
-  await page.goto('/');
-  const nav = page.locator('nav');
+  await page.goto(ROUTES.home);
+  const nav = page.locator('nav.site-nav, header nav').first();
   await expect(nav).toBeVisible();
-  await expect(nav.locator(`a[href="${ROUTES.about}"]`)).toBeVisible();
-  await expect(nav.locator(`a[href="${ROUTES.services}"]`)).toBeVisible();
-  await expect(nav.locator(`a[href="${ROUTES.contacts}"]`)).toBeVisible();
+  // Each nav link is the .nav-link variant; the .header-cta is a separate
+  // element that also points at /contacts. Filter to the in-list links only.
+  await expect(nav.locator(`a.nav-link[href="${ROUTES.about}"]`)).toBeVisible();
+  await expect(nav.locator(`a.nav-link[href="${ROUTES.services}"]`)).toBeVisible();
+  await expect(nav.locator(`a.nav-link[href="${ROUTES.contacts}"]`)).toBeVisible();
 });
 
 test('homepage has cookie consent banner or it was dismissed', async ({ page }) => {
-  await page.goto('/');
+  await page.goto(ROUTES.home);
   // Cookie banner may or may not be visible depending on prior state
   const banner = page.locator('[role="dialog"]');
   const bannerCount = await banner.count();

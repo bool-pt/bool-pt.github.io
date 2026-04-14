@@ -1,8 +1,5 @@
 ---
 import { Image } from 'astro:assets';
-import mendixLogo from '@bool/media/images/platform-logos/clean/mendix.png';
-import outsystemsLogo from '@bool/media/images/platform-logos/clean/outsystems.png';
-import powerPlatformLogo from '@bool/media/images/platform-logos/clean/power-platform.png';
 import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
 import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
 import Section from '../../primitives/Section/Section.astro';
@@ -12,7 +9,7 @@ interface CertificationItem {
   name: string;
   count: string;
   label: string;
-  imageKey: string | null;
+  logo?: ImageMetadata | null;
 }
 
 interface Props {
@@ -23,17 +20,6 @@ interface Props {
 }
 
 const { tag, heading, body, certifications } = Astro.props;
-
-const imageMap: Record<string, ImageMetadata> = {
-  outsystems: outsystemsLogo,
-  mendix: mendixLogo,
-  powerPlatform: powerPlatformLogo,
-};
-
-const resolvedCertifications = certifications.map((cert) => ({
-  ...cert,
-  image: cert.imageKey ? imageMap[cert.imageKey] : null,
-}));
 ---
 
 <Section
@@ -56,13 +42,13 @@ const resolvedCertifications = certifications.map((cert) => ({
 
     <div class="cert-grid">
       {
-        resolvedCertifications.map((cert) => (
+        certifications.map((cert) => (
           <div class="cert-card">
             <div class="cert-card-top">
               <div class="cert-icon">
-                {cert.image ? (
+                {cert.logo ? (
                   <Image
-                    src={cert.image}
+                    src={cert.logo}
                     alt={cert.name}
                     width={70}
                     height={70}

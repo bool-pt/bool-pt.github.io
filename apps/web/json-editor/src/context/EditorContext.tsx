@@ -13,6 +13,9 @@ import {
   addItem,
   removeItem,
   reorderItem,
+  addNestedItem,
+  removeNestedItem,
+  reorderNestedItem,
   type EditorState,
 } from '@bool/json-editor-core';
 
@@ -29,6 +32,29 @@ export type EditorAction =
   | { type: 'ADD_ITEM'; payload: { groupPrefix: string } }
   | { type: 'REMOVE_ITEM'; payload: { groupPrefix: string; index: string } }
   | { type: 'REORDER_ITEM'; payload: { groupPrefix: string; from: number; to: number } }
+  | {
+      type: 'ADD_NESTED_ITEM';
+      payload: { parentGroupPrefix: string; parentIndex: string; innerPrefix: string };
+    }
+  | {
+      type: 'REMOVE_NESTED_ITEM';
+      payload: {
+        parentGroupPrefix: string;
+        parentIndex: string;
+        innerPrefix: string;
+        index: string;
+      };
+    }
+  | {
+      type: 'REORDER_NESTED_ITEM';
+      payload: {
+        parentGroupPrefix: string;
+        parentIndex: string;
+        innerPrefix: string;
+        from: number;
+        to: number;
+      };
+    }
   | { type: 'SET_ACTIVE_SECTION'; payload: { name: string; context: 'page' | 'shared' } }
   | { type: 'TOGGLE_PREVIEW' }
   | { type: 'TOGGLE_SIDEBAR' }
@@ -246,6 +272,41 @@ function editorReducerInner(state: HistoryState, action: EditorAction): HistoryS
       return pushHistory(state, { ...current, sections, isDirty: true });
     }
 
+    case 'ADD_NESTED_ITEM': {
+      const sections = addNestedItem(
+        current.sections,
+        action.payload.parentGroupPrefix,
+        action.payload.parentIndex,
+        action.payload.innerPrefix,
+      );
+      const totalKeys = sections.reduce((sum, s) => sum + s.keyCount, 0);
+      return pushHistory(state, { ...current, sections, totalKeys, isDirty: true });
+    }
+
+    case 'REMOVE_NESTED_ITEM': {
+      const sections = removeNestedItem(
+        current.sections,
+        action.payload.parentGroupPrefix,
+        action.payload.parentIndex,
+        action.payload.innerPrefix,
+        action.payload.index,
+      );
+      const totalKeys = sections.reduce((sum, s) => sum + s.keyCount, 0);
+      return pushHistory(state, { ...current, sections, totalKeys, isDirty: true });
+    }
+
+    case 'REORDER_NESTED_ITEM': {
+      const sections = reorderNestedItem(
+        current.sections,
+        action.payload.parentGroupPrefix,
+        action.payload.parentIndex,
+        action.payload.innerPrefix,
+        action.payload.from,
+        action.payload.to,
+      );
+      return pushHistory(state, { ...current, sections, isDirty: true });
+    }
+
     case 'SET_ACTIVE_SECTION':
       return { ...state, current: { ...current, activeSection: action.payload.name, activeSectionContext: action.payload.context } };
 
@@ -327,6 +388,15 @@ export function EditorProvider({ children }: { children: ReactNode }) {
         for (const item of group.items) {
           for (const field of item.fields) {
             if (field.isDirty) count++;
+          }
+          if (item.nestedGroups) {
+            for (const nested of item.nestedGroups) {
+              for (const innerItem of nested.items) {
+                for (const field of innerItem.fields) {
+                  if (field.isDirty) count++;
+                }
+              }
+            }
           }
         }
       }

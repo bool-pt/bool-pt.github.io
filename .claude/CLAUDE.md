@@ -97,10 +97,17 @@ This is a **dev-time workflow only**. Share Figma URL → Claude generates token
 
 ## Content
 
-- All content in `packages/content/data/` as JSON or MDX
-- Zod schemas validate at build time — broken content **fails the build**, not the user
-- Content collections are the single source of truth
-- Content goes through `@bool/content` queries (`getTeam()`, `getBlogPosts()`, etc.) — never read data files directly
+Content lives in two places, by shape:
+
+1. **Flat-key i18n in `packages/i18n/src/locales/*.json`** is the source of truth for **section content** — all strings, image paths, icon names, repeating card arrays. Loaded via `t(key)`, `tCollection(prefix, fields)`, `tList(prefix)` from `@bool/i18n`. Authored via the json-editor (`apps/web/json-editor`) or by hand. Image fields hold a path relative to `packages/media/images/`; the picker's MediaPicker browses that tree.
+2. **MDX/JSON content collections in `packages/content/data/`** are reserved for content with long-form bodies that don't fit a flat schema — currently just `blog/` and `events/`. Loaded via `getBlogPosts()` / `getEvents()` from `@bool/content`. Validated by Zod at build time — broken content **fails the build**, not the user.
+
+Per-section payload loaders live in `@bool/content` (`getCaseStudies()`, `getTeamGrid()`) and reuse `collectArray` + `collectNestedList` + `resolveImage` helpers from the same package. Add a new loader by following the case-studies pattern.
+
+Drift guards (run automatically in CI and on pre-commit when relevant files change):
+- `validateLocale()` walks every key in en.json; media-typed keys must resolve to a real file under `packages/media/images/`, icon-typed keys must be a registered `GradientIcon`.
+- `getCaseStudies()` / `getTeamGrid()` are unit-tested against real en.json — schema drift, missing media, or invalid sector/tech break the test immediately.
+- `gradientIconPaths` in `@bool/ui` is tested against a hardcoded canonical list mirrored in `KNOWN_GRADIENT_ICONS` in `@bool/content` — adding/renaming an icon must be done in lockstep.
 
 ---
 

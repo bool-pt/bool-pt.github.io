@@ -1,5 +1,5 @@
 ---
-import { getEvents, transformEvent } from '@bool/content';
+import { getEvents, resolveImage, transformEvent } from '@bool/content';
 import { t, tCollection, tList } from '@bool/i18n';
 import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
 import ContactSection from '@bool/ui/sections/ContactSection.astro';
@@ -16,7 +16,7 @@ import { getHeaderLabels, getFooterLabels, getContactSectionProps, getNewsletter
 const events = await getEvents();
 const eventItems = events.slice(0, 3).map(transformEvent);
 
-const latestFeatured = tCollection('latestPosts.item', ['category', 'title', 'author', 'readTime', 'date', 'location', 'cta'])
+const latestFeatured = tCollection('latestPosts.item', ['category', 'title', 'author', 'readTime', 'date', 'location', 'cta', 'image'])
   .map((item) => ({
     category: item.category,
     title: item.title,
@@ -25,24 +25,33 @@ const latestFeatured = tCollection('latestPosts.item', ['category', 'title', 'au
       .join(' · '),
     cta: item.cta,
     href: '/blog',
+    image: resolveImage(item.image).src,
   }));
 
 const knowledgeFilters = tList('knowledgeCenter.filters');
 
 const knowledgeArticles = tCollection('knowledgeCenter.article', [
   'category', 'title', 'author', 'readTime', 'views', 'subtitle',
-  'challenge', 'solution', 'techStack',
+  'challenge', 'solution', 'techStack', 'image',
 ]).map((a, i) => ({
-  ...a,
+  category: a.category,
+  title: a.title,
+  author: a.author,
+  readTime: a.readTime,
+  views: a.views,
+  subtitle: a.subtitle,
+  challenge: a.challenge,
+  solution: a.solution,
   href: '/blog',
   tags: t(`knowledgeCenter.tags.${i + 1}`).split(','),
   metrics: tCollection(`knowledgeCenter.article.${i + 1}.metrics`, ['value', 'label']),
   techStack: a.techStack.split(','),
+  frontImage: resolveImage(a.image).src,
 }));
 
 const newsFilters = tList('newsUpdates.filters');
 
-const newsItems = tCollection('newsUpdates.item', ['category', 'date', 'title', 'summary', 'tags'])
+const newsItems = tCollection('newsUpdates.item', ['category', 'date', 'title', 'summary', 'tags', 'image'])
   .map((item) => ({
     category: item.category,
     date: item.date,
@@ -50,6 +59,7 @@ const newsItems = tCollection('newsUpdates.item', ['category', 'date', 'title', 
     summary: item.summary,
     href: '/blog',
     tags: item.tags.split(','),
+    image: resolveImage(item.image).src,
   }));
 
 const pressReleases = tCollection('pressReleases.item', ['date', 'title', 'description'])
@@ -71,6 +81,7 @@ const eventCards = tCollection('eventsCalendar.item', ['category', 'title', 'des
     body={t('insightsHero.body')}
     ctaExplore={t('insightsHero.cta.explore')}
     ctaSubscribe={t('insightsHero.cta.subscribe')}
+    backgroundImage={resolveImage(t('insightsHero.backgroundImage'))}
   />
   <LatestFromBoolSection
     tag={t('latestPosts.tag')}

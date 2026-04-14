@@ -16,8 +16,12 @@ interface Props {
   variant?: 'centered' | 'card';
   emailAriaPrefix: string;
   linkedinAriaSuffix: string;
-  detailTitle: string;
-  detailBody: string;
+  /** Long-form bio shown on the back face of `card` variant. */
+  bio?: string;
+  /** Optional pull quote shown above the bio. */
+  quote?: string;
+  /** Optional skill / focus tags shown as pills on the back face. */
+  tags?: string[];
   class?: string;
 }
 
@@ -34,8 +38,9 @@ const {
   variant = 'centered',
   emailAriaPrefix,
   linkedinAriaSuffix,
-  detailTitle,
-  detailBody,
+  bio = '',
+  quote = '',
+  tags = [],
   class: className,
 } = Astro.props;
 
@@ -98,8 +103,17 @@ const initials = name
         </div>
       </div>
       <div class="pcv2-detail" data-person-detail hidden>
-        <h3 class="pcv2-detail-title">{detailTitle}</h3>
-        <p class="pcv2-detail-body">{detailBody}</p>
+        <h3 class="pcv2-detail-title">{name}</h3>
+        <p class="pcv2-detail-role">{role}</p>
+        {quote && <blockquote class="pcv2-detail-quote">“{quote}”</blockquote>}
+        {bio && <p class="pcv2-detail-body">{bio}</p>}
+        {tags.length > 0 && (
+          <ul class="pcv2-detail-tags">
+            {tags.map((tag) => (
+              <li class="pcv2-detail-tag">{tag}</li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   )
@@ -383,11 +397,48 @@ const initials = name
     line-height: 1.2;
   }
 
+  .pcv2-detail-role {
+    font-size: var(--font-size-body-sm);
+    color: var(--color-muted-foreground);
+    margin: 0 0 1rem;
+  }
+
+  .pcv2-detail-quote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: var(--font-size-body);
+    line-height: 1.4;
+    color: var(--color-primary);
+    margin: 0 0 1rem;
+    padding: 0;
+    border: 0;
+  }
+
   .pcv2-detail-body {
     font-size: var(--font-size-body-sm);
     line-height: 1.6;
     color: var(--color-foreground);
     margin: 0;
+  }
+
+  .pcv2-detail-tags {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+  }
+
+  .pcv2-detail-tag {
+    padding: 0.25rem 0.625rem;
+    border-radius: 999px;
+    background: var(--color-surface-charcoal);
+    color: var(--color-on-dark);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
   }
 
   /* ===== Centered variant ===== */

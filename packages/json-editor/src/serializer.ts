@@ -27,6 +27,15 @@ export function serialize(
         for (const field of item.fields) {
           result[field.key] = field.value;
         }
+        if (item.nestedGroups) {
+          for (const nested of item.nestedGroups) {
+            for (const innerItem of nested.items) {
+              for (const field of innerItem.fields) {
+                result[field.key] = field.value;
+              }
+            }
+          }
+        }
       }
     }
   }

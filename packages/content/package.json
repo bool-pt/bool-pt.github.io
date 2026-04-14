@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@bool/shared": "workspace:*",
+    "@bool/i18n": "workspace:*",
+    "@bool/media": "workspace:*",
     "zod": "catalog:",
     "astro": "catalog:"
   },

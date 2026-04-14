@@ -3,6 +3,7 @@ packages:
   - 'apps/api'
   - 'packages/*'
   - 'tooling/*'
+  - 'e2e'
 
 catalog:
   # Core

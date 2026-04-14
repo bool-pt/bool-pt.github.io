@@ -1,5 +1,5 @@
 ---
-import aiKeyboard from '@bool/media/images/sections/homepage/ai-section.jpg';
+import aiKeyboardFallback from '@bool/media/images/backgrounds/ai-section.jpg';
 import { ROUTES } from '@bool/shared';
 import SplitLayout from '../../compositions/SplitLayout/SplitLayout.astro';
 import TextBlockWithActions from '../../compositions/TextBlockWithActions/TextBlockWithActions.astro';
@@ -19,6 +19,7 @@ interface Props {
   minBlockSize?: string;
   imageWidth?: number;
   imageHeight?: number;
+  image?: ImageMetadata;
 }
 
 const {
@@ -32,6 +33,7 @@ const {
   minBlockSize = '504px',
   imageWidth = 488,
   imageHeight = 340,
+  image = aiKeyboardFallback,
 } = Astro.props;
 
 const isImageLeft = variant === 'image-left';
@@ -69,7 +71,7 @@ const textSlot = isImageLeft ? 'end' : 'start';
         </TextBlockWithActions>
         <RoundedImage
           slot={imageSlot}
-          src={aiKeyboard}
+          src={image}
           alt={imageAlt}
           aspectRatio={`${imageWidth} / ${imageHeight}`}
           radius="0.75rem"

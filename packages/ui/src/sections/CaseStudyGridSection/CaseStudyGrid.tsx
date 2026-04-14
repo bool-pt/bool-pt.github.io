@@ -4,21 +4,26 @@ import FilterableGrid from '../../compositions/FilterableGrid/FilterableGrid';
 import FlipCard, { flipCardStyles as styles } from '../../compositions/FlipCard/FlipCard';
 import Icon from '../../primitives/Icon/Icon';
 
-interface CaseItem {
-  title: string;
-  description: string;
+export interface CaseFlipItem {
   client: string;
+  title: string;
+  subtitle: string;
+  coverImageSrc: string;
+  sector: string;
+  tech: string;
+  backHeader: string;
+  modalSubheading: string;
+  metrics: Array<{ value: string; label: string }>;
+  challenge: string;
+  solution: string;
+  benefits: string;
+  team: string;
+  duration: string;
   tags: string[];
-  image: string;
-  frontImage?: string;
-  metrics?: Array<{ value: string; label: string }>;
-  challenge?: string;
-  solution?: string;
-  techStack?: string[];
 }
 
 interface Props {
-  cases: CaseItem[];
+  cases: CaseFlipItem[];
   sectors: string[];
   techFilters: string[];
   labels: {
@@ -40,40 +45,29 @@ function CaseFlipCard({
   onOpenModal,
   ctaLabel,
 }: {
-  item: CaseItem;
-  onOpenModal: (item: CaseItem) => void;
+  item: CaseFlipItem;
+  onOpenModal: (item: CaseFlipItem) => void;
   ctaLabel: string;
 }) {
-  const tagDisplay = item.tags.map((t) => t.toUpperCase()).join(' · ');
-
   return (
     <FlipCard
       frontContent={
-        item.frontImage ? (
-          <>
-            <img src={item.frontImage} alt="" className={styles.frontImage} loading="lazy" />
-            <div className={styles.frontOverlay} />
-            <div className={styles.frontContent}>
-              <span className={styles.frontLabel}>{item.client}</span>
-              <div className={styles.frontTitle}>{item.title}</div>
-            </div>
-          </>
-        ) : (
-          <>
-            <div className={styles.frontIcon}>
-              <Icon name="image-placeholder" size={48} />
-            </div>
-            <span className={styles.frontLabel}>{item.client}</span>
-          </>
-        )
+        <>
+          <img src={item.coverImageSrc} alt="" className={styles.frontImage} loading="lazy" />
+          <div className={styles.frontOverlay} />
+          <div className={styles.frontContent}>
+            <span className={styles.frontLabel}>{item.client.toUpperCase()}</span>
+            <div className={styles.frontTitle}>{item.subtitle}</div>
+          </div>
+        </>
       }
       backContent={
         <>
           <div className={styles.backOverlay} />
           <div className={styles.backContent}>
-            <span className={styles.backTag}>{tagDisplay}</span>
-            <h3 className={styles.backTitle}>{item.title}</h3>
-            {item.metrics && item.metrics.length > 0 && (
+            <span className={styles.backTag}>{item.backHeader}</span>
+            <h3 className={styles.backTitle}>{item.subtitle}</h3>
+            {item.metrics.length > 0 && (
               <div className={styles.metricsStrip}>
                 {item.metrics.map((metric) => (
                   <div key={metric.label}>
@@ -102,24 +96,23 @@ function CaseFlipCard({
 }
 
 export default function CaseStudyGrid({ cases, sectors, techFilters, labels }: Props) {
-  const [selectedCase, setSelectedCase] = useState<CaseItem | null>(null);
+  const [selectedCase, setSelectedCase] = useState<CaseFlipItem | null>(null);
 
   const modalArticle = selectedCase
     ? {
-        category: selectedCase.tags.map((t) => t.toUpperCase()).join(' · '),
-        title: selectedCase.title,
-        subtitle: `${selectedCase.client} · ${selectedCase.tags[0] || ''}`,
-        frontImage: selectedCase.frontImage,
+        category: selectedCase.backHeader,
+        title: selectedCase.subtitle,
+        subtitle: selectedCase.modalSubheading,
+        frontImage: selectedCase.coverImageSrc,
         challenge: selectedCase.challenge,
         solution: selectedCase.solution,
         metrics: selectedCase.metrics,
-        techStack: selectedCase.techStack,
-        readTime: '',
+        techStack: selectedCase.tags,
       }
     : null;
 
   return (
-    <>
+    <div data-testid="case-study-grid">
       <FilterableGrid
         data={cases}
         filterGroups={[
@@ -127,19 +120,14 @@ export default function CaseStudyGrid({ cases, sectors, techFilters, labels }: P
           { items: techFilters, ariaLabel: labels.filterAriaLabel, toggle: true },
         ]}
         matchFilter={(item, groupIndex, activeIndex) => {
-          if (groupIndex === 0)
-            return (
-              activeIndex === 0 ||
-              item.tags.some((tag) => tag.toUpperCase() === sectors[activeIndex])
-            );
-          return (
-            activeIndex === -1 ||
-            item.tags.some((tag) => tag.toUpperCase() === techFilters[activeIndex])
-          );
+          if (groupIndex === 0) {
+            return activeIndex === 0 || item.sector.toUpperCase() === sectors[activeIndex];
+          }
+          return activeIndex === -1 || item.tech.toUpperCase() === techFilters[activeIndex];
         }}
         renderItem={(item, i) => (
           <CaseFlipCard
-            key={`${item.title}-${i}`}
+            key={`${item.subtitle}-${i}`}
             item={item}
             onOpenModal={setSelectedCase}
             ctaLabel={labels.fullCaseStudy}
@@ -162,6 +150,6 @@ export default function CaseStudyGrid({ cases, sectors, techFilters, labels }: P
           ctaHref: labels.ctaHref,
         }}
       />
-    </>
+    </div>
   );
 }

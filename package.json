@@ -9,7 +9,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "turbo test",
-    "test:e2e": "playwright test --config e2e/playwright.config.ts",
+    "test:e2e": "pnpm -F @bool/e2e e2e",
     "typecheck": "turbo typecheck",
     "changeset": "changeset",
     "prepare": "husky"
@@ -38,6 +38,12 @@
     ],
     "*.{json,md,yaml,yml,css}": [
       "prettier --write"
+    ],
+    "packages/i18n/src/locales/*.json": [
+      "pnpm -F @bool/content vitest run src/validation.test.ts src/case-studies.test.ts src/team-grid.test.ts --"
+    ],
+    "packages/media/images/**/*": [
+      "pnpm -F @bool/content vitest run src/validation.test.ts --"
     ]
   },
   "pnpm": {

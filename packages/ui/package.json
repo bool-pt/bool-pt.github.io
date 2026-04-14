@@ -14,6 +14,7 @@
     "./primitives/ButtonLink.astro": "./src/primitives/ButtonLink/ButtonLink.astro",
     "./primitives/Icon.astro": "./src/primitives/Icon/Icon.astro",
     "./primitives/Icon": "./src/primitives/Icon/Icon.tsx",
+    "./primitives/Icon/icon-data": "./src/primitives/Icon/icon-data.ts",
     "./primitives/GradientIcon.astro": "./src/primitives/GradientIcon/GradientIcon.astro",
     "./primitives/GradientIcon": "./src/primitives/GradientIcon/GradientIcon.tsx",
     "./primitives/BrandLetter.astro": "./src/primitives/BrandLetter/BrandLetter.astro",

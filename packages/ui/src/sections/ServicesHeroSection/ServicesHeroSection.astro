@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import heroBg from '@bool/media/images/sections/homepage/home-hero-01.png';
+import heroBgFallback from '@bool/media/images/backgrounds/home-hero-01.png';
 import BoolLettersOverlay from '../../compositions/BoolLettersOverlay/BoolLettersOverlay.astro';
 import DarkPageHero from '../../compositions/DarkPageHero/DarkPageHero.astro';
 import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
@@ -10,9 +10,10 @@ interface Props {
   heading: string;
   body1: string;
   body2: string;
+  backgroundImage?: ImageMetadata;
 }
 
-const { heading, body1, body2 } = Astro.props;
+const { heading, body1, body2, backgroundImage = heroBgFallback } = Astro.props;
 ---
 
 <DarkPageHero
@@ -21,7 +22,7 @@ const { heading, body1, body2 } = Astro.props;
   aria-labelledby="services-hero-heading"
 >
   <div class="heroBg">
-    <Image src={heroBg} alt="" aria-hidden="true" class="heroBgImg" loading="eager" />
+    <Image src={backgroundImage} alt="" aria-hidden="true" class="heroBgImg" loading="eager" />
   </div>
 
   <div class="heroLettersScaler">

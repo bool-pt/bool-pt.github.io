@@ -17,8 +17,6 @@ export interface ArticleModalData {
   solution?: string;
   metrics?: Metric[];
   techStack?: string[];
-  readTime: string;
-  views?: string;
 }
 
 export interface ArticleModalLabels {
