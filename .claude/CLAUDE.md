@@ -57,11 +57,11 @@ Only files that **must** live at root: `pnpm-workspace.yaml`, `turbo.json`, `pac
 
 ### Strategy by Layer
 
-| Layer                 | Approach                                                                      |
-| --------------------- | ----------------------------------------------------------------------------- |
-| Shadcn primitives     | Tailwind utility classes via `cn()` — this is how Shadcn works                |
-| Astro sections/layout | Scoped `<style>` blocks                                                       |
-| React islands         | CSS Modules (`.module.css`) for anything beyond utility classes               |
+| Layer                 | Approach                                                                                                  |
+| --------------------- | --------------------------------------------------------------------------------------------------------- |
+| Shadcn primitives     | Tailwind utility classes via `cn()` — this is how Shadcn works                                            |
+| Astro sections/layout | Scoped `<style>` blocks                                                                                   |
+| React islands         | CSS Modules (`.module.css`) for anything beyond utility classes                                           |
 | `globals.css`         | Tailwind import, `@font-face`, CSS custom properties (Shadcn + tokens), base resets — no component styles |
 
 ### Colors & Spacing
@@ -105,6 +105,7 @@ Content lives in two places, by shape:
 Per-section payload loaders live in `@bool/content` (`getCaseStudies()`, `getTeamGrid()`) and reuse `collectArray` + `collectNestedList` + `resolveImage` helpers from the same package. Add a new loader by following the case-studies pattern.
 
 Drift guards (run automatically in CI and on pre-commit when relevant files change):
+
 - `validateLocale()` walks every key in en.json; media-typed keys must resolve to a real file under `packages/media/images/`, icon-typed keys must be a registered `GradientIcon`.
 - `getCaseStudies()` / `getTeamGrid()` are unit-tested against real en.json — schema drift, missing media, or invalid sector/tech break the test immediately.
 - `gradientIconPaths` in `@bool/ui` is tested against a hardcoded canonical list mirrored in `KNOWN_GRADIENT_ICONS` in `@bool/content` — adding/renaming an icon must be done in lockstep.
@@ -161,6 +162,21 @@ Drift guards (run automatically in CI and on pre-commit when relevant files chan
 
 ---
 
+## CI / Deploy
+
+Two separate GitHub Actions workflows:
+
+| Workflow                                    | Trigger                      | What it does                          |
+| ------------------------------------------- | ---------------------------- | ------------------------------------- |
+| **CI** (`.github/workflows/ci.yml`)         | Push to `main`, PRs          | Lint → Typecheck → Test → Build → E2E |
+| **Deploy** (`.github/workflows/deploy.yml`) | Manual (`workflow_dispatch`) | Build → Deploy to GitHub Pages        |
+
+- CI validates every push and PR — never deploys
+- Deploy is triggered manually from Actions > Deploy > Run workflow
+- Deploy only builds and deploys — no lint/test/E2E (those already passed in CI)
+
+---
+
 ## Conventions
 
 ### Commits
@@ -175,9 +191,23 @@ Conventional Commits enforced by commitlint:
 - `test:` — adding or updating tests
 - `chore:` — tooling, CI, dependencies
 
-### Branches
+### Branches & Pull Request Workflow
 
-Feature branches → PR → `main`. Branch names: `feat/short-description`, `fix/short-description`.
+**`main` is protected** — no direct pushes allowed. All changes go through pull requests.
+
+1. **Create a feature branch** from `main`: `feat/short-description`, `fix/short-description`
+2. **Push the branch** and **open a PR** against `main`
+3. **CI runs automatically** on the PR (lint, typecheck, test, build, E2E)
+4. **A reviewer must approve** the PR before it can be merged
+5. **Merge to `main`** only after approval + green CI
+6. **Deploy manually** via GitHub Actions > Deploy > Run workflow
+
+| Who                         | Can do                                       |
+| --------------------------- | -------------------------------------------- |
+| Any contributor / Claude    | Create branches, push, open PRs              |
+| Reviewer (admin/maintainer) | Approve PRs, merge to `main`, trigger deploy |
+
+**Never push directly to `main`.** Even small fixes go through a PR. This ensures every change is reviewed and CI-validated before reaching production.
 
 ### Imports
 
