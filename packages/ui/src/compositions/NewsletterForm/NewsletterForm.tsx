@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { trackEvent } from '@bool/analytics';
 import { submitNewsletter } from '@bool/api';
 import { newsletterSchema, ROUTES } from '@bool/shared';
-import { cn } from '../../lib/utils';
+import { cn } from '@bool/shared';
 import { InlineInputButton } from '../../primitives/InlineInputButton/InlineInputButton';
 import Captcha from '../Captcha/Captcha';
 import type { CaptchaHandle } from '../Captcha/Captcha';

@@ -1,7 +1,7 @@
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { Check, ChevronRight, Circle } from 'lucide-react';
 import type * as React from 'react';
-import { cn } from '../../lib/utils';
+import { cn } from '@bool/shared';
 
 const DropdownMenu = DropdownMenuPrimitive.Root;
 const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
@@ -21,7 +21,7 @@ function DropdownMenuSubTrigger({
     <DropdownMenuPrimitive.SubTrigger
       ref={ref}
       className={cn(
-        'focus:bg-muted data-[state=open]:bg-muted flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none',
+        'focus:bg-muted data-[state=open]:bg-muted flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-none select-none',
         inset && 'ps-8',
         className
       )}
@@ -81,7 +81,7 @@ function DropdownMenuItem({
     <DropdownMenuPrimitive.Item
       ref={ref}
       className={cn(
-        'focus:bg-muted focus:text-foreground relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+        'focus:bg-muted focus:text-foreground relative flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm transition-colors outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
         inset && 'ps-8',
         className
       )}
@@ -101,7 +101,7 @@ function DropdownMenuCheckboxItem({
     <DropdownMenuPrimitive.CheckboxItem
       ref={ref}
       className={cn(
-        'focus:bg-muted focus:text-foreground relative flex cursor-default select-none items-center rounded-sm py-1.5 pe-2 ps-8 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+        'focus:bg-muted focus:text-foreground relative flex cursor-default items-center rounded-sm py-1.5 ps-8 pe-2 text-sm transition-colors outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
         className
       )}
       checked={checked}
@@ -127,7 +127,7 @@ function DropdownMenuRadioItem({
     <DropdownMenuPrimitive.RadioItem
       ref={ref}
       className={cn(
-        'focus:bg-muted focus:text-foreground relative flex cursor-default select-none items-center rounded-sm py-1.5 pe-2 ps-8 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+        'focus:bg-muted focus:text-foreground relative flex cursor-default items-center rounded-sm py-1.5 ps-8 pe-2 text-sm transition-colors outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
         className
       )}
       {...props}

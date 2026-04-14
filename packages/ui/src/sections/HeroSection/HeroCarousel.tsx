@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { cn } from '@bool/shared';
 import { useSwipe } from '../../lib/useSwipe';
-import { cn } from '../../lib/utils';
 import styles from './HeroCarousel.module.css';
 
 interface SlideData {

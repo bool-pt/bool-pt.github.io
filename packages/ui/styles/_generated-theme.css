@@ -84,8 +84,8 @@
   --font-display: 'Degular', ui-sans-serif, system-ui, sans-serif;
   --font-accent: 'Oxanium', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
-  --radius-xs: 0.125rem;
-  --radius-sm: 0.25rem;
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.125rem;
   --radius-md: 0.375rem;
   --radius-lg: 0.5rem;
   --radius-xl: 0.75rem;
@@ -95,7 +95,7 @@
   --radius-5xl: 4.5rem;
   --radius-full: 9999px;
   --shadow-card: 2px 4px 10px rgba(0, 0, 0, 0.15);
-  --shadow-subtle: 0 4px 4px rgba(0, 0, 0, 0.10);
+  --shadow-subtle: 0 4px 4px rgba(0, 0, 0, 0.1);
   --shadow-soft: 4px 4px 4px rgba(0, 0, 0, 0.06);
   --shadow-dark-card: 2px 4px 10px rgba(43, 41, 38, 0.25);
   --shadow-hover: 0 4px 24px rgba(0, 0, 0, 0.08);
@@ -104,7 +104,7 @@
   --shadow-overlay: 0 12px 32px rgba(0, 0, 0, 0.2);
   --shadow-testimonial: 4px 8px 24px rgba(0, 0, 0, 0.12);
   --shadow-primary-button: 2px 4px 5px rgba(231, 69, 58, 0.25);
-  --shadow-primary-button-subtle: 2px 4px 5px rgba(231, 69, 58, 0.10);
+  --shadow-primary-button-subtle: 2px 4px 5px rgba(231, 69, 58, 0.1);
   --shadow-primary-button-hover: 0 6px 10px rgba(231, 69, 58, 0.25);
   --font-size-caption: clamp(0.75rem, 0.704rem + 0.19vw, 0.875rem);
   --font-size-body-sm: clamp(0.8125rem, 0.794rem + 0.09vw, 0.875rem);

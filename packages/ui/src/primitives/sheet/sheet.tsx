@@ -3,7 +3,7 @@ import { cva } from 'class-variance-authority';
 import type { VariantProps } from 'class-variance-authority';
 import { X } from 'lucide-react';
 import type * as React from 'react';
-import { cn } from '../../lib/utils';
+import { cn } from '@bool/shared';
 
 const Sheet = DialogPrimitive.Root;
 const SheetTrigger = DialogPrimitive.Trigger;
@@ -18,7 +18,7 @@ function SheetOverlay({
   return (
     <DialogPrimitive.Overlay
       className={cn(
-        'fixed inset-0 z-50 bg-black/80 transition-opacity duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] data-[state=open]:opacity-100 data-[state=closed]:opacity-0',
+        'fixed inset-0 z-50 bg-black/80 transition-opacity duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] data-[state=closed]:opacity-0 data-[state=open]:opacity-100',
         className
       )}
       {...props}
@@ -51,7 +51,14 @@ interface SheetContentProps
   closeLabel?: string;
 }
 
-function SheetContent({ side = 'right', className, children, ref, closeLabel = 'Close', ...props }: SheetContentProps) {
+function SheetContent({
+  side = 'right',
+  className,
+  children,
+  ref,
+  closeLabel = 'Close',
+  ...props
+}: SheetContentProps) {
   return (
     <SheetPortal>
       <SheetOverlay />

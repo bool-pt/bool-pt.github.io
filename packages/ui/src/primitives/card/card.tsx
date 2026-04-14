@@ -1,5 +1,5 @@
 import type * as React from 'react';
-import { cn } from '../../lib/utils';
+import { cn } from '@bool/shared';
 
 function Card({ className, ref, ...props }: React.ComponentProps<'div'>) {
   return (
@@ -19,7 +19,7 @@ function CardTitle({ className, ref, ...props }: React.ComponentProps<'h3'>) {
   return (
     <h3
       ref={ref}
-      className={cn('text-2xl font-semibold leading-none tracking-tight', className)}
+      className={cn('text-2xl leading-none font-semibold tracking-tight', className)}
       {...props}
     />
   );

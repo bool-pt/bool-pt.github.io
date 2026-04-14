@@ -1,7 +1,7 @@
 .banner {
   position: fixed;
-  bottom: 1.5rem;
-  left: 50%;
+  inset-block-end: 1.5rem;
+  inset-inline-start: 50%;
   transform: translateX(-50%);
   z-index: 9999;
   width: 90%;
@@ -94,19 +94,23 @@
   background-color: transparent;
   cursor: pointer;
   position: relative;
-  transition: background-color 150ms, border-color 150ms;
+  transition:
+    background-color 150ms,
+    border-color 150ms;
 }
 
 .toggle::after {
   content: '';
   position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 0.875rem;
-  height: 0.875rem;
+  inset-block-start: 2px;
+  inset-inline-start: 2px;
+  inline-size: 0.875rem;
+  block-size: 0.875rem;
   border-radius: 50%;
   background-color: var(--color-on-dark-subtle);
-  transition: transform 150ms, background-color 150ms;
+  transition:
+    transform 150ms,
+    background-color 150ms;
 }
 
 .toggle:checked {

@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight, MapPin } from 'lucide-react';
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { cn } from '@bool/shared';
 import { useSwipe } from '../../lib/useSwipe';
-import { cn } from '../../lib/utils';
 import Icon from '../../primitives/Icon/Icon';
 import styles from './OfficeCarousel.module.css';
 

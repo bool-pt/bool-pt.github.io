@@ -1,5 +1,5 @@
+import { cn } from '@bool/shared';
 import { setStoredLocale, buildLocalizedPath } from '../../lib/locale';
-import { cn } from '../../lib/utils';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -34,7 +34,9 @@ export default function LanguageSelect({
     if (targetLocale === currentLocale) return;
     setStoredLocale(targetLocale);
     const codes = locales.map((l) => l.code);
-    window.location.assign(buildLocalizedPath(window.location.pathname, targetLocale, defaultLocale, codes));
+    window.location.assign(
+      buildLocalizedPath(window.location.pathname, targetLocale, defaultLocale, codes)
+    );
   }
 
   return (

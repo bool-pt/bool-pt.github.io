@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from 'react';
-import { cn } from '../../lib/utils';
+import { cn } from '@bool/shared';
 import styles from './FilterableGrid.module.css';
 
 interface FilterGroup {

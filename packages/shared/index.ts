@@ -3,3 +3,4 @@ export * from './src/validation.ts';
 export * from './src/constants.ts';
 export * from './src/tokens/index.ts';
 export { formatDate } from './src/formatDate.ts';
+export { cn } from './src/cn.ts';

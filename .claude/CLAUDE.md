@@ -23,8 +23,9 @@ Pages import sections. Sections compose compositions + primitives. Compositions 
 
 ### Package Boundaries
 
-- Import from barrel exports only: `@bool/ui`, never `@bool/ui/src/primitives/Button`
-- Packages never reach into each other's internals
+- **React components**: import from barrel exports (`@bool/ui`, `@bool/shared`)
+- **Astro components**: import via subpath (`@bool/ui/sections/HeroSection.astro`, `@bool/ui/layout/BaseLayout.astro`) — Astro components can't be tree-shaken so barrel re-exports add no value
+- Packages never reach into each other's `src/` internals
 - 9 packages: `@bool/ui`, `@bool/content`, `@bool/i18n`, `@bool/seo`, `@bool/analytics`, `@bool/compliance`, `@bool/api`, `@bool/media`, `@bool/shared`
 
 ### Root Is Minimal

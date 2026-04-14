@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useCallback } from 'react';
+import { cn } from '@bool/shared';
 import { useSwipe } from '../../lib/useSwipe';
-import { cn } from '../../lib/utils';
 import styles from './TestimonialsCarousel.module.css';
 
 interface TestimonialItem {
@@ -21,7 +21,13 @@ interface Props {
   nextLabel: string;
 }
 
-export default function TestimonialsCarousel({ testimonials = [], variant = 'dark', avatarSrc, prevLabel, nextLabel }: Props) {
+export default function TestimonialsCarousel({
+  testimonials = [],
+  variant = 'dark',
+  avatarSrc,
+  prevLabel,
+  nextLabel,
+}: Props) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const scrollPrev = useCallback(() => {
@@ -54,7 +60,12 @@ export default function TestimonialsCarousel({ testimonials = [], variant = 'dar
           {testimonials.map((item) => (
             <div key={item.company} className={styles.card}>
               <div className={styles.avatar}>
-                <img src={item.avatar ?? avatarSrc} alt="" className={styles.avatarImg} loading="lazy" />
+                <img
+                  src={item.avatar ?? avatarSrc}
+                  alt=""
+                  className={styles.avatarImg}
+                  loading="lazy"
+                />
               </div>
               <p className={styles.quote}>{item.quote}</p>
               <p className={styles.company}>{item.company}</p>

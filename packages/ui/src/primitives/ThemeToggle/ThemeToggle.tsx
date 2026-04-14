@@ -1,7 +1,7 @@
 import { Moon, Sun } from 'lucide-react';
 import { useSyncExternalStore } from 'react';
+import { cn } from '@bool/shared';
 import { getTheme, setTheme } from '../../lib/theme';
-import { cn } from '../../lib/utils';
 
 function subscribeToTheme(callback: () => void) {
   const observer = new MutationObserver(callback);
@@ -23,7 +23,11 @@ interface ThemeToggleProps {
   switchToDarkLabel: string;
 }
 
-export default function ThemeToggle({ className, switchToLightLabel, switchToDarkLabel }: ThemeToggleProps) {
+export default function ThemeToggle({
+  className,
+  switchToLightLabel,
+  switchToDarkLabel,
+}: ThemeToggleProps) {
   const isDark = useSyncExternalStore(subscribeToTheme, getThemeSnapshot, getServerSnapshot);
 
   function toggle() {
@@ -36,8 +40,8 @@ export default function ThemeToggle({ className, switchToLightLabel, switchToDar
       onClick={toggle}
       aria-label={isDark ? switchToLightLabel : switchToDarkLabel}
       className={cn(
-        'inline-flex items-center justify-center rounded-full p-2 text-on-dark transition-opacity duration-150 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-        className,
+        'text-on-dark focus-visible:ring-ring inline-flex items-center justify-center rounded-full p-2 transition-opacity duration-150 hover:opacity-80 focus-visible:ring-2 focus-visible:outline-none',
+        className
       )}
     >
       {isDark ? <Sun size={20} /> : <Moon size={20} />}
