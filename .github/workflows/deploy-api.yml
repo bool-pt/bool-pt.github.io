@@ -1,6 +1,11 @@
 name: Deploy API
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/api/**'
+      - 'packages/shared/**'
   workflow_dispatch:
 
 permissions:
