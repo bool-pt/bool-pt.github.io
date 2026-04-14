@@ -56,7 +56,7 @@ describe('SesNewsletterStore', () => {
     it('updates contact when already exists', async () => {
       const { AlreadyExistsException } = await import('@aws-sdk/client-sesv2');
       mockSend
-        .mockRejectedValueOnce(new AlreadyExistsException('exists'))
+        .mockRejectedValueOnce(new AlreadyExistsException({ message: 'exists', $metadata: {} }))
         .mockResolvedValueOnce({});
 
       await store.subscribe('user@example.com');

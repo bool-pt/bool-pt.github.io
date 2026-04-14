@@ -34,7 +34,7 @@ function redirect(url: string) {
     statusCode: 302,
     headers: {
       Location: url,
-      ...getCorsHeaders(),
+      ...getCorsHeaders(undefined),
     },
     body: '',
   };

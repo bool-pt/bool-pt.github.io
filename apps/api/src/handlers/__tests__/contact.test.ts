@@ -82,7 +82,7 @@ describe('contact handler', () => {
       {} as never
     );
 
-    const sentEmail = mockSend.mock.calls[0][0];
+    const sentEmail = mockSend.mock.calls[0]?.[0] as { html: string; subject: string };
     expect(sentEmail.html).toContain('&lt;script&gt;');
     expect(sentEmail.html).not.toContain('<script>');
     expect(sentEmail.html).toContain('&lt;img src=x onerror=');

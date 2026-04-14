@@ -70,7 +70,7 @@ describe('newsletter handler', () => {
       {} as never
     );
 
-    const sentEmail = mockSend.mock.calls[0][0];
+    const sentEmail = mockSend.mock.calls[0]?.[0] as { html: string };
     expect(sentEmail.html).toContain('https://bool.pt/newsletter/confirm?token=');
     expect(sentEmail.html).toContain('Confirm subscription');
   });

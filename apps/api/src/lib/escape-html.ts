@@ -9,5 +9,5 @@ const ESCAPE_MAP: Record<string, string> = {
 const ESCAPE_RE = /[&<>"']/g;
 
 export function escapeHtml(text: string): string {
-  return text.replace(ESCAPE_RE, (char) => ESCAPE_MAP[char]);
+  return text.replace(ESCAPE_RE, (char) => ESCAPE_MAP[char] ?? char);
 }

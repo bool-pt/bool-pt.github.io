@@ -141,7 +141,7 @@ describe('penetration tests', () => {
         {} as never
       );
 
-      const html = mockSend.mock.calls[0][0].html;
+      const html = (mockSend.mock.calls[0]?.[0] as { html: string }).html;
       expect(html).not.toContain('<script>');
       expect(html).toContain('&lt;script&gt;');
     });
@@ -158,7 +158,7 @@ describe('penetration tests', () => {
         {} as never
       );
 
-      const html = mockSend.mock.calls[0][0].html;
+      const html = (mockSend.mock.calls[0]?.[0] as { html: string }).html;
       expect(html).not.toContain('<img');
       expect(html).toContain('&lt;img');
     });
@@ -205,7 +205,7 @@ describe('penetration tests', () => {
         {} as never
       );
 
-      const subject = mockSend.mock.calls[0][0].subject;
+      const subject = (mockSend.mock.calls[0]?.[0] as { subject: string }).subject;
       expect(subject).not.toContain('<img');
       expect(subject).toContain('&lt;img');
     });
