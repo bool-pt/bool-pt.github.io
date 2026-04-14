@@ -1,5 +1,5 @@
-// Utilities
-export { cn } from './src/lib/utils.ts';
+// Utilities (re-exported from @bool/shared for backward compat)
+export { cn } from '@bool/shared';
 
 // Icons (React)
 export { default as Icon } from './src/primitives/Icon/Icon.tsx';
@@ -13,4 +13,3 @@ export { default as ThemeToggle } from './src/primitives/ThemeToggle/ThemeToggle
 export { default as ContactForm } from './src/compositions/ContactForm/ContactForm.tsx';
 export { default as NewsletterForm } from './src/compositions/NewsletterForm/NewsletterForm.tsx';
 export { default as TestimonialsCarousel } from './src/compositions/TestimonialsCarousel/TestimonialsCarousel.tsx';
-

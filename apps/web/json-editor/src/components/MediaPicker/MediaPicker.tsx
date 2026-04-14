@@ -34,14 +34,8 @@ export default function MediaPicker({ fieldKey, value, onChange, disabled = fals
   const currentEntry = findByPath(value);
   const isMissing = value.trim() !== '' && !currentEntry;
 
-  const sectionFolders = useMemo(
-    () => folders.filter((f) => SECTION_FOLDER_NAMES.has(f)),
-    [],
-  );
-  const sharedFolders = useMemo(
-    () => folders.filter((f) => !SECTION_FOLDER_NAMES.has(f)),
-    [],
-  );
+  const sectionFolders = useMemo(() => folders.filter((f) => SECTION_FOLDER_NAMES.has(f)), []);
+  const sharedFolders = useMemo(() => folders.filter((f) => !SECTION_FOLDER_NAMES.has(f)), []);
 
   const visibleEntries = useMemo(() => {
     const all = entriesInFolder(folder);
@@ -68,7 +62,14 @@ export default function MediaPicker({ fieldKey, value, onChange, disabled = fals
               aria-hidden="true"
             />
           ) : (
-            <img src={currentEntry.url} alt="" className={styles.thumb} />
+            <img
+              src={currentEntry.url}
+              alt=""
+              className={styles.thumb}
+              width={36}
+              height={36}
+              decoding="async"
+            />
           )
         ) : (
           <span className={styles.thumbMissing} aria-hidden="true">
@@ -164,7 +165,15 @@ export default function MediaPicker({ fieldKey, value, onChange, disabled = fals
                               aria-hidden="true"
                             />
                           ) : (
-                            <img src={entry.url} alt="" className={styles.tileThumb} loading="lazy" />
+                            <img
+                              src={entry.url}
+                              alt=""
+                              className={styles.tileThumb}
+                              loading="lazy"
+                              decoding="async"
+                              width={144}
+                              height={108}
+                            />
                           )}
                           <span className={styles.tileLabel}>{entry.filename}</span>
                         </button>
@@ -174,7 +183,8 @@ export default function MediaPicker({ fieldKey, value, onChange, disabled = fals
                 )}
 
                 <p className={styles.footerNote}>
-                  Need a new image? Save it locally with a clean filename and send it to the developer with your exported JSON.
+                  Need a new image? Save it locally with a clean filename and send it to the
+                  developer with your exported JSON.
                 </p>
               </section>
             </div>
