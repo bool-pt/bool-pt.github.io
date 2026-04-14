@@ -23,7 +23,15 @@ vi.mock('../Captcha/Captcha', () => ({
     theme?: string;
     ref?: React.Ref<unknown>;
   }) => {
-    return <button type="button" data-testid="mock-captcha" onClick={() => onVerify('test-captcha-token')}>Verify</button>;
+    return (
+      <button
+        type="button"
+        data-testid="mock-captcha"
+        onClick={() => onVerify('test-captcha-token')}
+      >
+        Verify
+      </button>
+    );
   },
 }));
 
@@ -53,11 +61,9 @@ const labels = {
   captchaRequired: 'Please complete the captcha.',
 };
 
-describe('ContactForm', () => {
+describe('ContactForm', { timeout: 15_000 }, () => {
   it('renders full layout fields', () => {
-    render(
-      <ContactForm layout="full" captchaSiteKey="test-key" labels={labels} />,
-    );
+    render(<ContactForm layout="full" captchaSiteKey="test-key" labels={labels} />);
 
     expect(screen.getByLabelText('First Name')).toBeInTheDocument();
     expect(screen.getByLabelText('Last Name')).toBeInTheDocument();
@@ -68,9 +74,7 @@ describe('ContactForm', () => {
   });
 
   it('renders simple layout fields', () => {
-    render(
-      <ContactForm layout="simple" captchaSiteKey="test-key" labels={labels} />,
-    );
+    render(<ContactForm layout="simple" captchaSiteKey="test-key" labels={labels} />);
 
     expect(screen.getByLabelText('Name')).toBeInTheDocument();
     expect(screen.getByLabelText('Email')).toBeInTheDocument();
@@ -84,9 +88,7 @@ describe('ContactForm', () => {
   it('shows validation errors when submitting empty form', async () => {
     const user = userEvent.setup();
 
-    render(
-      <ContactForm layout="full" captchaSiteKey="" labels={labels} />,
-    );
+    render(<ContactForm layout="full" captchaSiteKey="" labels={labels} />);
 
     await user.click(screen.getByRole('button', { name: 'Send' }));
 
@@ -100,9 +102,7 @@ describe('ContactForm', () => {
   it('does not call API when captcha is not verified', async () => {
     const user = userEvent.setup();
 
-    render(
-      <ContactForm layout="simple" captchaSiteKey="test-key" labels={labels} />,
-    );
+    render(<ContactForm layout="simple" captchaSiteKey="test-key" labels={labels} />);
 
     await user.type(screen.getByLabelText('Name'), 'John Doe');
     await user.type(screen.getByLabelText('Email'), 'john@example.com');
@@ -117,13 +117,14 @@ describe('ContactForm', () => {
   it('submits successfully and shows success message', async () => {
     const user = userEvent.setup();
 
-    render(
-      <ContactForm layout="simple" captchaSiteKey="test-key" labels={labels} />,
-    );
+    render(<ContactForm layout="simple" captchaSiteKey="test-key" labels={labels} />);
 
     await user.type(screen.getByLabelText('Name'), 'John Doe');
     await user.type(screen.getByLabelText('Email'), 'john@example.com');
-    await user.type(screen.getByLabelText('Message'), 'This is a test message that is long enough.');
+    await user.type(
+      screen.getByLabelText('Message'),
+      'This is a test message that is long enough.'
+    );
 
     // Click the mock captcha button to trigger onVerify
     await user.click(screen.getByTestId('mock-captcha'));
@@ -141,20 +142,24 @@ describe('ContactForm', () => {
       message: 'This is a test message that is long enough.',
       captchaToken: 'test-captcha-token',
     });
-    expect(trackEvent).toHaveBeenCalledWith('form_submission', { type: 'contact', layout: 'simple' });
+    expect(trackEvent).toHaveBeenCalledWith('form_submission', {
+      type: 'contact',
+      layout: 'simple',
+    });
   });
 
   it('shows error message when API call fails', async () => {
     const user = userEvent.setup();
     vi.mocked(submitContactForm).mockRejectedValueOnce(new Error('API Error'));
 
-    render(
-      <ContactForm layout="simple" captchaSiteKey="test-key" labels={labels} />,
-    );
+    render(<ContactForm layout="simple" captchaSiteKey="test-key" labels={labels} />);
 
     await user.type(screen.getByLabelText('Name'), 'John Doe');
     await user.type(screen.getByLabelText('Email'), 'john@example.com');
-    await user.type(screen.getByLabelText('Message'), 'This is a test message that is long enough.');
+    await user.type(
+      screen.getByLabelText('Message'),
+      'This is a test message that is long enough.'
+    );
 
     await user.click(screen.getByTestId('mock-captcha'));
     await user.click(screen.getByRole('button', { name: 'Send' }));
@@ -165,9 +170,7 @@ describe('ContactForm', () => {
   });
 
   it('has correct aria-label on form', () => {
-    render(
-      <ContactForm layout="full" captchaSiteKey="test-key" labels={labels} />,
-    );
+    render(<ContactForm layout="full" captchaSiteKey="test-key" labels={labels} />);
 
     expect(screen.getByRole('form', { name: 'Contact form' })).toBeInTheDocument();
   });

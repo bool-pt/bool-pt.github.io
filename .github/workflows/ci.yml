@@ -78,7 +78,7 @@ jobs:
           PUBLIC_SENTRY_DSN: ${{ vars.PUBLIC_SENTRY_DSN }}
       - name: Merge json-editor into main site output
         run: cp -r apps/web/json-editor/dist apps/web/bool/dist/json-editor
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v4
         with:
           path: apps/web/bool/dist
 
@@ -126,4 +126,4 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
