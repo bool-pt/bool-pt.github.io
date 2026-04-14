@@ -33,9 +33,9 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
   const [email, setEmail] = useState('');
   const [captchaToken, setCaptchaToken] = useState('');
   const [marketingConsent, setMarketingConsent] = useState(false);
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error' | 'captcha-needed' | 'consent-needed'>(
-    'idle'
-  );
+  const [status, setStatus] = useState<
+    'idle' | 'loading' | 'success' | 'error' | 'captcha-needed' | 'consent-needed'
+  >('idle');
   const captchaRef = useRef<CaptchaHandle>(null);
 
   async function handleSubmit() {
@@ -96,7 +96,7 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
       <InlineInputButton
         value={email}
         onChange={setEmail}
-        onSubmit={handleSubmit}
+        onSubmit={() => void handleSubmit()}
         label={labels.label}
         placeholder={labels.placeholder}
         buttonText={buttonText}
@@ -104,7 +104,9 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
         type="email"
         variant={isBar ? 'light' : 'dark'}
       />
-      <label className={cn(styles.consentLabel, isBar ? styles.consentLabelBar : styles.consentLabelCta)}>
+      <label
+        className={cn(styles.consentLabel, isBar ? styles.consentLabelBar : styles.consentLabelCta)}
+      >
         <input
           type="checkbox"
           checked={marketingConsent}
@@ -114,12 +116,16 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
           }}
           className={styles.checkbox}
         />
-        <span>{labels.consentBefore}<a href={ROUTES.privacy} className={styles.consentLink}>{labels.consentLinkText}</a>{labels.consentAfter}</span>
+        <span>
+          {labels.consentBefore}
+          <a href={ROUTES.privacy} className={styles.consentLink}>
+            {labels.consentLinkText}
+          </a>
+          {labels.consentAfter}
+        </span>
       </label>
       {status === 'consent-needed' && (
-        <p className={styles.consentError}>
-          {labels.consentRequired}
-        </p>
+        <p className={styles.consentError}>{labels.consentRequired}</p>
       )}
       {captchaSiteKey && (
         <div style={{ marginBlockStart: '0.75rem' }}>

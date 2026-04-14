@@ -239,6 +239,12 @@ importers:
       prettier:
         specifier: 'catalog:'
         version: 3.8.1
+      prettier-plugin-astro:
+        specifier: 'catalog:'
+        version: 0.14.1
+      prettier-plugin-tailwindcss:
+        specifier: 'catalog:'
+        version: 0.7.2(prettier-plugin-astro@0.14.1)(prettier@3.8.1)
       turbo:
         specifier: 'catalog:'
         version: 2.9.3
