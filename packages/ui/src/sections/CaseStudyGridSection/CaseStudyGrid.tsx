@@ -64,7 +64,7 @@ function CaseFlipCard({
           />
           <div className={styles.frontOverlay} />
           <div className={styles.frontContent}>
-            <span className={styles.frontLabel}>{(item.title || item.client).toUpperCase()}</span>
+            <span className={styles.frontLabel}>{`${item.sector} - ${item.tech}`}</span>
             <div className={styles.frontTitle}>{item.subtitle}</div>
           </div>
         </>
@@ -110,7 +110,6 @@ export default function CaseStudyGrid({ cases, sectors, techFilters, labels }: P
     ? {
         category: selectedCase.backHeader,
         title: selectedCase.subtitle,
-        subtitle: selectedCase.modalSubheading,
         frontImage: selectedCase.coverImageSrc,
         challenge: selectedCase.challenge,
         solution: selectedCase.solution,

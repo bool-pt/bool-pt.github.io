@@ -11,33 +11,42 @@ import NewsletterCTASection from '@bool/ui/sections/NewsletterCTASection.astro';
 import PortfolioHeroSection from '@bool/ui/sections/PortfolioHeroSection.astro';
 import PortfolioStatsSection from '@bool/ui/sections/PortfolioStatsSection.astro';
 import TestimonialsCarouselSection from '@bool/ui/sections/TestimonialsCarouselSection.astro';
-import { getHeaderLabels, getFooterLabels, getContactSectionProps, getNewsletterLabels } from '../../labels';
+import {
+  getHeaderLabels,
+  getFooterLabels,
+  getContactSectionProps,
+  getNewsletterLabels,
+} from '../../labels';
 
 const caseStudiesPayload = getCaseStudies();
 
 const sectors = t('portfolioHero.sectors').split(',');
 
-const clientTestimonials = tCollection('clientTestimonials', ['quote', 'name', 'role', 'avatar'])
-  .map((item) => ({
-    quote: item.quote,
-    company: item.name,
-    designation: item.role,
-    avatar: resolveImage(item.avatar).src,
-  }));
+const clientTestimonials = tCollection('clientTestimonials', [
+  'quote',
+  'name',
+  'role',
+  'avatar',
+]).map((item) => ({
+  quote: item.quote,
+  company: item.name,
+  designation: item.role,
+  avatar: resolveImage(item.avatar).src,
+}));
 
 const portfolioStats = tCollection('portfolioStats.items', ['value', 'label']);
 
 const recognitionIcons = ['trophy', 'chart', 'shield', 'trophy'] as const;
-const recognitions = tCollection('portfolioStats.recognition', ['title', 'description'])
-  .map((r, i) => ({ ...r, iconName: recognitionIcons[i] ?? ('trophy' as const) }));
+const recognitions = tCollection('portfolioStats.recognition', ['title', 'description']).map(
+  (r, i) => ({ ...r, iconName: recognitionIcons[i] ?? ('trophy' as const) })
+);
 
-const certifications = tCollection('certifications.items', ['name', 'count', 'logo'])
-  .map((c) => ({
-    name: c.name,
-    count: c.count,
-    label: t('certifications.label'),
-    logo: c.logo ? resolveImage(c.logo) : null,
-  }));
+const certifications = tCollection('certifications.items', ['name', 'count', 'logo']).map((c) => ({
+  name: c.name,
+  count: c.count,
+  label: t('certifications.label'),
+  logo: c.logo ? resolveImage(c.logo) : null,
+}));
 ---
 
 <BaseLayout
@@ -53,7 +62,6 @@ const certifications = tCollection('certifications.items', ['name', 'count', 'lo
     sectors={sectors}
     ctaStories={t('portfolioHero.cta.stories')}
     ctaServices={t('portfolioHero.cta.services')}
-    statsHighlight={{ value: t('portfolioHero.stats.highlight.value'), label: t('portfolioHero.stats.highlight.label') }}
     stats={portfolioStats}
     backgroundImage={resolveImage(t('portfolioHero.backgroundImage'))}
   />
