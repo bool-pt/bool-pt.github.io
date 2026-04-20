@@ -26,7 +26,7 @@ test.describe('Case studies grid', () => {
     for (let i = 0; i < labelCount; i++) {
       const label = (await frontLabels.nth(i).textContent())?.trim() ?? '';
       const title = (await frontTitles.nth(i).textContent())?.trim() ?? '';
-      expect(label, `card #${i + 1} client (frontLabel)`).not.toBe('');
+      expect(label, `card #${i + 1} sector-tech (frontLabel)`).not.toBe('');
       expect(typeof title, `card #${i + 1} subtitle (frontTitle)`).toBe('string');
     }
 

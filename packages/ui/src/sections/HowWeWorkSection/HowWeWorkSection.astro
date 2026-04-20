@@ -67,6 +67,8 @@ const { heading, cards } = Astro.props;
       grid-template-rows: repeat(2, 384px);
       justify-content: center;
       align-items: center;
+      block-size: 960px;
+      align-content: center;
     }
 
     .hwwHeading {
@@ -96,6 +98,13 @@ const { heading, cards } = Astro.props;
     padding: 2rem;
     display: flex;
     flex-direction: column;
+  }
+
+  @media (min-width: 768px) {
+    .hwwCard {
+      inline-size: 384px;
+      block-size: 384px;
+    }
   }
 
   @media (min-width: 768px) {
