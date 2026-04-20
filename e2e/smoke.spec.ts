@@ -28,7 +28,7 @@ test('404 page renders for unknown routes', async ({ page }) => {
   // Use a path under the site's base so Astro's 404 page is served.
   const response = await page.goto(`${ROUTES.home}this-does-not-exist`);
   expect(response?.status()).toBe(404);
-  await expect(page.locator('h1')).toContainText('404');
+  await expect(page.locator('h1')).toContainText('Page not found');
 });
 
 test('homepage has navigation links', async ({ page }) => {
