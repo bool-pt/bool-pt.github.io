@@ -574,12 +574,7 @@ import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
 ### 10.5 New React Island
 
 1. Create `packages/ui/src/compositions/MyWidget/MyWidget.tsx` + `MyWidget.module.css`
-2. CSS Module rules:
-   - Import as `styles`: `import styles from './MyWidget.module.css'`
-   - Use `cn()` for conditional classes: `cn(styles.base, active && styles.active, className)`
-   - camelCase class names: `.cardGrid`, `.navBtn`
-   - Use CSS custom properties for colors/shadows — never Tailwind utilities in module files
-   - One level of nesting max
+2. Follow CSS Module rules in `styling.md`
 3. Export from `packages/ui/src/compositions/index.ts`
 4. Use in Astro section with hydration directive:
 
@@ -644,8 +639,10 @@ import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
 | Tokens                | File                                        |
 | --------------------- | ------------------------------------------- |
 | Colors                | `packages/shared/src/tokens/colors.ts`      |
+| Dark Mode Overrides   | `packages/shared/src/tokens/dark.ts`        |
 | Typography            | `packages/shared/src/tokens/typography.ts`  |
 | Spacing               | `packages/shared/src/tokens/spacing.ts`     |
+| Opacity               | `packages/shared/src/tokens/opacity.ts`     |
 | Border Radius         | `packages/shared/src/tokens/radii.ts`       |
 | Shadows               | `packages/shared/src/tokens/shadows.ts`     |
 | Breakpoints           | `packages/shared/src/tokens/breakpoints.ts` |

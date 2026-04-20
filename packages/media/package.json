@@ -10,7 +10,9 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "test": "vitest run"
+    "test": "vitest run",
+    "sync:drive": "node scripts/sync-google-drive.mjs",
+    "test:drive": "node scripts/test-drive-connection.mjs"
   },
   "devDependencies": {
     "@bool/tsconfig": "workspace:*",

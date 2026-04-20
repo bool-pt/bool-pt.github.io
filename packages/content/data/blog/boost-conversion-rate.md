@@ -3,7 +3,7 @@ title: Boost your conversation rate
 description: Practical strategies to improve your digital product conversion rate using low-code and data-driven optimisation techniques.
 date: 2026-05-26
 author: Nome Apelido
-image: /images/blog/boost-conversion-rate.jpg
+image: covers/insight-01.jpg
 tags:
   - conversion
   - low-code

@@ -59,31 +59,24 @@ pnpm dev:json-editor
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start Astro dev server |
-| `pnpm build` | Build all packages and apps |
-| `pnpm lint` | Run ESLint across all packages |
-| `pnpm typecheck` | Run TypeScript type checking |
-| `pnpm test` | Run unit tests (Vitest) |
-| `pnpm test:e2e` | Run E2E tests (Playwright) |
-| `pnpm format` | Format all files with Prettier |
-| `pnpm format:check` | Check formatting |
+| Command             | Description                    |
+| ------------------- | ------------------------------ |
+| `pnpm dev`          | Start Astro dev server         |
+| `pnpm build`        | Build all packages and apps    |
+| `pnpm lint`         | Run ESLint across all packages |
+| `pnpm typecheck`    | Run TypeScript type checking   |
+| `pnpm test`         | Run unit tests (Vitest)        |
+| `pnpm test:e2e`     | Run E2E tests (Playwright)     |
+| `pnpm format`       | Format all files with Prettier |
+| `pnpm format:check` | Check formatting               |
 
 ## Environment Variables
 
-Copy `.env.example` to `.env` in `apps/web/bool/`:
-
-| Variable | Description |
-|----------|-------------|
-| `PUBLIC_CONTACT_API_URL` | Contact form Lambda endpoint |
-| `PUBLIC_NEWSLETTER_API_URL` | Newsletter Lambda endpoint |
-| `PUBLIC_HCAPTCHA_SITE_KEY` | hCaptcha public site key |
-| `PUBLIC_GA_MEASUREMENT_ID` | Google Analytics 4 measurement ID |
+All configuration is managed via GitHub repository variables and secrets — no local `.env` files needed. See the **GitHub Variables & Secrets** section in `.claude/CLAUDE.md` for the full reference.
 
 ## Deployment
 
-Automated via GitHub Actions. Push to `main` triggers build and deploy to GitHub Pages.
+Automated via GitHub Actions. Deploy is triggered manually from Actions > Deploy > Run workflow.
 
 ## License
 

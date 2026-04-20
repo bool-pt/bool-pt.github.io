@@ -8,105 +8,130 @@ Full dependency tree: **Pages → Sections → Compositions → Primitives**
 
 ### Homepage (`index.astro`)
 
-| #   | Section              | Compositions                                                  | Primitives                                                  | React Islands                      |
-| --- | -------------------- | ------------------------------------------------------------- | ----------------------------------------------------------- | ---------------------------------- |
-| 1   | HeroSection          | BoolLettersOverlay                                            | —                                                           | HeroCarousel `client:load`         |
-| 2   | NewsletterBarSection | —                                                             | Section, SectionContainer, TextBlock                        | NewsletterForm `client:visible`    |
-| 3   | PowerAISection       | SplitLayout, TextBlockWithActions                             | ButtonLink, RoundedImage, Section, SectionContainer         | —                                  |
-| 4   | ServicesSection      | DottedLineCardGrid                                            | Section, SectionContainer                                   | —                                  |
-| 5   | PromiseSection       | SplitLayout, TextBlockWithActions, IconFeatureCard, ArrowLink | Section, SectionContainer, ButtonLink, ResponsiveGrid, GradientIcon | —                                  |
-| 6   | TestimonialsSection  | SectionIntro                                                  | Section, SectionContainer                                   | TestimonialsCarousel `client:visible` |
-| 7   | PeopleSection        | TextBlockWithActions, ImageTextBanner                         | ButtonLink, Section, ActionRow                              | —                                  |
-| 8   | InsightsSection      | IntroGridSection, ImageOverlayCard, ArrowLink                 | AuthorMeta, CardImageBg, CardTitle                          | —                                  |
-| 9   | EventsSection        | SectionIntro, CalendarEventLayout, EventListCard              | Section, ButtonLink                                         | —                                  |
-| 10  | ContactSection       | ContactInfo, SplitWithForm                                    | Section, SectionContainer                                   | ContactForm `client:load`          |
-| 11  | NewsletterCTASection | —                                                             | Section, SectionContainer, TextBlock                        | NewsletterForm `client:visible`    |
+| #   | Section              | Compositions                                                  | Primitives                                                          | React Islands                         |
+| --- | -------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------- | ------------------------------------- |
+| 1   | HeroSection          | BoolLettersOverlay                                            | —                                                                   | HeroCarousel `client:load`            |
+| 2   | NewsletterBarSection | —                                                             | Section, SectionContainer, TextBlock                                | NewsletterForm `client:visible`       |
+| 3   | PowerAISection       | SplitLayout, TextBlockWithActions                             | ButtonLink, RoundedImage, Section, SectionContainer                 | —                                     |
+| 4   | ServicesSection      | DottedLineCardGrid                                            | Section, SectionContainer                                           | —                                     |
+| 5   | PromiseSection       | SplitLayout, TextBlockWithActions, IconFeatureCard, ArrowLink | Section, SectionContainer, ButtonLink, ResponsiveGrid, GradientIcon | —                                     |
+| 6   | TestimonialsSection  | SectionIntro                                                  | Section, SectionContainer                                           | TestimonialsCarousel `client:visible` |
+| 7   | PeopleSection        | TextBlockWithActions, ImageTextBanner                         | ButtonLink, Section, ActionRow                                      | —                                     |
+| 8   | InsightsSection      | IntroGridSection, ImageOverlayCard, ArrowLink                 | AuthorMeta, CardImageBg, CardTitle                                  | —                                     |
+| 9   | EventsSection        | SectionIntro, CalendarEventLayout, EventListCard              | Section, ButtonLink                                                 | —                                     |
+| 10  | ContactSection       | ContactInfo, SplitWithForm                                    | Section, SectionContainer                                           | ContactForm `client:load`             |
+| 11  | NewsletterCTASection | —                                                             | Section, SectionContainer, TextBlock                                | NewsletterForm `client:visible`       |
 
 ---
 
 ### About (`about.astro`)
 
-| #   | Section              | Compositions                      | Primitives                                             | React Islands             |
-| --- | -------------------- | --------------------------------- | ------------------------------------------------------ | ------------------------- |
-| 1   | AboutHeroSection     | DarkPageHero, SectionIntro        | SectionContainer, ResponsiveGrid, TextBlock            | —                         |
-| 2   | BoolInNumbersSection | TrapezoidStatsRow, SkewedCard     | Section, SectionContainer, TextBlock                   | —                         |
-| 3   | PowerAISection       | SplitLayout, TextBlockWithActions | ButtonLink, RoundedImage, Section, SectionContainer    | —                         |
-| 4   | FeaturedTechSection  | ArrowLink, IntroGridSection       | —                                                      | —                         |
-| 5   | TeamGridSection      | IntroGridSection, PersonCard      | —                                                      | —                         |
-| 6   | FromPortugalSection  | SectionIntro                      | Section, SectionContainer                              | OfficeCarousel `client:visible` |
-| 7   | ContactSection       | ContactInfo, SplitWithForm        | Section, SectionContainer                              | ContactForm `client:load` |
+| #   | Section              | Compositions                      | Primitives                                          | React Islands                   |
+| --- | -------------------- | --------------------------------- | --------------------------------------------------- | ------------------------------- |
+| 1   | AboutHeroSection     | DarkPageHero, SectionIntro        | SectionContainer, ResponsiveGrid, TextBlock         | —                               |
+| 2   | BoolInNumbersSection | TrapezoidStatsRow, SkewedCard     | Section, SectionContainer, TextBlock                | —                               |
+| 3   | PowerAISection       | SplitLayout, TextBlockWithActions | ButtonLink, RoundedImage, Section, SectionContainer | —                               |
+| 4   | FeaturedTechSection  | ArrowLink, IntroGridSection       | —                                                   | —                               |
+| 5   | TeamGridSection      | IntroGridSection, PersonCard      | —                                                   | —                               |
+| 6   | FromPortugalSection  | SectionIntro                      | Section, SectionContainer                           | OfficeCarousel `client:visible` |
+| 7   | ContactSection       | ContactInfo, SplitWithForm        | Section, SectionContainer                           | ContactForm `client:load`       |
 
 ---
 
 ### Services (`services.astro`)
 
-| #   | Section              | Compositions                                  | Primitives                            | React Islands                   |
-| --- | -------------------- | --------------------------------------------- | ------------------------------------- | ------------------------------- |
-| 1   | ServicesHeroSection  | DarkPageHero, BoolLettersOverlay, SectionIntro | SectionContainer                      | —                               |
-| 2   | PowerAISection       | SplitLayout, TextBlockWithActions             | RoundedImage, Section, SectionContainer | —                             |
-| 3   | SolutionsROISection  | —                                             | Icon, Section, SectionContainer       | —                               |
-| 4   | StatsBannerSection   | ImageTextBanner                               | Section                               | —                               |
-| 5   | TechStackSection     | SectionIntro, ExpertPortrait                  | Section, SectionContainer, TextBlock, CheckListItem, ButtonLink | —                               |
-| 6   | HowWeWorkSection     | —                                             | Section, SectionContainer             | —                               |
-| 7   | LetsBuildCTASection  | CTASection                                    | ButtonLink                            | —                               |
-| 8   | ContactSection       | ContactInfo, SplitWithForm                    | Section, SectionContainer             | ContactForm `client:load`       |
-| 9   | NewsletterCTASection | BoolLettersOverlay                            | Section, SectionContainer, TextBlock  | NewsletterForm `client:visible` |
+| #   | Section              | Compositions                                   | Primitives                                                      | React Islands                   |
+| --- | -------------------- | ---------------------------------------------- | --------------------------------------------------------------- | ------------------------------- |
+| 1   | ServicesHeroSection  | DarkPageHero, BoolLettersOverlay, SectionIntro | SectionContainer                                                | —                               |
+| 2   | PowerAISection       | SplitLayout, TextBlockWithActions              | RoundedImage, Section, SectionContainer                         | —                               |
+| 3   | SolutionsROISection  | —                                              | Icon, Section, SectionContainer                                 | —                               |
+| 4   | StatsBannerSection   | ImageTextBanner                                | Section                                                         | —                               |
+| 5   | TechStackSection     | SectionIntro, ExpertPortrait                   | Section, SectionContainer, TextBlock, CheckListItem, ButtonLink | —                               |
+| 6   | HowWeWorkSection     | —                                              | Section, SectionContainer                                       | —                               |
+| 7   | LetsBuildCTASection  | CTASection                                     | ButtonLink                                                      | —                               |
+| 8   | ContactSection       | ContactInfo, SplitWithForm                     | Section, SectionContainer                                       | ContactForm `client:load`       |
+| 9   | NewsletterCTASection | BoolLettersOverlay                             | Section, SectionContainer, TextBlock                            | NewsletterForm `client:visible` |
 
 ---
 
 ### People (`people.astro`)
 
-| #   | Section                     | Compositions                                                                  | Primitives                              | React Islands                               |
-| --- | --------------------------- | ----------------------------------------------------------------------------- | --------------------------------------- | ------------------------------------------- |
-| 1   | PeopleHeroSection           | SectionTag, DarkPageHero, SectionIntro, TrapezoidStatsRow, BoolLettersOverlay | SectionContainer, ButtonLink, ActionRow | —                                           |
-| 2   | ValuesSection               | SectionTag, IntroGridSection, NumberedCard                                    | —                                       | —                                           |
-| 3   | BeyondSprintSection         | SectionTag, IntroGridSection, ContentCard                                     | TextBlock                               | —                                           |
-| 4   | PhotoGallerySection         | SectionTag, SectionIntro                                                      | Section, SectionContainer               | —                                           |
+| #   | Section                     | Compositions                                                                  | Primitives                              | React Islands                                  |
+| --- | --------------------------- | ----------------------------------------------------------------------------- | --------------------------------------- | ---------------------------------------------- |
+| 1   | PeopleHeroSection           | SectionTag, DarkPageHero, SectionIntro, TrapezoidStatsRow, BoolLettersOverlay | SectionContainer, ButtonLink, ActionRow | —                                              |
+| 2   | ValuesSection               | SectionTag, IntroGridSection, NumberedCard                                    | —                                       | —                                              |
+| 3   | BeyondSprintSection         | SectionTag, IntroGridSection, ContentCard                                     | TextBlock                               | —                                              |
+| 4   | PhotoGallerySection         | SectionTag, SectionIntro                                                      | Section, SectionContainer               | —                                              |
 | 5   | TestimonialsCarouselSection | SectionTag, SectionIntro                                                      | Section, SectionContainer               | PortfolioTestimonialsCarousel `client:visible` |
-| 6   | CareersCtaSection           | CTASection                                                                    | ButtonLink                              | —                                           |
-| 7   | NewsletterCTASection        | —                                                                             | Section, SectionContainer, TextBlock    | NewsletterForm `client:visible`             |
-| 8   | ContactSection              | ContactInfo, SplitWithForm                                                    | Section, SectionContainer               | ContactForm `client:load`                   |
+| 6   | CareersCtaSection           | CTASection                                                                    | ButtonLink                              | —                                              |
+| 7   | ContactSection              | ContactInfo, SplitWithForm                                                    | Section, SectionContainer               | ContactForm `client:load`                      |
+| 8   | NewsletterCTASection        | —                                                                             | Section, SectionContainer, TextBlock    | NewsletterForm `client:visible`                |
 
 ---
 
 ### Portfolio (`portfolio/index.astro`)
 
-| #   | Section                     | Compositions                                                                | Primitives                              | React Islands                               |
-| --- | --------------------------- | --------------------------------------------------------------------------- | --------------------------------------- | ------------------------------------------- |
-| 1   | PortfolioHeroSection        | SectionTag, SectionIntro, StatsCardGrid, DarkPageHero + local SectorTagGrid | ButtonLink, SectionContainer, ActionRow | —                                           |
-| 2   | CaseStudyGridSection        | SectionTag, SectionIntro                                                    | Section, SectionContainer               | CaseStudyGrid `client:visible`              |
+| #   | Section                     | Compositions                                                                | Primitives                              | React Islands                                  |
+| --- | --------------------------- | --------------------------------------------------------------------------- | --------------------------------------- | ---------------------------------------------- |
+| 1   | PortfolioHeroSection        | SectionTag, SectionIntro, StatsCardGrid, DarkPageHero + local SectorTagGrid | ButtonLink, SectionContainer, ActionRow | —                                              |
+| 2   | CaseStudyGridSection        | SectionTag, SectionIntro                                                    | Section, SectionContainer               | CaseStudyGrid `client:visible`                 |
 | 3   | TestimonialsCarouselSection | SectionTag, SectionIntro                                                    | Section, SectionContainer               | PortfolioTestimonialsCarousel `client:visible` |
-| 4   | PortfolioStatsSection       | SectionTag, SectionIntro, TrapezoidStatsRow, SkewedCard                     | Section, SectionContainer               | —                                           |
-| 5   | CertificationsSection       | SectionTag, SectionIntro                                                    | Section, SectionContainer               | —                                           |
-| 6   | ClientLogosSection          | SectionTag, SectionIntro                                                    | Section, SectionContainer               | —                                           |
-| 7   | LetsBuildCTASection         | CTASection                                                                  | ButtonLink                              | —                                           |
-| 8   | ContactSection              | ContactInfo, SplitWithForm                                                  | Section, SectionContainer               | ContactForm `client:load`                   |
-| 9   | NewsletterCTASection        | BoolLettersOverlay                                                          | Section, SectionContainer, TextBlock    | NewsletterForm `client:visible`             |
+| 4   | PortfolioStatsSection       | SectionTag, SectionIntro, TrapezoidStatsRow, SkewedCard                     | Section, SectionContainer               | —                                              |
+| 5   | CertificationsSection       | SectionTag, SectionIntro                                                    | Section, SectionContainer               | —                                              |
+| 6   | ClientLogosSection          | SectionTag, SectionIntro                                                    | Section, SectionContainer               | —                                              |
+| 7   | LetsBuildCTASection         | CTASection                                                                  | ButtonLink                              | —                                              |
+| 8   | ContactSection              | ContactInfo, SplitWithForm                                                  | Section, SectionContainer               | ContactForm `client:load`                      |
+| 9   | NewsletterCTASection        | BoolLettersOverlay                                                          | Section, SectionContainer, TextBlock    | NewsletterForm `client:visible`                |
 
 ---
 
 ### Blog / Insights (`blog/index.astro`)
 
-| #   | Section                | Compositions                                                          | Primitives                                | React Islands                   |
-| --- | ---------------------- | --------------------------------------------------------------------- | ----------------------------------------- | ------------------------------- |
-| 1   | InsightsHeroSection    | SectionTag, DarkPageHero, SectionIntro                                | SectionContainer, ButtonLink, ActionRow   | —                               |
-| 2   | LatestFromBoolSection  | SectionTag, IntroGridSection, ArrowLink, ImageOverlayCard             | CardLabel, CardTitle, MetaText            | —                               |
-| 3   | KnowledgeCenterSection | SectionTag, SectionIntro                                              | Section, SectionContainer                 | KnowledgeGrid `client:visible`  |
-| 4   | NewsUpdatesSection     | SectionTag, SectionIntro                                              | Section, SectionContainer                 | NewsGrid `client:visible`       |
-| 5   | PressReleasesSection   | ArrowLink, SectionTag, SectionIntro, ListRow                          | Section, SectionContainer, TextBlock, DashedCard | —                          |
-| 6   | EventsCalendarSection  | SectionTag, SectionIntro, CalendarEventLayout, EventDetailCard        | Section, SectionContainer                 | —                               |
-| 7   | InsightsCTASection     | SectionTag, CTASection                                                | ButtonLink                                | —                               |
-| 8   | ContactSection         | ContactInfo, SplitWithForm                                            | Section, SectionContainer                 | ContactForm `client:load`       |
-| 9   | NewsletterCTASection   | —                                                                     | Section, SectionContainer, TextBlock      | NewsletterForm `client:visible` |
+| #   | Section                | Compositions                                                   | Primitives                                       | React Islands                   |
+| --- | ---------------------- | -------------------------------------------------------------- | ------------------------------------------------ | ------------------------------- |
+| 1   | InsightsHeroSection    | SectionTag, DarkPageHero, SectionIntro                         | SectionContainer, ButtonLink, ActionRow          | —                               |
+| 2   | LatestFromBoolSection  | SectionTag, IntroGridSection, ArrowLink, ImageOverlayCard      | CardLabel, CardTitle, MetaText                   | —                               |
+| 3   | KnowledgeCenterSection | SectionTag, SectionIntro                                       | Section, SectionContainer                        | KnowledgeGrid `client:visible`  |
+| 4   | NewsUpdatesSection     | SectionTag, SectionIntro                                       | Section, SectionContainer                        | NewsGrid `client:visible`       |
+| 5   | PressReleasesSection   | ArrowLink, SectionTag, SectionIntro, ListRow                   | Section, SectionContainer, TextBlock, DashedCard | —                               |
+| 6   | EventsCalendarSection  | SectionTag, SectionIntro, CalendarEventLayout, EventDetailCard | Section, SectionContainer                        | —                               |
+| 7   | InsightsCTASection     | SectionTag, CTASection                                         | ButtonLink                                       | —                               |
+| 8   | ContactSection         | ContactInfo, SplitWithForm                                     | Section, SectionContainer                        | ContactForm `client:load`       |
+| 9   | NewsletterCTASection   | —                                                              | Section, SectionContainer, TextBlock             | NewsletterForm `client:visible` |
 
 ---
 
 ### Contacts (`contacts.astro`)
 
-| #   | Section              | Compositions               | Primitives                           | React Islands                   |
-| --- | -------------------- | -------------------------- | ------------------------------------ | ------------------------------- |
+| #   | Section              | Compositions                                   | Primitives                           | React Islands                   |
+| --- | -------------------- | ---------------------------------------------- | ------------------------------------ | ------------------------------- |
 | 1   | ContactsHeroSection  | ContactInfo, SplitWithForm, BoolLettersOverlay | Section, SectionContainer            | ContactForm `client:visible`    |
-| 2   | NewsletterCTASection | —                          | Section, SectionContainer, TextBlock | NewsletterForm `client:visible` |
+| 2   | NewsletterCTASection | —                                              | Section, SectionContainer, TextBlock | NewsletterForm `client:visible` |
+
+---
+
+### Events (`events.astro`)
+
+| #   | Section               | Compositions                                                   | Primitives                | React Islands                                    |
+| --- | --------------------- | -------------------------------------------------------------- | ------------------------- | ------------------------------------------------ |
+| 1   | EventsCalendarSection | SectionTag, SectionIntro, CalendarEventLayout, EventDetailCard | Section, SectionContainer | EventCalendar _(nested via CalendarEventLayout)_ |
+
+---
+
+### Careers (`careers.astro`)
+
+| #   | Section            | Compositions               | Primitives | React Islands |
+| --- | ------------------ | -------------------------- | ---------- | ------------- |
+| 1   | CareersHeroSection | DarkPageHero, SectionIntro | —          | —             |
+| 2   | CareersCtaSection  | CTASection                 | ButtonLink | —             |
+
+---
+
+### Legal Pages (`cookies.astro`, `privacy.astro`, `terms.astro`)
+
+| #   | Section          | Compositions               | Primitives                | React Islands |
+| --- | ---------------- | -------------------------- | ------------------------- | ------------- |
+| 1   | LegalPageSection | DarkPageHero, SectionIntro | Section, SectionContainer | —             |
 
 ---
 
@@ -120,7 +145,7 @@ Content-driven page — no named sections. Renders MDX content via Astro's `Cont
 
 ### 404 (`404.astro`)
 
-Inline markup only — no named sections.
+Inline markup only — no named sections. Uses `BoolLettersOverlay` composition directly.
 
 ---
 
@@ -128,13 +153,16 @@ Inline markup only — no named sections.
 
 Sections reused across multiple pages:
 
-| Section                     | Pages                                              |
-| --------------------------- | -------------------------------------------------- |
-| ContactSection              | Homepage, About, Services, People, Portfolio, Blog |
+| Section                     | Pages                                                 |
+| --------------------------- | ----------------------------------------------------- |
+| ContactSection              | Homepage, About, Services, People, Portfolio, Blog    |
 | NewsletterCTASection        | Homepage, Services, People, Contacts, Portfolio, Blog |
-| PowerAISection              | Homepage, About, Services                          |
-| TestimonialsCarouselSection | People, Portfolio                                  |
-| LetsBuildCTASection         | Services, Portfolio                                |
+| PowerAISection              | Homepage, About, Services                             |
+| TestimonialsCarouselSection | People, Portfolio                                     |
+| LetsBuildCTASection         | Services, Portfolio                                   |
+| CareersCtaSection           | People, Careers                                       |
+| EventsCalendarSection       | Blog, Events                                          |
+| LegalPageSection            | Cookies, Privacy, Terms                               |
 
 ---
 
@@ -163,7 +191,7 @@ Each composition and what it imports from the primitives and other compositions 
 | ExpertPortrait                          | —                                         | —                                   |
 | FeaturedStatsCard                       | CardLabel, CardTitle, ButtonLink          | —                                   |
 | FilterPills                             | —                                         | —                                   |
-| FilterableGrid _(React)_               | —                                         | —                                   |
+| FilterableGrid _(React)_                | —                                         | —                                   |
 | IconFeatureCard                         | —                                         | —                                   |
 | ImageOverlayCard                        | —                                         | —                                   |
 | ImageTextBanner                         | —                                         | —                                   |
@@ -196,15 +224,15 @@ Each composition and what it imports from the primitives and other compositions 
 
 Some sections define local helper components (not exported to the barrel):
 
-| Section              | Local Component         | Imports                                                          |
-| -------------------- | ----------------------- | ---------------------------------------------------------------- |
-| HeroSection          | HeroCarousel _(React)_  | —                                                                |
-| TechStackSection       | TechCard                  | ExpertPortrait, ButtonLink, CheckListItem, TextBlock, ActionRow  |
-| CaseStudyGridSection   | CaseStudyGrid _(React)_   | FilterableGrid                                                   |
-| KnowledgeCenterSection | KnowledgeGrid _(React)_   | FilterableGrid                                                   |
-| KnowledgeCenterSection | ArticleModal _(React)_    | —                                                                |
-| NewsUpdatesSection     | NewsGrid _(React)_        | FilterableGrid                                                   |
-| PortfolioHeroSection   | SectorTagGrid             | TagGroup, ActionRow, Tag                                         |
+| Section                | Local Component         | Imports                                                         |
+| ---------------------- | ----------------------- | --------------------------------------------------------------- |
+| HeroSection            | HeroCarousel _(React)_  | —                                                               |
+| TechStackSection       | TechCard                | ExpertPortrait, ButtonLink, CheckListItem, TextBlock, ActionRow |
+| CaseStudyGridSection   | CaseStudyGrid _(React)_ | FilterableGrid                                                  |
+| KnowledgeCenterSection | KnowledgeGrid _(React)_ | FilterableGrid                                                  |
+| KnowledgeCenterSection | ArticleModal _(React)_  | —                                                               |
+| NewsUpdatesSection     | NewsGrid _(React)_      | FilterableGrid                                                  |
+| PortfolioHeroSection   | SectorTagGrid           | TagGroup, ActionRow, Tag                                        |
 
 ---
 
@@ -212,19 +240,19 @@ Some sections define local helper components (not exported to the barrel):
 
 All interactive components and their hydration strategy:
 
-| Component                     | Type                          | Hydration                             | Used In                                    |
-| ----------------------------- | ----------------------------- | ------------------------------------- | ------------------------------------------ |
-| HeroCarousel                  | Local to HeroSection          | `client:load`                         | HeroSection                                |
-| ContactForm                   | Composition                   | `client:load`                         | ContactSection                             |
-| ContactForm                   | Composition                   | `client:visible`                      | ContactsHeroSection                        |
-| TestimonialsCarousel          | Composition                   | `client:visible`                      | TestimonialsSection                        |
-| PortfolioTestimonialsCarousel | Composition                   | `client:visible`                      | TestimonialsCarouselSection                |
-| NewsletterForm                | Composition                   | `client:visible`                      | NewsletterBarSection, NewsletterCTASection |
-| CaseStudyGrid                 | Local to CaseStudyGridSection | `client:visible`                      | CaseStudyGridSection                       |
+| Component                     | Type                            | Hydration                             | Used In                                    |
+| ----------------------------- | ------------------------------- | ------------------------------------- | ------------------------------------------ |
+| HeroCarousel                  | Local to HeroSection            | `client:load`                         | HeroSection                                |
+| ContactForm                   | Composition                     | `client:load`                         | ContactSection                             |
+| ContactForm                   | Composition                     | `client:visible`                      | ContactsHeroSection                        |
+| TestimonialsCarousel          | Composition                     | `client:visible`                      | TestimonialsSection                        |
+| PortfolioTestimonialsCarousel | Composition                     | `client:visible`                      | TestimonialsCarouselSection                |
+| NewsletterForm                | Composition                     | `client:visible`                      | NewsletterBarSection, NewsletterCTASection |
+| CaseStudyGrid                 | Local to CaseStudyGridSection   | `client:visible`                      | CaseStudyGridSection                       |
 | KnowledgeGrid                 | Local to KnowledgeCenterSection | `client:visible`                      | KnowledgeCenterSection                     |
-| NewsGrid                      | Local to NewsUpdatesSection   | `client:visible`                      | NewsUpdatesSection                         |
-| OfficeCarousel                | Composition                   | `client:visible`                      | FromPortugalSection                        |
-| EventCalendar                 | Composition                   | _(nested inside CalendarEventLayout)_ | EventsSection, EventsCalendarSection       |
+| NewsGrid                      | Local to NewsUpdatesSection     | `client:visible`                      | NewsUpdatesSection                         |
+| OfficeCarousel                | Composition                     | `client:visible`                      | FromPortugalSection                        |
+| EventCalendar                 | Composition                     | _(nested inside CalendarEventLayout)_ | EventsSection, EventsCalendarSection       |
 
 ---
 

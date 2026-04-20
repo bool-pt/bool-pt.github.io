@@ -57,17 +57,10 @@ export default function ArticleModal({ article, open, onClose, labels }: Props) 
 
             <span className={styles.category}>{article.category}</span>
             <h2 className={styles.title}>{article.title}</h2>
-            {article.subtitle && (
-              <DialogPrimitive.Description className="sr-only">
-                {article.subtitle}
-              </DialogPrimitive.Description>
-            )}
-            {!article.subtitle && (
-              <DialogPrimitive.Description className="sr-only">
-                {article.category} — {article.title}
-              </DialogPrimitive.Description>
-            )}
             {article.subtitle && <p className={styles.subtitle}>{article.subtitle}</p>}
+            <DialogPrimitive.Description className="sr-only">
+              {article.category} — {article.title}
+            </DialogPrimitive.Description>
 
             {article.frontImage && (
               <div className={styles.imageWrap}>
@@ -114,27 +107,27 @@ export default function ArticleModal({ article, open, onClose, labels }: Props) 
             {article.techStack && article.techStack.length > 0 && (
               <div className={styles.techRow}>
                 <div className={styles.techLabel}>{labels.techStack}</div>
-                <div className={styles.techPillsRow}>
-                  <div className={styles.techPills}>
-                    {article.techStack.map((tech) => (
-                      <span key={tech} className={styles.pill}>
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                  <a href={labels.ctaHref} className={styles.ctaButton}>
-                    {labels.talkToExpert}
-                  </a>
+                <div className={styles.techPills}>
+                  {article.techStack.map((tech) => (
+                    <span key={tech} className={styles.pill}>
+                      {tech}
+                    </span>
+                  ))}
                 </div>
               </div>
             )}
 
             <DialogPrimitive.Title className="sr-only">{article.title}</DialogPrimitive.Title>
 
-            <button type="button" className={styles.backLink} onClick={onClose}>
-              <Icon name="arrow-left" size={16} strokeWidth={2.5} />
-              {labels.backToArticles}
-            </button>
+            <div className={styles.footerRow}>
+              <button type="button" className={styles.backLink} onClick={onClose}>
+                <Icon name="arrow-left" size={16} strokeWidth={2.5} />
+                {labels.backToArticles}
+              </button>
+              <a href={labels.ctaHref} className={styles.ctaButton}>
+                {labels.talkToExpert}
+              </a>
+            </div>
           </div>
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
