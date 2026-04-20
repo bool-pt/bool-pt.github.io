@@ -64,7 +64,7 @@ function CaseFlipCard({
           />
           <div className={styles.frontOverlay} />
           <div className={styles.frontContent}>
-            <span className={styles.frontLabel}>{item.title.toUpperCase()}</span>
+            <span className={styles.frontLabel}>{(item.title || item.client).toUpperCase()}</span>
             <div className={styles.frontTitle}>{item.subtitle}</div>
           </div>
         </>
