@@ -2,6 +2,7 @@
 import blogImg1Fallback from '@bool/media/images/covers/insight-01.jpg';
 import blogImg2Fallback from '@bool/media/images/covers/insight-02.jpg';
 import blogImg3Fallback from '@bool/media/images/covers/insight-03.jpg';
+import { ROUTES } from '@bool/shared';
 import ArrowLink from '../../compositions/ArrowLink/ArrowLink.astro';
 import ImageOverlayCard from '../../compositions/ImageOverlayCard/ImageOverlayCard.astro';
 import IntroGridSection from '../../compositions/IntroGridSection/IntroGridSection.astro';
@@ -48,7 +49,10 @@ const { heading, description, posts = [], readMoreLabel = 'Read more' } = Astro.
           gradient="linear-gradient(to top, var(--black-75) 0%, var(--black-20) 50%, transparent 70%)"
           hoverEffect="lift"
         >
-          <CardImageBg slot="image" src={post.image ?? (fallbackImages[i % fallbackImages.length] as ImageMetadata).src} />
+          <CardImageBg
+            slot="image"
+            src={post.image ?? (fallbackImages[i % fallbackImages.length] as ImageMetadata).src}
+          />
           <AuthorMeta
             author={post.author}
             date={post.date}
@@ -58,7 +62,11 @@ const { heading, description, posts = [], readMoreLabel = 'Read more' } = Astro.
           <CardTitle colorScheme="dark" class="insight-card-title">
             {post.title}
           </CardTitle>
-          <ArrowLink href={`/blog/${post.slug}`} label={readMoreLabel} colorScheme="dark" />
+          <ArrowLink
+            href={`${ROUTES.blog}/${post.slug}`}
+            label={readMoreLabel}
+            colorScheme="dark"
+          />
         </ImageOverlayCard>
       ))
     }

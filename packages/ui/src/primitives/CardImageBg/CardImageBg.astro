@@ -15,7 +15,7 @@ const {
 
 const style = [
   `background-color: ${fallbackColor}`,
-  src ? `background-image: url(${src})` : null,
+  src ? `background-image: url("${src}")` : null,
   fallbackGradient && !src ? `background-image: ${fallbackGradient}` : null,
 ]
   .filter(Boolean)

@@ -64,12 +64,12 @@ export default function EventCalendar({
   );
 
   const eventDates = useMemo(() => {
-    const dates = new Set<string>();
+    const map = new Map<string, string | undefined>();
     for (const e of events) {
       const d = new Date(e.date);
-      dates.add(`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`);
+      map.set(`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`, e.tagColor);
     }
-    return dates;
+    return map;
   }, [events]);
 
   const selectedEvent = useMemo(() => {
@@ -115,6 +115,7 @@ export default function EventCalendar({
     currentYear === today.getFullYear();
 
   const isEventDay = (day: number) => eventDates.has(`${currentYear}-${currentMonth}-${day}`);
+  const getEventColor = (day: number) => eventDates.get(`${currentYear}-${currentMonth}-${day}`);
 
   const cells: (number | null)[] = [];
   for (let i = 0; i < firstDay; i++) cells.push(null);
@@ -153,26 +154,30 @@ export default function EventCalendar({
       </div>
 
       <div className={styles.grid}>
-        {cells.map((day, i) => (
-          <button
-            key={i}
-            type="button"
-            className={[
-              styles.cell,
-              day === null ? styles.cellEmpty : '',
-              day !== null && isToday(day) ? styles.cellToday : '',
-              day !== null && isEventDay(day) ? styles.cellEvent : '',
-              day !== null && day === selectedDate ? styles.cellSelected : '',
-            ]
-              .filter(Boolean)
-              .join(' ')}
-            onClick={() => day !== null && setSelectedDate(day)}
-            disabled={day === null}
-            aria-label={day !== null ? `${MONTHS[currentMonth]} ${day}` : undefined}
-          >
-            {day}
-          </button>
-        ))}
+        {cells.map((day, i) => {
+          const eventColor = day !== null ? getEventColor(day) : undefined;
+          return (
+            <button
+              key={i}
+              type="button"
+              className={[
+                styles.cell,
+                day === null ? styles.cellEmpty : '',
+                day !== null && isToday(day) ? styles.cellToday : '',
+                day !== null && isEventDay(day) ? styles.cellEvent : '',
+                day !== null && day === selectedDate ? styles.cellSelected : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+              style={eventColor ? { backgroundColor: eventColor } : undefined}
+              onClick={() => day !== null && setSelectedDate(day)}
+              disabled={day === null}
+              aria-label={day !== null ? `${MONTHS[currentMonth]} ${day}` : undefined}
+            >
+              {day}
+            </button>
+          );
+        })}
       </div>
 
       {selectedEvent && (

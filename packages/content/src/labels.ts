@@ -7,6 +7,7 @@ export function getHeaderLabels(locale: Locale = 'en') {
     logoAria: t('header.logoAria', locale),
     ctaLabel: t('header.cta', locale),
     linkLabels: {
+      'nav.home': t('nav.home', locale),
       'nav.about': t('nav.about', locale),
       'nav.services': t('nav.services', locale),
       'nav.people': t('nav.people', locale),
@@ -19,6 +20,7 @@ export function getHeaderLabels(locale: Locale = 'en') {
       title: t('mobileNav.title', locale),
       navAria: t('nav.mobile.aria', locale),
       linkLabels: {
+        'nav.home': t('nav.home', locale),
         'nav.about': t('nav.about', locale),
         'nav.services': t('nav.services', locale),
         'nav.people': t('nav.people', locale),

@@ -2,6 +2,7 @@
 import { t } from '@bool/i18n';
 import { ROUTES } from '@bool/shared';
 import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
+import BoolLettersOverlay from '@bool/ui/compositions/BoolLettersOverlay.astro';
 import { getHeaderLabels, getFooterLabels } from '../labels';
 ---
 
@@ -12,26 +13,95 @@ import { getHeaderLabels, getFooterLabels } from '../labels';
   headerLabels={getHeaderLabels()}
   footerLabels={getFooterLabels()}
 >
-  <section
-    style="display: grid; place-items: center; min-block-size: 60vh; text-align: center; padding: 2rem;"
-  >
-    <div>
-      <h1
-        style="font-size: var(--font-size-mega); font-weight: 800; line-height: 1; margin-block-end: 1rem;"
-      >
-        {t('notFound.heading')}
-      </h1>
-      <p
-        style="font-size: var(--font-size-body-lg); color: var(--color-muted-foreground); margin-block-end: 2rem;"
-      >
-        {t('notFound.message')}
-      </p>
-      <a
-        href={ROUTES.home}
-        style="display: inline-flex; align-items: center; padding: 0.625rem 1.5rem; background-color: var(--color-primary); color: var(--color-primary-foreground); border-radius: 0.375rem; font-size: var(--font-size-body-sm); font-weight: 500; text-decoration: none;"
-      >
-        {t('notFound.cta')}
-      </a>
+  <section class="not-found" aria-labelledby="not-found-heading">
+    <div class="not-found-letters">
+      <BoolLettersOverlay opacity={0.06} variant="compact" />
+    </div>
+    <div class="not-found-content">
+      <p class="not-found-code">{t('notFound.heading')}</p>
+      <h1 id="not-found-heading" class="not-found-subtitle">{t('notFound.subtitle')}</h1>
+      <p class="not-found-message">{t('notFound.message')}</p>
+      <a href={ROUTES.home} class="not-found-cta">{t('notFound.cta')}</a>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .not-found {
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-block-size: 70vh;
+    text-align: center;
+    padding: 2rem;
+    overflow: hidden;
+    background-color: var(--color-surface-dark);
+  }
+
+  .not-found-letters {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+    block-size: 0;
+    pointer-events: none;
+    color: var(--color-on-dark);
+    container-type: inline-size;
+  }
+
+  .not-found-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .not-found-code {
+    font-family: var(--font-display);
+    font-size: clamp(6rem, 15vw, 10rem);
+    font-weight: 800;
+    line-height: 1;
+    margin: 0;
+    background: linear-gradient(180deg, var(--color-on-dark) 0%, var(--color-on-dark-muted) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .not-found-subtitle {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 4vw, 2.25rem);
+    font-weight: 700;
+    color: var(--color-on-dark);
+    margin: 0.5rem 0 0;
+    line-height: 1.2;
+  }
+
+  .not-found-message {
+    font-size: var(--font-size-body-lg);
+    color: var(--color-on-dark-muted);
+    margin: 1rem 0 0;
+    max-inline-size: 28rem;
+    line-height: 1.5;
+  }
+
+  .not-found-cta {
+    display: inline-flex;
+    align-items: center;
+    margin-block-start: 2.5rem;
+    padding: 0.75rem 2rem;
+    background-color: var(--color-primary);
+    color: var(--color-on-dark);
+    font-family: var(--font-display);
+    font-size: var(--font-size-body);
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--radius-full);
+    transition: opacity 150ms;
+  }
+
+  .not-found-cta:hover {
+    opacity: 0.9;
+  }
+</style>
