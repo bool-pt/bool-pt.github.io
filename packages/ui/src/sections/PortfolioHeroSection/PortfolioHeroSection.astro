@@ -18,7 +18,7 @@ interface Props {
   sectors: string[];
   ctaStories: string;
   ctaServices: string;
-  statsHighlight: { value: string; label: string };
+  statsHighlight?: { value: string; label: string };
   stats: Array<{ value: string; label: string }>;
   backgroundImage?: ImageMetadata;
 }
@@ -42,7 +42,13 @@ const {
   aria-labelledby="portfolio-hero-heading"
 >
   <div class="portfolio-hero-bg">
-    <Image src={backgroundImage} alt="" aria-hidden="true" class="portfolio-hero-bg-img" loading="eager" />
+    <Image
+      src={backgroundImage}
+      alt=""
+      aria-hidden="true"
+      class="portfolio-hero-bg-img"
+      loading="eager"
+    />
   </div>
 
   <div class="portfolio-hero-letters-scaler">
@@ -68,9 +74,7 @@ const {
           >
             <SectionTag slot="tag" tagColor="primary">{tag}</SectionTag>
             <Fragment slot="heading"
-              ><span
-                set:html={heading.replace('\n', '<br /><strong>') + '</strong>'}
-              /></Fragment
+              ><span set:html={heading.replace('\n', '<br /><strong>') + '</strong>'} /></Fragment
             >
             <Fragment slot="description">{body}</Fragment>
           </SectionIntro>
@@ -78,18 +82,11 @@ const {
             <SectorTagGrid sectors={sectors} />
           </div>
           <div class="portfolio-hero-actions">
-            <ButtonLink href="#case-studies" variant="primary"
-              >{ctaStories}</ButtonLink
-            >
-            <ButtonLink href={ROUTES.services} variant="outline"
-              >{ctaServices}</ButtonLink
-            >
+            <ButtonLink href="#case-studies" variant="primary">{ctaStories}</ButtonLink>
+            <ButtonLink href={ROUTES.services} variant="outline">{ctaServices}</ButtonLink>
           </div>
         </div>
-        <StatsCardGrid
-          highlight={statsHighlight}
-          stats={stats}
-        />
+        <StatsCardGrid highlight={statsHighlight} stats={stats} />
       </div>
     </SectionContainer>
   </div>
