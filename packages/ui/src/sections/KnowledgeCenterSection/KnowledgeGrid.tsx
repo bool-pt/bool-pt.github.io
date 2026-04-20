@@ -1,18 +1,18 @@
 import { useState } from 'react';
-import ArticleModal from '../../compositions/ArticleModal/ArticleModal';
 import FilterableGrid from '../../compositions/FilterableGrid/FilterableGrid';
 import FlipCard, { flipCardStyles as styles } from '../../compositions/FlipCard/FlipCard';
+import InsightArticleModal from '../../compositions/InsightArticleModal/InsightArticleModal';
+import type {
+  InsightArticleData,
+  InsightArticleLabels,
+} from '../../compositions/InsightArticleModal/InsightArticleModal';
 import Icon from '../../primitives/Icon/Icon';
-
-interface Metric {
-  value: string;
-  label: string;
-}
 
 interface ArticleItem {
   category: string;
   title: string;
   author: string;
+  authorAvatar?: string;
   readTime: string;
   views?: string;
   href: string;
@@ -21,7 +21,8 @@ interface ArticleItem {
   subtitle?: string;
   challenge?: string;
   solution?: string;
-  metrics?: Metric[];
+  publishDate?: string;
+  metrics?: Array<{ value: string; label: string }>;
   techStack?: string[];
 }
 
@@ -35,12 +36,13 @@ interface Props {
     views: string;
     emptyMessage: string;
     filterAriaLabel: string;
-    challenge: string;
-    solution: string;
-    techStack: string;
-    talkToExpert: string;
+    aboutThisArticle: string;
+    published: string;
+    relatedTopics: string;
     backToArticles: string;
-    ctaHref: string;
+    copyLink: string;
+    copied: string;
+    shareChannels: Array<{ key: string; visible: boolean }>;
   };
 }
 
@@ -113,8 +115,40 @@ function ArticleFlipCard({
   );
 }
 
+function toModalArticle(
+  item: ArticleItem,
+  shareChannels: Array<{ key: string; visible: boolean }>
+): InsightArticleData {
+  return {
+    category: item.category,
+    title: item.title,
+    description: item.subtitle ?? '',
+    frontImage: item.frontImage,
+    highlightedContent: item.challenge ?? '',
+    content: item.solution ?? '',
+    author: item.author,
+    authorAvatar: item.authorAvatar,
+    readTime: item.readTime,
+    publishDate: item.publishDate ?? '',
+    relatedTopics: item.techStack ?? [],
+    shareChannels,
+    url: item.href,
+  };
+}
+
 export default function KnowledgeGrid({ articles, filters, labels }: Props) {
   const [selectedArticle, setSelectedArticle] = useState<ArticleItem | null>(null);
+
+  const modalLabels: InsightArticleLabels = {
+    close: labels.close,
+    aboutThisArticle: labels.aboutThisArticle,
+    readTime: labels.readTime,
+    published: labels.published,
+    relatedTopics: labels.relatedTopics,
+    backToArticles: labels.backToArticles,
+    copyLink: labels.copyLink,
+    copied: labels.copied,
+  };
 
   return (
     <>
@@ -140,11 +174,11 @@ export default function KnowledgeGrid({ articles, filters, labels }: Props) {
         emptyMessage={labels.emptyMessage}
         ariaLabel={labels.filterAriaLabel}
       />
-      <ArticleModal
-        article={selectedArticle}
+      <InsightArticleModal
+        article={selectedArticle ? toModalArticle(selectedArticle, labels.shareChannels) : null}
         open={!!selectedArticle}
         onClose={() => setSelectedArticle(null)}
-        labels={labels}
+        labels={modalLabels}
       />
     </>
   );

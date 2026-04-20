@@ -11,27 +11,39 @@ import ServicesHeroSection from '@bool/ui/sections/ServicesHeroSection.astro';
 import SolutionsROISection from '@bool/ui/sections/SolutionsROISection.astro';
 import StatsBannerSection from '@bool/ui/sections/StatsBannerSection.astro';
 import TechStackSection from '@bool/ui/sections/TechStackSection.astro';
-import { getHeaderLabels, getFooterLabels, getContactSectionProps, getNewsletterLabels } from '../labels';
+import {
+  getHeaderLabels,
+  getFooterLabels,
+  getContactSectionProps,
+  getNewsletterLabels,
+} from '../labels';
 
 const solutions = tCollection('solutionsRoi', ['name', 'result']);
 
 const platformKeys = ['outsystems', 'powerplatform', 'mendix', 'opensource'] as const;
-const platforms = tCollection('techStack.platforms', ['name', 'expert', 'role', 'body'])
-  .map((p, i) => ({
+const platforms = tCollection('techStack.platforms', ['name', 'expert', 'role', 'body']).map(
+  (p, i) => ({
     key: platformKeys[i] ?? '',
     ...p,
     features: tList(`techStack.platforms.${i + 1}.features`),
-  }));
+  })
+);
 
-const iconNames = ['shield', 'chart', 'trophy', 'rocket', 'document'] as const;
-const howWeWorkCards = tCollection('howWeWork.cards', ['subtitle', 'title', 'description', 'bullet1', 'bullet2', 'bullet3'])
-  .map((card, i) => ({
-    subtitle: card.subtitle,
-    title: card.title,
-    description: card.description,
-    bullets: [card.bullet1, card.bullet2, card.bullet3],
-    iconName: iconNames[i] ?? 'shield' as const,
-  }));
+const iconNames = ['shield', 'chart', 'rocket', 'trophy'] as const;
+const howWeWorkCards = tCollection('howWeWork.cards', [
+  'subtitle',
+  'title',
+  'description',
+  'bullet1',
+  'bullet2',
+  'bullet3',
+]).map((card, i) => ({
+  subtitle: card.subtitle,
+  title: card.title,
+  description: card.description,
+  bullets: [card.bullet1, card.bullet2, card.bullet3],
+  iconName: iconNames[i] ?? ('shield' as const),
+}));
 ---
 
 <BaseLayout
@@ -85,10 +97,7 @@ const howWeWorkCards = tCollection('howWeWork.cards', ['subtitle', 'title', 'des
     contactExpert={t('techStack.contactExpert')}
     platforms={platforms}
   />
-  <HowWeWorkSection
-    heading={t('howWeWork.heading')}
-    cards={howWeWorkCards}
-  />
+  <HowWeWorkSection heading={t('howWeWork.heading')} cards={howWeWorkCards} />
   <LetsBuildCTASection
     heading={t('ctaBanner.heading')}
     body={t('ctaBanner.body')}

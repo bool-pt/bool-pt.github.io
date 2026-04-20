@@ -1,5 +1,4 @@
 ---
-import { ROUTES } from '@bool/shared';
 import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
 import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
 import Section from '../../primitives/Section/Section.astro';
@@ -10,11 +9,13 @@ interface ArticleItem {
   category: string;
   title: string;
   author: string;
+  authorAvatar?: string;
   readTime: string;
   views: string;
   subtitle: string;
   challenge: string;
   solution: string;
+  publishDate: string;
   href: string;
   tags: string[];
   metrics: Array<{ value: string; label: string }>;
@@ -35,11 +36,13 @@ interface Props {
     views: string;
     emptyMessage: string;
     filterAriaLabel: string;
-    challenge: string;
-    solution: string;
-    techStack: string;
-    talkToExpert: string;
+    aboutThisArticle: string;
+    published: string;
+    relatedTopics: string;
     backToArticles: string;
+    copyLink: string;
+    copied: string;
+    shareChannels: Array<{ key: string; visible: boolean }>;
   };
 }
 
@@ -69,12 +72,7 @@ const { tag, heading, body, filters, articles, labels } = Astro.props;
       <Fragment slot="description">{body}</Fragment>
     </SectionIntro>
 
-    <KnowledgeGrid
-      client:visible
-      articles={articles}
-      filters={filters}
-      labels={{ ...labels, ctaHref: ROUTES.contacts }}
-    />
+    <KnowledgeGrid client:visible articles={articles} filters={filters} labels={labels} />
   </SectionContainer>
 </Section>
 

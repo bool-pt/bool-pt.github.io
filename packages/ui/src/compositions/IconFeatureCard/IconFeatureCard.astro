@@ -44,6 +44,17 @@ const hasFooter = Astro.slots.has('footer');
     padding: 2rem;
     border-radius: 8px;
     box-shadow: var(--shadow-card);
+    position: relative;
+  }
+
+  .icon-card:has(.icon-card-footer a) {
+    cursor: pointer;
+  }
+
+  .icon-card-footer :global(a::after) {
+    content: '';
+    position: absolute;
+    inset: 0;
   }
 
   @media (min-width: 640px) {

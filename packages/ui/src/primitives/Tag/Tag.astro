@@ -2,13 +2,14 @@
 interface Props {
   variant?: 'outline' | 'filled' | 'ghost';
   colorScheme?: 'primary' | 'on-dark' | 'muted';
+  style?: string;
   class?: string;
 }
 
-const { variant = 'outline', colorScheme = 'muted', class: className } = Astro.props;
+const { variant = 'outline', colorScheme = 'muted', style, class: className } = Astro.props;
 ---
 
-<span class:list={['tag', `tag--${variant}`, `tag--${colorScheme}`, className]}>
+<span class:list={['tag', `tag--${variant}`, `tag--${colorScheme}`, className]} style={style}>
   <slot />
 </span>
 

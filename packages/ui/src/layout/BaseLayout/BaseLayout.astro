@@ -65,7 +65,17 @@ interface Props {
   footerLabels: FooterLabels;
 }
 
-const { title, description, canonicalUrl, ogImage, noindex, locale = 'en', jsonLd, headerLabels, footerLabels } = Astro.props;
+const {
+  title,
+  description,
+  canonicalUrl,
+  ogImage,
+  noindex,
+  locale = 'en',
+  jsonLd,
+  headerLabels,
+  footerLabels,
+} = Astro.props;
 
 const globalJsonLd = [organizationJsonLd(), websiteJsonLd()];
 const pageJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
@@ -96,9 +106,7 @@ const allJsonLd = [...globalJsonLd, ...pageJsonLd];
       ogImage={ogImage}
       noindex={noindex}
     />
-    {allJsonLd.map((ld) => (
-      <script type="application/ld+json" set:html={JSON.stringify(ld)} />
-    ))}
+    {allJsonLd.map((ld) => <script type="application/ld+json" set:html={JSON.stringify(ld)} />)}
     <GoogleAnalytics />
     <script>
       import { initSentry } from '@bool/analytics';
@@ -133,6 +141,7 @@ const allJsonLd = [...globalJsonLd, ...pageJsonLd];
     </script>
   </head>
   <body>
+    <a href="#main-content" class="skip-nav">Skip to content</a>
     <Header
       navAria={headerLabels.navAria}
       logoAria={headerLabels.logoAria}
@@ -141,7 +150,7 @@ const allJsonLd = [...globalJsonLd, ...pageJsonLd];
       mobileNavLabels={headerLabels.mobileNavLabels}
       languageSelectLabels={headerLabels.languageSelectLabels}
     />
-    <main>
+    <main id="main-content">
       <slot />
     </main>
     <Footer labels={footerLabels} />

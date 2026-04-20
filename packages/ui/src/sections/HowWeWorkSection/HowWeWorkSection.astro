@@ -20,30 +20,36 @@ interface Props {
 const { heading, cards } = Astro.props;
 ---
 
-<Section background="var(--color-background)" aria-labelledby="how-we-work-heading" paddingBlock="5rem 0">
+<Section
+  background="var(--color-background)"
+  aria-labelledby="how-we-work-heading"
+  paddingBlock="5rem 0"
+>
   <SectionContainer>
     <div class="hwwGrid">
       <h2 id="how-we-work-heading" class="hwwHeading" set:html={heading} />
 
-      {cards.map((card, i) => (
-        <article class={`hwwCard hwwCard--${i + 1}`}>
-          <div class="hwwCardHeader">
-            <div class="hwwCardIconBox">
-              <GradientIcon name={card.iconName} size={28} />
+      {
+        cards.map((card, i) => (
+          <article class={`hwwCard hwwCard--${i + 1}`}>
+            <div class="hwwCardHeader">
+              <div class="hwwCardIconBox">
+                <GradientIcon name={card.iconName} size={28} />
+              </div>
+              <div class="hwwCardTitles">
+                <h3 class="hwwCardTitle">{card.subtitle}</h3>
+                <span class="hwwCardSubtitle">{card.title}</span>
+              </div>
             </div>
-            <div class="hwwCardTitles">
-              <h3 class="hwwCardTitle">{card.subtitle}</h3>
-              <span class="hwwCardSubtitle">{card.title}</span>
-            </div>
-          </div>
-          <p class="hwwCardDesc">{card.description}</p>
-          <ul class="hwwCardBullets">
-            {card.bullets.map((bullet) => (
-              <li>{bullet}</li>
-            ))}
-          </ul>
-        </article>
-      ))}
+            <p class="hwwCardDesc">{card.description}</p>
+            <ul class="hwwCardBullets">
+              {card.bullets.map((bullet) => (
+                <li>{bullet}</li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
     </div>
   </SectionContainer>
 </Section>
@@ -57,10 +63,14 @@ const { heading, cards } = Astro.props;
 
   @media (min-width: 768px) {
     .hwwGrid {
-      grid-template-columns: repeat(3, 384px);
+      grid-template-columns: 1fr repeat(2, 384px);
+      grid-template-rows: repeat(2, 384px);
       justify-content: center;
-      block-size: 960px;
-      align-content: center;
+      align-items: center;
+    }
+
+    .hwwHeading {
+      grid-row: 1 / -1;
     }
   }
 

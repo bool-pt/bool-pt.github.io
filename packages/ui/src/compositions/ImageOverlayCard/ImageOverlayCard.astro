@@ -51,6 +51,19 @@ const wrapperStyle =
     min-block-size: 100%;
   }
 
+  .overlay-card-content::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    block-size: 55%;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    mask-image: linear-gradient(to top, black 40%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to top, black 40%, transparent 100%);
+    z-index: -1;
+  }
+
   .overlay-card--lift {
     transition:
       transform 200ms,

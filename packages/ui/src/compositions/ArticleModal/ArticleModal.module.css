@@ -14,7 +14,6 @@
   z-index: 9999;
   inline-size: 1216px;
   max-inline-size: 95vw;
-  block-size: 971px;
   max-block-size: 90vh;
   padding: 0;
   border: none;
@@ -39,7 +38,7 @@
   border-block-start: 4px solid var(--color-primary);
   padding: 1.25rem;
   overflow-y: auto;
-  block-size: 100%;
+  max-block-size: 90vh;
 }
 
 @media (min-width: 640px) {
@@ -199,13 +198,6 @@
   color: var(--color-primary);
 }
 
-.techPillsRow {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1rem;
-}
-
 .techPills {
   display: flex;
   flex-wrap: wrap;
@@ -247,6 +239,14 @@
 
 .ctaButton:hover {
   opacity: 0.9;
+}
+
+.footerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .backLink {

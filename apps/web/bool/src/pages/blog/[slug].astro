@@ -2,7 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import { getCollection, render } from 'astro:content';
 import { blogPostingJsonLd } from '@bool/seo';
-import { SITE_URL } from '@bool/shared';
+import { SITE_URL, BASE_PATH } from '@bool/shared';
 import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
 import { getHeaderLabels, getFooterLabels } from '../../labels';
 
@@ -25,7 +25,7 @@ const jsonLd = blogPostingJsonLd({
   datePublished: post.data.date.toISOString(),
   author: post.data.author,
   image: post.data.image,
-  url: `${SITE_URL}/blog/${post.id}`,
+  url: `${SITE_URL}${BASE_PATH}/blog/${post.id}`,
 });
 ---
 

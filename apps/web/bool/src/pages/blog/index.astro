@@ -11,37 +11,63 @@ import LatestFromBoolSection from '@bool/ui/sections/LatestFromBoolSection.astro
 import NewsletterCTASection from '@bool/ui/sections/NewsletterCTASection.astro';
 import NewsUpdatesSection from '@bool/ui/sections/NewsUpdatesSection.astro';
 import PressReleasesSection from '@bool/ui/sections/PressReleasesSection.astro';
-import { getHeaderLabels, getFooterLabels, getContactSectionProps, getNewsletterLabels, getCalendarLabels } from '../../labels';
+import {
+  getHeaderLabels,
+  getFooterLabels,
+  getContactSectionProps,
+  getNewsletterLabels,
+  getCalendarLabels,
+} from '../../labels';
 
 const events = await getEvents();
 const eventItems = events.slice(0, 3).map(transformEvent);
 
-const latestFeatured = tCollection('latestPosts.item', ['category', 'title', 'author', 'readTime', 'date', 'location', 'cta', 'image'])
-  .map((item) => ({
-    category: item.category,
-    title: item.title,
-    meta: [item.author, item.readTime, item.date, item.location]
-      .filter((v) => v && !v.startsWith('latestPosts.'))
-      .join(' · '),
-    cta: item.cta,
-    href: '/blog',
-    image: resolveImage(item.image).src,
-  }));
+const latestFeatured = tCollection('latestPosts.item', [
+  'category',
+  'title',
+  'author',
+  'readTime',
+  'date',
+  'location',
+  'cta',
+  'image',
+]).map((item) => ({
+  category: item.category,
+  title: item.title,
+  meta: [item.author, item.readTime, item.date, item.location]
+    .filter((v) => v && !v.startsWith('latestPosts.'))
+    .join(' · '),
+  cta: item.cta,
+  href: '/blog',
+  image: resolveImage(item.image).src,
+}));
 
 const knowledgeFilters = tList('knowledgeCenter.filters');
 
 const knowledgeArticles = tCollection('knowledgeCenter.article', [
-  'category', 'title', 'author', 'readTime', 'views', 'subtitle',
-  'challenge', 'solution', 'techStack', 'image',
+  'category',
+  'title',
+  'author',
+  'readTime',
+  'views',
+  'subtitle',
+  'challenge',
+  'solution',
+  'techStack',
+  'image',
+  'publishDate',
+  'authorAvatar',
 ]).map((a, i) => ({
   category: a.category,
   title: a.title,
   author: a.author,
+  authorAvatar: a.authorAvatar ? resolveImage(a.authorAvatar).src : undefined,
   readTime: a.readTime,
   views: a.views,
   subtitle: a.subtitle,
   challenge: a.challenge,
   solution: a.solution,
+  publishDate: a.publishDate,
   href: '/blog',
   tags: t(`knowledgeCenter.tags.${i + 1}`).split(','),
   metrics: tCollection(`knowledgeCenter.article.${i + 1}.metrics`, ['value', 'label']),
@@ -51,22 +77,34 @@ const knowledgeArticles = tCollection('knowledgeCenter.article', [
 
 const newsFilters = tList('newsUpdates.filters');
 
-const newsItems = tCollection('newsUpdates.item', ['category', 'date', 'title', 'summary', 'tags', 'image'])
-  .map((item) => ({
-    category: item.category,
-    date: item.date,
-    title: item.title,
-    summary: item.summary,
-    href: '/blog',
-    tags: item.tags.split(','),
-    image: resolveImage(item.image).src,
-  }));
+const newsItems = tCollection('newsUpdates.item', [
+  'category',
+  'date',
+  'title',
+  'summary',
+  'tags',
+  'image',
+]).map((item) => ({
+  category: item.category,
+  date: item.date,
+  title: item.title,
+  summary: item.summary,
+  href: '/blog',
+  tags: item.tags.split(','),
+  image: resolveImage(item.image).src,
+}));
 
-const pressReleases = tCollection('pressReleases.item', ['date', 'title', 'description'])
-  .map((p) => ({ ...p, href: '/blog' }));
+const pressReleases = tCollection('pressReleases.item', ['date', 'title', 'description']).map(
+  (p) => ({ ...p, href: '/blog' })
+);
 
-const eventCards = tCollection('eventsCalendar.item', ['category', 'title', 'description', 'dateInfo', 'cta'])
-  .map((e) => ({ ...e, href: '/blog' }));
+const eventCards = tCollection('eventsCalendar.item', [
+  'category',
+  'title',
+  'description',
+  'dateInfo',
+  'cta',
+]).map((e) => ({ ...e, href: '/blog' }));
 ---
 
 <BaseLayout
@@ -102,11 +140,18 @@ const eventCards = tCollection('eventsCalendar.item', ['category', 'title', 'des
       views: t('knowledgeCenter.viewsLabel'),
       emptyMessage: t('knowledgeCenter.emptyState'),
       filterAriaLabel: t('knowledgeCenter.filter.aria'),
-      challenge: t('knowledgeCenter.modal.challenge'),
-      solution: t('knowledgeCenter.modal.solution'),
-      techStack: t('knowledgeCenter.modal.techStack'),
-      talkToExpert: t('knowledgeCenter.modal.talkToExpert'),
+      aboutThisArticle: t('knowledgeCenter.modal.aboutThisArticle'),
+      published: t('knowledgeCenter.modal.published'),
+      relatedTopics: t('knowledgeCenter.modal.relatedTopics'),
       backToArticles: t('knowledgeCenter.modal.backToArticles'),
+      copyLink: t('knowledgeCenter.modal.copyLink'),
+      copied: t('knowledgeCenter.modal.copied'),
+      shareChannels: [
+        { key: 'email', visible: t('knowledgeCenter.share.email.visible') === 'true' },
+        { key: 'linkedin', visible: t('knowledgeCenter.share.linkedin.visible') === 'true' },
+        { key: 'x', visible: t('knowledgeCenter.share.x.visible') === 'true' },
+        { key: 'copyLink', visible: t('knowledgeCenter.share.copyLink.visible') === 'true' },
+      ],
     }}
   />
   <NewsUpdatesSection

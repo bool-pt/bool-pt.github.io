@@ -77,6 +77,7 @@ const { heading, body, logoSuffix, technologies, learnMoreLabel = 'Learn more' }
     --tech-card-shadow: var(--shadow-card);
     --tech-card-shadow-hover: var(--shadow-overlay);
 
+    position: relative;
     background-color: var(--tech-card-bg);
     border-radius: var(--tech-card-radius);
     padding: var(--tech-card-padding);
@@ -89,6 +90,13 @@ const { heading, body, logoSuffix, technologies, learnMoreLabel = 'Learn more' }
     aspect-ratio: 1;
     transition: box-shadow 200ms;
     box-shadow: var(--tech-card-shadow);
+    cursor: pointer;
+  }
+
+  .tech-card :global(.arrow-link::after) {
+    content: '';
+    position: absolute;
+    inset: 0;
   }
 
   .tech-card:hover {
