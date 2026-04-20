@@ -1,0 +1,51 @@
+name: Sync from Google Drive
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: sync-drive
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    name: Sync Drive → media + locales
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Sync from Google Drive
+        run: pnpm --filter @bool/media sync:drive
+        env:
+          GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+          GOOGLE_DRIVE_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git add -N packages/media/ packages/i18n/src/locales/ packages/content/data/blog/
+          git diff --quiet && echo "changed=false" >> "$GITHUB_OUTPUT" || echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Commit and push
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add packages/media/images/ packages/media/.drive-manifest.json
+          git add packages/i18n/src/locales/
+          git add packages/content/data/blog/
+          git diff --cached --quiet && exit 0
+          git commit -m "chore: sync media and locales from Google Drive"
+          git push

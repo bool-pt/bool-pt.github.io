@@ -38,7 +38,14 @@ const { cards, images = [], learnMoreLabel = 'Learn more' } = Astro.props;
           <div class="card-body">
             <h3 class="card-title">{card.title}</h3>
             <p class="card-desc">{card.description}</p>
-            {card.href && <ArrowLink href={card.href} label={learnMoreLabel} colorScheme="light" />}
+            {card.href && (
+              <ArrowLink
+                href={card.href}
+                label={learnMoreLabel}
+                colorScheme="light"
+                class="card-link"
+              />
+            )}
           </div>
         </div>
       </article>
@@ -106,10 +113,10 @@ const { cards, images = [], learnMoreLabel = 'Learn more' } = Astro.props;
     .card:nth-child(1)::before {
       content: '';
       position: absolute;
-      top: calc(-1 * var(--stagger) / 2);
-      right: calc(-1 * var(--col-gap));
-      width: min(36rem, calc(100% + var(--col-gap)));
-      height: calc(var(--stagger) / 2);
+      inset-block-start: calc(-1 * var(--stagger) / 2);
+      inset-inline-end: calc(-1 * var(--col-gap));
+      inline-size: min(36rem, calc(100% + var(--col-gap)));
+      block-size: calc(var(--stagger) / 2);
       background-image: var(--h-dash), var(--v-dash);
       background-size:
         100% var(--line-width),
@@ -125,10 +132,10 @@ const { cards, images = [], learnMoreLabel = 'Learn more' } = Astro.props;
     .card:nth-child(1)::after {
       content: '';
       position: absolute;
-      bottom: calc(-1 * var(--row-gap));
-      left: 2rem;
-      width: var(--line-width);
-      height: var(--row-gap);
+      inset-block-end: calc(-1 * var(--row-gap));
+      inset-inline-start: 2rem;
+      inline-size: var(--line-width);
+      block-size: var(--row-gap);
       background-image: var(--v-dash);
       background-size: var(--line-width) 100%;
       background-repeat: no-repeat;
@@ -139,10 +146,10 @@ const { cards, images = [], learnMoreLabel = 'Learn more' } = Astro.props;
     .card:nth-child(3)::after {
       content: '';
       position: absolute;
-      top: 60%;
-      right: calc(-1 * var(--col-gap));
-      width: var(--col-gap);
-      height: var(--line-width);
+      inset-block-start: 60%;
+      inset-inline-end: calc(-1 * var(--col-gap));
+      inline-size: var(--col-gap);
+      block-size: var(--line-width);
       background-image: var(--h-dash);
       background-size: 100% var(--line-width);
       background-repeat: no-repeat;
@@ -153,10 +160,10 @@ const { cards, images = [], learnMoreLabel = 'Learn more' } = Astro.props;
     .card:nth-child(3)::before {
       content: '';
       position: absolute;
-      top: 60%;
-      left: calc(-1 * var(--edge-reach));
-      width: var(--edge-reach);
-      height: var(--line-width);
+      inset-block-start: 60%;
+      inset-inline-start: calc(-1 * var(--edge-reach));
+      inline-size: var(--edge-reach);
+      block-size: var(--line-width);
       background-image: var(--h-dash);
       background-size: 100% var(--line-width);
       background-repeat: no-repeat;
@@ -167,10 +174,10 @@ const { cards, images = [], learnMoreLabel = 'Learn more' } = Astro.props;
     .card:nth-child(2)::before {
       content: '';
       position: absolute;
-      bottom: calc(-1 * var(--row-gap));
-      left: 95%;
-      width: var(--line-width);
-      height: var(--row-gap);
+      inset-block-end: calc(-1 * var(--row-gap));
+      inset-inline-start: 95%;
+      inline-size: var(--line-width);
+      block-size: var(--row-gap);
       background-image: var(--v-dash);
       background-size: var(--line-width) 100%;
       background-repeat: no-repeat;
@@ -181,10 +188,10 @@ const { cards, images = [], learnMoreLabel = 'Learn more' } = Astro.props;
     .card:nth-child(2)::after {
       content: '';
       position: absolute;
-      bottom: calc(-1 * var(--row-gap));
-      left: 20%;
-      width: var(--line-width);
-      height: var(--row-gap);
+      inset-block-end: calc(-1 * var(--row-gap));
+      inset-inline-start: 20%;
+      inline-size: var(--line-width);
+      block-size: var(--row-gap);
       background-image: var(--v-dash);
       background-size: var(--line-width) 100%;
       background-repeat: no-repeat;
@@ -195,10 +202,10 @@ const { cards, images = [], learnMoreLabel = 'Learn more' } = Astro.props;
     .card-grid::before {
       content: '';
       position: absolute;
-      top: calc(var(--stagger) + var(--card-height) * 0.6);
-      left: calc(-1 * var(--edge-reach));
-      width: var(--edge-reach);
-      height: var(--line-width);
+      inset-block-start: calc(var(--stagger) + var(--card-height) * 0.6);
+      inset-inline-start: calc(-1 * var(--edge-reach));
+      inline-size: var(--edge-reach);
+      block-size: var(--line-width);
       background-image: var(--h-dash);
       background-size: 100% var(--line-width);
       background-repeat: no-repeat;
@@ -209,10 +216,10 @@ const { cards, images = [], learnMoreLabel = 'Learn more' } = Astro.props;
     .card-grid::after {
       content: '';
       position: absolute;
-      top: calc(var(--stagger) + var(--card-height) * 0.6);
-      left: calc(50% - var(--col-gap) / 2);
-      width: var(--col-gap);
-      height: var(--line-width);
+      inset-block-start: calc(var(--stagger) + var(--card-height) * 0.6);
+      inset-inline-start: calc(50% - var(--col-gap) / 2);
+      inline-size: var(--col-gap);
+      block-size: var(--line-width);
       background-image: var(--h-dash);
       background-size: 100% var(--line-width);
       background-repeat: no-repeat;
@@ -223,10 +230,10 @@ const { cards, images = [], learnMoreLabel = 'Learn more' } = Astro.props;
     .card:nth-child(4)::before {
       content: '';
       position: absolute;
-      bottom: calc(-1 * var(--stagger) / 2);
-      left: calc(-1 * var(--col-gap));
-      width: min(36rem, calc(100% + var(--col-gap)));
-      height: calc(var(--stagger) / 2);
+      inset-block-end: calc(-1 * var(--stagger) / 2);
+      inset-inline-start: calc(-1 * var(--col-gap));
+      inline-size: min(36rem, calc(100% + var(--col-gap)));
+      block-size: calc(var(--stagger) / 2);
       background-image: var(--h-dash), var(--v-dash);
       background-size:
         100% var(--line-width),
@@ -249,6 +256,16 @@ const { cards, images = [], learnMoreLabel = 'Learn more' } = Astro.props;
     box-shadow: var(--shadow-card);
     display: flex;
     flex-direction: column;
+  }
+
+  .card-inner:has(.card-link) {
+    cursor: pointer;
+  }
+
+  .card-body :global(.card-link::after) {
+    content: '';
+    position: absolute;
+    inset: 0;
   }
 
   .card-image {

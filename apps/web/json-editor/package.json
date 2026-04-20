@@ -10,7 +10,8 @@
     "build:analyze": "ANALYZE=true vite build",
     "preview": "vite preview",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
   },
   "dependencies": {
     "@bool/analytics": "workspace:*",
@@ -30,11 +31,18 @@
     "@bool/tsconfig": "workspace:*",
     "@bool/vite-config": "workspace:*",
     "@tailwindcss/vite": "catalog:",
+    "@bool/test-utils": "workspace:*",
+    "@bool/vitest-config": "workspace:*",
+    "@testing-library/jest-dom": "catalog:",
+    "@testing-library/react": "catalog:",
+    "@testing-library/user-event": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "catalog:",
     "eslint": "catalog:",
+    "jsdom": "catalog:",
     "typescript": "catalog:",
-    "vite": "catalog:"
+    "vite": "catalog:",
+    "vitest": "catalog:"
   }
 }

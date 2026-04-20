@@ -48,8 +48,8 @@ Sections listed per page, in render order.
 4. PhotoGallerySection
 5. TestimonialsCarouselSection
 6. CareersCtaSection
-7. NewsletterCTASection
-8. ContactSection
+7. ContactSection
+8. NewsletterCTASection
 
 ## Portfolio (`portfolio/index.astro`)
 
@@ -80,7 +80,15 @@ Sections listed per page, in render order.
 1. ContactsHeroSection
 2. NewsletterCTASection
 
+## Events (`events.astro`)
+
+1. EventsCalendarSection
+
 ## Careers (`careers.astro`)
 
-1. DarkPageHero (composition, not a section)
+1. CareersHeroSection
 2. CareersCtaSection
+
+## Legal Pages (`cookies.astro`, `privacy.astro`, `terms.astro`)
+
+1. LegalPageSection

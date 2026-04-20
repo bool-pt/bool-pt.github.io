@@ -27,11 +27,7 @@ const { ariaLabel, slides, carouselAriaLabels, backgroundImage = heroBgFallback 
     <div class="hero-overlay" aria-hidden="true"></div>
   </div>
 
-  <HeroCarousel
-    client:load
-    slides={slides}
-    ariaLabels={carouselAriaLabels}
-  />
+  <HeroCarousel client:load slides={slides} ariaLabels={carouselAriaLabels} />
 
   <div class="hero-letters-scaler">
     <div class="hero-letters-wrap">
@@ -73,7 +69,7 @@ const { ariaLabel, slides, carouselAriaLabels, backgroundImage = heroBgFallback 
   .hero-overlay {
     position: absolute;
     inset: 0;
-    background-color: rgb(0 0 0 / 0.8);
+    background-color: var(--overlay-dark);
   }
 
   .hero-letters-scaler {

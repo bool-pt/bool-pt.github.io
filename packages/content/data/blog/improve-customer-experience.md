@@ -3,7 +3,7 @@ title: Improve your customer experience
 description: How leading enterprises are using AI-augmented low-code platforms to deliver faster, more personalised customer experiences at scale.
 date: 2026-05-26
 author: Nome Apelido
-image: /images/blog/improve-customer-experience.jpg
+image: covers/insight-02.jpg
 tags:
   - customer-experience
   - ai
