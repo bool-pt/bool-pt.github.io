@@ -153,6 +153,9 @@ async function getAccessToken(sa) {
 
 async function driveGet(path, token, params = {}) {
   const url = new URL(`${DRIVE_API}/${path}`);
+  // Always support shared drives — required when the folder lives in a Workspace shared drive
+  url.searchParams.set('supportsAllDrives', 'true');
+  url.searchParams.set('includeItemsFromAllDrives', 'true');
   for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v);
 
   const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
@@ -576,9 +579,31 @@ if (!mediaFolderId && !localesFolderId) {
       'Expected folder structure:\n' +
       '  <root>/\n' +
       '  ├── media/     (images)\n' +
-      '  └── locales/   (JSON locale files)\n\n' +
-      'Check that the folder is shared with the service account and contains the expected subfolders.'
+      '  └── locales/   (JSON locale files)\n'
   );
+
+  // Diagnostic: list what's actually in the root folder
+  console.error('Diagnostic — items the service account can see in the root folder:');
+  try {
+    const rootContents = await driveGet('files', token, {
+      q: `'${folderId}' in parents and trashed = false`,
+      fields: 'files(id, name, mimeType)',
+      pageSize: '50',
+    });
+    if (rootContents.files.length === 0) {
+      console.error(
+        '   (folder appears empty — subfolders may not be shared with the service account)'
+      );
+    } else {
+      for (const f of rootContents.files) {
+        const isFolder = f.mimeType === 'application/vnd.google-apps.folder';
+        console.error(`   ${isFolder ? 'folder' : 'file  '}  "${f.name}"`);
+      }
+      console.error('\n   Folder names must be exactly "media" and "locales" (lowercase).');
+    }
+  } catch (err) {
+    console.error(`   Could not list folder contents: ${err.message}`);
+  }
   process.exit(1);
 }
 
