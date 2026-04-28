@@ -70,6 +70,9 @@ async function getAccessToken(sa) {
 
 async function driveGet(path, token, params = {}) {
   const url = new URL(`${DRIVE_API}/${path}`);
+  // Always support shared drives — required when the folder lives in a Workspace shared drive
+  url.searchParams.set('supportsAllDrives', 'true');
+  url.searchParams.set('includeItemsFromAllDrives', 'true');
   for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v);
   const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
   if (!res.ok) {
@@ -103,8 +106,25 @@ try {
   const folder = await driveGet(`files/${folderId}`, token, { fields: 'id, name, mimeType' });
   console.log(`   Folder name: "${folder.name}"`);
 } catch (err) {
-  console.error(`   Failed to access folder: ${err.message}`);
-  console.error('   Check that the folder is shared with the service account email.');
+  console.error(`   Failed to access folder: ${err.message}\n`);
+  console.error('   Diagnostic — folders this service account can see:');
+  try {
+    const visible = await driveGet('files', token, {
+      q: `mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
+      fields: 'files(id, name)',
+      pageSize: '20',
+    });
+    if (visible.files.length === 0) {
+      console.error('   (none — share the target folder with this service account email)');
+    } else {
+      for (const f of visible.files) {
+        console.error(`   - ${f.name} (${f.id})`);
+      }
+    }
+  } catch (diagErr) {
+    console.error(`   Could not run diagnostic: ${diagErr.message}`);
+  }
+  console.error(`\n   Make sure ${sa.client_email} has Viewer access to folder ${folderId}.`);
   process.exit(1);
 }
 
