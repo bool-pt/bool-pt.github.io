@@ -9,6 +9,7 @@ concurrency:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   sync:
@@ -32,20 +33,23 @@ jobs:
           GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
           GOOGLE_DRIVE_FOLDER_ID: ${{ vars.GOOGLE_DRIVE_FOLDER_ID || secrets.GOOGLE_DRIVE_FOLDER_ID }}
 
-      - name: Check for changes
-        id: changes
-        run: |
-          git add -N packages/media/ packages/i18n/src/locales/ packages/content/data/blog/
-          git diff --quiet && echo "changed=false" >> "$GITHUB_OUTPUT" || echo "changed=true" >> "$GITHUB_OUTPUT"
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: 'chore: sync media and locales from Google Drive'
+          title: 'chore: sync media and locales from Google Drive'
+          body: |
+            Automated sync from the shared Google Drive folder.
 
-      - name: Commit and push
-        if: steps.changes.outputs.changed == 'true'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add packages/media/images/ packages/media/.drive-manifest.json
-          git add packages/i18n/src/locales/
-          git add packages/content/data/blog/
-          git diff --cached --quiet && exit 0
-          git commit -m "chore: sync media and locales from Google Drive"
-          git push
+            - Media images updated in `packages/media/images/`
+            - Locale files updated in `packages/i18n/src/locales/`
+            - Blog frontmatter image paths rewritten if media was reorganized
+
+            Triggered by @${{ github.actor }} via the **Sync from Google Drive** workflow.
+          branch: chore/sync-drive
+          delete-branch: true
+          add-paths: |
+            packages/media/images/
+            packages/media/.drive-manifest.json
+            packages/i18n/src/locales/
+            packages/content/data/blog/
