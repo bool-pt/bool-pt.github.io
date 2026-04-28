@@ -163,15 +163,46 @@ if (!hasMedia && !hasLocales) {
   ok = false;
 }
 
-// Step 5: Count files in each subfolder
+// Step 5: Recursively list files in each subfolder
+async function listAllRecursive(folderId, token, depth = 0) {
+  const items = [];
+  let pageToken;
+  do {
+    const params = {
+      q: `'${folderId}' in parents and trashed = false`,
+      fields: 'nextPageToken, files(id, name, mimeType, size)',
+      pageSize: '1000',
+    };
+    if (pageToken) params.pageToken = pageToken;
+    const data = await driveGet('files', token, params);
+    for (const f of data.files) {
+      if (f.mimeType === 'application/vnd.google-apps.folder') {
+        items.push({ name: f.name, depth, isFolder: true });
+        const nested = await listAllRecursive(f.id, token, depth + 1);
+        items.push(...nested);
+      } else {
+        items.push({ name: f.name, depth, size: Number(f.size || 0) });
+      }
+    }
+    pageToken = data.nextPageToken;
+  } while (pageToken);
+  return items;
+}
+
 if (hasMedia) {
   const mediaFolder = data.files.find((f) => f.name === 'media');
-  const mediaData = await driveGet('files', token, {
-    q: `'${mediaFolder.id}' in parents and trashed = false`,
-    fields: 'files(id)',
-    pageSize: '1000',
-  });
-  console.log(`\n   media/ contains ${mediaData.files.length} items`);
+  const mediaItems = await listAllRecursive(mediaFolder.id, token);
+  const fileCount = mediaItems.filter((i) => !i.isFolder).length;
+  console.log(`\n   media/ contains ${fileCount} files:`);
+  for (const item of mediaItems) {
+    const indent = '   ' + '  '.repeat(item.depth + 1);
+    if (item.isFolder) {
+      console.log(`${indent}${item.name}/`);
+    } else {
+      const kb = item.size > 0 ? `(${(item.size / 1024).toFixed(0)} KB)` : '';
+      console.log(`${indent}${item.name} ${kb}`);
+    }
+  }
 }
 
 if (hasLocales) {
@@ -182,7 +213,7 @@ if (hasLocales) {
     pageSize: '100',
   });
   console.log(
-    `   locales/ contains: ${localesData.files.map((f) => f.name).join(', ') || '(empty)'}`
+    `\n   locales/ contains: ${localesData.files.map((f) => f.name).join(', ') || '(empty)'}`
   );
 }
 
