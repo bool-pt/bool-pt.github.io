@@ -153,6 +153,9 @@ async function getAccessToken(sa) {
 
 async function driveGet(path, token, params = {}) {
   const url = new URL(`${DRIVE_API}/${path}`);
+  // Always support shared drives — required when the folder lives in a Workspace shared drive
+  url.searchParams.set('supportsAllDrives', 'true');
+  url.searchParams.set('includeItemsFromAllDrives', 'true');
   for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v);
 
   const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
