@@ -2,12 +2,8 @@
   "ci": {
     "collect": {
       "staticDistDir": "apps/web/bool/dist",
-      "url": [
-        "/",
-        "/about",
-        "/services",
-        "/contacts"
-      ]
+      "numberOfRuns": 3,
+      "url": ["/", "/about", "/services", "/contacts"]
     },
     "assert": {
       "assertions": {
