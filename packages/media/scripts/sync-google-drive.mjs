@@ -568,10 +568,19 @@ const sa = loadServiceAccount();
 const token = await getAccessToken(sa);
 console.log(`Authenticated as ${sa.client_email}\n`);
 
-// Discover subfolders
+// Discover subfolders. media/ may optionally contain an images/ subfolder
+// to mirror packages/media/images/ — if so, sync from inside that.
 console.log('Looking for media/ and locales/ subfolders…');
-const mediaFolderId = await findSubfolder(folderId, 'media', token);
+let mediaFolderId = await findSubfolder(folderId, 'media', token);
 const localesFolderId = await findSubfolder(folderId, 'locales', token);
+
+if (mediaFolderId) {
+  const nestedImages = await findSubfolder(mediaFolderId, 'images', token);
+  if (nestedImages) {
+    console.log('  (using media/images/ as the root — mirroring packages/media/images/)');
+    mediaFolderId = nestedImages;
+  }
+}
 
 if (!mediaFolderId && !localesFolderId) {
   console.error(
