@@ -496,6 +496,62 @@ async function syncMedia(mediaFolderId, token) {
 // Sync: locales
 // ---------------------------------------------------------------------------
 
+/**
+ * Merges a Drive locale JSON over the local copy:
+ *   - Keys present in both → Drive value wins (content edits propagate)
+ *   - Keys present only in Drive → added (new translations land)
+ *   - Keys present only locally → kept (code-side additions survive an out-of-date Drive)
+ *
+ * Drive's key order is preserved; local-only keys are appended at the end
+ * (they'll naturally move into Drive's order on the next sync after Drive
+ * is updated to include them).
+ *
+ * Deletions from Drive are NOT propagated — a key removed from Drive will
+ * persist locally. validateLocale() + the labels tests catch genuinely dead
+ * references; intentional pruning can be done in a follow-up PR if needed.
+ */
+function mergeLocale(localContent, driveContent) {
+  const local = JSON.parse(localContent);
+  const drive = JSON.parse(driveContent);
+  if (local === null || typeof local !== 'object' || Array.isArray(local)) {
+    throw new Error('Local locale file is not a JSON object');
+  }
+  if (drive === null || typeof drive !== 'object' || Array.isArray(drive)) {
+    throw new Error('Drive locale file is not a JSON object');
+  }
+
+  const merged = {};
+  const driveKeys = new Set();
+  const updatedKeys = [];
+
+  for (const [key, driveValue] of Object.entries(drive)) {
+    merged[key] = driveValue;
+    driveKeys.add(key);
+    if (Object.prototype.hasOwnProperty.call(local, key) && local[key] !== driveValue) {
+      updatedKeys.push(key);
+    }
+  }
+
+  const localOnlyKeys = [];
+  for (const [key, localValue] of Object.entries(local)) {
+    if (!driveKeys.has(key)) {
+      merged[key] = localValue;
+      localOnlyKeys.push(key);
+    }
+  }
+
+  return {
+    merged,
+    localOnlyKeys,
+    updatedKeys,
+    addedKeys: [...driveKeys].filter((k) => !(k in local)),
+  };
+}
+
+function serializeLocale(obj) {
+  return JSON.stringify(obj, null, 2) + '\n';
+}
+
 async function syncLocales(localesFolderId, token) {
   console.log('=== Locales Sync ===\n');
   console.log('Listing files in Drive locales/ folder…');
@@ -530,23 +586,45 @@ async function syncLocales(localesFolderId, token) {
       continue;
     }
 
-    // Always download and compare content — size/mtime is unreliable for JSON
-    // edited in Drive (whitespace changes, re-saves without edits)
     process.stdout.write(`  Checking ${file.name}… `);
     const buf = await downloadFile(file.id, token);
     const driveContent = buf.toString('utf-8');
 
-    if (!isNew) {
-      const localContent = readFileSync(destPath, 'utf-8');
-      if (localContent === driveContent) {
-        console.log('unchanged');
-        unchanged++;
-        continue;
-      }
+    if (isNew) {
+      writeFileSync(destPath, driveContent);
+      console.log('done [new locale]');
+      downloaded++;
+      continue;
     }
 
-    writeFileSync(destPath, driveContent);
-    console.log(isNew ? 'done [new locale]' : 'done [updated]');
+    const localContent = readFileSync(destPath, 'utf-8');
+    let merged, localOnlyKeys, updatedKeys, addedKeys;
+    try {
+      ({ merged, localOnlyKeys, updatedKeys, addedKeys } = mergeLocale(localContent, driveContent));
+    } catch (err) {
+      console.log(`SKIPPED (${err.message})`);
+      skipped++;
+      continue;
+    }
+
+    const mergedContent = serializeLocale(merged);
+    if (mergedContent === localContent) {
+      console.log('unchanged');
+      unchanged++;
+      continue;
+    }
+
+    writeFileSync(destPath, mergedContent);
+    const parts = [];
+    if (addedKeys.length) parts.push(`+${addedKeys.length} from Drive`);
+    if (updatedKeys.length) parts.push(`~${updatedKeys.length} updated`);
+    if (localOnlyKeys.length) parts.push(`${localOnlyKeys.length} kept local-only`);
+    console.log(`done [merged: ${parts.join(', ') || 'whitespace/format only'}]`);
+    if (localOnlyKeys.length) {
+      const sample = localOnlyKeys.slice(0, 5).join(', ');
+      const ellipsis = localOnlyKeys.length > 5 ? `, … (+${localOnlyKeys.length - 5} more)` : '';
+      console.log(`    local-only keys preserved: ${sample}${ellipsis}`);
+    }
     downloaded++;
   }
 
