@@ -34,16 +34,21 @@ Media and locale files are synced from a shared Google Drive folder via GitHub A
 
 ```
 <GOOGLE_DRIVE_FOLDER_ID>/
-├── media/          → packages/media/images/
-│   ├── backgrounds/
-│   ├── team/
-│   └── ...
-└── locales/        → packages/i18n/src/locales/
+├── media/                  → packages/media/images/
+│   ├── images/
+│   │   ├── backgrounds/
+│   │   ├── team/
+│   │   └── ...
+│   ├── fonts/
+│   └── subscriptions/       (written to by the Lambda API — not synced down)
+│       ├── newsletter        (Google Sheet — columns: email, date)
+│       └── contacts          (Google Sheet — columns: name, email, message, date)
+└── locales/                → packages/i18n/src/locales/
     ├── en.json
     └── pt.json (future)
 ```
 
-Both subfolders are optional — the script syncs whichever it finds.
+The `media/` and `locales/` subfolders are optional — the sync script downloads whichever it finds. The `subscriptions/` folder lives **inside `media/`** and is **write-only from the API direction**: it is **not** pulled down by `sync-drive.yml` (the sync only downloads files with image extensions, so the Sheets are ignored). Newsletter confirmations and contact form submissions append rows to these Google Sheets via the Sheets API, and GDPR erasure (`DELETE /data`) removes rows. Configure with the `NEWSLETTER_SHEET_ID` and `CONTACTS_SHEET_ID` GitHub Variables (Sheet ID = the `/d/<ID>/edit` segment of the Sheet URL) and share each Sheet with the service account email as **Editor**. Sheet writes are fail-soft — if Sheets is unreachable the form submission still succeeds and the failure is logged as `[sheets-write-failed]` in CloudWatch.
 
 ### Setup (one-time)
 
@@ -76,7 +81,20 @@ Only supported image formats: `.jpg`, `.jpeg`, `.png`, `.webp`, `.avif`, `.svg`.
 
 ### Locale sync
 
-JSON files in the `locales/` subfolder overwrite `packages/i18n/src/locales/`. Adding a new file (e.g. `pt.json`) creates a new locale automatically. The script downloads each file and compares content byte-for-byte — unchanged files are not written, so git stays clean.
+JSON files in the `locales/` subfolder are **merged** into `packages/i18n/src/locales/` — not overwritten. For an existing locale file, the merge rules are:
+
+| Key location                      | Result                                                           |
+| --------------------------------- | ---------------------------------------------------------------- |
+| Present in both (same value)      | unchanged                                                        |
+| Present in both (different value) | **Drive's value wins** — content edits propagate                 |
+| Drive only                        | added                                                            |
+| Local only                        | **kept** — code-side additions survive an out-of-date Drive copy |
+
+This means a new translation key added by a code change (e.g. `newsletter.name.label`) will survive a sync even if the Drive copy hasn't been updated yet. Drive's key order is preserved; local-only keys are appended at the end and naturally move into place on the next sync after Drive is updated to include them.
+
+Adding a new file (e.g. `pt.json`) creates a new locale automatically. The script logs how many keys came from Drive, were updated by Drive, and were preserved as local-only — e.g. `done [merged: +2 from Drive, ~1 updated, 3 kept local-only]`. Unchanged files are not written, so git stays clean.
+
+**One trade-off:** deletions from Drive **do not** delete keys locally. If a content editor removes a key from Drive intentionally, the local copy keeps it as a stale entry. `validateLocale()` and the labels tests catch genuinely broken references; intentional pruning is a manual code edit (or could be added behind a `--prune` flag if needed).
 
 ### Media reorganization support
 
