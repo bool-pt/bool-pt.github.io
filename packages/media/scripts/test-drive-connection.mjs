@@ -174,7 +174,7 @@ const data = await driveGet('files', token, {
 
 if (data.files.length === 0) {
   console.log('   Folder is empty.');
-  ok = false;
+  record('Drive root contents', 'warn', 'folder is empty');
 } else {
   for (const file of data.files) {
     const isFolder = file.mimeType === 'application/vnd.google-apps.folder';
