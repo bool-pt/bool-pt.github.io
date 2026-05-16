@@ -24,3 +24,5 @@ jobs:
         env:
           GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
           GOOGLE_DRIVE_FOLDER_ID: ${{ vars.GOOGLE_DRIVE_FOLDER_ID || secrets.GOOGLE_DRIVE_FOLDER_ID }}
+          NEWSLETTER_SHEET_ID: ${{ vars.NEWSLETTER_SHEET_ID }}
+          CONTACTS_SHEET_ID: ${{ vars.CONTACTS_SHEET_ID }}
