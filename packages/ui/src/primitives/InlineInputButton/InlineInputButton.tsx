@@ -11,7 +11,6 @@ interface InlineInputButtonProps {
   buttonText: string;
   disabled?: boolean;
   type?: 'email' | 'text' | 'search';
-  variant?: 'light' | 'dark';
   className?: string;
 }
 
@@ -24,7 +23,6 @@ export function InlineInputButton({
   buttonText,
   disabled = false,
   type = 'email',
-  _variant = 'light',
   className,
 }: InlineInputButtonProps) {
   const inputId = useId();
