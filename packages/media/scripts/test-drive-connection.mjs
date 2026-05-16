@@ -300,11 +300,18 @@ async function probeSheet(label, sheetId, expectedHeaders) {
   } catch (err) {
     console.error(`     FAILED: ${err.message}`);
     console.error(`     Make sure ${sa.client_email} is shared on this sheet as Editor.`);
-    const hint = /403/.test(err.message)
-      ? `Not shared with ${sa.client_email}`
-      : /404/.test(err.message)
-        ? 'Sheet ID not found'
-        : err.message.split('\n')[0];
+    const msg = err.message;
+    const apiDisabled =
+      msg.includes('has not been used in project') ||
+      msg.includes('SERVICE_DISABLED') ||
+      msg.includes('it is disabled');
+    const hint = apiDisabled
+      ? 'Sheets API not enabled on this GCP project — enable at console.cloud.google.com'
+      : /403/.test(msg)
+        ? `Not shared with ${sa.client_email} as Editor`
+        : /404/.test(msg)
+          ? 'Sheet ID not found — check NEWSLETTER_SHEET_ID / CONTACTS_SHEET_ID variable'
+          : msg.split('\n')[0];
     record(checkName, 'fail', hint);
   }
 }
