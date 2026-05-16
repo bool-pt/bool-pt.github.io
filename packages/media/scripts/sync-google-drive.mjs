@@ -23,8 +23,10 @@
  * - **Manifest-based tracking** for media: `.drive-manifest.json` maps each Google Drive
  *   file ID to its local path. Drive IDs are stable across renames/moves, so the script
  *   detects reorganizations and auto-updates references in locale files and blog frontmatter.
- * - **Locale sync**: JSON files in the `locales/` Drive folder overwrite
- *   `packages/i18n/src/locales/` — adding a new file (e.g. `pt.json`) creates a new locale.
+ * - **Locale sync**: JSON files in the `locales/` Drive folder are merged into
+ *   `packages/i18n/src/locales/` — Drive wins on shared keys, local-only keys are kept,
+ *   Drive-only keys are added. Adding a new file (e.g. `pt.json`) creates a new locale.
+ *   Deletions from Drive are NOT propagated (see syncLocales for full rules).
  * - **Hardcoded import warnings**: Astro components with hardcoded `@bool/media` imports
  *   can't be auto-rewritten — the script warns so a developer can update them manually.
  *
