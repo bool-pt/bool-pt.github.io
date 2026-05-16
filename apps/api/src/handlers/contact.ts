@@ -7,6 +7,7 @@ import { ok, error } from '../lib/response.ts';
 import { parseAndValidate, getOrigin } from '../lib/validate.ts';
 import { createCaptchaProvider } from '../providers/captcha/index.ts';
 import { createEmailProvider } from '../providers/email/index.ts';
+import { createSubscriptionStore } from '../providers/subscriptions/index.ts';
 
 const contactApiSchema = contactFormSimpleSchema.extend({
   captchaToken: z.string().min(1, 'Captcha token is required'),
@@ -61,6 +62,13 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
       subject: `Contact form: ${escapeHtml(name)}`,
       html: buildEmailHtml({ name, email, phone, message }),
     });
+
+    try {
+      const store = createSubscriptionStore();
+      await store.recordContact({ name, email, message, date: new Date().toISOString() });
+    } catch (err) {
+      console.error('[sheets-write-failed] contact', err);
+    }
 
     return ok(origin);
   } catch {

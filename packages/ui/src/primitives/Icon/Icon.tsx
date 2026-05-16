@@ -39,6 +39,7 @@ export default function Icon({ name, size = 24, strokeWidth = 1.5, className }: 
         height={size}
         viewBox={viewBox}
         fill="currentColor"
+        fillRule={icon.fillRule}
         aria-hidden="true"
         className={className}
       >

@@ -1,10 +1,14 @@
 import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createNewsletterStore } from '../../providers/newsletter/index.ts';
+import { createSubscriptionStore } from '../../providers/subscriptions/index.ts';
 import { handler } from '../delete-data.ts';
 
 vi.mock('../../providers/newsletter/index.ts', () => ({
   createNewsletterStore: vi.fn(),
+}));
+vi.mock('../../providers/subscriptions/index.ts', () => ({
+  createSubscriptionStore: vi.fn(),
 }));
 vi.mock('../../config.ts', () => ({
   getConfig: () => ({
@@ -27,6 +31,8 @@ function makeEvent(body: unknown, origin = 'https://bool.pt'): APIGatewayProxyEv
 
 describe('delete-data handler (GDPR erasure)', () => {
   const mockDelete = vi.fn();
+  const mockRemoveNewsletter = vi.fn();
+  const mockRemoveContact = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -34,6 +40,12 @@ describe('delete-data handler (GDPR erasure)', () => {
       subscribe: vi.fn(),
       unsubscribe: vi.fn(),
       delete: mockDelete,
+    });
+    vi.mocked(createSubscriptionStore).mockReturnValue({
+      recordNewsletter: vi.fn(),
+      recordContact: vi.fn(),
+      removeNewsletter: mockRemoveNewsletter,
+      removeContact: mockRemoveContact,
     });
   });
 
@@ -48,6 +60,21 @@ describe('delete-data handler (GDPR erasure)', () => {
 
     expect(result).toMatchObject({ statusCode: 200 });
     expect(mockDelete).toHaveBeenCalledWith('user@example.com');
+    expect(mockRemoveNewsletter).toHaveBeenCalledWith('user@example.com');
+    expect(mockRemoveContact).toHaveBeenCalledWith('user@example.com');
+  });
+
+  it('still returns 200 when sheet removal fails', async () => {
+    mockDelete.mockResolvedValue(undefined);
+    mockRemoveNewsletter.mockRejectedValueOnce(new Error('Sheets down'));
+
+    const result = await handler(
+      makeEvent({ email: 'user@example.com' }),
+      {} as never,
+      {} as never
+    );
+
+    expect(result).toMatchObject({ statusCode: 200 });
   });
 
   it('returns 400 on invalid email', async () => {

@@ -29,24 +29,26 @@ All configuration lives in GitHub — no `.env.local` files needed. Configure at
 
 ### Variables (`vars.*`) — non-sensitive, visible in logs
 
-| Variable                    | Used by                | Description                                    |
-| --------------------------- | ---------------------- | ---------------------------------------------- |
-| `PUBLIC_CONTACT_API_URL`    | CI, Deploy, Lighthouse | Contact form Lambda endpoint URL               |
-| `PUBLIC_NEWSLETTER_API_URL` | CI, Deploy, Lighthouse | Newsletter Lambda endpoint URL                 |
-| `PUBLIC_HCAPTCHA_SITE_KEY`  | CI, Deploy, Lighthouse | hCaptcha site key (public, identifies site)    |
-| `PUBLIC_GA_MEASUREMENT_ID`  | CI, Deploy, Lighthouse | Google Analytics 4 measurement ID              |
-| `PUBLIC_SENTRY_DSN`         | CI, Deploy             | Sentry DSN for error monitoring                |
-| `AWS_DEPLOY_ROLE_ARN`       | Deploy API             | IAM role ARN for OIDC-based AWS authentication |
-| `SES_FROM_EMAIL`            | Deploy API             | SES verified sender email address              |
-| `SES_NOTIFY_EMAIL`          | Deploy API             | Email address for contact form notifications   |
-| `SES_CONTACT_LIST`          | Deploy API             | SES contact list name for newsletter           |
+| Variable                    | Used by                | Description                                                                                                   |
+| --------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `PUBLIC_CONTACT_API_URL`    | CI, Deploy, Lighthouse | Contact form Lambda endpoint URL                                                                              |
+| `PUBLIC_NEWSLETTER_API_URL` | CI, Deploy, Lighthouse | Newsletter Lambda endpoint URL                                                                                |
+| `PUBLIC_HCAPTCHA_SITE_KEY`  | CI, Deploy, Lighthouse | hCaptcha site key (public, identifies site)                                                                   |
+| `PUBLIC_GA_MEASUREMENT_ID`  | CI, Deploy, Lighthouse | Google Analytics 4 measurement ID                                                                             |
+| `PUBLIC_SENTRY_DSN`         | CI, Deploy             | Sentry DSN for error monitoring                                                                               |
+| `AWS_DEPLOY_ROLE_ARN`       | Deploy API             | IAM role ARN for OIDC-based AWS authentication                                                                |
+| `SES_FROM_EMAIL`            | Deploy API             | SES verified sender email address                                                                             |
+| `SES_NOTIFY_EMAIL`          | Deploy API             | Email address for contact form notifications                                                                  |
+| `SES_CONTACT_LIST`          | Deploy API             | SES contact list name for newsletter                                                                          |
+| `NEWSLETTER_SHEET_ID`       | Deploy API             | Google Sheets ID for newsletter subscribers (from `media/subscriptions/`) — leave unset to disable sheet sync |
+| `CONTACTS_SHEET_ID`         | Deploy API             | Google Sheets ID for contact form submissions — leave unset to disable sheet sync                             |
 
 ### Secrets (`secrets.*`) — encrypted, masked in logs
 
-| Secret                       | Used by    | Description                                                           |
-| ---------------------------- | ---------- | --------------------------------------------------------------------- |
-| `GOOGLE_SERVICE_ACCOUNT_KEY` | Sync Drive | Full JSON content of the Google Cloud service account key             |
-| `GOOGLE_DRIVE_FOLDER_ID`     | Sync Drive | Google Drive root folder ID (contains media/ and locales/ subfolders) |
+| Secret                       | Used by                | Description                                                                                                                                     |
+| ---------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GOOGLE_SERVICE_ACCOUNT_KEY` | Sync Drive, Deploy API | Full JSON content of the Google Cloud service account key. Sync Drive uses `drive.readonly`; API uses `spreadsheets` to write subscription rows |
+| `GOOGLE_DRIVE_FOLDER_ID`     | Sync Drive             | Google Drive root folder ID (contains media/ and locales/ subfolders)                                                                           |
 
 ### SST Secrets (managed via `npx sst secret set`, not GitHub)
 

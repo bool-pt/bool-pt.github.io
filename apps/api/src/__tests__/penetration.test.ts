@@ -13,6 +13,7 @@ import { handler as unsubscribeHandler } from '../handlers/unsubscribe.ts';
 import { createCaptchaProvider } from '../providers/captcha/index.ts';
 import { createEmailProvider } from '../providers/email/index.ts';
 import { createNewsletterStore } from '../providers/newsletter/index.ts';
+import { createSubscriptionStore } from '../providers/subscriptions/index.ts';
 
 vi.mock('../providers/captcha/index.ts', () => ({
   createCaptchaProvider: vi.fn(),
@@ -22,6 +23,9 @@ vi.mock('../providers/email/index.ts', () => ({
 }));
 vi.mock('../providers/newsletter/index.ts', () => ({
   createNewsletterStore: vi.fn(),
+}));
+vi.mock('../providers/subscriptions/index.ts', () => ({
+  createSubscriptionStore: vi.fn(),
 }));
 vi.mock('../config.ts', () => ({
   getConfig: () => ({
@@ -63,6 +67,12 @@ describe('penetration tests', () => {
       subscribe: mockSubscribe,
       unsubscribe: vi.fn(),
       delete: vi.fn(),
+    });
+    vi.mocked(createSubscriptionStore).mockReturnValue({
+      recordNewsletter: vi.fn(),
+      recordContact: vi.fn(),
+      removeNewsletter: vi.fn(),
+      removeContact: vi.fn(),
     });
     mockVerify.mockResolvedValue({ success: true });
     mockSend.mockResolvedValue(undefined);
@@ -379,7 +389,7 @@ describe('penetration tests', () => {
       mockVerify.mockResolvedValue({ success: false });
 
       const result = (await newsletterHandler(
-        makeEvent({ email: 'test@test.com', captchaToken: 'fake' }),
+        makeEvent({ name: 'John Doe', email: 'test@test.com', captchaToken: 'fake' }),
         {} as never,
         {} as never
       )) as APIGatewayProxyStructuredResultV2;
@@ -472,7 +482,7 @@ describe('penetration tests', () => {
       mockSend.mockRejectedValue(new Error('SES rate limit: account in sandbox'));
 
       const result = (await newsletterHandler(
-        makeEvent({ email: 'test@test.com', captchaToken: 'tok' }),
+        makeEvent({ name: 'John Doe', email: 'test@test.com', captchaToken: 'tok' }),
         {} as never,
         {} as never
       )) as APIGatewayProxyStructuredResultV2;

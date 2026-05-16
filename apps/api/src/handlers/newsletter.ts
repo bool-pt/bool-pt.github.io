@@ -15,12 +15,13 @@ const newsletterApiSchema = newsletterSchema.extend({
 
 const CONFIRM_BASE_URL = 'https://bool.pt/newsletter/confirm';
 
-function buildConfirmationHtml(confirmUrl: string): string {
-  const escaped = escapeHtml(confirmUrl);
+function buildConfirmationHtml(confirmUrl: string, name: string): string {
+  const escapedUrl = escapeHtml(confirmUrl);
+  const escapedName = escapeHtml(name);
   return `
-    <h2>Confirm your newsletter subscription</h2>
+    <h2>Hi ${escapedName}, confirm your newsletter subscription</h2>
     <p>Click the link below to confirm your subscription to the Bool newsletter:</p>
-    <p><a href="${escaped}">Confirm subscription</a></p>
+    <p><a href="${escapedUrl}">Confirm subscription</a></p>
     <p>If you did not request this, you can safely ignore this email.</p>
     <p>This link expires in 24 hours.</p>
   `.trim();
@@ -35,7 +36,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
       return error(400, validation.error, origin);
     }
 
-    const { captchaToken, email } = validation.data;
+    const { captchaToken, email, name } = validation.data;
 
     const captcha = createCaptchaProvider();
     const captchaResult = await captcha.verify(captchaToken, event.requestContext.http.sourceIp);
@@ -52,7 +53,7 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
       to: email,
       from: config.sesFromEmail,
       subject: 'Confirm your Bool newsletter subscription',
-      html: buildConfirmationHtml(confirmUrl),
+      html: buildConfirmationHtml(confirmUrl, name),
     });
 
     return ok(origin);

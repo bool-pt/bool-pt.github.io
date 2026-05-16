@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useId, useRef, useState } from 'react';
 import { trackEvent } from '@bool/analytics';
 import { submitNewsletter } from '@bool/api';
 import { newsletterSchema, ROUTES } from '@bool/shared';
@@ -15,6 +15,9 @@ interface NewsletterLabels {
   ctaCta: string;
   label: string;
   placeholder: string;
+  nameLabel: string;
+  namePlaceholder: string;
+  nameRequired: string;
   captchaRequired: string;
   error: string;
   consentBefore: string;
@@ -30,18 +33,21 @@ interface Props {
 }
 
 export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels }: Props) {
+  const nameInputId = useId();
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [captchaToken, setCaptchaToken] = useState('');
   const [marketingConsent, setMarketingConsent] = useState(false);
   const [status, setStatus] = useState<
-    'idle' | 'loading' | 'success' | 'error' | 'captcha-needed' | 'consent-needed'
+    'idle' | 'loading' | 'success' | 'error' | 'captcha-needed' | 'consent-needed' | 'name-needed'
   >('idle');
   const captchaRef = useRef<CaptchaHandle>(null);
 
   async function handleSubmit() {
-    const validation = newsletterSchema.safeParse({ email });
+    const validation = newsletterSchema.safeParse({ name, email });
     if (!validation.success) {
-      setStatus('error');
+      const hasNameIssue = validation.error.issues.some((i) => i.path[0] === 'name');
+      setStatus(hasNameIssue ? 'name-needed' : 'error');
       return;
     }
 
@@ -57,9 +63,10 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
 
     setStatus('loading');
     try {
-      await submitNewsletter({ email, captchaToken: captchaToken || '' });
+      await submitNewsletter({ name, email, captchaToken: captchaToken || '' });
       trackEvent('form_submission', { type: 'newsletter' });
       setStatus('success');
+      setName('');
       setEmail('');
       setCaptchaToken('');
       captchaRef.current?.reset();
@@ -93,6 +100,25 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
 
   return (
     <div>
+      <div className={styles.nameField}>
+        <label htmlFor={nameInputId} className={styles.srOnly}>
+          {labels.nameLabel}
+        </label>
+        <input
+          id={nameInputId}
+          type="text"
+          value={name}
+          onChange={(e) => {
+            setName(e.target.value);
+            if (status === 'name-needed') setStatus('idle');
+          }}
+          placeholder={labels.namePlaceholder}
+          disabled={isDisabled}
+          autoComplete="name"
+          className={styles.nameInput}
+        />
+      </div>
+      {status === 'name-needed' && <p className={styles.consentError}>{labels.nameRequired}</p>}
       <InlineInputButton
         value={email}
         onChange={setEmail}
@@ -102,7 +128,6 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
         buttonText={buttonText}
         disabled={isDisabled}
         type="email"
-        variant={isBar ? 'light' : 'dark'}
       />
       <label
         className={cn(styles.consentLabel, isBar ? styles.consentLabelBar : styles.consentLabelCta)}
