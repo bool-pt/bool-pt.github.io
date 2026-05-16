@@ -12,6 +12,9 @@ export function getConfig() {
     sesNotifyEmail: requireEnv('SES_NOTIFY_EMAIL'),
     sesContactList: requireEnv('SES_CONTACT_LIST'),
     corsAllowedOrigin: process.env['CORS_ALLOWED_ORIGIN'] ?? 'https://bool.pt',
+    googleServiceAccountKey: process.env['GOOGLE_SERVICE_ACCOUNT_KEY'] ?? '',
+    newsletterSheetId: process.env['NEWSLETTER_SHEET_ID'] ?? '',
+    contactsSheetId: process.env['CONTACTS_SHEET_ID'] ?? '',
   };
 }
 

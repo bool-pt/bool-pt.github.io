@@ -1,3 +1,44 @@
+.nameField {
+  display: flex;
+  align-items: center;
+  inline-size: 100%;
+  block-size: 3.5rem;
+  border-radius: var(--radius-full);
+  background: var(--white-60);
+  border: 2px solid var(--white-65);
+  backdrop-filter: blur(8px);
+  margin-block-end: 1.25rem;
+  overflow: hidden;
+}
+
+.nameInput {
+  flex: 1;
+  min-inline-size: 0;
+  padding: 0 1.25rem;
+  background: transparent;
+  border: none;
+  color: var(--color-on-dark);
+  font-size: var(--font-size-body);
+  font-weight: 500;
+}
+
+.nameInput::placeholder {
+  color: var(--color-on-dark-muted);
+}
+
+.nameInput:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.srOnly {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
 .consentLabel {
   display: flex;
   align-items: center;

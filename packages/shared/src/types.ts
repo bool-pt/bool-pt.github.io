@@ -7,6 +7,7 @@ export interface ContactFormData {
 }
 
 export interface NewsletterData {
+  name: string;
   email: string;
   captchaToken: string;
 }

@@ -1,10 +1,14 @@
 import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createNewsletterStore } from '../../providers/newsletter/index.ts';
+import { createSubscriptionStore } from '../../providers/subscriptions/index.ts';
 import { handler } from '../unsubscribe.ts';
 
 vi.mock('../../providers/newsletter/index.ts', () => ({
   createNewsletterStore: vi.fn(),
+}));
+vi.mock('../../providers/subscriptions/index.ts', () => ({
+  createSubscriptionStore: vi.fn(),
 }));
 
 function makeEvent(body: unknown, origin = 'https://bool.pt'): APIGatewayProxyEventV2 {
@@ -17,6 +21,7 @@ function makeEvent(body: unknown, origin = 'https://bool.pt'): APIGatewayProxyEv
 
 describe('unsubscribe handler', () => {
   const mockUnsubscribe = vi.fn();
+  const mockRemoveNewsletter = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -24,6 +29,12 @@ describe('unsubscribe handler', () => {
       subscribe: vi.fn(),
       unsubscribe: mockUnsubscribe,
       delete: vi.fn(),
+    });
+    vi.mocked(createSubscriptionStore).mockReturnValue({
+      recordNewsletter: vi.fn(),
+      recordContact: vi.fn(),
+      removeNewsletter: mockRemoveNewsletter,
+      removeContact: vi.fn(),
     });
   });
 
@@ -39,6 +50,20 @@ describe('unsubscribe handler', () => {
     expect(result).toMatchObject({ statusCode: 200 });
     expect(JSON.parse((result as { body: string }).body)).toEqual({ success: true });
     expect(mockUnsubscribe).toHaveBeenCalledWith('test@example.com');
+    expect(mockRemoveNewsletter).toHaveBeenCalledWith('test@example.com');
+  });
+
+  it('still returns 200 when sheet removal fails', async () => {
+    mockUnsubscribe.mockResolvedValue(undefined);
+    mockRemoveNewsletter.mockRejectedValueOnce(new Error('Sheets down'));
+
+    const result = await handler(
+      makeEvent({ email: 'test@example.com' }),
+      {} as never,
+      {} as never
+    );
+
+    expect(result).toMatchObject({ statusCode: 200 });
   });
 
   it('returns 400 on invalid email', async () => {

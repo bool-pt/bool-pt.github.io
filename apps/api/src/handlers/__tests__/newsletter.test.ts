@@ -44,7 +44,7 @@ describe('newsletter handler', () => {
     mockSend.mockResolvedValue(undefined);
 
     const result = await handler(
-      makeEvent({ email: 'user@example.com', captchaToken: 'valid-token' }),
+      makeEvent({ name: 'John Doe', email: 'user@example.com', captchaToken: 'valid-token' }),
       {} as never,
       {} as never
     );
@@ -65,7 +65,7 @@ describe('newsletter handler', () => {
     mockSend.mockResolvedValue(undefined);
 
     await handler(
-      makeEvent({ email: 'user@example.com', captchaToken: 'valid-token' }),
+      makeEvent({ name: 'John Doe', email: 'user@example.com', captchaToken: 'valid-token' }),
       {} as never,
       {} as never
     );
@@ -77,7 +77,7 @@ describe('newsletter handler', () => {
 
   it('returns 400 on invalid email', async () => {
     const result = await handler(
-      makeEvent({ email: 'not-an-email', captchaToken: 'token' }),
+      makeEvent({ name: 'John Doe', email: 'not-an-email', captchaToken: 'token' }),
       {} as never,
       {} as never
     );
@@ -89,7 +89,7 @@ describe('newsletter handler', () => {
     mockVerify.mockResolvedValue({ success: false });
 
     const result = await handler(
-      makeEvent({ email: 'user@example.com', captchaToken: 'bad-token' }),
+      makeEvent({ name: 'John Doe', email: 'user@example.com', captchaToken: 'bad-token' }),
       {} as never,
       {} as never
     );
@@ -103,7 +103,7 @@ describe('newsletter handler', () => {
     mockSend.mockRejectedValue(new Error('SES failure'));
 
     const result = await handler(
-      makeEvent({ email: 'user@example.com', captchaToken: 'valid-token' }),
+      makeEvent({ name: 'John Doe', email: 'user@example.com', captchaToken: 'valid-token' }),
       {} as never,
       {} as never
     );

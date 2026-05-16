@@ -42,3 +42,6 @@ jobs:
           SES_FROM_EMAIL: ${{ vars.SES_FROM_EMAIL }}
           SES_NOTIFY_EMAIL: ${{ vars.SES_NOTIFY_EMAIL }}
           SES_CONTACT_LIST: ${{ vars.SES_CONTACT_LIST }}
+          GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+          NEWSLETTER_SHEET_ID: ${{ vars.NEWSLETTER_SHEET_ID }}
+          CONTACTS_SHEET_ID: ${{ vars.CONTACTS_SHEET_ID }}

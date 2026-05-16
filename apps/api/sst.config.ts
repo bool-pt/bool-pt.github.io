@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/triple-slash-reference, @typescript-eslint/require-await -- SST framework requires this file shape */
 /// <reference path="./.sst/platform/config.d.ts" />
 
 export default $config({
@@ -18,6 +19,9 @@ export default $config({
       SES_FROM_EMAIL: process.env.SES_FROM_EMAIL ?? '',
       SES_NOTIFY_EMAIL: process.env.SES_NOTIFY_EMAIL ?? '',
       SES_CONTACT_LIST: process.env.SES_CONTACT_LIST ?? '',
+      GOOGLE_SERVICE_ACCOUNT_KEY: process.env.GOOGLE_SERVICE_ACCOUNT_KEY ?? '',
+      NEWSLETTER_SHEET_ID: process.env.NEWSLETTER_SHEET_ID ?? '',
+      CONTACTS_SHEET_ID: process.env.CONTACTS_SHEET_ID ?? '',
     };
 
     const sharedPermissions = [

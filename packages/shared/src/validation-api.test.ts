@@ -104,13 +104,13 @@ describe('validateContactFormSimple', () => {
 });
 
 describe('validateNewsletter', () => {
-  it('accepts valid email', () => {
-    const result = validateNewsletter({ email: 'john@example.com' });
+  it('accepts valid name and email', () => {
+    const result = validateNewsletter({ name: 'John Doe', email: 'john@example.com' });
     expect(result.success).toBe(true);
   });
 
   it('rejects invalid email', () => {
-    const result = validateNewsletter({ email: 'not-valid' });
+    const result = validateNewsletter({ name: 'John Doe', email: 'not-valid' });
     expect(result.success).toBe(false);
     if (!result.success) {
       expect(result.errors[0].path).toBe('email');
@@ -119,7 +119,12 @@ describe('validateNewsletter', () => {
   });
 
   it('rejects empty email', () => {
-    const result = validateNewsletter({ email: '' });
+    const result = validateNewsletter({ name: 'John Doe', email: '' });
+    expect(result.success).toBe(false);
+  });
+
+  it('rejects missing name', () => {
+    const result = validateNewsletter({ email: 'john@example.com' });
     expect(result.success).toBe(false);
   });
 });

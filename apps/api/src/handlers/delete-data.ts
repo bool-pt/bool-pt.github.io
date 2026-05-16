@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { ok, error } from '../lib/response.ts';
 import { parseAndValidate, getOrigin } from '../lib/validate.ts';
 import { createNewsletterStore } from '../providers/newsletter/index.ts';
+import { createSubscriptionStore } from '../providers/subscriptions/index.ts';
 
 const deleteSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -10,10 +11,8 @@ const deleteSchema = z.object({
 
 /**
  * GDPR Article 17 — Right to erasure.
- * Permanently deletes all data associated with the given email address.
- * Currently this covers: newsletter subscription (SES Contact List).
- * Contact form submissions are not stored (fire-and-forget email),
- * so there is no data to delete for those.
+ * Removes the email from SES Contact List and from both Google Sheets
+ * (newsletter subscribers + contact form submissions).
  */
 export const handler: APIGatewayProxyHandlerV2 = async (event) => {
   const origin = getOrigin(event);
@@ -26,6 +25,16 @@ export const handler: APIGatewayProxyHandlerV2 = async (event) => {
 
     const store = createNewsletterStore();
     await store.delete(validation.data.email);
+
+    try {
+      const sheetStore = createSubscriptionStore();
+      await Promise.all([
+        sheetStore.removeNewsletter(validation.data.email),
+        sheetStore.removeContact(validation.data.email),
+      ]);
+    } catch (err) {
+      console.error('[sheets-write-failed] delete-data', err);
+    }
 
     return ok(origin);
   } catch {

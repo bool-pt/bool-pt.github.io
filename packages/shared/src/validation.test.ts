@@ -75,19 +75,33 @@ describe('contactFormSimpleSchema', () => {
 });
 
 describe('newsletterSchema', () => {
-  it('accepts valid email', () => {
-    expect(newsletterSchema.safeParse({ email: 'test@example.com' }).success).toBe(true);
+  const valid = { name: 'John Doe', email: 'test@example.com' };
+
+  it('accepts valid name and email', () => {
+    expect(newsletterSchema.safeParse(valid).success).toBe(true);
   });
 
   it('rejects invalid email', () => {
-    expect(newsletterSchema.safeParse({ email: 'not-valid' }).success).toBe(false);
+    expect(newsletterSchema.safeParse({ ...valid, email: 'not-valid' }).success).toBe(false);
   });
 
   it('rejects empty email', () => {
-    expect(newsletterSchema.safeParse({ email: '' }).success).toBe(false);
+    expect(newsletterSchema.safeParse({ ...valid, email: '' }).success).toBe(false);
   });
 
   it('rejects missing email', () => {
-    expect(newsletterSchema.safeParse({}).success).toBe(false);
+    expect(newsletterSchema.safeParse({ name: 'John' }).success).toBe(false);
+  });
+
+  it('rejects short name', () => {
+    expect(newsletterSchema.safeParse({ ...valid, name: 'J' }).success).toBe(false);
+  });
+
+  it('rejects name over 100 chars', () => {
+    expect(newsletterSchema.safeParse({ ...valid, name: 'x'.repeat(101) }).success).toBe(false);
+  });
+
+  it('rejects missing name', () => {
+    expect(newsletterSchema.safeParse({ email: 'test@example.com' }).success).toBe(false);
   });
 });

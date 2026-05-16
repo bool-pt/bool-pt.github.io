@@ -2,6 +2,7 @@ import type { APIGatewayProxyEventV2 } from 'aws-lambda';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createCaptchaProvider } from '../../providers/captcha/index.ts';
 import { createEmailProvider } from '../../providers/email/index.ts';
+import { createSubscriptionStore } from '../../providers/subscriptions/index.ts';
 import { handler } from '../contact.ts';
 
 vi.mock('../../providers/captcha/index.ts', () => ({
@@ -9,6 +10,9 @@ vi.mock('../../providers/captcha/index.ts', () => ({
 }));
 vi.mock('../../providers/email/index.ts', () => ({
   createEmailProvider: vi.fn(),
+}));
+vi.mock('../../providers/subscriptions/index.ts', () => ({
+  createSubscriptionStore: vi.fn(),
 }));
 vi.mock('../../config.ts', () => ({
   getConfig: () => ({
@@ -32,11 +36,18 @@ function makeEvent(body: unknown, origin = 'https://bool.pt'): APIGatewayProxyEv
 describe('contact handler', () => {
   const mockVerify = vi.fn();
   const mockSend = vi.fn();
+  const mockRecordContact = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(createCaptchaProvider).mockReturnValue({ verify: mockVerify });
     vi.mocked(createEmailProvider).mockReturnValue({ send: mockSend });
+    vi.mocked(createSubscriptionStore).mockReturnValue({
+      recordNewsletter: vi.fn(),
+      recordContact: mockRecordContact,
+      removeNewsletter: vi.fn(),
+      removeContact: vi.fn(),
+    });
   });
 
   it('returns 200 on valid submission', async () => {
@@ -65,6 +76,32 @@ describe('contact handler', () => {
         subject: 'Contact form: John Doe',
       })
     );
+    expect(mockRecordContact).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: 'John Doe',
+        email: 'john@example.com',
+        message: 'Hello, this is a test message.',
+      })
+    );
+  });
+
+  it('still returns 200 when sheet write fails', async () => {
+    mockVerify.mockResolvedValue({ success: true });
+    mockSend.mockResolvedValue(undefined);
+    mockRecordContact.mockRejectedValueOnce(new Error('Sheets down'));
+
+    const result = await handler(
+      makeEvent({
+        name: 'John Doe',
+        email: 'john@example.com',
+        message: 'Hello, this is a test message.',
+        captchaToken: 'valid-token',
+      }),
+      {} as never,
+      {} as never
+    );
+
+    expect(result).toMatchObject({ statusCode: 200 });
   });
 
   it('escapes HTML in email body and subject', async () => {

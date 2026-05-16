@@ -2,10 +2,14 @@ import type { APIGatewayProxyEventV2, APIGatewayProxyStructuredResultV2 } from '
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { generateToken } from '../../lib/token.ts';
 import { createNewsletterStore } from '../../providers/newsletter/index.ts';
+import { createSubscriptionStore } from '../../providers/subscriptions/index.ts';
 import { handler } from '../newsletter-confirm.ts';
 
 vi.mock('../../providers/newsletter/index.ts', () => ({
   createNewsletterStore: vi.fn(),
+}));
+vi.mock('../../providers/subscriptions/index.ts', () => ({
+  createSubscriptionStore: vi.fn(),
 }));
 vi.mock('../../config.ts', () => ({
   getConfig: () => ({
@@ -28,6 +32,7 @@ function makeEvent(token?: string): APIGatewayProxyEventV2 {
 
 describe('newsletter-confirm handler', () => {
   const mockSubscribe = vi.fn();
+  const mockRecordNewsletter = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -35,6 +40,12 @@ describe('newsletter-confirm handler', () => {
       subscribe: mockSubscribe,
       unsubscribe: vi.fn(),
       delete: vi.fn(),
+    });
+    vi.mocked(createSubscriptionStore).mockReturnValue({
+      recordNewsletter: mockRecordNewsletter,
+      recordContact: vi.fn(),
+      removeNewsletter: vi.fn(),
+      removeContact: vi.fn(),
     });
   });
 
@@ -51,6 +62,24 @@ describe('newsletter-confirm handler', () => {
     expect(result.statusCode).toBe(302);
     expect(result.headers?.['Location']).toBe('https://bool.pt/newsletter/confirmed');
     expect(mockSubscribe).toHaveBeenCalledWith('user@example.com');
+    expect(mockRecordNewsletter).toHaveBeenCalledWith(
+      expect.objectContaining({ email: 'user@example.com' })
+    );
+  });
+
+  it('still redirects to success when sheet write fails', async () => {
+    mockSubscribe.mockResolvedValue(undefined);
+    mockRecordNewsletter.mockRejectedValueOnce(new Error('Sheets down'));
+    const token = generateToken('user@example.com', 'test-newsletter-secret');
+
+    const result = (await handler(
+      makeEvent(token),
+      {} as never,
+      {} as never
+    )) as APIGatewayProxyStructuredResultV2;
+
+    expect(result.statusCode).toBe(302);
+    expect(result.headers?.['Location']).toBe('https://bool.pt/newsletter/confirmed');
   });
 
   it('redirects to error when token is missing', async () => {
