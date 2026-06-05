@@ -7,20 +7,14 @@
  * 2. Drive API is enabled
  * 3. Folder is shared with the service account
  * 4. Expected subfolders (media/, locales/) exist
- * 5. If NEWSLETTER_SHEET_ID / CONTACTS_SHEET_ID are set, the service account can
- *    read each Sheet's metadata and header row.
  */
 
 import { createSign } from 'node:crypto';
 import { appendFileSync } from 'node:fs';
 
 const DRIVE_API = 'https://www.googleapis.com/drive/v3';
-const SHEETS_API = 'https://sheets.googleapis.com/v4/spreadsheets';
 const TOKEN_URL = 'https://oauth2.googleapis.com/token';
-const SCOPE = [
-  'https://www.googleapis.com/auth/drive.readonly',
-  'https://www.googleapis.com/auth/spreadsheets.readonly',
-].join(' ');
+const SCOPE = 'https://www.googleapis.com/auth/drive.readonly';
 
 // ---------------------------------------------------------------------------
 // Auth
@@ -251,91 +245,6 @@ if (hasLocales) {
   groupStart(`locales/ contains: ${names}`);
   console.log(names);
   groupEnd();
-}
-
-// Step 6: Probe subscription Sheets if their IDs are set
-const newsletterSheetId = process.env.NEWSLETTER_SHEET_ID;
-const contactsSheetId = process.env.CONTACTS_SHEET_ID;
-
-async function sheetsGet(path, token) {
-  const res = await fetch(`${SHEETS_API}/${path}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Sheets API ${path} (${res.status}): ${text}`);
-  }
-  return res.json();
-}
-
-async function probeSheet(label, sheetId, expectedHeaders) {
-  const checkName = `Sheet: ${label}`;
-  console.log(`\n   ${label} (${sheetId})…`);
-  try {
-    const meta = await sheetsGet(
-      `${sheetId}?fields=properties(title),sheets(properties(title,index))`,
-      token
-    );
-    const firstTab = meta.sheets.find((s) => s.properties.index === 0)?.properties.title;
-    console.log(`     Spreadsheet title: "${meta.properties.title}"`);
-    console.log(`     First tab:         "${firstTab}"`);
-
-    const headerRange = `${firstTab}!A1:Z1`;
-    const headers = await sheetsGet(`${sheetId}/values/${encodeURIComponent(headerRange)}`, token);
-    const cells = (headers.values && headers.values[0]) || [];
-    console.log(`     Header row:        [${cells.join(', ') || '(empty)'}]`);
-
-    const missing = expectedHeaders.filter((h) => !cells.includes(h));
-    if (missing.length) {
-      console.log(`     Missing expected columns: ${missing.join(', ')}`);
-      record(
-        checkName,
-        'fail',
-        `"${meta.properties.title}" — missing columns: ${missing.join(', ')}`
-      );
-    } else {
-      console.log(`     All expected columns present.`);
-      record(checkName, 'ok', `"${meta.properties.title}" → [${cells.join(', ')}]`);
-    }
-  } catch (err) {
-    console.error(`     FAILED: ${err.message}`);
-    console.error(`     Make sure ${sa.client_email} is shared on this sheet as Editor.`);
-    const msg = err.message;
-    const apiDisabled =
-      msg.includes('has not been used in project') ||
-      msg.includes('SERVICE_DISABLED') ||
-      msg.includes('it is disabled');
-    const hint = apiDisabled
-      ? 'Sheets API not enabled on this GCP project — enable at console.cloud.google.com'
-      : /403/.test(msg)
-        ? `Not shared with ${sa.client_email} as Editor`
-        : /404/.test(msg)
-          ? 'Sheet ID not found — check NEWSLETTER_SHEET_ID / CONTACTS_SHEET_ID variable'
-          : msg.split('\n')[0];
-    record(checkName, 'fail', hint);
-  }
-}
-
-if (newsletterSheetId || contactsSheetId) {
-  console.log('\n5. Probing subscription Sheets…');
-  if (newsletterSheetId) {
-    await probeSheet('newsletter', newsletterSheetId, ['email', 'date']);
-  } else {
-    console.log('   newsletter: NEWSLETTER_SHEET_ID not set — skipping');
-    record('Sheet: newsletter', 'skip', 'NEWSLETTER_SHEET_ID not set');
-  }
-  if (contactsSheetId) {
-    await probeSheet('contacts', contactsSheetId, ['name', 'email', 'message', 'date']);
-  } else {
-    console.log('   contacts: CONTACTS_SHEET_ID not set — skipping');
-    record('Sheet: contacts', 'skip', 'CONTACTS_SHEET_ID not set');
-  }
-} else {
-  console.log(
-    '\n5. Subscription Sheets: NEWSLETTER_SHEET_ID / CONTACTS_SHEET_ID not set — skipping probe.'
-  );
-  record('Sheet: newsletter', 'skip', 'NEWSLETTER_SHEET_ID not set');
-  record('Sheet: contacts', 'skip', 'CONTACTS_SHEET_ID not set');
 }
 
 // ---------------------------------------------------------------------------

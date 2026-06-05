@@ -4,15 +4,16 @@
 
 ## Workflows
 
-Five GitHub Actions workflows:
+Four GitHub Actions workflows:
 
-| Workflow                                            | Trigger                                | What it does                                               |
-| --------------------------------------------------- | -------------------------------------- | ---------------------------------------------------------- |
-| **CI** (`.github/workflows/ci.yml`)                 | Push to `main`, PRs                    | Lint -> Typecheck -> Test -> Build -> E2E                  |
-| **Deploy** (`.github/workflows/deploy.yml`)         | Manual (`workflow_dispatch`)           | Build -> Deploy to GitHub Pages                            |
-| **Deploy API** (`.github/workflows/deploy-api.yml`) | Push to `main` (apps/api/\*\*), manual | Deploy Lambda API via SST                                  |
-| **Sync Drive** (`.github/workflows/sync-drive.yml`) | Manual (`workflow_dispatch`)           | Sync media + locales from Google Drive -> commit to `main` |
-| **Lighthouse** (`.github/workflows/lighthouse.yml`) | PRs to `main`                          | Lighthouse performance audit                               |
+| Workflow                                            | Trigger                      | What it does                                               |
+| --------------------------------------------------- | ---------------------------- | ---------------------------------------------------------- |
+| **CI** (`.github/workflows/ci.yml`)                 | Push to `main`, PRs          | Lint -> Typecheck -> Test -> Build -> E2E                  |
+| **Deploy** (`.github/workflows/deploy.yml`)         | Manual (`workflow_dispatch`) | Build -> Deploy to GitHub Pages                            |
+| **Sync Drive** (`.github/workflows/sync-drive.yml`) | Manual (`workflow_dispatch`) | Sync media + locales from Google Drive -> commit to `main` |
+| **Lighthouse** (`.github/workflows/lighthouse.yml`) | PRs to `main`                | Lighthouse performance audit                               |
+
+> **Note on form submissions:** the site's contact + newsletter forms are wired to call `PUBLIC_CONTACT_API_URL` / `PUBLIC_NEWSLETTER_API_URL`. The previous AWS Lambda + SES + Sheets backend that served those endpoints has been removed pending a decision on the new email provider (Postmark or similar). Until a new backend is wired up, form submissions will fail at runtime — the site is not yet in production.
 
 ### Workflow rules
 
@@ -29,30 +30,17 @@ All configuration lives in GitHub — no `.env.local` files needed. Configure at
 
 ### Variables (`vars.*`) — non-sensitive, visible in logs
 
-| Variable                    | Used by                | Description                                                                                                   |
-| --------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `PUBLIC_CONTACT_API_URL`    | CI, Deploy, Lighthouse | Contact form Lambda endpoint URL                                                                              |
-| `PUBLIC_NEWSLETTER_API_URL` | CI, Deploy, Lighthouse | Newsletter Lambda endpoint URL                                                                                |
-| `PUBLIC_HCAPTCHA_SITE_KEY`  | CI, Deploy, Lighthouse | hCaptcha site key (public, identifies site)                                                                   |
-| `PUBLIC_GA_MEASUREMENT_ID`  | CI, Deploy, Lighthouse | Google Analytics 4 measurement ID                                                                             |
-| `PUBLIC_SENTRY_DSN`         | CI, Deploy             | Sentry DSN for error monitoring                                                                               |
-| `AWS_DEPLOY_ROLE_ARN`       | Deploy API             | IAM role ARN for OIDC-based AWS authentication                                                                |
-| `SES_FROM_EMAIL`            | Deploy API             | SES verified sender email address                                                                             |
-| `SES_NOTIFY_EMAIL`          | Deploy API             | Email address for contact form notifications                                                                  |
-| `SES_CONTACT_LIST`          | Deploy API             | SES contact list name for newsletter                                                                          |
-| `NEWSLETTER_SHEET_ID`       | Deploy API             | Google Sheets ID for newsletter subscribers (from `media/subscriptions/`) — leave unset to disable sheet sync |
-| `CONTACTS_SHEET_ID`         | Deploy API             | Google Sheets ID for contact form submissions — leave unset to disable sheet sync                             |
+| Variable                    | Used by                | Description                                                |
+| --------------------------- | ---------------------- | ---------------------------------------------------------- |
+| `PUBLIC_CONTACT_API_URL`    | CI, Deploy, Lighthouse | Contact form endpoint URL (used by the frontend at submit) |
+| `PUBLIC_NEWSLETTER_API_URL` | CI, Deploy, Lighthouse | Newsletter endpoint URL (used by the frontend at submit)   |
+| `PUBLIC_HCAPTCHA_SITE_KEY`  | CI, Deploy, Lighthouse | hCaptcha site key (public, identifies site)                |
+| `PUBLIC_GA_MEASUREMENT_ID`  | CI, Deploy, Lighthouse | Google Analytics 4 measurement ID                          |
+| `PUBLIC_SENTRY_DSN`         | CI, Deploy             | Sentry DSN for error monitoring                            |
 
 ### Secrets (`secrets.*`) — encrypted, masked in logs
 
-| Secret                       | Used by                | Description                                                                                                                                     |
-| ---------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GOOGLE_SERVICE_ACCOUNT_KEY` | Sync Drive, Deploy API | Full JSON content of the Google Cloud service account key. Sync Drive uses `drive.readonly`; API uses `spreadsheets` to write subscription rows |
-| `GOOGLE_DRIVE_FOLDER_ID`     | Sync Drive             | Google Drive root folder ID (contains media/ and locales/ subfolders)                                                                           |
-
-### SST Secrets (managed via `npx sst secret set`, not GitHub)
-
-| Secret                  | Used by    | Description                              |
-| ----------------------- | ---------- | ---------------------------------------- |
-| `HCaptchaSecret`        | Deploy API | hCaptcha secret key (server-side verify) |
-| `NewsletterTokenSecret` | Deploy API | JWT signing secret for newsletter tokens |
+| Secret                       | Used by    | Description                                                           |
+| ---------------------------- | ---------- | --------------------------------------------------------------------- |
+| `GOOGLE_SERVICE_ACCOUNT_KEY` | Sync Drive | Full JSON content of the Google Cloud service account key             |
+| `GOOGLE_DRIVE_FOLDER_ID`     | Sync Drive | Google Drive root folder ID (contains media/ and locales/ subfolders) |
