@@ -5,10 +5,13 @@ import type { Locale } from '@bool/i18n';
 import { resolveImage } from './media.ts';
 import { collectArray, collectNestedList } from './sections.ts';
 
+/** Shown when a team member has no portrait yet. */
+const PLACEHOLDER_PORTRAIT = 'portraits/portrait.png';
+
 const itemSchema = z.object({
   name: z.string().min(1, 'name required'),
   role: z.string().min(1, 'role required'),
-  image: z.string().min(1, 'image required'),
+  image: z.string().default(''),
   linkedin: z.string().default(''),
   email: z.string().default(''),
   bio: z.string().default(''),
@@ -48,14 +51,14 @@ export function getTeamGrid(locale: Locale = defaultLocale): TeamGridPayload {
       throw new Error(
         `[@bool/content] teamGrid.items[${idx + 1}] failed validation: ${parseResult.error.issues
           .map((i) => `${i.path.join('.')}: ${i.message}`)
-          .join('; ')}`,
+          .join('; ')}`
       );
     }
     const parsed = parseResult.data;
     return {
       name: parsed.name,
       role: parsed.role,
-      image: resolveImage(parsed.image),
+      image: resolveImage(parsed.image || PLACEHOLDER_PORTRAIT),
       ...(parsed.linkedin ? { linkedin: parsed.linkedin } : {}),
       ...(parsed.email ? { email: parsed.email } : {}),
       bio: parsed.bio,
