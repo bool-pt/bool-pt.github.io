@@ -39,16 +39,13 @@ Media and locale files are synced from a shared Google Drive folder via GitHub A
 │   │   ├── backgrounds/
 │   │   ├── team/
 │   │   └── ...
-│   ├── fonts/
-│   └── subscriptions/       (written to by the Lambda API — not synced down)
-│       ├── newsletter        (Google Sheet — columns: email, date)
-│       └── contacts          (Google Sheet — columns: name, email, message, date)
+│   └── fonts/
 └── locales/                → packages/i18n/src/locales/
     ├── en.json
     └── pt.json (future)
 ```
 
-The `media/` and `locales/` subfolders are optional — the sync script downloads whichever it finds. The `subscriptions/` folder lives **inside `media/`** and is **write-only from the API direction**: it is **not** pulled down by `sync-drive.yml` (the sync only downloads files with image extensions, so the Sheets are ignored). Newsletter confirmations and contact form submissions append rows to these Google Sheets via the Sheets API, and GDPR erasure (`DELETE /data`) removes rows. Configure with the `NEWSLETTER_SHEET_ID` and `CONTACTS_SHEET_ID` GitHub Variables (Sheet ID = the `/d/<ID>/edit` segment of the Sheet URL) and share each Sheet with the service account email as **Editor**. Sheet writes are fail-soft — if Sheets is unreachable the form submission still succeeds and the failure is logged as `[sheets-write-failed]` in CloudWatch.
+The `media/` and `locales/` subfolders are optional — the sync script downloads whichever it finds.
 
 ### Setup (one-time)
 
