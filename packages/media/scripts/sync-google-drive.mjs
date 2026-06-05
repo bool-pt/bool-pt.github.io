@@ -60,6 +60,7 @@ import { createSign } from 'node:crypto';
 import {
   readFileSync,
   writeFileSync,
+  appendFileSync,
   mkdirSync,
   existsSync,
   readdirSync,
@@ -525,12 +526,23 @@ function mergeLocale(localContent, driveContent) {
   const merged = {};
   const driveKeys = new Set();
   const updatedKeys = [];
+  // Destructive changes: a key that had a non-empty value locally but comes
+  // down empty/blank from Drive (the silent-clobber risk). Surfaced in the
+  // sync log + PR body so a reviewer can reject before merging.
+  const clearedKeys = [];
 
   for (const [key, driveValue] of Object.entries(drive)) {
     merged[key] = driveValue;
     driveKeys.add(key);
     if (Object.prototype.hasOwnProperty.call(local, key) && local[key] !== driveValue) {
       updatedKeys.push(key);
+      const localFilled =
+        typeof local[key] === 'string' ? local[key].trim() !== '' : local[key] != null;
+      const driveBlank =
+        typeof driveValue === 'string' ? driveValue.trim() === '' : driveValue == null;
+      if (localFilled && driveBlank) {
+        clearedKeys.push({ key, was: local[key] });
+      }
     }
   }
 
@@ -546,6 +558,7 @@ function mergeLocale(localContent, driveContent) {
     merged,
     localOnlyKeys,
     updatedKeys,
+    clearedKeys,
     addedKeys: [...driveKeys].filter((k) => !(k in local)),
   };
 }
@@ -564,7 +577,7 @@ async function syncLocales(localesFolderId, token) {
 
   if (driveFiles.length === 0) {
     console.log('No JSON files found in locales/ folder.\n');
-    return { downloaded: 0, skipped: 0, unchanged: 0 };
+    return { downloaded: 0, skipped: 0, unchanged: 0, warnings: [] };
   }
 
   mkdirSync(LOCALES_DIR, { recursive: true });
@@ -572,6 +585,8 @@ async function syncLocales(localesFolderId, token) {
   let downloaded = 0;
   let skipped = 0;
   let unchanged = 0;
+  // { file, key, was } for every value Drive blanked out
+  const warnings = [];
 
   for (const file of driveFiles) {
     // Only sync top-level .json files (ignore subdirectories)
@@ -600,9 +615,12 @@ async function syncLocales(localesFolderId, token) {
     }
 
     const localContent = readFileSync(destPath, 'utf-8');
-    let merged, localOnlyKeys, updatedKeys, addedKeys;
+    let merged, localOnlyKeys, updatedKeys, addedKeys, clearedKeys;
     try {
-      ({ merged, localOnlyKeys, updatedKeys, addedKeys } = mergeLocale(localContent, driveContent));
+      ({ merged, localOnlyKeys, updatedKeys, addedKeys, clearedKeys } = mergeLocale(
+        localContent,
+        driveContent
+      ));
     } catch (err) {
       console.log(`SKIPPED (${err.message})`);
       skipped++;
@@ -627,10 +645,19 @@ async function syncLocales(localesFolderId, token) {
       const ellipsis = localOnlyKeys.length > 5 ? `, … (+${localOnlyKeys.length - 5} more)` : '';
       console.log(`    local-only keys preserved: ${sample}${ellipsis}`);
     }
+    if (clearedKeys.length) {
+      console.warn(
+        `    ⚠️  ${clearedKeys.length} value(s) CLEARED by Drive (was set locally → now blank):`
+      );
+      for (const { key, was } of clearedKeys) {
+        console.warn(`        ${key}: "${was}" → ""`);
+        warnings.push({ file: file.name, key, was });
+      }
+    }
     downloaded++;
   }
 
-  return { downloaded, skipped, unchanged };
+  return { downloaded, skipped, unchanged, warnings };
 }
 
 // ---------------------------------------------------------------------------
@@ -707,9 +734,35 @@ if (mediaFolderId) {
 
 // Then sync locales (overwrites with Drive versions — done after media moves
 // so that any path rewrites from media moves don't conflict)
-let localesSummary = { downloaded: 0, skipped: 0, unchanged: 0 };
+let localesSummary = { downloaded: 0, skipped: 0, unchanged: 0, warnings: [] };
 if (localesFolderId) {
   localesSummary = await syncLocales(localesFolderId, token);
+}
+
+// Surface destructive (value-cleared) changes where a reviewer will see them:
+// the Actions run summary and the create-pull-request body (via step output).
+const clearWarnings = localesSummary.warnings ?? [];
+if (clearWarnings.length > 0) {
+  const lines = [
+    '> [!WARNING]',
+    `> **${clearWarnings.length} value(s) were cleared by this sync** — a key that was set locally came down blank from Drive. Review before merging; if unintended, fix the value in Drive and re-sync (or do not merge).`,
+    '>',
+    ...clearWarnings.map((w) => `> - \`${w.key}\` (${w.file}): \`"${w.was}"\` → \`""\``),
+  ];
+  const block = lines.join('\n');
+
+  // 1) Actions run page
+  if (process.env.GITHUB_STEP_SUMMARY) {
+    appendFileSync(process.env.GITHUB_STEP_SUMMARY, `\n${block}\n`);
+  }
+  // 2) PR body — exposed as a multiline step output named "warnings"
+  if (process.env.GITHUB_OUTPUT) {
+    const delim = 'SYNC_WARNINGS_EOF';
+    appendFileSync(process.env.GITHUB_OUTPUT, `warnings<<${delim}\n${block}\n${delim}\n`);
+  }
+} else if (process.env.GITHUB_OUTPUT) {
+  // Emit an empty output so the workflow reference never errors.
+  appendFileSync(process.env.GITHUB_OUTPUT, 'warnings<<SYNC_WARNINGS_EOF\nSYNC_WARNINGS_EOF\n');
 }
 
 // Summary

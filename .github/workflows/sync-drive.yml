@@ -28,6 +28,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - name: Sync from Google Drive
+        id: sync
         run: pnpm --filter @bool/media sync:drive
         env:
           GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
@@ -44,6 +45,8 @@ jobs:
             - Media images updated in `packages/media/images/`
             - Locale files updated in `packages/i18n/src/locales/`
             - Blog frontmatter image paths rewritten if media was reorganized
+
+            ${{ steps.sync.outputs.warnings }}
 
             Triggered by @${{ github.actor }} via the **Sync from Google Drive** workflow.
           branch: chore/sync-drive
