@@ -1,0 +1,203 @@
+---
+import ArrowLink from '../../compositions/ArrowLink/ArrowLink.astro';
+import ImageOverlayCard from '../../compositions/ImageOverlayCard/ImageOverlayCard.astro';
+import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
+import CardImageBg from '../../primitives/CardImageBg/CardImageBg.astro';
+import CardTitle from '../../primitives/CardTitle/CardTitle.astro';
+import Icon from '../../primitives/Icon/Icon.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+
+interface UseCaseItem {
+  category: string;
+  title: string;
+  image: string;
+  href: string;
+}
+
+interface Props {
+  eyebrow: string;
+  heading: string;
+  description: string;
+  ctaLabel: string;
+  prevLabel: string;
+  nextLabel: string;
+  items?: UseCaseItem[];
+  backgroundImage?: ImageMetadata;
+}
+
+const {
+  eyebrow,
+  heading,
+  description,
+  ctaLabel,
+  prevLabel,
+  nextLabel,
+  items = [],
+  backgroundImage,
+} = Astro.props;
+---
+
+<Section
+  background="var(--color-background)"
+  aria-labelledby="ai-use-cases-heading"
+  paddingBlock="4rem"
+  backgroundImage={backgroundImage?.src}
+>
+  <SectionContainer>
+    <div class="uc-header">
+      <div class="uc-intro">
+        <SectionTag>{eyebrow}</SectionTag>
+        <h2 id="ai-use-cases-heading" class="uc-heading">{heading}</h2>
+        <p class="uc-desc">{description}</p>
+      </div>
+      <div class="uc-nav">
+        <button type="button" class="uc-arrow" data-uc-prev aria-label={prevLabel}>
+          <Icon name="chevron-left" size={16} strokeWidth={2.5} />
+        </button>
+        <button type="button" class="uc-arrow" data-uc-next aria-label={nextLabel}>
+          <Icon name="chevron-right" size={16} strokeWidth={2.5} />
+        </button>
+      </div>
+    </div>
+
+    <div class="uc-track" data-uc-track>
+      {
+        items.map((item) => (
+          <ImageOverlayCard
+            aspectRatio="384/470"
+            gradient="linear-gradient(to top, var(--black-75) 0%, var(--black-20) 50%, transparent 70%)"
+            hoverEffect="lift"
+            class="uc-card"
+          >
+            <CardImageBg slot="image" src={item.image} />
+            <span class="uc-category">{item.category}</span>
+            <CardTitle colorScheme="dark" class="uc-card-title">
+              {item.title}
+            </CardTitle>
+            <ArrowLink href={item.href} label={ctaLabel} colorScheme="dark" class="uc-cta" />
+          </ImageOverlayCard>
+        ))
+      }
+    </div>
+  </SectionContainer>
+</Section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-uc-track]').forEach((track) => {
+    const section = track.closest('section') ?? document;
+    const prev = section.querySelector<HTMLButtonElement>('[data-uc-prev]');
+    const next = section.querySelector<HTMLButtonElement>('[data-uc-next]');
+
+    function step() {
+      const card = track.querySelector<HTMLElement>('.uc-card');
+      if (!card) return track.clientWidth;
+      const gap = parseFloat(getComputedStyle(track).columnGap || '24') || 24;
+      return card.offsetWidth + gap;
+    }
+
+    prev?.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+    next?.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+  });
+</script>
+
+<style>
+  .uc-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-block-end: 3rem;
+  }
+
+  .uc-heading {
+    font-family: var(--font-display);
+    font-size: var(--font-size-display);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--color-surface-dark);
+    margin: 0 0 1rem;
+  }
+
+  .uc-desc {
+    font-family: var(--font-display);
+    font-size: var(--font-size-lead);
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--color-foreground);
+    margin: 0;
+    max-inline-size: 32rem;
+  }
+
+  .uc-nav {
+    display: flex;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .uc-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 2rem;
+    block-size: 2rem;
+    border-radius: 50%;
+    border: 2px solid var(--color-primary);
+    background-color: transparent;
+    color: var(--color-primary);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition:
+      background-color 150ms,
+      color 150ms;
+  }
+
+  .uc-arrow:hover {
+    background-color: var(--color-primary);
+    color: var(--color-background);
+  }
+
+  .uc-track {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline-start: 0;
+    /* Hide scrollbar — navigation is via arrows / swipe */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-block-end: 0.5rem;
+  }
+
+  .uc-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .uc-track :global(.uc-card) {
+    flex: 0 0 auto;
+    inline-size: min(384px, 80vw);
+    scroll-snap-align: start;
+  }
+
+  .uc-category {
+    font-size: var(--font-size-body-sm);
+    color: var(--color-on-dark-muted);
+    margin-block-end: 0.5rem;
+  }
+
+  .uc-track :global(.uc-card-title) {
+    margin-block-end: 1.25rem;
+  }
+
+  .uc-track :global(.arrow-link--dark) {
+    color: var(--color-primary);
+  }
+
+  @media (max-width: 640px) {
+    .uc-header {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+  }
+</style>
