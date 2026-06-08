@@ -51,10 +51,11 @@ jobs:
       - run: pnpm test
       - name: Upload coverage
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: coverage
           path: packages/*/coverage/
+          if-no-files-found: ignore
 
   build:
     name: Build
@@ -108,7 +109,8 @@ jobs:
         run: pnpm test:e2e
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: playwright-report
           path: playwright-report/
+          if-no-files-found: ignore
