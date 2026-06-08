@@ -1,6 +1,6 @@
 # Bool — CLAUDE.md
 
-Bool is a corporate website for a software consultancy. **Astro 5** static site with **React 19** islands, **Shadcn UI**, **Tailwind CSS 4**, **pnpm monorepo** with **Turborepo**, hosted on **GitHub Pages**. Zero backend — contact form hits an external AWS Lambda.
+Bool is a corporate website for a software consultancy. **Astro 6** static site with **React 19** islands, **Shadcn UI**, **Tailwind CSS 4**, **pnpm monorepo** with **Turborepo**, hosted on **GitHub Pages**. Zero backend — contact form hits an external AWS Lambda.
 
 ## Documentation
 
@@ -25,7 +25,7 @@ Bool is a corporate website for a software consultancy. **Astro 5** static site 
 apps/web pages  →  sections  →  compositions  →  primitives
 ```
 
-**Never skip layers** — a page must not import a primitive directly. Sections compose compositions + primitives. Compositions compose primitives.
+**Never skip layers** — a page must not import a primitive directly. Sections compose compositions + primitives. Compositions compose primitives. `eslint-plugin-boundaries` enforces this automatically in `@bool/ui` — a lint error is a real violation.
 
 ### Package Boundaries
 
@@ -40,7 +40,23 @@ apps/web pages  →  sections  →  compositions  →  primitives
 
 ### Root Is Minimal
 
-Only files that **must** live at root: `pnpm-workspace.yaml`, `turbo.json`, `package.json`, `.gitignore`, `.mcp.json`. All configuration lives in `tooling/`.
+Root contains only what tools require there or what belongs to the repo itself:
+
+| File / dir             | Why it's at root                                                |
+| ---------------------- | --------------------------------------------------------------- |
+| `pnpm-workspace.yaml`  | pnpm workspace definition — must be at root                     |
+| `pnpm-lock.yaml`       | pnpm lockfile — auto-generated, must be at root                 |
+| `turbo.json`           | Turborepo pipeline — must be at root                            |
+| `package.json`         | Root scripts and devDeps                                        |
+| `eslint.config.mjs`    | ESLint v9 flat config — auto-discovered from root, must be here |
+| `prettier.config.mjs`  | Prettier config — resolved from root                            |
+| `tsconfig.json`        | Root TypeScript project references                              |
+| `vitest.workspace.ts`  | Vitest workspace config — resolved from root                    |
+| `.gitignore`           | Git ignore rules                                                |
+| `.mcp.json`            | MCP server config for Claude Code                               |
+| `LICENSE`, `README.md` | Standard repo files                                             |
+
+**Never** add stray config, scripts, or assets to root. All other configuration lives in `tooling/`.
 
 ---
 
@@ -108,20 +124,22 @@ Use Tailwind theme classes for colors/spacing. **Never** hardcode hex/rgb/hsl. U
 
 ## Hard Rules
 
-| Rule                         | Detail                                                                                                                        |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| Verify before suggesting     | Read `package.json`, `tsconfig.json`, `astro.config.ts` before recommending a dependency or config change                     |
-| If unsure, ASK               | Never guess about architecture decisions, styling approach, or package boundaries                                             |
-| Scope boundaries             | Never touch files outside the package you're working in. Cross-package changes require explicit instruction                   |
-| Prefer editing over creating | Edit existing files. Only create new files when the task genuinely requires it                                                |
-| No silent fallbacks          | If something fails, throw or surface the error. Never swallow errors with empty catch blocks                                  |
-| No duct-tape code            | No `// TODO: fix later`, no `@ts-ignore` without an adjacent explanation, no commented-out code                               |
-| Clean codebase               | Delete deprecated code, unused imports, dead files. No `_old` suffixes or compatibility shims                                 |
-| Ask before large changes     | If a task touches more than 5 files, outline the plan first and get confirmation                                              |
-| Be concise                   | No trailing summaries. No restating what was just done. The diff speaks for itself                                            |
-| No planning language in code | Remove "will implement", "placeholder for", "TODO: add" from operational files                                                |
-| Encapsulate assets           | Assets go in `@bool/media`, config in `tooling/`. Never add stray files to project root                                       |
-| Visual QA mandatory          | When implementing from a design: run `/design-qa`, iterate until zero discrepancies                                           |
-| Dependency freshness gate    | **Never** add a dependency published less than 7 days ago. Check `npm info <pkg> time`. Flag for manual review if urgent      |
-| All config in GitHub         | No `.env.local` files. Variables and secrets live in GitHub repo settings. Full reference: `documentation/ci-deploy.md`       |
-| `main` is protected          | Never push directly. All changes go through PRs. Conventional Commits enforced. Full workflow: `documentation/conventions.md` |
+| Rule                         | Detail                                                                                                                                              |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Verify before suggesting     | Read `package.json`, `tsconfig.json`, `astro.config.ts` before recommending a dependency or config change                                           |
+| If unsure, ASK               | Never guess about architecture decisions, styling approach, or package boundaries                                                                   |
+| Scope boundaries             | Never touch files outside the package you're working in. Cross-package changes require explicit instruction                                         |
+| Prefer editing over creating | Edit existing files. Only create new files when the task genuinely requires it                                                                      |
+| No silent fallbacks          | If something fails, throw or surface the error. Never swallow errors with empty catch blocks                                                        |
+| No duct-tape code            | No `// TODO: fix later`, no `@ts-ignore` without an adjacent explanation, no commented-out code                                                     |
+| Clean codebase               | Delete deprecated code, unused imports, dead files. No `_old` suffixes or compatibility shims                                                       |
+| Ask before large changes     | If a task touches more than 5 files, outline the plan first and get confirmation                                                                    |
+| Be concise                   | No trailing summaries. No restating what was just done. The diff speaks for itself                                                                  |
+| No planning language in code | Remove "will implement", "placeholder for", "TODO: add" from operational files                                                                      |
+| Encapsulate assets           | Assets go in `@bool/media`, config in `tooling/`. Never add stray files to project root                                                             |
+| Visual QA mandatory          | When implementing from a design: run `/design-qa`, iterate until zero discrepancies                                                                 |
+| Dependency freshness gate    | **Never** add a dependency published less than 7 days ago. Run `pnpm freshness <pkg>[@version]` before installing. Flag for manual review if urgent |
+| Use `catalog:` for versions  | All deps in `package.json` files must use `catalog:`. Pin the version once in `pnpm-workspace.yaml` only                                            |
+| Dead code gate               | Run `pnpm knip` before shipping. Config: `tooling/knip.config.ts`                                                                                   |
+| All config in GitHub         | No `.env.local` files. Variables and secrets live in GitHub repo settings. Full reference: `documentation/ci-deploy.md`                             |
+| `main` is protected          | Never push directly. All changes go through PRs. Conventional Commits enforced. Full workflow: `documentation/conventions.md`                       |
