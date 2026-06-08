@@ -62,7 +62,7 @@ export function CookieBanner() {
   }
 
   return (
-    <div role="dialog" aria-label={t('cookie.aria')} aria-live="polite" className={styles.banner}>
+    <div role="region" aria-label={t('cookie.aria')} className={styles.banner}>
       {view === 'initial' ? (
         <>
           <p className={styles.message}>{t('cookie.message')}</p>

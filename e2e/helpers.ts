@@ -9,16 +9,16 @@ import type { Locator, Page } from '@playwright/test';
  * pointer events.
  */
 export async function dismissCookieBanner(page: Page): Promise<void> {
-  // Match the CookieBanner specifically (it carries aria-label="Cookie consent");
-  // matching just role="dialog" can also match Radix dialogs opened later.
-  const banner = page
-    .locator('[role="dialog"][aria-label="Cookie consent"]')
-    .first();
+  // The banner mounts after React hydration — wait briefly before deciding it
+  // is absent (e.g. consent already stored in localStorage from a prior test).
+  // Use aria-label only so the selector survives future role changes.
+  const banner = page.locator('[aria-label="Cookie consent"]').first();
+  await banner.waitFor({ state: 'visible', timeout: 3_000 }).catch(() => {});
   if (!(await banner.isVisible().catch(() => false))) return;
   const accept = banner.locator('button').first();
   if (!(await accept.isVisible().catch(() => false))) return;
   await accept.click();
-  await banner.waitFor({ state: 'hidden', timeout: 5_000 }).catch(() => {});
+  await banner.waitFor({ state: 'hidden', timeout: 5_000 });
 }
 
 /**
@@ -29,13 +29,8 @@ export async function dismissCookieBanner(page: Page): Promise<void> {
  * Use before any test that interacts with a React handler — without this,
  * Playwright can race React mount and click on a static button.
  */
-export async function getHydratedRoot(
-  page: Page,
-  componentName: string,
-): Promise<Locator> {
-  const island = page
-    .locator(`astro-island[component-url*="${componentName}"]`)
-    .first();
+export async function getHydratedRoot(page: Page, componentName: string): Promise<Locator> {
+  const island = page.locator(`astro-island[component-url*="${componentName}"]`).first();
   await island.waitFor({ state: 'attached', timeout: 10_000 });
   await island.scrollIntoViewIfNeeded();
   // Hydrated islands drop the `await-children` attribute. Poll until it's
@@ -45,13 +40,11 @@ export async function getHydratedRoot(
   await page
     .waitForFunction(
       (component) => {
-        const el = document.querySelector(
-          `astro-island[component-url*="${component}"]`,
-        );
+        const el = document.querySelector(`astro-island[component-url*="${component}"]`);
         return !!el && !el.hasAttribute('await-children');
       },
       componentName,
-      { timeout: 10_000 },
+      { timeout: 10_000 }
     )
     .catch(() => {});
   return island;

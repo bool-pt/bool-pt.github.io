@@ -42,16 +42,14 @@ test.describe('Navigation', () => {
           await menuButton.click();
           return menuButton.getAttribute('aria-expanded');
         },
-        { timeout: 10_000, intervals: [200, 400, 600, 800, 1000] },
+        { timeout: 10_000, intervals: [200, 400, 600, 800, 1000] }
       )
       .toBe('open');
 
     // Sheet (Radix Dialog) mounts in a portal at <body>. Match the dialog
     // containing the nav links so we don't pick up the cookie banner dialog
     // or the dialog backdrop alone.
-    const mobileNav = page
-      .locator(`[role="dialog"]:has(a[href="${ROUTES.about}"])`)
-      .first();
+    const mobileNav = page.locator(`[role="dialog"]:has(a[href="${ROUTES.about}"])`).first();
     await expect(mobileNav).toBeVisible({ timeout: 5_000 });
     await mobileNav.locator(`a[href="${ROUTES.about}"]`).first().click();
     await expect(page).toHaveURL(ROUTES.about);
@@ -64,7 +62,7 @@ test.describe('Cookie Consent', () => {
     await page.evaluate(() => localStorage.clear());
     await page.reload();
 
-    const banner = page.locator('[role="dialog"]').first();
+    const banner = page.locator('[aria-label="Cookie consent"]').first();
     if (await banner.isVisible().catch(() => false)) {
       await dismissCookieBanner(page);
       await expect(banner).toBeHidden();
@@ -85,7 +83,7 @@ test.describe('Cookie Consent', () => {
     await page.evaluate(() => localStorage.clear());
     await page.reload();
 
-    const banner = page.locator('[role="dialog"]').first();
+    const banner = page.locator('[aria-label="Cookie consent"]').first();
     if (!(await banner.isVisible().catch(() => false))) return;
 
     const manageButton = banner.locator('button').last();
@@ -104,7 +102,7 @@ test.describe('Contact Form', () => {
 
     // Find and submit the form
     const submitButton = page.locator('button[type="submit"]');
-    if (await submitButton.count() > 0) {
+    if ((await submitButton.count()) > 0) {
       await submitButton.first().click();
 
       // Should show validation errors (required fields)
@@ -119,19 +117,19 @@ test.describe('Contact Form', () => {
 
     // Fill in form fields
     const nameInput = page.locator('input[name="name"], input[name="firstName"]');
-    if (await nameInput.count() > 0) {
+    if ((await nameInput.count()) > 0) {
       await nameInput.first().fill('John Doe');
       await expect(nameInput.first()).toHaveValue('John Doe');
     }
 
     const emailInput = page.locator('input[name="email"]');
-    if (await emailInput.count() > 0) {
+    if ((await emailInput.count()) > 0) {
       await emailInput.first().fill('john@example.com');
       await expect(emailInput.first()).toHaveValue('john@example.com');
     }
 
     const messageInput = page.locator('textarea[name="message"]');
-    if (await messageInput.count() > 0) {
+    if ((await messageInput.count()) > 0) {
       await messageInput.first().fill('Test message content');
       await expect(messageInput.first()).toHaveValue('Test message content');
     }
