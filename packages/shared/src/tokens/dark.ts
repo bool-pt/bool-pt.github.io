@@ -1,4 +1,4 @@
-import { colorPrimitives } from './colors';
+import { colorPrimitives } from './colors.ts';
 
 export const colorSemanticsDark = {
   primary: colorPrimitives.red[400],
