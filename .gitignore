@@ -41,7 +41,21 @@ stats.html
 *.log
 pnpm-debug.log*
 
-# Claude Code
+# Husky internals (auto-generated on install)
+.husky/_/
+
+# Claude Code — local/machine-specific, never commit
+.claude/settings.local.json
 .claude/.logs/
 .claude/plans/
 .claude/implementation-plans/
+# Anthropic-managed skill assets (binary fonts, templates) — installed per-machine by Claude Code
+.claude/skills/anthropic/
+
+# Google Drive synced media — populated by sync-drive.yml, never commit
+packages/media/images/blog-posts/
+packages/media/images/client-logos/
+packages/media/images/events/
+packages/media/images/knowledge-center/
+packages/media/images/news/
+packages/media/images/testimonials/
