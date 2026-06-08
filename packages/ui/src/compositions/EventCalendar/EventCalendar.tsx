@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import styles from './EventCalendar.module.css';
 
 interface CalendarEvent {
@@ -88,10 +88,14 @@ export default function EventCalendar({
     window.dispatchEvent(new CustomEvent('bool:calendar-select', { detail: { title } }));
   };
 
-  // Highlight the first event card on mount
+  // Capture the initial first-event title in a ref so the mount effect has a
+  // stable reference — avoids adding `events` to the dep array while keeping
+  // the dispatch genuinely mount-only.
+  const initialTitleRef = useRef(events.length > 0 ? events[0].title : null);
+
   useEffect(() => {
-    if (events.length > 0) dispatchSelect(events[0].title);
-  }, []); // intentionally mount-only — dispatch runs once on initial render
+    if (initialTitleRef.current) dispatchSelect(initialTitleRef.current);
+  }, []);
 
   const daysInMonth = getDaysInMonth(currentYear, currentMonth);
   const firstDay = getFirstDayOfMonth(currentYear, currentMonth);

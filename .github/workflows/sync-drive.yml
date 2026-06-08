@@ -37,8 +37,8 @@ jobs:
       - name: Create pull request
         uses: peter-evans/create-pull-request@v8
         with:
-          commit-message: 'chore: sync media and locales from Google Drive'
-          title: 'chore: sync media and locales from Google Drive'
+          commit-message: 'chore(media): sync media and locales from Google Drive'
+          title: 'chore(media): sync media and locales from Google Drive'
           body: |
             Automated sync from the shared Google Drive folder.
 
