@@ -49,17 +49,19 @@ export default function EventScheduleModal({ labels }: Props) {
   const formId = useId();
   const [open, setOpen] = useState(false);
   const [eventTitle, setEventTitle] = useState('');
+  const [submitted, setSubmitted] = useState(false);
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitSuccessful },
+    formState: { errors },
   } = useForm<FormFields>();
 
   useEffect(() => {
     function handleOpen(event: Event) {
       const detail = (event as CustomEvent<OpenEventDetail>).detail;
       setEventTitle(detail?.title ?? '');
+      setSubmitted(false);
       reset();
       setOpen(true);
     }
@@ -67,13 +69,17 @@ export default function EventScheduleModal({ labels }: Props) {
     return () => window.removeEventListener('bool:open-event-schedule', handleOpen);
   }, [reset]);
 
-  // UI-only: no network call. A successful submit flips isSubmitSuccessful and
-  // swaps the form for the confirmation view.
-  function onSubmit() {}
+  // UI-only: no network call. Flip to the confirmation view on valid submit.
+  function onSubmit() {
+    setSubmitted(true);
+  }
 
   function handleOpenChange(next: boolean) {
     setOpen(next);
-    if (!next) reset();
+    if (!next) {
+      reset();
+      setSubmitted(false);
+    }
   }
 
   return (
@@ -89,7 +95,7 @@ export default function EventScheduleModal({ labels }: Props) {
           <DialogPrimitive.Title className={styles.title}>{eventTitle}</DialogPrimitive.Title>
           <p className={styles.subtitle}>{labels.subtitle}</p>
 
-          {isSubmitSuccessful ? (
+          {submitted ? (
             <div className={styles.success}>
               <CheckCircle
                 size={48}
