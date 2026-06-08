@@ -1,13 +1,10 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": [
-    "tooling/vite/src/**",
-    "tooling/vitest/**"
-  ],
+  "globalDependencies": ["tooling/vite/src/**", "tooling/vitest/**"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["src/**", "package.json", "tsconfig.json", "astro.config.*"],
+      "inputs": ["src/**", "*.ts", "package.json", "tsconfig.json", "astro.config.*"],
       "outputs": ["dist/**", ".astro/**"]
     },
     "dev": {
@@ -27,7 +24,7 @@
       "inputs": ["src/**", "tests/**", "*.config.*"],
       "outputs": ["coverage/**"]
     },
-"deploy": {
+    "deploy": {
       "dependsOn": ["^build"],
       "cache": false
     }

@@ -1,8 +1,6 @@
 export const SITE_URL = 'https://bool.pt';
 export const BASE_PATH = '/bool';
 export const SITE_NAME = 'Bool';
-export const SITE_DESCRIPTION =
-  'Critical software built fast and built to last. With 15 years of Low-Code expertise and the power of AI, we turn your toughest challenges into measurable results.';
 
 export const COMPANY = {
   name: 'Bool',

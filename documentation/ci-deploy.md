@@ -4,14 +4,15 @@
 
 ## Workflows
 
-Four GitHub Actions workflows:
+Five GitHub Actions workflows:
 
-| Workflow                                            | Trigger                      | What it does                                               |
-| --------------------------------------------------- | ---------------------------- | ---------------------------------------------------------- |
-| **CI** (`.github/workflows/ci.yml`)                 | Push to `main`, PRs          | Lint -> Typecheck -> Test -> Build -> E2E                  |
-| **Deploy** (`.github/workflows/deploy.yml`)         | Manual (`workflow_dispatch`) | Build -> Deploy to GitHub Pages                            |
-| **Sync Drive** (`.github/workflows/sync-drive.yml`) | Manual (`workflow_dispatch`) | Sync media + locales from Google Drive -> commit to `main` |
-| **Lighthouse** (`.github/workflows/lighthouse.yml`) | PRs to `main`                | Lighthouse performance audit                               |
+| Workflow                                                                  | Trigger                      | What it does                                                                            |
+| ------------------------------------------------------------------------- | ---------------------------- | --------------------------------------------------------------------------------------- |
+| **CI** (`.github/workflows/ci.yml`)                                       | Push to `main`, PRs          | Lint -> Typecheck -> Test -> Build -> E2E                                               |
+| **Deploy** (`.github/workflows/deploy.yml`)                               | Manual (`workflow_dispatch`) | Build -> Deploy to GitHub Pages                                                         |
+| **Sync Drive** (`.github/workflows/sync-drive.yml`)                       | Manual (`workflow_dispatch`) | Sync media + locales from Google Drive -> commit to `main`                              |
+| **Lighthouse** (`.github/workflows/lighthouse.yml`)                       | PRs to `main`                | Lighthouse performance audit                                                            |
+| **Test Drive Connection** (`.github/workflows/test-drive-connection.yml`) | Manual (`workflow_dispatch`) | Verify Google Drive service account credential (`pnpm --filter @bool/media test:drive`) |
 
 > **Note on form submissions:** the site's contact + newsletter forms are wired to call `PUBLIC_CONTACT_API_URL` / `PUBLIC_NEWSLETTER_API_URL`. The previous AWS Lambda + SES + Sheets backend that served those endpoints has been removed pending a decision on the new email provider (Postmark or similar). Until a new backend is wired up, form submissions will fail at runtime — the site is not yet in production.
 

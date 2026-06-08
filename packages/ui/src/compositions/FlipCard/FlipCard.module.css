@@ -53,7 +53,12 @@
 .frontOverlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, var(--black-70) 0%, var(--black-10) 50%);
+  background: linear-gradient(
+    to top,
+    var(--black-85) 0%,
+    var(--black-65) 45%,
+    var(--black-30) 100%
+  );
 }
 
 .frontContent {
@@ -73,7 +78,7 @@
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--color-on-dark);
+  color: var(--color-primary);
 }
 
 .frontTitle {

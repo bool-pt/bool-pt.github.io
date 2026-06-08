@@ -45,12 +45,13 @@ Full dependency tree: **Pages → Sections → Compositions → Primitives**
 | 1   | ServicesHeroSection  | DarkPageHero, BoolLettersOverlay, SectionIntro | SectionContainer                                                | —                               |
 | 2   | PowerAISection       | SplitLayout, TextBlockWithActions              | RoundedImage, Section, SectionContainer                         | —                               |
 | 3   | SolutionsROISection  | —                                              | Icon, Section, SectionContainer                                 | —                               |
-| 4   | StatsBannerSection   | ImageTextBanner                                | Section                                                         | —                               |
-| 5   | TechStackSection     | SectionIntro, ExpertPortrait                   | Section, SectionContainer, TextBlock, CheckListItem, ButtonLink | —                               |
-| 6   | HowWeWorkSection     | —                                              | Section, SectionContainer                                       | —                               |
-| 7   | LetsBuildCTASection  | CTASection                                     | ButtonLink                                                      | —                               |
-| 8   | ContactSection       | ContactInfo, SplitWithForm                     | Section, SectionContainer                                       | ContactForm `client:load`       |
-| 9   | NewsletterCTASection | BoolLettersOverlay                             | Section, SectionContainer, TextBlock                            | NewsletterForm `client:visible` |
+| 4   | AiUseCasesSection    | SectionTag, ImageOverlayCard, ArrowLink        | CardImageBg, CardTitle, Icon, Section, SectionContainer         | —                               |
+| 5   | StatsBannerSection   | ImageTextBanner                                | Section                                                         | —                               |
+| 6   | TechStackSection     | SectionIntro, ExpertPortrait                   | Section, SectionContainer, TextBlock, CheckListItem, ButtonLink | —                               |
+| 7   | HowWeWorkSection     | —                                              | Section, SectionContainer                                       | —                               |
+| 8   | LetsBuildCTASection  | CTASection                                     | ButtonLink                                                      | —                               |
+| 9   | ContactSection       | ContactInfo, SplitWithForm                     | Section, SectionContainer                                       | ContactForm `client:load`       |
+| 10  | NewsletterCTASection | BoolLettersOverlay                             | Section, SectionContainer, TextBlock                            | NewsletterForm `client:visible` |
 
 ---
 

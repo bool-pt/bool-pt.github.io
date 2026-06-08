@@ -100,4 +100,32 @@ describe('useConsent', () => {
     expect(result.current.hasDecided).toBe(false);
     expect(localStorage.getItem(CONSENT_STORAGE_KEY)).toBeNull();
   });
+
+  it('re-syncs state when bool:consent-updated fires', () => {
+    const { result } = renderHook(() => useConsent());
+    expect(result.current.consent).toBeNull();
+
+    const updated = { analytics: true, marketing: false, timestamp: Date.now() };
+    localStorage.setItem(CONSENT_STORAGE_KEY, JSON.stringify(updated));
+
+    act(() => {
+      window.dispatchEvent(new Event('bool:consent-updated'));
+    });
+
+    expect(result.current.consent).toEqual(updated);
+    expect(result.current.hasDecided).toBe(true);
+  });
+
+  it('removes bool:consent-updated listener on unmount', () => {
+    const { unmount } = renderHook(() => useConsent());
+    unmount();
+
+    const stored = { analytics: true, marketing: true, timestamp: Date.now() };
+    localStorage.setItem(CONSENT_STORAGE_KEY, JSON.stringify(stored));
+
+    // Dispatching after unmount should not throw
+    expect(() => {
+      window.dispatchEvent(new Event('bool:consent-updated'));
+    }).not.toThrow();
+  });
 });

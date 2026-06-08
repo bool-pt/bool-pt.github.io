@@ -1,6 +1,7 @@
 ---
 interface Props {
   background?: string;
+  backgroundImage?: string;
   paddingBlock?: string;
   class?: string;
   id?: string;
@@ -12,6 +13,7 @@ interface Props {
 
 const {
   background,
+  backgroundImage,
   paddingBlock,
   class: className,
   id,
@@ -24,6 +26,9 @@ const {
 const sectionStyle =
   [
     background ? `background-color: ${background}` : null,
+    backgroundImage
+      ? `background-image: url("${backgroundImage}"); background-size: cover; background-position: center; background-repeat: no-repeat`
+      : null,
     paddingBlock ? `padding-block: ${paddingBlock}` : null,
     style,
   ]

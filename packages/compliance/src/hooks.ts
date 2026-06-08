@@ -7,15 +7,21 @@ export function useConsent() {
   const [hasDecided, setHasDecided] = useState(false);
 
   useEffect(() => {
-    const stored = getConsent();
-    if (stored && isConsentExpired(stored)) {
-      clearConsent();
-      setConsentState(null);
-      setHasDecided(false);
-    } else {
-      setConsentState(stored);
-      setHasDecided(stored !== null);
+    function sync() {
+      const stored = getConsent();
+      if (stored && isConsentExpired(stored)) {
+        clearConsent();
+        setConsentState(null);
+        setHasDecided(false);
+      } else {
+        setConsentState(stored);
+        setHasDecided(stored !== null);
+      }
     }
+
+    sync();
+    window.addEventListener('bool:consent-updated', sync);
+    return () => window.removeEventListener('bool:consent-updated', sync);
   }, []);
 
   const acceptAll = useCallback(() => {

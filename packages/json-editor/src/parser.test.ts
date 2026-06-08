@@ -52,7 +52,7 @@ describe('parseFlatJson', () => {
 
   it('integrates repeating group detection', () => {
     const json: Record<string, string> = {
-      'testimonials.title': 'What they say',
+      'testimonials.heading': 'What they say',
       'testimonials.slides.1.quote': 'Great!',
       'testimonials.slides.1.name': 'Alice',
       'testimonials.slides.2.quote': 'Amazing!',
@@ -64,7 +64,7 @@ describe('parseFlatJson', () => {
     expect(section).toBeDefined();
 
     // 'title' should be a simple field, not in a repeating group
-    expect(section?.fields.some((f) => f.key === 'testimonials.title')).toBe(true);
+    expect(section?.fields.some((f) => f.key === 'testimonials.heading')).toBe(true);
 
     // Repeating group should be detected
     expect(section?.repeatingGroups).toHaveLength(1);

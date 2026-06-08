@@ -17,15 +17,17 @@ interface Props {
   heading: string;
   body: string;
   certifications: CertificationItem[];
+  backgroundImage?: ImageMetadata;
 }
 
-const { tag, heading, body, certifications } = Astro.props;
+const { tag, heading, body, certifications, backgroundImage } = Astro.props;
 ---
 
 <Section
   background="var(--color-surface-warm-dark)"
   aria-labelledby="certifications-heading"
   class="certifications-section"
+  backgroundImage={backgroundImage?.src}
 >
   <SectionContainer>
     <SectionIntro

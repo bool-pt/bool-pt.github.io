@@ -11,14 +11,7 @@
   "dependencies": {
     "vitest": "catalog:",
     "@vitest/coverage-v8": "catalog:",
-    "@testing-library/jest-dom": "catalog:"
-  },
-  "peerDependencies": {
+    "@testing-library/jest-dom": "catalog:",
     "jsdom": "catalog:"
-  },
-  "peerDependenciesMeta": {
-    "jsdom": {
-      "optional": true
-    }
   }
 }

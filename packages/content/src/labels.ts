@@ -132,6 +132,30 @@ export function getContactFormLabels(locale: Locale = 'en') {
   };
 }
 
+export function getEventScheduleLabels(locale: Locale = 'en') {
+  return {
+    eyebrow: t('eventSchedule.eyebrow', locale),
+    subtitle: t('eventSchedule.subtitle', locale),
+    close: t('eventSchedule.close', locale),
+    formAria: t('eventSchedule.formAria', locale),
+    fullName: t('eventSchedule.fullName', locale),
+    fullNamePlaceholder: t('eventSchedule.fullNamePlaceholder', locale),
+    phone: t('eventSchedule.phone', locale),
+    phonePlaceholder: t('eventSchedule.phonePlaceholder', locale),
+    email: t('eventSchedule.email', locale),
+    emailPlaceholder: t('eventSchedule.emailPlaceholder', locale),
+    time: t('eventSchedule.time', locale),
+    timePlaceholder: t('eventSchedule.timePlaceholder', locale),
+    timeOptions: t('eventSchedule.timeOptions', locale).split(','),
+    message: t('eventSchedule.message', locale),
+    messagePlaceholder: t('eventSchedule.messagePlaceholder', locale),
+    submit: t('eventSchedule.submit', locale),
+    success: t('eventSchedule.success', locale),
+    required: t('eventSchedule.required', locale),
+    emailInvalid: t('eventSchedule.emailInvalid', locale),
+  };
+}
+
 export function getContactSectionProps(locale: Locale = 'en') {
   return {
     heading: t('contactForm.heading', locale),

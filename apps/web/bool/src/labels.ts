@@ -5,4 +5,5 @@ export {
   getCalendarLabels,
   getContactFormLabels,
   getContactSectionProps,
+  getEventScheduleLabels,
 } from '@bool/content';

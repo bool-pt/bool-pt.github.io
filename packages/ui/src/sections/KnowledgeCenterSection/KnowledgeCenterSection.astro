@@ -44,9 +44,10 @@ interface Props {
     copied: string;
     shareChannels: Array<{ key: string; visible: boolean }>;
   };
+  backgroundImage?: ImageMetadata;
 }
 
-const { tag, heading, body, filters, articles, labels } = Astro.props;
+const { tag, heading, body, filters, articles, labels, backgroundImage } = Astro.props;
 ---
 
 <Section
@@ -55,6 +56,7 @@ const { tag, heading, body, filters, articles, labels } = Astro.props;
   id="knowledge"
   class="knowledge-section"
   style="padding-block-end: 0"
+  backgroundImage={backgroundImage?.src}
 >
   <SectionContainer>
     <SectionIntro
@@ -80,6 +82,10 @@ const { tag, heading, body, filters, articles, labels } = Astro.props;
   .knowledge-section {
     overflow: hidden;
     padding-block-end: 0 !important;
+  }
+
+  .knowledge-section :global(.section-intro-heading) {
+    color: var(--color-primary);
   }
 
   .knowledge-section :global(.section-intro p) {

@@ -20,6 +20,7 @@ interface Props {
   imageWidth?: number;
   imageHeight?: number;
   image?: ImageMetadata;
+  backgroundImage?: ImageMetadata;
 }
 
 const {
@@ -34,6 +35,7 @@ const {
   imageWidth = 488,
   imageHeight = 340,
   image = aiKeyboardFallback,
+  backgroundImage,
 } = Astro.props;
 
 const isImageLeft = variant === 'image-left';
@@ -49,6 +51,7 @@ const textSlot = isImageLeft ? 'end' : 'start';
   aria-labelledby="ai-heading"
   contentVisibility={false}
   style={`min-block-size: ${minBlockSize};${isImageLeft ? ' box-shadow: var(--shadow-hover);' : ''}`}
+  backgroundImage={backgroundImage?.src}
 >
   <SectionContainer>
     <div class:list={['power-ai', { 'power-ai--image-left': isImageLeft }]}>
@@ -67,7 +70,13 @@ const textSlot = isImageLeft ? 'end' : 'start';
           <Fragment slot="heading" set:html={heading} />
           <p>{body1}</p>
           {body2 && <p>{body2}</p>}
-          {showCta && <ButtonLink slot="actions" href={ROUTES.services} variant="primary">{cta}</ButtonLink>}
+          {
+            showCta && (
+              <ButtonLink slot="actions" href={ROUTES.services} variant="primary">
+                {cta}
+              </ButtonLink>
+            )
+          }
         </TextBlockWithActions>
         <RoundedImage
           slot={imageSlot}

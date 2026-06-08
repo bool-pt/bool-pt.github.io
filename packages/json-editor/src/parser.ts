@@ -1,5 +1,5 @@
 import { detectRepeatingGroups } from './detector';
-import { classifyField } from './field-kinds';
+import { classifyField, getFieldOptions } from './field-kinds';
 import type {
   NestedRepeatingGroup,
   NestedRepeatingItem,
@@ -133,6 +133,7 @@ export function parseFlatJson(json: Record<string, string>): ParsedTree {
         value: json[k] ?? '',
         isDirty: false,
         kind: classifyField(k),
+        options: getFieldOptions(k),
       }));
 
     sections.push({
@@ -166,7 +167,7 @@ export function parseFlatJson(json: Record<string, string>): ParsedTree {
 function buildRepeatingGroups(
   keys: string[],
   json: Record<string, string>,
-  templates: RepeatingGroupTemplate[],
+  templates: RepeatingGroupTemplate[]
 ): RepeatingGroup[] {
   const groups: RepeatingGroup[] = [];
 
@@ -199,6 +200,7 @@ function buildRepeatingGroups(
         value: json[key] ?? '',
         isDirty: false,
         kind: classifyField(key),
+        options: getFieldOptions(key),
       });
     }
 
@@ -213,17 +215,9 @@ function buildRepeatingGroups(
       const sortedFields = fields.sort((a, b) => {
         const aSuffix = a.key.slice(template.prefix.length + index.length + 2);
         const bSuffix = b.key.slice(template.prefix.length + index.length + 2);
-        return (
-          template.fieldSuffixes.indexOf(aSuffix) -
-          template.fieldSuffixes.indexOf(bSuffix)
-        );
+        return template.fieldSuffixes.indexOf(aSuffix) - template.fieldSuffixes.indexOf(bSuffix);
       });
-      const nestedGroups = buildNestedGroups(
-        template,
-        index,
-        keys,
-        json,
-      );
+      const nestedGroups = buildNestedGroups(template, index, keys, json);
       return nestedGroups.length > 0
         ? { index, fields: sortedFields, nestedGroups }
         : { index, fields: sortedFields };
@@ -246,7 +240,7 @@ function buildNestedGroups(
   parentTemplate: RepeatingGroupTemplate,
   parentIndex: string,
   allKeys: string[],
-  json: Record<string, string>,
+  json: Record<string, string>
 ): NestedRepeatingGroup[] {
   const nestedTemplates = parentTemplate.nestedTemplates ?? [];
   if (nestedTemplates.length === 0) return [];
@@ -277,19 +271,25 @@ function buildNestedGroups(
         value: json[key] ?? '',
         isDirty: false,
         kind: classifyField(key),
+        options: getFieldOptions(key),
       });
     }
 
-    const sortedEntries = [...itemMap.entries()].sort(
-      (a, b) => Number(a[0]) - Number(b[0]),
-    );
+    const sortedEntries = [...itemMap.entries()].sort((a, b) => Number(a[0]) - Number(b[0]));
 
     const items: NestedRepeatingItem[] = sortedEntries.map(([index, fields]) => ({
       index,
       fields: fields.sort((a, b) => {
-        const aSuffix = a.key.slice(innerDot.length + index.length + (nestedTemplate.fieldSuffixes.includes('') ? 0 : 1));
-        const bSuffix = b.key.slice(innerDot.length + index.length + (nestedTemplate.fieldSuffixes.includes('') ? 0 : 1));
-        return nestedTemplate.fieldSuffixes.indexOf(aSuffix) - nestedTemplate.fieldSuffixes.indexOf(bSuffix);
+        const aSuffix = a.key.slice(
+          innerDot.length + index.length + (nestedTemplate.fieldSuffixes.includes('') ? 0 : 1)
+        );
+        const bSuffix = b.key.slice(
+          innerDot.length + index.length + (nestedTemplate.fieldSuffixes.includes('') ? 0 : 1)
+        );
+        return (
+          nestedTemplate.fieldSuffixes.indexOf(aSuffix) -
+          nestedTemplate.fieldSuffixes.indexOf(bSuffix)
+        );
       }),
     }));
 

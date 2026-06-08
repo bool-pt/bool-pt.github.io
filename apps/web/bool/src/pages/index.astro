@@ -1,10 +1,6 @@
 ---
-import {
-  getEvents,
-  resolveImage,
-  transformEvent,
-} from '@bool/content';
-import { t, tCollection, isValidLocale, defaultLocale } from '@bool/i18n';
+import { getEvents, resolveImage, transformEvent } from '@bool/content';
+import { t, tCollection, isValidLocale, defaultLocale, tOptional } from '@bool/i18n';
 import type { Locale } from '@bool/i18n';
 import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
 import ContactSection from '@bool/ui/sections/ContactSection.astro';
@@ -18,46 +14,74 @@ import PowerAISection from '@bool/ui/sections/PowerAISection.astro';
 import PromiseSection from '@bool/ui/sections/PromiseSection.astro';
 import ServicesSection from '@bool/ui/sections/ServicesSection.astro';
 import TestimonialsSection from '@bool/ui/sections/TestimonialsSection.astro';
-import { getHeaderLabels, getFooterLabels, getContactSectionProps, getNewsletterLabels, getCalendarLabels } from '../labels';
+import {
+  getHeaderLabels,
+  getFooterLabels,
+  getContactSectionProps,
+  getNewsletterLabels,
+  getCalendarLabels,
+  getEventScheduleLabels,
+} from '../labels';
 
 const rawLocale = Astro.currentLocale ?? defaultLocale;
 const locale: Locale = isValidLocale(rawLocale) ? rawLocale : 'en';
 
 const events = await getEvents();
-const eventItems = events.slice(0, 3).map(transformEvent);
+const eventItems = events.map(transformEvent);
 
-const postItems = tCollection('insightsPreview.posts', ['slug', 'title', 'author', 'date', 'image'])
-  .map((p) => ({
-    slug: p.slug,
-    title: p.title,
-    author: p.author,
-    date: p.date,
-    image: resolveImage(p.image).src,
-  }));
+const postItems = tCollection('insightsPreview.posts', [
+  'slug',
+  'title',
+  'author',
+  'date',
+  'image',
+]).map((p) => ({
+  slug: p.slug,
+  title: p.title,
+  author: p.author,
+  date: p.date,
+  image: resolveImage(p.image).src,
+}));
 
-const serviceItems = tCollection('serviceCards.items', ['title', 'description', 'href', 'image'])
-  .map((s) => ({
-    title: s.title,
-    description: s.description,
-    href: s.href,
-    image: resolveImage(s.image),
-  }));
+const serviceItems = tCollection('serviceCards.items', [
+  'title',
+  'description',
+  'href',
+  'image',
+]).map((s) => ({
+  title: s.title,
+  description: s.description,
+  href: s.href,
+  image: resolveImage(s.image),
+}));
 
-const modelItems = tCollection('ourPromise.items', ['title', 'subtitle', 'iconName', 'href'])
-  .map((m) => ({ title: m.title, subtitle: m.subtitle, icon: m.iconName, href: m.href }));
+const modelItems = tCollection('ourPromise.items', ['title', 'subtitle', 'iconName', 'href']).map(
+  (m) => ({ title: m.title, subtitle: m.subtitle, icon: m.iconName, href: m.href })
+);
 
-const testimonialItems = tCollection('testimonials.items', ['quote', 'company', 'designation', 'avatar'])
-  .map((t) => ({
-    quote: t.quote,
-    company: t.company,
-    designation: t.designation,
-    avatar: resolveImage(t.avatar).src,
-  }));
+const testimonialItems = tCollection('testimonials.items', [
+  'quote',
+  'company',
+  'designation',
+  'avatar',
+]).map((t) => ({
+  quote: t.quote,
+  company: t.company,
+  designation: t.designation,
+  avatar: resolveImage(t.avatar).src,
+}));
 
 const heroSlides = tCollection(
   'hero.slides',
-  ['title', 'subtitle', 'cta.primary.label', 'cta.primary.href', 'cta.secondary.label', 'cta.secondary.href'],
-  locale,
+  [
+    'title',
+    'subtitle',
+    'cta.primary.label',
+    'cta.primary.href',
+    'cta.secondary.label',
+    'cta.secondary.href',
+  ],
+  locale
 ).map((s) => ({
   title: s.title,
   subtitle: s.subtitle,
@@ -66,6 +90,17 @@ const heroSlides = tCollection(
     secondary: { label: s['cta.secondary.label'], href: s['cta.secondary.href'] },
   },
 }));
+
+const bgNewsletterBar = tOptional('newsletterBar.backgroundImage');
+const bgPowerAi = tOptional('powerAi.backgroundImage');
+const bgServices = tOptional('serviceCards.backgroundImage');
+const bgPromise = tOptional('ourPromise.backgroundImage');
+const bgTestimonials = tOptional('testimonials.backgroundImage');
+const bgPeople = tOptional('teamPreview.backgroundImage');
+const bgInsights = tOptional('insightsPreview.backgroundImage');
+const bgEvents = tOptional('eventsPreview.backgroundImage');
+const bgNewsletterCta = tOptional('newsletterCta.backgroundImage');
+const bgContactSection = tOptional('contactSection.backgroundImage');
 ---
 
 <BaseLayout
@@ -79,13 +114,17 @@ const heroSlides = tCollection(
     ariaLabel={t('hero.aria', locale)}
     slides={heroSlides}
     backgroundImage={resolveImage(t('hero.backgroundImage', locale))}
-    carouselAriaLabels={{ slideIndicators: t('carousel.slideIndicators.aria', locale), slide: t('carousel.slideN.aria', locale) }}
+    carouselAriaLabels={{
+      slideIndicators: t('carousel.slideIndicators.aria', locale),
+      slide: t('carousel.slideN.aria', locale),
+    }}
   />
   <NewsletterBarSection
     ariaLabel={t('newsletter.subscription.aria', locale)}
     heading={t('newsletterBar.heading', locale)}
     sub={t('newsletterBar.sub', locale)}
     newsletterLabels={getNewsletterLabels(locale)}
+    backgroundImage={bgNewsletterBar ? resolveImage(bgNewsletterBar) : undefined}
   />
   <PowerAISection
     heading={t('powerAi.heading', locale)}
@@ -94,8 +133,14 @@ const heroSlides = tCollection(
     cta={t('powerAi.cta', locale)}
     imageAlt={t('powerAi.image.alt', locale)}
     image={resolveImage(t('powerAi.image', locale))}
+    backgroundImage={bgPowerAi ? resolveImage(bgPowerAi) : undefined}
   />
-  <ServicesSection heading={t('serviceCards.heading', locale)} services={serviceItems} learnMoreLabel={t('common.learnMore', locale)} />
+  <ServicesSection
+    heading={t('serviceCards.heading', locale)}
+    services={serviceItems}
+    learnMoreLabel={t('common.learnMore', locale)}
+    backgroundImage={bgServices ? resolveImage(bgServices) : undefined}
+  />
   <PromiseSection
     heading={t('ourPromise.heading', locale)}
     body1={t('ourPromise.body1', locale)}
@@ -103,11 +148,13 @@ const heroSlides = tCollection(
     cta={t('ourPromise.cta', locale)}
     models={modelItems}
     learnMoreLabel={t('common.learnMore', locale)}
+    backgroundImage={bgPromise ? resolveImage(bgPromise) : undefined}
   />
   <TestimonialsSection
-    heading={t('testimonials.title', locale)}
+    heading={t('testimonials.heading', locale)}
     description={t('testimonials.description', locale)}
     testimonials={testimonialItems}
+    backgroundImage={bgTestimonials ? resolveImage(bgTestimonials) : undefined}
   />
   <PeopleSection
     imageAlt={t('teamPreview.image.alt', locale)}
@@ -116,25 +163,35 @@ const heroSlides = tCollection(
     ctaJoin={t('teamPreview.cta.join', locale)}
     ctaMeet={t('teamPreview.cta.meet', locale)}
     image={resolveImage(t('teamPreview.image', locale))}
+    backgroundImage={bgPeople ? resolveImage(bgPeople) : undefined}
   />
   <InsightsSection
     heading={t('insightsPreview.heading', locale)}
     description={t('insightsPreview.description', locale)}
     posts={postItems}
     readMoreLabel={t('common.readMore', locale)}
+    backgroundImage={bgInsights ? resolveImage(bgInsights) : undefined}
   />
   <EventsSection
     heading={t('eventsPreview.heading', locale)}
     description={t('eventsPreview.description', locale)}
     cardHeading={t('eventsPreview.cardHeading', locale)}
     cta={t('eventsPreview.cta', locale)}
+    meetCta={t('eventsPreview.meetCta', locale)}
+    meetHref={t('eventsPreview.meetHref', locale)}
     calendarLabels={getCalendarLabels(locale)}
+    scheduleLabels={getEventScheduleLabels(locale)}
     events={eventItems}
+    backgroundImage={bgEvents ? resolveImage(bgEvents) : undefined}
   />
-  <ContactSection {...getContactSectionProps(locale)} />
+  <ContactSection
+    {...getContactSectionProps(locale)}
+    backgroundImage={bgContactSection ? resolveImage(bgContactSection) : undefined}
+  />
   <NewsletterCTASection
     heading={t('newsletterCta.heading', locale)}
     body={t('newsletterCta.body', locale)}
     newsletterLabels={getNewsletterLabels(locale)}
+    backgroundImage={bgNewsletterCta ? resolveImage(bgNewsletterCta) : undefined}
   />
 </BaseLayout>

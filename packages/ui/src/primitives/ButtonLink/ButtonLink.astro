@@ -4,6 +4,9 @@ interface Props {
   variant?: 'primary' | 'outline' | 'ghost' | 'on-dark';
   iconLeft?: boolean;
   iconRight?: boolean;
+  download?: string;
+  target?: string;
+  rel?: string;
   class?: string;
 }
 
@@ -12,13 +15,22 @@ const {
   variant = 'primary',
   iconLeft = false,
   iconRight = false,
+  download,
+  target,
+  rel,
   class: className,
 } = Astro.props;
 
 import Icon from '../Icon/Icon.astro';
 ---
 
-<a href={href} class:list={['btn-link', `btn-link--${variant}`, className]}>
+<a
+  href={href}
+  download={download}
+  target={target}
+  rel={rel}
+  class:list={['btn-link', `btn-link--${variant}`, className]}
+>
   {iconLeft && <Icon name="arrow-left" size={18} strokeWidth={2.5} class="btn-link-icon" />}
   <slot />
   {iconRight && <Icon name="arrow-right" size={18} strokeWidth={2.5} class="btn-link-icon" />}
@@ -33,7 +45,8 @@ import Icon from '../Icon/Icon.astro';
     block-size: 48px;
     padding-inline: 2rem;
     font-size: var(--font-size-body);
-    font-weight: 600;
+    font-weight: 700;
+    line-height: 1.25;
     text-decoration: none;
     border-radius: 28px;
     transition:

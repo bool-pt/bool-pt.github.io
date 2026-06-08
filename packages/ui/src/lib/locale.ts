@@ -1,10 +1,5 @@
 const STORAGE_KEY = 'locale';
 
-export function getStoredLocale(): string | null {
-  if (typeof localStorage === 'undefined') return null;
-  return localStorage.getItem(STORAGE_KEY);
-}
-
 export function setStoredLocale(locale: string): void {
   localStorage.setItem(STORAGE_KEY, locale);
 }

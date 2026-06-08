@@ -14,15 +14,25 @@ interface Props {
   ctaJoin: string;
   ctaMeet: string;
   image?: ImageMetadata;
+  backgroundImage?: ImageMetadata;
 }
 
-const { imageAlt, heading, body, ctaJoin, ctaMeet, image = peopleTeamFallback } = Astro.props;
+const {
+  imageAlt,
+  heading,
+  body,
+  ctaJoin,
+  ctaMeet,
+  image = peopleTeamFallback,
+  backgroundImage,
+} = Astro.props;
 ---
 
 <Section
   background="var(--color-surface-warm-dark)"
   aria-labelledby="people-heading"
   paddingBlock="0"
+  backgroundImage={backgroundImage?.src}
 >
   <ImageTextBanner image={image} imageAlt={imageAlt} height="396px" contentPadding="0 4rem 0 8rem">
     <TextBlockWithActions

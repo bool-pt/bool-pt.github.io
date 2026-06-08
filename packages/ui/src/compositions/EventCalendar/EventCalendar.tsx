@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import styles from './EventCalendar.module.css';
 
 interface CalendarEvent {
@@ -16,7 +16,6 @@ interface Props {
   dayNames?: string[];
   monthNames?: string[];
   eventPrefix?: string;
-  locale?: string;
 }
 
 const DEFAULT_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -50,7 +49,6 @@ export default function EventCalendar({
   dayNames,
   monthNames,
   eventPrefix,
-  locale = 'en-GB',
 }: Props) {
   const DAYS = dayNames ?? DEFAULT_DAYS;
   const MONTHS = monthNames ?? DEFAULT_MONTHS;
@@ -86,6 +84,15 @@ export default function EventCalendar({
     );
   }, [selectedDate, currentMonth, currentYear, events]);
 
+  const dispatchSelect = (title: string | null) => {
+    window.dispatchEvent(new CustomEvent('bool:calendar-select', { detail: { title } }));
+  };
+
+  // Highlight the first event card on mount
+  useEffect(() => {
+    if (events.length > 0) dispatchSelect(events[0].title);
+  }, []); // intentionally mount-only — dispatch runs once on initial render
+
   const daysInMonth = getDaysInMonth(currentYear, currentMonth);
   const firstDay = getFirstDayOfMonth(currentYear, currentMonth);
 
@@ -117,9 +124,17 @@ export default function EventCalendar({
   const isEventDay = (day: number) => eventDates.has(`${currentYear}-${currentMonth}-${day}`);
   const getEventColor = (day: number) => eventDates.get(`${currentYear}-${currentMonth}-${day}`);
 
-  const cells: (number | null)[] = [];
-  for (let i = 0; i < firstDay; i++) cells.push(null);
-  for (let d = 1; d <= daysInMonth; d++) cells.push(d);
+  const prevMonthIndex = currentMonth === 0 ? 11 : currentMonth - 1;
+  const prevMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+  const daysInPrevMonth = getDaysInMonth(prevMonthYear, prevMonthIndex);
+
+  // Fill the grid with the surrounding months' days so every week is complete.
+  // Out-of-month days are shown muted and are not interactive.
+  const cells: { day: number; inMonth: boolean }[] = [];
+  for (let i = firstDay; i > 0; i--) cells.push({ day: daysInPrevMonth - i + 1, inMonth: false });
+  for (let d = 1; d <= daysInMonth; d++) cells.push({ day: d, inMonth: true });
+  const trailing = (7 - (cells.length % 7)) % 7;
+  for (let d = 1; d <= trailing; d++) cells.push({ day: d, inMonth: false });
 
   return (
     <div className={styles.calendar}>
@@ -154,25 +169,42 @@ export default function EventCalendar({
       </div>
 
       <div className={styles.grid}>
-        {cells.map((day, i) => {
-          const eventColor = day !== null ? getEventColor(day) : undefined;
+        {cells.map((cell, i) => {
+          if (!cell.inMonth) {
+            return (
+              <span key={i} className={`${styles.cell} ${styles.cellOutside}`} aria-hidden="true">
+                {cell.day}
+              </span>
+            );
+          }
+          const { day } = cell;
+          const eventColor = getEventColor(day);
           return (
             <button
               key={i}
               type="button"
               className={[
                 styles.cell,
-                day === null ? styles.cellEmpty : '',
-                day !== null && isToday(day) ? styles.cellToday : '',
-                day !== null && isEventDay(day) ? styles.cellEvent : '',
-                day !== null && day === selectedDate ? styles.cellSelected : '',
+                isToday(day) ? styles.cellToday : '',
+                isEventDay(day) ? styles.cellEvent : '',
+                day === selectedDate ? styles.cellSelected : '',
               ]
                 .filter(Boolean)
                 .join(' ')}
               style={eventColor ? { backgroundColor: eventColor } : undefined}
-              onClick={() => day !== null && setSelectedDate(day)}
-              disabled={day === null}
-              aria-label={day !== null ? `${MONTHS[currentMonth]} ${day}` : undefined}
+              onClick={() => {
+                setSelectedDate(day);
+                const ev = events.find((e) => {
+                  const d = new Date(e.date);
+                  return (
+                    d.getFullYear() === currentYear &&
+                    d.getMonth() === currentMonth &&
+                    d.getDate() === day
+                  );
+                });
+                dispatchSelect(ev?.title ?? null);
+              }}
+              aria-label={`${MONTHS[currentMonth]} ${day}`}
             >
               {day}
             </button>
@@ -192,14 +224,14 @@ export default function EventCalendar({
               {selectedEvent.tag}
             </span>
             <span className={styles.previewDate}>
-              {new Date(selectedEvent.date).toLocaleDateString(locale, {
-                month: 'long',
-                day: 'numeric',
-              })}
+              {`${MONTHS[new Date(selectedEvent.date).getMonth()]} ${new Date(selectedEvent.date).getDate()}`}
             </span>
           </div>
           <p className={styles.previewTitle}>
-            {EVENT_PREFIX} {selectedEvent.tag}: {selectedEvent.title.split('—')[0]?.trim()}
+            {EVENT_PREFIX} {selectedEvent.tag}:{' '}
+            <span className={styles.previewTitleValue}>
+              {selectedEvent.title.split('—')[0]?.trim()}
+            </span>
           </p>
         </div>
       )}

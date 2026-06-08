@@ -33,12 +33,13 @@ Sections listed per page, in render order.
 1. ServicesHeroSection
 2. PowerAISection
 3. SolutionsROISection
-4. StatsBannerSection
-5. TechStackSection
-6. HowWeWorkSection
-7. LetsBuildCTASection
-8. ContactSection
-9. NewsletterCTASection
+4. AiUseCasesSection
+5. StatsBannerSection
+6. TechStackSection
+7. HowWeWorkSection
+8. LetsBuildCTASection
+9. ContactSection
+10. NewsletterCTASection
 
 ## People (`people.astro`)
 

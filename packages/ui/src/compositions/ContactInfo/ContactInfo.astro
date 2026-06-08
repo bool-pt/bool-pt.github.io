@@ -11,7 +11,14 @@ interface Props {
   class?: string;
 }
 
-const { colorScheme = 'dark', headingLevel = 'h2', addressLabel, addressLines, email, class: className } = Astro.props;
+const {
+  colorScheme = 'dark',
+  headingLevel = 'h2',
+  addressLabel,
+  addressLines,
+  email,
+  class: className,
+} = Astro.props;
 
 const headingSize = colorScheme === 'light' ? 'var(--font-size-hero)' : 'var(--font-size-display)';
 ---
@@ -20,10 +27,12 @@ const headingSize = colorScheme === 'light' ? 'var(--font-size-hero)' : 'var(--f
   <TextBlock
     headingLevel={headingLevel}
     headingSize={headingSize}
-    headingWeight="400"
+    headingWeight="700"
+    headingLineHeight="1.1"
     colorScheme={colorScheme}
     spacing="1.25rem"
     bodySize="1.125rem"
+    bodyWeight="400"
     bodyLineHeight="1.22"
   >
     <slot name="heading" slot="heading" />
@@ -33,13 +42,16 @@ const headingSize = colorScheme === 'light' ? 'var(--font-size-hero)' : 'var(--f
     <h3 class="contact-info-address-label">{addressLabel}</h3>
     <address>
       <p>
-        {addressLines.map((line, i) => <>{i > 0 && <br />}{line}</>)}
+        {
+          addressLines.map((line, i) => (
+            <>
+              {i > 0 && <br />}
+              {line}
+            </>
+          ))
+        }
       </p>
-      <ObfuscatedLink
-        href={`mailto:${email}`}
-        label={email}
-        class="contact-info-link"
-      />
+      <ObfuscatedLink href={`mailto:${email}`} label={email} class="contact-info-link" />
     </address>
   </div>
 </div>
@@ -77,6 +89,10 @@ const headingSize = colorScheme === 'light' ? 'var(--font-size-hero)' : 'var(--f
   }
 
   /* Dark color scheme */
+  .contact-info--dark :global(.text-block-body p) {
+    color: var(--color-on-dark);
+  }
+
   .contact-info--dark .contact-info-address p {
     color: var(--color-on-dark-muted);
   }

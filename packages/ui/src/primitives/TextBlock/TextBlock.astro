@@ -4,7 +4,9 @@ interface Props {
   headingId?: string;
   headingSize?: string;
   headingWeight?: string;
+  headingLineHeight?: string;
   bodySize?: string;
+  bodyWeight?: string;
   bodyMaxWidth?: string;
   bodyLineHeight?: string;
   spacing?: string;
@@ -17,7 +19,9 @@ const {
   headingId,
   headingSize,
   headingWeight,
+  headingLineHeight,
   bodySize,
+  bodyWeight,
   bodyMaxWidth,
   bodyLineHeight,
   spacing,
@@ -32,7 +36,9 @@ const wrapperStyle =
   [
     headingSize ? `--tb-heading-size: ${headingSize}` : null,
     headingWeight ? `--tb-heading-weight: ${headingWeight}` : null,
+    headingLineHeight ? `--tb-heading-line-height: ${headingLineHeight}` : null,
     bodySize ? `--tb-body-size: ${bodySize}` : null,
+    bodyWeight ? `--tb-body-weight: ${bodyWeight}` : null,
     bodyMaxWidth ? `--tb-body-max-width: ${bodyMaxWidth}` : null,
     bodyLineHeight ? `--tb-body-line-height: ${bodyLineHeight}` : null,
     spacing ? `--tb-spacing: ${spacing}` : null,
@@ -59,7 +65,7 @@ const wrapperStyle =
     font-family: var(--font-display);
     font-size: var(--tb-heading-size, var(--font-size-display));
     font-weight: var(--tb-heading-weight, 700);
-    line-height: 1.2;
+    line-height: var(--tb-heading-line-height, 1.2);
     letter-spacing: -0.02em;
     margin: 0 0 var(--tb-spacing, 1.5rem);
   }
@@ -74,7 +80,7 @@ const wrapperStyle =
 
   .text-block-body :global(p) {
     font-size: var(--tb-body-size, var(--font-size-body));
-    font-weight: 500;
+    font-weight: var(--tb-body-weight, 500);
     line-height: var(--tb-body-line-height, 1.65);
     margin: 0 0 1rem;
   }

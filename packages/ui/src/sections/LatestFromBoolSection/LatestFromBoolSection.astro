@@ -14,10 +14,18 @@ interface Props {
   tag: string;
   heading: string;
   body: string;
-  featured: Array<{ category: string; title: string; meta: string; cta: string; href: string; image?: string }>;
+  featured: Array<{
+    category: string;
+    title: string;
+    meta: string;
+    cta: string;
+    href: string;
+    image?: string;
+  }>;
+  backgroundImage?: ImageMetadata;
 }
 
-const { tag, heading, body, featured } = Astro.props;
+const { tag, heading, body, featured, backgroundImage } = Astro.props;
 
 const fallbackImages = [img01Fallback, img02Fallback, img03Fallback];
 ---
@@ -29,6 +37,7 @@ const fallbackImages = [img01Fallback, img02Fallback, img03Fallback];
   descriptionMaxWidth="36rem"
   gridColumns={3}
   gridCollapseAt="md"
+  backgroundImage={backgroundImage?.src}
 >
   <SectionTag slot="tag">{tag}</SectionTag>
   <Fragment slot="heading">{heading}</Fragment>
@@ -41,7 +50,10 @@ const fallbackImages = [img01Fallback, img02Fallback, img03Fallback];
         gradient="linear-gradient(to top, var(--black-75) 0%, var(--black-20) 50%, transparent 70%)"
         hoverEffect="lift"
       >
-        <CardImageBg slot="image" src={item.image ?? (fallbackImages[i % fallbackImages.length] as ImageMetadata).src} />
+        <CardImageBg
+          slot="image"
+          src={item.image ?? (fallbackImages[i % fallbackImages.length] as ImageMetadata).src}
+        />
         <CardLabel colorScheme="on-dark" class="latest-card-label">
           {item.category}
         </CardLabel>

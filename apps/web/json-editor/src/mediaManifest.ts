@@ -18,13 +18,14 @@ export {
 
 const RAW_IMAGES = import.meta.glob<string>(
   '../../../../packages/media/images/**/*.{jpg,jpeg,png,webp,avif}',
-  { eager: true, query: '?url', import: 'default' },
+  { eager: true, query: '?url', import: 'default' }
 );
 
-const RAW_SVGS = import.meta.glob<string>(
-  '../../../../packages/media/images/**/*.svg',
-  { eager: true, query: '?url', import: 'default' },
-);
+const RAW_SVGS = import.meta.glob<string>('../../../../packages/media/images/**/*.svg', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+});
 
 export interface MediaEntry {
   /** Path relative to packages/media/images/, e.g. "case-study/banco.jpg". */
@@ -76,9 +77,6 @@ for (const entry of allEntries) {
 
 /** Every folder under packages/media/images/, sorted alphabetically. */
 export const folders: string[] = [...byFolder.keys()].sort();
-
-/** All entries flat. */
-export const entries: MediaEntry[] = allEntries;
 
 /** Lookup entries in a single folder. */
 export function entriesInFolder(folder: string): MediaEntry[] {

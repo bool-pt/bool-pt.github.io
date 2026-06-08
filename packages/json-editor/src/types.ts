@@ -1,5 +1,10 @@
 /** What kind of editor a field should render in the UI. */
-export type FieldKind = 'text' | 'media' | 'icon';
+export type FieldKind = 'text' | 'media' | 'icon' | 'select';
+
+export interface SelectOption {
+  value: string;
+  label: string;
+}
 
 /** A single translatable field */
 export interface TranslationField {
@@ -9,6 +14,8 @@ export interface TranslationField {
   isDirty: boolean;
   /** Hint for the UI on which editor to render. Defaults to 'text' when omitted. */
   kind?: FieldKind;
+  /** Available options when kind === 'select'. */
+  options?: SelectOption[];
 }
 
 /** Defines the field template for items in a repeating group */

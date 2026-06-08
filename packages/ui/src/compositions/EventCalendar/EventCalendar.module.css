@@ -1,12 +1,11 @@
 .calendar {
-  background: var(--color-surface-dark);
+  background: var(--color-surface-warm-dark);
   border-radius: var(--radius-xl);
   padding: 1.5rem;
   color: var(--color-on-dark);
   max-inline-size: 384px;
   display: flex;
   flex-direction: column;
-  block-size: 100%;
 }
 
 .header {
@@ -19,6 +18,7 @@
 .monthLabel {
   font-size: var(--font-size-body);
   font-weight: 600;
+  word-spacing: 0.5rem;
 }
 
 .navBtn {
@@ -42,7 +42,7 @@
 .dayName {
   font-size: var(--font-size-caption);
   font-weight: 500;
-  color: var(--color-on-dark-muted);
+  color: var(--color-on-dark);
   padding-block: 0.25rem;
 }
 
@@ -62,18 +62,19 @@
   background: none;
   color: var(--white-80);
   cursor: pointer;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-lg);
   transition: background-color 150ms;
   inline-size: 2.25rem;
   block-size: 2.25rem;
   margin-inline: auto;
 }
 
-.cell:hover:not(.cellEmpty) {
+.cell:hover:not(.cellOutside) {
   background: var(--white-10);
 }
 
-.cellEmpty {
+.cellOutside {
+  color: var(--white-50);
   cursor: default;
 }
 
@@ -106,7 +107,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-block-end: 0.5rem;
+  margin-block-end: 1rem;
 }
 
 .previewTag {
@@ -121,12 +122,17 @@
 
 .previewDate {
   font-size: var(--font-size-body-sm);
-  color: var(--color-muted-foreground);
+  color: var(--color-surface-black);
 }
 
 .previewTitle {
   font-size: var(--font-size-body-sm);
+  font-weight: 600;
   color: var(--color-surface-dark);
   margin: 0;
   line-height: 1.4;
+}
+
+.previewTitleValue {
+  font-weight: 400;
 }

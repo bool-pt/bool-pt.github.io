@@ -11,11 +11,23 @@ interface Props {
   description: string;
   offices: Array<{ city: string; building: string; address: string; image?: string }>;
   carouselAriaLabels: { prev: string; next: string; imageAlt: string };
+  backgroundImage?: ImageMetadata;
 }
 
-const { heading, description, offices: officeData, carouselAriaLabels } = Astro.props;
+const {
+  heading,
+  description,
+  offices: officeData,
+  carouselAriaLabels,
+  backgroundImage,
+} = Astro.props;
 
-const fallbackImages = [office1Fallback.src, office2Fallback.src, office1Fallback.src, office2Fallback.src];
+const fallbackImages = [
+  office1Fallback.src,
+  office2Fallback.src,
+  office1Fallback.src,
+  office2Fallback.src,
+];
 
 const offices = officeData.map((office, i) => ({
   ...office,
@@ -23,7 +35,12 @@ const offices = officeData.map((office, i) => ({
 }));
 ---
 
-<Section aria-labelledby="portugal-heading" paddingBlock="5rem" background="var(--color-surface-light)">
+<Section
+  aria-labelledby="portugal-heading"
+  paddingBlock="5rem"
+  background="var(--color-surface-light)"
+  backgroundImage={backgroundImage?.src}
+>
   <SectionContainer>
     <div class="portugal-header">
       <SectionIntro

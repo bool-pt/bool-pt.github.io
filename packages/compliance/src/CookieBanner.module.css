@@ -5,7 +5,8 @@
   transform: translateX(-50%);
   z-index: 9999;
   width: 90%;
-  max-width: 480px;
+  min-width: 560px;
+  max-width: 640px;
   background-color: var(--color-surface-charcoal);
   color: var(--color-on-dark);
   border-radius: 12px;
@@ -18,6 +19,7 @@
   line-height: 1.6;
   margin: 0 0 1.25rem;
   color: var(--color-on-dark-muted);
+  text-align: center;
 }
 
 .actions {

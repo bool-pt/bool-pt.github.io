@@ -30,7 +30,7 @@ const socialLinks = [
   { key: 'facebook', href: SOCIAL.facebook },
   { key: 'instagram', href: SOCIAL.instagram },
   { key: 'linkedin', href: SOCIAL.linkedin },
-  { key: 'twitter', href: SOCIAL.twitter },
+  { key: 'twitter', href: SOCIAL.twitter, size: 26 },
   { key: 'youtube', href: SOCIAL.youtube },
 ].filter((s) => s.href);
 ---
@@ -42,7 +42,7 @@ const socialLinks = [
       <p class="footer-tagline">{labels.tagline}</p>
       <div class="footer-social" aria-label={labels.socialAria}>
         {
-          socialLinks.map(({ key, href }) => (
+          socialLinks.map(({ key, href, size }) => (
             <a
               href={href}
               target="_blank"
@@ -50,7 +50,7 @@ const socialLinks = [
               aria-label={labels.socialLabels[key] ?? key}
               class="social-icon"
             >
-              <Icon name={key} size={20} />
+              <Icon name={key} size={size ?? 20} />
             </a>
           ))
         }
@@ -87,10 +87,7 @@ const socialLinks = [
           ))
         }
         <li>
-          <CookiePreferencesButton
-            label={labels.cookiePreferencesLabel}
-            client:load
-          />
+          <CookiePreferencesButton label={labels.cookiePreferencesLabel} client:load />
         </li>
       </ul>
     </div>

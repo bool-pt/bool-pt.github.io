@@ -14,12 +14,17 @@ interface Props {
   body: string;
   viewMoreLabel: string;
   pressReleases: Array<{ date: string; title: string; description: string; href: string }>;
+  backgroundImage?: ImageMetadata;
 }
 
-const { tag, heading, body, viewMoreLabel, pressReleases } = Astro.props;
+const { tag, heading, body, viewMoreLabel, pressReleases, backgroundImage } = Astro.props;
 ---
 
-<Section background="var(--color-surface-warm-dark)" aria-labelledby="press-heading">
+<Section
+  background="var(--color-surface-warm-dark)"
+  aria-labelledby="press-heading"
+  backgroundImage={backgroundImage?.src}
+>
   <SectionContainer>
     <SectionIntro
       headingId="press-heading"

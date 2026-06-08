@@ -108,7 +108,9 @@ export default function OfficeCarousel({
         <div className={styles.viewport}>
           <div className={styles.track} style={{ transform: `translateX(-${offset}px)` }}>
             {offices.map((office, i) => {
-              const isColor = i === activeIndex || i === hoveredIndex;
+              // No card is selected/coloured by default — only on hover.
+              // activeIndex still drives the auto-rotating track position below.
+              const isColor = i === hoveredIndex;
               return (
                 <div
                   key={`${office.city}-${i}`}

@@ -1,4 +1,4 @@
-import { render, screen, cleanup } from '@testing-library/react';
+import { render, screen, cleanup, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { CookieBanner } from './CookieBanner';
@@ -6,6 +6,10 @@ import { useConsent } from './hooks';
 
 vi.mock('@bool/i18n', () => ({
   t: vi.fn((key: string) => key),
+}));
+
+vi.mock('./consent', () => ({
+  getConsent: vi.fn(() => null),
 }));
 
 const mockAccept = vi.fn();
@@ -120,5 +124,53 @@ describe('CookieBanner', () => {
       analytics: true,
       marketing: false,
     });
+  });
+
+  it('opens preferences view when bool:open-preferences fires even if hasDecided is true', () => {
+    setupMock({ hasDecided: true });
+
+    render(<CookieBanner />);
+
+    // Banner is hidden after consent
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+
+    act(() => {
+      window.dispatchEvent(new Event('bool:open-preferences'));
+    });
+
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByText('cookie.save')).toBeInTheDocument();
+    expect(screen.getByText('cookie.back')).toBeInTheDocument();
+  });
+
+  it('closes preferences panel (not initial view) when back is clicked after footer open', async () => {
+    const user = userEvent.setup();
+    setupMock({ hasDecided: true });
+
+    render(<CookieBanner />);
+
+    act(() => {
+      window.dispatchEvent(new Event('bool:open-preferences'));
+    });
+
+    await user.click(screen.getByText('cookie.back'));
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('closes preferences panel after save when opened from footer', async () => {
+    const user = userEvent.setup();
+    setupMock({ hasDecided: true });
+
+    render(<CookieBanner />);
+
+    act(() => {
+      window.dispatchEvent(new Event('bool:open-preferences'));
+    });
+
+    await user.click(screen.getByText('cookie.save'));
+
+    expect(mockSavePreferences).toHaveBeenCalledOnce();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 });
