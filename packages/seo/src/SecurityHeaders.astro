@@ -1,15 +1,16 @@
 ---
 // CSP is delivered via meta tags because GitHub Pages does not support custom HTTP headers.
-// Note: frame-ancestors cannot be set via meta tags — X-Frame-Options is used instead.
+// Note: frame-ancestors and X-Frame-Options cannot be enforced via meta tags — browsers
+// require those as HTTP response headers. Framing protection requires a CDN (e.g. Cloudflare)
+// in front of GitHub Pages if it becomes a requirement.
 // Update the connect-src domain when the Lambda API URL is known.
 ---
 
 <meta
   http-equiv="Content-Security-Policy"
-  content="default-src 'self'; script-src 'self' 'unsafe-inline' https://js.hcaptcha.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://hcaptcha.com; frame-src https://hcaptcha.com; img-src 'self' data: https://www.google-analytics.com; connect-src 'self' https://api.hcaptcha.com https://*.amazonaws.com https://www.google-analytics.com; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';"
+  content="default-src 'self'; script-src 'self' 'unsafe-inline' https://js.hcaptcha.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://hcaptcha.com; frame-src 'self' https://hcaptcha.com; img-src 'self' data: https://www.google-analytics.com; connect-src 'self' https://api.hcaptcha.com https://*.amazonaws.com https://www.google-analytics.com; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';"
 />
 <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-<meta http-equiv="X-Frame-Options" content="DENY" />
 <meta name="referrer" content="strict-origin-when-cross-origin" />
 <meta
   http-equiv="Permissions-Policy"
