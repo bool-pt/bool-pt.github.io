@@ -149,7 +149,7 @@ export function getCaseStudies(locale: Locale = defaultLocale): CaseStudiesPaylo
       challengeLabel: t('caseStudies.challengeLabel', locale),
       solutionLabel: t('caseStudies.solutionLabel', locale),
       techStackLabel: t('caseStudies.techStackLabel', locale),
-      talkToExpertCta: t('caseStudies.talkToExpertCta', locale),
+      talkToExpertCta: t('common.talkToExpert', locale),
       close: t('common.close', locale),
     },
     sectors,

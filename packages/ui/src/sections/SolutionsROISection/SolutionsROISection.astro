@@ -9,12 +9,18 @@ interface Props {
   colResults: string;
   ariaLabel: string;
   solutions: Array<{ name: string; result: string }>;
+  backgroundImage?: ImageMetadata;
 }
 
-const { heading, colSolutions, colResults, ariaLabel, solutions } = Astro.props;
+const { heading, colSolutions, colResults, ariaLabel, solutions, backgroundImage } = Astro.props;
 ---
 
-<Section background="var(--color-surface-muted)" aria-labelledby="solutions-heading" paddingBlock="5rem">
+<Section
+  background="var(--color-surface-muted)"
+  aria-labelledby="solutions-heading"
+  paddingBlock="5rem"
+  backgroundImage={backgroundImage?.src}
+>
   <SectionContainer>
     <h2 id="solutions-heading" class="solutionsHeading">
       {heading}

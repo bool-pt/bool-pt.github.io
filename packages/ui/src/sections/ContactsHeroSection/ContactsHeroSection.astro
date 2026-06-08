@@ -34,9 +34,11 @@ interface Props {
   addressLines: string[];
   contactEmail: string;
   formLabels: ContactFormLabels;
+  backgroundImage?: ImageMetadata;
 }
 
-const { heading, body, addressLabel, addressLines, contactEmail, formLabels } = Astro.props;
+const { heading, body, addressLabel, addressLines, contactEmail, formLabels, backgroundImage } =
+  Astro.props;
 ---
 
 <Section
@@ -46,6 +48,7 @@ const { heading, body, addressLabel, addressLines, contactEmail, formLabels } = 
   minBlockSize="799px"
   paddingBlock="9rem 3rem"
   class="contacts-hero"
+  backgroundImage={backgroundImage?.src}
 >
   <div class="contacts-letters">
     <BoolLettersOverlay opacity={0.2} />

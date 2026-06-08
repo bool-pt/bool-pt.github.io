@@ -24,15 +24,28 @@ interface Props {
   cta: string;
   models?: ModelItem[];
   learnMoreLabel?: string;
+  backgroundImage?: ImageMetadata;
 }
 
-const { heading, body1, body2, cta, models = [], learnMoreLabel = 'Learn more' } = Astro.props;
+const {
+  heading,
+  body1,
+  body2,
+  cta,
+  models = [],
+  learnMoreLabel = 'Learn more',
+  backgroundImage,
+} = Astro.props;
 ---
 
-<Section background="var(--color-background)" aria-labelledby="promise-heading">
+<Section
+  background="var(--color-background)"
+  aria-labelledby="promise-heading"
+  backgroundImage={backgroundImage?.src}
+>
   <SectionContainer>
     <div class="promise-section">
-      <SplitLayout ratio="1fr 1fr" gap="3rem" alignItems="start">
+      <SplitLayout ratio="1fr 1fr" gap="3rem" alignItems="start" collapseAt="lg">
         <TextBlockWithActions
           slot="start"
           headingId="promise-heading"
@@ -52,9 +65,25 @@ const { heading, body1, body2, cta, models = [], learnMoreLabel = 'Learn more' }
         <ResponsiveGrid slot="end" columns={2} collapseAt="sm" class="promise-models">
           {
             models.map((model, i) => (
-              <IconFeatureCard title={model.title} description={model.subtitle} align="center" iconShape={i === 1 || i === 2 ? 'square' : 'circle'}>
-                <GradientIcon slot="icon" name={model.icon} size={model.icon === 'shield' ? 28 : 32} />
-                {model.href && <ArrowLink slot="footer" href={model.href} label={learnMoreLabel} colorScheme="dark" />}
+              <IconFeatureCard
+                title={model.title}
+                description={model.subtitle}
+                align="center"
+                iconShape={i === 1 || i === 2 ? 'square' : 'circle'}
+              >
+                <GradientIcon
+                  slot="icon"
+                  name={model.icon}
+                  size={model.icon === 'shield' ? 28 : 32}
+                />
+                {model.href && (
+                  <ArrowLink
+                    slot="footer"
+                    href={model.href}
+                    label={learnMoreLabel}
+                    colorScheme="dark"
+                  />
+                )}
               </IconFeatureCard>
             ))
           }
@@ -65,14 +94,6 @@ const { heading, body1, body2, cta, models = [], learnMoreLabel = 'Learn more' }
 </Section>
 
 <style>
-  .promise-models {
-    justify-content: center;
-  }
-
-  :global(.promise-models) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .promise-section :global(.text-block--light .text-block-body p) {
     color: var(--color-foreground);
     margin-block-end: 1.25rem;

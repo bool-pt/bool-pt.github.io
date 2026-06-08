@@ -77,6 +77,16 @@ const { events, calendarLabels, calendarHydration = 'visible', class: className 
   }
 
   .calendar-event-layout-calendar {
-    block-size: 100%;
+    align-self: start;
   }
 </style>
+
+<script>
+  window.addEventListener('bool:calendar-select', (e) => {
+    const title = (e as CustomEvent<{ title: string | null }>).detail?.title;
+    document.querySelectorAll<HTMLElement>('[data-event-title]').forEach((li) => {
+      const card = li.querySelector<HTMLElement>('.event-detail-card') ?? li;
+      card.classList.toggle('is-selected', li.dataset.eventTitle === title);
+    });
+  });
+</script>

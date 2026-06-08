@@ -25,9 +25,16 @@ interface Props {
   description: string;
   posts?: PostItem[];
   readMoreLabel?: string;
+  backgroundImage?: ImageMetadata;
 }
 
-const { heading, description, posts = [], readMoreLabel = 'Read more' } = Astro.props;
+const {
+  heading,
+  description,
+  posts = [],
+  readMoreLabel = 'Read more',
+  backgroundImage,
+} = Astro.props;
 ---
 
 <div class="insights-wrap">
@@ -35,6 +42,7 @@ const { heading, description, posts = [], readMoreLabel = 'Read more' } = Astro.
     headingId="insights-heading"
     headingSize="var(--font-size-display)"
     background="var(--color-background)"
+    backgroundImage={backgroundImage?.src}
     gridColumns={3}
     gridCollapseAt="md"
     paddingBlock="4rem"

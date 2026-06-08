@@ -18,9 +18,10 @@ interface Props {
   galleryAlts: string[];
   /** Five image slots (large + four small). Falls back to gallery placeholders if omitted. */
   images?: ImageMetadata[];
+  backgroundImage?: ImageMetadata;
 }
 
-const { tag, heading, body, galleryAria, galleryAlts, images } = Astro.props;
+const { tag, heading, body, galleryAria, galleryAlts, images, backgroundImage } = Astro.props;
 const fallbackImages: ImageMetadata[] = [
   gallery01Fallback,
   gallery02Fallback,
@@ -29,11 +30,15 @@ const fallbackImages: ImageMetadata[] = [
   gallery05Fallback,
 ];
 const resolvedImages: ImageMetadata[] = [0, 1, 2, 3, 4].map(
-  (i) => images?.[i] ?? (fallbackImages[i] as ImageMetadata),
+  (i) => images?.[i] ?? (fallbackImages[i] as ImageMetadata)
 );
 ---
 
-<Section aria-labelledby="photo-gallery-heading" paddingBlock="3rem 0">
+<Section
+  aria-labelledby="photo-gallery-heading"
+  paddingBlock="3rem 0"
+  backgroundImage={backgroundImage?.src}
+>
   <SectionContainer>
     <SectionIntro
       headingId="photo-gallery-heading"
@@ -51,19 +56,54 @@ const resolvedImages: ImageMetadata[] = [0, 1, 2, 3, 4].map(
   </SectionContainer>
   <div class="gallery-grid" role="group" aria-label={galleryAria}>
     <div class="gallery-item gallery-item--large">
-      <Image src={resolvedImages[0] as ImageMetadata} alt={galleryAlts[0]} class="gallery-img" width={720} height={520} loading="lazy" />
+      <Image
+        src={resolvedImages[0] as ImageMetadata}
+        alt={galleryAlts[0]}
+        class="gallery-img"
+        width={720}
+        height={520}
+        loading="lazy"
+      />
     </div>
     <div class="gallery-item gallery-item--small">
-      <Image src={resolvedImages[1] as ImageMetadata} alt={galleryAlts[1]} class="gallery-img" width={360} height={256} loading="lazy" />
+      <Image
+        src={resolvedImages[1] as ImageMetadata}
+        alt={galleryAlts[1]}
+        class="gallery-img"
+        width={360}
+        height={256}
+        loading="lazy"
+      />
     </div>
     <div class="gallery-item gallery-item--small">
-      <Image src={resolvedImages[2] as ImageMetadata} alt={galleryAlts[2]} class="gallery-img" width={360} height={256} loading="lazy" />
+      <Image
+        src={resolvedImages[2] as ImageMetadata}
+        alt={galleryAlts[2]}
+        class="gallery-img"
+        width={360}
+        height={256}
+        loading="lazy"
+      />
     </div>
     <div class="gallery-item gallery-item--small">
-      <Image src={resolvedImages[3] as ImageMetadata} alt={galleryAlts[3]} class="gallery-img" width={360} height={256} loading="lazy" />
+      <Image
+        src={resolvedImages[3] as ImageMetadata}
+        alt={galleryAlts[3]}
+        class="gallery-img"
+        width={360}
+        height={256}
+        loading="lazy"
+      />
     </div>
     <div class="gallery-item gallery-item--small">
-      <Image src={resolvedImages[4] as ImageMetadata} alt={galleryAlts[4]} class="gallery-img" width={360} height={256} loading="lazy" />
+      <Image
+        src={resolvedImages[4] as ImageMetadata}
+        alt={galleryAlts[4]}
+        class="gallery-img"
+        width={360}
+        height={256}
+        loading="lazy"
+      />
     </div>
   </div>
 </Section>

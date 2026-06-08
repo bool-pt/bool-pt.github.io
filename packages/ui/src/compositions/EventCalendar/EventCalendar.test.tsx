@@ -119,12 +119,14 @@ describe('EventCalendar', () => {
     render(<EventCalendar events={events} ariaLabels={ariaLabels} />);
 
     // The first event is pre-selected, so the preview should already be visible
-    expect(screen.getByText(/Event Conference: React Summit/)).toBeInTheDocument();
+    expect(screen.getByText(/Event Conference:/)).toBeInTheDocument();
+    expect(screen.getByText(/React Summit/)).toBeInTheDocument();
 
     // Click the second event date
     await user.click(screen.getByLabelText('March 20'));
 
-    expect(screen.getByText(/Event Workshop: Astro Workshop/)).toBeInTheDocument();
+    expect(screen.getByText(/Event Workshop:/)).toBeInTheDocument();
+    expect(screen.getByText(/Astro Workshop/)).toBeInTheDocument();
   });
 
   it('clicking a non-event date clears the preview', async () => {
@@ -144,8 +146,18 @@ describe('EventCalendar', () => {
   it('uses custom dayNames and monthNames when provided', () => {
     const customDays = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
     const customMonths = [
-      'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-      'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
+      'Janeiro',
+      'Fevereiro',
+      'Março',
+      'Abril',
+      'Maio',
+      'Junho',
+      'Julho',
+      'Agosto',
+      'Setembro',
+      'Outubro',
+      'Novembro',
+      'Dezembro',
     ];
 
     render(
@@ -154,7 +166,7 @@ describe('EventCalendar', () => {
         ariaLabels={ariaLabels}
         dayNames={customDays}
         monthNames={customMonths}
-      />,
+      />
     );
 
     expect(screen.getByText('Março 2025')).toBeInTheDocument();

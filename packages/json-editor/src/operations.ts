@@ -1,9 +1,5 @@
-import { classifyField } from './field-kinds';
-import type {
-  NestedRepeatingItem,
-  Section,
-  TranslationField,
-} from './types';
+import { classifyField, getFieldOptions } from './field-kinds';
+import type { NestedRepeatingItem, Section, TranslationField } from './types';
 
 const NUMERIC_RE = /^\d+$/;
 
@@ -11,11 +7,7 @@ const NUMERIC_RE = /^\d+$/;
  * Update a single field's value by its full key.
  * Returns a new sections array (immutable).
  */
-export function updateField(
-  sections: Section[],
-  fullKey: string,
-  newValue: string,
-): Section[] {
+export function updateField(sections: Section[], fullKey: string, newValue: string): Section[] {
   return sections.map((section) => {
     // Check simple fields
     const fieldIdx = section.fields.findIndex((f) => f.key === fullKey);
@@ -106,12 +98,9 @@ export function addItem(sections: Section[], groupPrefix: string): Section[] {
     const { template, items } = group;
 
     // Determine next index
-    const numericIndices = items
-      .map((item) => Number(item.index))
-      .filter((n) => !isNaN(n));
+    const numericIndices = items.map((item) => Number(item.index)).filter((n) => !isNaN(n));
 
-    const nextIndex =
-      numericIndices.length > 0 ? String(Math.max(...numericIndices) + 1) : '1';
+    const nextIndex = numericIndices.length > 0 ? String(Math.max(...numericIndices) + 1) : '1';
 
     // Create new item with empty fields from the template
     const newFields: TranslationField[] = template.fieldSuffixes.map((suffix) => ({
@@ -138,11 +127,7 @@ export function addItem(sections: Section[], groupPrefix: string): Section[] {
  * Remove an item from a repeating group and renumber subsequent items.
  * Returns a new sections array.
  */
-export function removeItem(
-  sections: Section[],
-  groupPrefix: string,
-  index: string,
-): Section[] {
+export function removeItem(sections: Section[], groupPrefix: string, index: string): Section[] {
   return sections.map((section) => {
     const gi = section.repeatingGroups.findIndex((g) => g.prefix === groupPrefix);
     if (gi === -1) return section;
@@ -182,7 +167,7 @@ export function reorderItem(
   sections: Section[],
   groupPrefix: string,
   fromPosition: number,
-  toPosition: number,
+  toPosition: number
 ): Section[] {
   return sections.map((section) => {
     const gi = section.repeatingGroups.findIndex((g) => g.prefix === groupPrefix);
@@ -207,11 +192,7 @@ export function reorderItem(
     items.splice(toPosition, 0, moved);
 
     // Renumber all items
-    const renumbered = renumberItems(
-      items,
-      groupPrefix,
-      group.template.fieldSuffixes,
-    );
+    const renumbered = renumberItems(items, groupPrefix, group.template.fieldSuffixes);
 
     const newGroup = { ...group, items: renumbered };
     const newGroups = [...section.repeatingGroups];
@@ -226,9 +207,18 @@ export function reorderItem(
  * Also rewrites keys inside any nested groups under each item.
  */
 function renumberItems(
-  items: { index: string; fields: TranslationField[]; nestedGroups?: Array<{ prefix: string; innerPrefix: string; template: { innerPrefix: string; fieldSuffixes: string[] }; items: NestedRepeatingItem[] }> }[],
+  items: {
+    index: string;
+    fields: TranslationField[];
+    nestedGroups?: Array<{
+      prefix: string;
+      innerPrefix: string;
+      template: { innerPrefix: string; fieldSuffixes: string[] };
+      items: NestedRepeatingItem[];
+    }>;
+  }[],
   prefix: string,
-  fieldSuffixes: string[],
+  fieldSuffixes: string[]
 ): typeof items {
   return items.map((item, i) => {
     const newIndex = String(i + 1);
@@ -285,18 +275,22 @@ export function addNestedItem(
   sections: Section[],
   parentGroupPrefix: string,
   parentIndex: string,
-  innerPrefix: string,
+  innerPrefix: string
 ): Section[] {
   return mapNestedGroup(sections, parentGroupPrefix, parentIndex, innerPrefix, (nested) => {
-    const numericIndices = nested.items
-      .map((it) => Number(it.index))
-      .filter((n) => !isNaN(n));
+    const numericIndices = nested.items.map((it) => Number(it.index)).filter((n) => !isNaN(n));
     const nextIndex = numericIndices.length > 0 ? String(Math.max(...numericIndices) + 1) : '1';
     const newFields: TranslationField[] = nested.template.fieldSuffixes.map((suffix) => {
       const key = suffix
         ? `${nested.prefix}.${nextIndex}.${suffix}`
         : `${nested.prefix}.${nextIndex}`;
-      return { key, value: '', isDirty: true, kind: classifyField(key) };
+      return {
+        key,
+        value: '',
+        isDirty: true,
+        kind: classifyField(key),
+        options: getFieldOptions(key),
+      };
     });
     const newItem: NestedRepeatingItem = { index: nextIndex, fields: newFields };
     return { ...nested, items: [...nested.items, newItem] };
@@ -308,7 +302,7 @@ export function removeNestedItem(
   parentGroupPrefix: string,
   parentIndex: string,
   innerPrefix: string,
-  index: string,
+  index: string
 ): Section[] {
   return mapNestedGroup(sections, parentGroupPrefix, parentIndex, innerPrefix, (nested) => {
     const filtered = nested.items.filter((it) => it.index !== index);
@@ -324,7 +318,7 @@ export function reorderNestedItem(
   parentIndex: string,
   innerPrefix: string,
   fromPosition: number,
-  toPosition: number,
+  toPosition: number
 ): Section[] {
   return mapNestedGroup(sections, parentGroupPrefix, parentIndex, innerPrefix, (nested) => {
     if (
@@ -347,7 +341,7 @@ export function reorderNestedItem(
 function renumberNestedItems(
   items: NestedRepeatingItem[],
   prefix: string,
-  fieldSuffixes: string[],
+  fieldSuffixes: string[]
 ): NestedRepeatingItem[] {
   return items.map((item, i) => {
     const newIndex = String(i + 1);
@@ -379,8 +373,8 @@ function mapNestedGroup(
   parentIndex: string,
   innerPrefix: string,
   transform: (
-    nested: NonNullable<Section['repeatingGroups'][number]['items'][number]['nestedGroups']>[number],
-  ) => typeof nested,
+    nested: NonNullable<Section['repeatingGroups'][number]['items'][number]['nestedGroups']>[number]
+  ) => typeof nested
 ): Section[] {
   return sections.map((section) => {
     const gi = section.repeatingGroups.findIndex((g) => g.prefix === parentGroupPrefix);

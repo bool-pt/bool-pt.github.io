@@ -11,9 +11,10 @@ interface Props {
   heading: string;
   body: string;
   cta: string;
+  backgroundImage?: ImageMetadata;
 }
 
-const { tag, heading, body, cta } = Astro.props;
+const { tag, heading, body, cta, backgroundImage } = Astro.props;
 ---
 
 <CTASection
@@ -22,7 +23,7 @@ const { tag, heading, body, cta } = Astro.props;
   minHeight="446px"
   contentMaxWidth="42rem"
   class="careers-cta"
-  style={`--cta-bg-image: url(${ctaBg.src})`}
+  style={`--cta-bg-image: url(${backgroundImage?.src ?? ctaBg.src})`}
 >
   <SectionTag slot="tag" tagColor="primary">{tag}</SectionTag>
   <Fragment slot="heading">{heading}</Fragment>

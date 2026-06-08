@@ -1,13 +1,12 @@
 ---
 import { getEvents, resolveImage, transformEvent } from '@bool/content';
-import { t, tCollection, tList } from '@bool/i18n';
+import { t, tCollection, tList, tOptional } from '@bool/i18n';
 import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
 import ContactSection from '@bool/ui/sections/ContactSection.astro';
 import EventsCalendarSection from '@bool/ui/sections/EventsCalendarSection.astro';
 import InsightsCTASection from '@bool/ui/sections/InsightsCTASection.astro';
 import InsightsHeroSection from '@bool/ui/sections/InsightsHeroSection.astro';
 import KnowledgeCenterSection from '@bool/ui/sections/KnowledgeCenterSection.astro';
-import LatestFromBoolSection from '@bool/ui/sections/LatestFromBoolSection.astro';
 import NewsletterCTASection from '@bool/ui/sections/NewsletterCTASection.astro';
 import NewsUpdatesSection from '@bool/ui/sections/NewsUpdatesSection.astro';
 import PressReleasesSection from '@bool/ui/sections/PressReleasesSection.astro';
@@ -17,30 +16,19 @@ import {
   getContactSectionProps,
   getNewsletterLabels,
   getCalendarLabels,
+  getEventScheduleLabels,
 } from '../../labels';
 
 const events = await getEvents();
 const eventItems = events.slice(0, 3).map(transformEvent);
 
-const latestFeatured = tCollection('latestPosts.item', [
-  'category',
-  'title',
-  'author',
-  'readTime',
-  'date',
-  'location',
-  'cta',
-  'image',
-]).map((item) => ({
-  category: item.category,
-  title: item.title,
-  meta: [item.author, item.readTime, item.date, item.location]
-    .filter((v) => v && !v.startsWith('latestPosts.'))
-    .join(' · '),
-  cta: item.cta,
-  href: '/blog',
-  image: resolveImage(item.image).src,
-}));
+const bgKnowledgeCenter = tOptional('knowledgeCenter.backgroundImage');
+const bgNewsUpdates = tOptional('newsUpdates.backgroundImage');
+const bgPressReleases = tOptional('pressReleases.backgroundImage');
+const bgEventsCalendar = tOptional('eventsCalendar.backgroundImage');
+const bgInsightsCta = tOptional('insightsCta.backgroundImage');
+const bgNewsletterCta = tOptional('newsletterCta.backgroundImage');
+const bgContactSection = tOptional('contactSection.backgroundImage');
 
 const knowledgeFilters = tList('knowledgeCenter.filters');
 
@@ -98,13 +86,53 @@ const pressReleases = tCollection('pressReleases.item', ['date', 'title', 'descr
   (p) => ({ ...p, href: '/blog' })
 );
 
+function buildGoogleCalendarHref(
+  title: string,
+  description: string,
+  startDate: string,
+  endDate: string,
+  location: string
+): string {
+  if (!startDate || !endDate) return '#';
+  const fmt = (d: string) =>
+    d.includes('T') ? d.replace(/[-:]/g, '').replace(/\.\d+/, '') : d.replace(/-/g, '');
+  const params = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: title,
+    dates: `${fmt(startDate)}/${fmt(endDate)}`,
+    details: description,
+    location,
+  });
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+}
+
 const eventCards = tCollection('eventsCalendar.item', [
   'category',
   'title',
   'description',
   'dateInfo',
   'cta',
-]).map((e) => ({ ...e, href: '/blog' }));
+  'ctaType',
+  'href',
+  'startDate',
+  'endDate',
+  'location',
+]).map((e) => {
+  const isCalendar = e.ctaType === 'calendar';
+  return {
+    category: e.category,
+    title: e.title,
+    description: e.description,
+    dateInfo: e.dateInfo,
+    cta: e.cta,
+    ctaType: e.ctaType,
+    href: isCalendar
+      ? buildGoogleCalendarHref(e.title, e.description, e.startDate, e.endDate, e.location)
+      : e.href,
+    target: isCalendar ? '_blank' : undefined,
+    rel: isCalendar ? 'noopener noreferrer' : undefined,
+  };
+});
 ---
 
 <BaseLayout
@@ -120,12 +148,6 @@ const eventCards = tCollection('eventsCalendar.item', [
     ctaExplore={t('insightsHero.cta.explore')}
     ctaSubscribe={t('insightsHero.cta.subscribe')}
     backgroundImage={resolveImage(t('insightsHero.backgroundImage'))}
-  />
-  <LatestFromBoolSection
-    tag={t('latestPosts.tag')}
-    heading={t('latestPosts.heading')}
-    body={t('latestPosts.body')}
-    featured={latestFeatured}
   />
   <KnowledgeCenterSection
     tag={t('knowledgeCenter.tag')}
@@ -153,6 +175,7 @@ const eventCards = tCollection('eventsCalendar.item', [
         { key: 'copyLink', visible: t('knowledgeCenter.share.copyLink.visible') === 'true' },
       ],
     }}
+    backgroundImage={bgKnowledgeCenter ? resolveImage(bgKnowledgeCenter) : undefined}
   />
   <NewsUpdatesSection
     tag={t('newsUpdates.tag')}
@@ -165,6 +188,7 @@ const eventCards = tCollection('eventsCalendar.item', [
       emptyMessage: t('newsUpdates.emptyState'),
       filterAriaLabel: t('newsUpdates.filter.aria'),
     }}
+    backgroundImage={bgNewsUpdates ? resolveImage(bgNewsUpdates) : undefined}
   />
   <PressReleasesSection
     tag={t('pressReleases.tag')}
@@ -172,6 +196,7 @@ const eventCards = tCollection('eventsCalendar.item', [
     body={t('pressReleases.body')}
     viewMoreLabel={t('pressReleases.cta.viewMore')}
     pressReleases={pressReleases}
+    backgroundImage={bgPressReleases ? resolveImage(bgPressReleases) : undefined}
   />
   <EventsCalendarSection
     tag={t('eventsCalendar.tag')}
@@ -180,18 +205,26 @@ const eventCards = tCollection('eventsCalendar.item', [
     eventCards={eventCards}
     calendarLabels={getCalendarLabels()}
     events={eventItems}
+    scheduleLabels={getEventScheduleLabels()}
+    backgroundImage={bgEventsCalendar ? resolveImage(bgEventsCalendar) : undefined}
   />
   <InsightsCTASection
     tag={t('insightsCta.tag')}
     headingLine1={t('insightsCta.heading.line1')}
     headingLine2={t('insightsCta.heading.line2')}
     body={t('insightsCta.body')}
-    button={t('insightsCta.button')}
+    button={t('common.talkToExpert')}
+    backgroundImage={bgInsightsCta ? resolveImage(bgInsightsCta) : undefined}
   />
-  <ContactSection {...getContactSectionProps()} background="var(--color-surface-black)" />
+  <ContactSection
+    {...getContactSectionProps()}
+    background="var(--color-surface-black)"
+    backgroundImage={bgContactSection ? resolveImage(bgContactSection) : undefined}
+  />
   <NewsletterCTASection
     heading={t('newsletterCta.heading')}
     body={t('newsletterCta.body')}
     newsletterLabels={getNewsletterLabels()}
+    backgroundImage={bgNewsletterCta ? resolveImage(bgNewsletterCta) : undefined}
   />
 </BaseLayout>

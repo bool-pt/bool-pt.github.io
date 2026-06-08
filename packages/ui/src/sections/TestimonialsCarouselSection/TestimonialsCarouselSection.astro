@@ -19,9 +19,10 @@ interface Props {
   body: string;
   testimonials: TestimonialItem[];
   carouselAriaLabels: { prev: string; next: string };
+  backgroundImage?: ImageMetadata;
 }
 
-const { tag, heading, body, testimonials, carouselAriaLabels } = Astro.props;
+const { tag, heading, body, testimonials, carouselAriaLabels, backgroundImage } = Astro.props;
 
 const resolvedTestimonials = testimonials.map((item) => ({
   ...item,
@@ -33,6 +34,7 @@ const resolvedTestimonials = testimonials.map((item) => ({
   background="var(--black-15)"
   aria-labelledby="testimonials-carousel-heading"
   class="testimonials-section"
+  backgroundImage={backgroundImage?.src}
 >
   <SectionContainer>
     <SectionIntro

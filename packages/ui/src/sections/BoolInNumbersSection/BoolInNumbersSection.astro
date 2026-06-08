@@ -13,9 +13,10 @@ interface Props {
   imageAlt: string;
   stats: Array<{ number: string; label: string }>;
   image?: ImageMetadata;
+  backgroundImage?: ImageMetadata;
 }
 
-const { heading, body, imageAlt, stats, image = numbersImgFallback } = Astro.props;
+const { heading, body, imageAlt, stats, image = numbersImgFallback, backgroundImage } = Astro.props;
 ---
 
 <Section
@@ -23,6 +24,7 @@ const { heading, body, imageAlt, stats, image = numbersImgFallback } = Astro.pro
   background="var(--color-background)"
   contentVisibility={false}
   paddingBlock="clamp(3rem, 6vw, 5rem)"
+  backgroundImage={backgroundImage?.src}
 >
   <SectionContainer>
     <div class="numbers-wrap">

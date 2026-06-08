@@ -1,8 +1,8 @@
 ---
+import ButtonLink from '../../primitives/ButtonLink/ButtonLink.astro';
 import CardLabel from '../../primitives/CardLabel/CardLabel.astro';
 import CardTitle from '../../primitives/CardTitle/CardTitle.astro';
 import HoverCard from '../../primitives/HoverCard/HoverCard.astro';
-import ArrowLink from '../ArrowLink/ArrowLink.astro';
 
 interface Props {
   category: string;
@@ -10,11 +10,25 @@ interface Props {
   description: string;
   dateInfo: string;
   ctaLabel: string;
+  ctaType?: string;
   href: string;
+  target?: string;
+  rel?: string;
   class?: string;
 }
 
-const { category, title, description, dateInfo, ctaLabel, href, class: className } = Astro.props;
+const {
+  category,
+  title,
+  description,
+  dateInfo,
+  ctaLabel,
+  ctaType,
+  href,
+  target,
+  rel,
+  class: className,
+} = Astro.props;
 ---
 
 <HoverCard hoverEffect="glow" colorScheme="light" class:list={['event-detail-card', className]}>
@@ -23,13 +37,46 @@ const { category, title, description, dateInfo, ctaLabel, href, class: className
     <CardTitle class="event-detail-card-title">{title}</CardTitle>
     <p class="event-detail-card-desc">{description}</p>
     <p class="event-detail-card-date">{dateInfo}</p>
-    <ArrowLink href={href} label={ctaLabel} />
+    {
+      ctaType === 'meet' ? (
+        <ButtonLink href="#" variant="primary" class="event-detail-cta event-schedule-trigger">
+          {ctaLabel} →
+        </ButtonLink>
+      ) : ctaType === 'internal' ? (
+        <ButtonLink href="#" variant="primary" class="event-detail-cta">
+          {ctaLabel}
+        </ButtonLink>
+      ) : (
+        <ButtonLink
+          href={href}
+          target={target}
+          rel={rel}
+          variant="primary"
+          class="event-detail-cta"
+        >
+          {ctaLabel} →
+        </ButtonLink>
+      )
+    }
   </div>
 </HoverCard>
 
 <style>
   .event-detail-card-inner {
     padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  :global(.event-detail-card.hover-card--light.hover-card--glow) {
+    border-inline-start-width: 3px;
+    border-inline-start-color: var(--color-primary);
+  }
+
+  :global(.event-detail-card.is-selected) {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-hover);
   }
 
   .event-detail-card-title {
@@ -46,6 +93,11 @@ const { category, title, description, dateInfo, ctaLabel, href, class: className
   .event-detail-card-date {
     font-size: var(--font-size-body-sm);
     color: var(--color-muted-foreground);
-    margin: 0 0 0.75rem;
+    margin: 0 0 1.25rem;
+  }
+
+  :global(.event-detail-cta--disabled) {
+    pointer-events: none;
+    opacity: 0.5;
   }
 </style>

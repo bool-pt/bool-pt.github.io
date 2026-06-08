@@ -3,6 +3,8 @@ import { ROUTES } from '@bool/shared';
 import type { EventItem } from '@bool/shared';
 import CalendarEventLayout from '../../compositions/CalendarEventLayout/CalendarEventLayout.astro';
 import EventListCard from '../../compositions/EventListCard/EventListCard.astro';
+import EventScheduleModal from '../../compositions/EventScheduleModal/EventScheduleModal';
+import type { EventScheduleLabels } from '../../compositions/EventScheduleModal/EventScheduleModal';
 import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
 import ButtonLink from '../../primitives/ButtonLink/ButtonLink.astro';
 import Section from '../../primitives/Section/Section.astro';
@@ -20,11 +22,30 @@ interface Props {
   description: string;
   cardHeading: string;
   cta: string;
+  meetCta?: string;
+  meetHref?: string;
   calendarLabels: CalendarLabels;
+  scheduleLabels?: EventScheduleLabels;
   events?: EventItem[];
+  backgroundImage?: ImageMetadata;
 }
 
-const { heading, description, cardHeading, cta, calendarLabels, events = [] } = Astro.props;
+const {
+  heading,
+  description,
+  cardHeading,
+  cta,
+  meetCta,
+  meetHref,
+  calendarLabels,
+  scheduleLabels,
+  events = [],
+  backgroundImage,
+} = Astro.props;
+
+// Number of events shown before "See more" expands the rest in place.
+const INITIAL_VISIBLE = 2;
+const hasMore = events.length > INITIAL_VISIBLE;
 
 const calendarEvents = events.map((e) => ({
   date: e.rawDate ?? e.date,
@@ -39,6 +60,7 @@ const calendarEvents = events.map((e) => ({
   background="var(--color-surface-muted)"
   aria-labelledby="events-heading"
   paddingBlock="3rem"
+  backgroundImage={backgroundImage?.src}
 >
   <div class="events-container">
     <SectionIntro
@@ -51,31 +73,81 @@ const calendarEvents = events.map((e) => ({
       <Fragment slot="description">{description}</Fragment>
     </SectionIntro>
 
-    <CalendarEventLayout events={calendarEvents} calendarHydration="load" calendarLabels={calendarLabels}>
+    <CalendarEventLayout
+      events={calendarEvents}
+      calendarHydration="load"
+      calendarLabels={calendarLabels}
+    >
       <div class="events-card">
         <h3 class="events-card-heading">{cardHeading}</h3>
         <div class="events-list">
           {
-            events.map((event) => (
+            events.map((event, i) => (
               <EventListCard
+                class={i >= INITIAL_VISIBLE ? 'event-collapsed' : undefined}
                 date={event.date}
                 tag={event.tag}
                 tagColor={event.tagColor}
                 title={event.title}
                 description={event.description}
                 location={event.location}
-                url={event.url}
+                meetCta={meetCta}
+                meetHref={meetHref}
               />
             ))
           }
         </div>
-        <div class="events-cta-wrap">
-          <ButtonLink href={ROUTES.events} variant="primary">{cta}</ButtonLink>
-        </div>
+        {
+          hasMore && (
+            <div class="events-cta-wrap">
+              <ButtonLink href={ROUTES.events} variant="outline" class="events-expand-trigger">
+                {cta}
+              </ButtonLink>
+            </div>
+          )
+        }
       </div>
     </CalendarEventLayout>
   </div>
+
+  {
+    scheduleLabels && (
+      <div class="event-schedule-modal-mount">
+        {/* client:load — a closed modal has no layout box, so client:visible would never hydrate */}
+        <EventScheduleModal client:load labels={scheduleLabels} />
+      </div>
+    )
+  }
 </Section>
+
+<script>
+  // Progressive enhancement: "See more" reveals collapsed events in place.
+  // Without JS the link still navigates to the events page.
+  document.querySelectorAll<HTMLAnchorElement>('.events-expand-trigger').forEach((trigger) => {
+    trigger.addEventListener('click', (event) => {
+      const card = trigger.closest('.events-card');
+      const collapsed = card?.querySelectorAll('.event-collapsed');
+      if (!collapsed?.length) return;
+      event.preventDefault();
+      collapsed.forEach((el) => el.classList.remove('event-collapsed'));
+      trigger.remove();
+    });
+  });
+
+  // "Meet us there" opens the event-schedule modal when it's mounted.
+  // Without the modal (or JS), the button still navigates to its href.
+  const hasScheduleModal = !!document.querySelector('.event-schedule-modal-mount');
+  if (hasScheduleModal) {
+    document.querySelectorAll<HTMLAnchorElement>('.event-schedule-trigger').forEach((trigger) => {
+      trigger.addEventListener('click', (event) => {
+        event.preventDefault();
+        const item = trigger.closest('.event-item');
+        const title = item?.querySelector('.event-title')?.textContent?.trim() ?? '';
+        window.dispatchEvent(new CustomEvent('bool:open-event-schedule', { detail: { title } }));
+      });
+    });
+  }
+</script>
 
 <style>
   .events-container {
@@ -121,6 +193,11 @@ const calendarEvents = events.map((e) => ({
   .events-list {
     display: flex;
     flex-direction: column;
+  }
+
+  /* Collapsed events are hidden until "See more" expands them. */
+  .events-list :global(.event-collapsed) {
+    display: none;
   }
 
   .events-cta-wrap {

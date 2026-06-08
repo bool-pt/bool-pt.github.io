@@ -22,4 +22,5 @@ export {
   getCalendarLabels,
   getContactFormLabels,
   getContactSectionProps,
+  getEventScheduleLabels,
 } from './src/labels.ts';

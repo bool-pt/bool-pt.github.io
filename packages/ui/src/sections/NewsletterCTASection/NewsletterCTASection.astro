@@ -29,9 +29,10 @@ interface Props {
   heading: string;
   body: string;
   newsletterLabels: NewsletterLabels;
+  backgroundImage?: ImageMetadata;
 }
 
-const { heading, body, newsletterLabels } = Astro.props;
+const { heading, body, newsletterLabels, backgroundImage } = Astro.props;
 ---
 
 <Section
@@ -41,7 +42,13 @@ const { heading, body, newsletterLabels } = Astro.props;
   style={`min-block-size: 427px`}
 >
   <div class="newsletter-bg">
-    <Image src={newsletterBg} alt="" aria-hidden="true" class="newsletter-bg-img" loading="lazy" />
+    <Image
+      src={backgroundImage ?? newsletterBg}
+      alt=""
+      aria-hidden="true"
+      class="newsletter-bg-img"
+      loading="lazy"
+    />
   </div>
   <div class="newsletter-letters-scaler">
     <div class="newsletter-letters">

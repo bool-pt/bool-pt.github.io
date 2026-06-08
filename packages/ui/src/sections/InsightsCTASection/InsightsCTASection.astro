@@ -11,9 +11,10 @@ interface Props {
   headingLine2: string;
   body: string;
   button: string;
+  backgroundImage?: ImageMetadata;
 }
 
-const { tag, headingLine1, headingLine2, body, button } = Astro.props;
+const { tag, headingLine1, headingLine2, body, button, backgroundImage } = Astro.props;
 ---
 
 <div class="insights-cta">
@@ -22,7 +23,7 @@ const { tag, headingLine1, headingLine2, body, button } = Astro.props;
     align="start"
     contentMaxWidth="36rem"
     minHeight="28rem"
-    style={`background-image: linear-gradient(var(--overlay-image), var(--overlay-image)), url(${ctaBg.src})`}
+    style={`background-image: linear-gradient(var(--overlay-image), var(--overlay-image)), url(${backgroundImage?.src ?? ctaBg.src})`}
   >
     <SectionTag slot="tag">{tag}</SectionTag>
     <Fragment slot="heading">

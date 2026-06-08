@@ -8,9 +8,10 @@ interface Props {
   heading: string;
   subtitle: string;
   values: Array<{ number: string; title: string; body: string }>;
+  backgroundImage?: ImageMetadata;
 }
 
-const { tag, heading, subtitle, values } = Astro.props;
+const { tag, heading, subtitle, values, backgroundImage } = Astro.props;
 ---
 
 <div class="values-wrap">
@@ -24,6 +25,7 @@ const { tag, heading, subtitle, values } = Astro.props;
     gridCollapseAt="md"
     gridGap="0"
     gridRole="list"
+    backgroundImage={backgroundImage?.src}
   >
     <SectionTag slot="tag" tagColor="primary">{tag}</SectionTag>
     <Fragment slot="heading">{heading}</Fragment>
@@ -31,11 +33,7 @@ const { tag, heading, subtitle, values } = Astro.props;
 
     {
       values.map((value) => (
-        <NumberedCard
-          number={value.number}
-          title={value.title}
-          body={value.body}
-        />
+        <NumberedCard number={value.number} title={value.title} body={value.body} />
       ))
     }
   </IntroGridSection>
@@ -50,7 +48,7 @@ const { tag, heading, subtitle, values } = Astro.props;
 
   @media (min-width: 768px) {
     .values-wrap :global(section) {
-      block-size: 600px;
+      min-block-size: 600px;
     }
 
     .values-wrap :global(.hover-card) {

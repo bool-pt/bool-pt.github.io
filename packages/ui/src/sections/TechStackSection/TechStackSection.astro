@@ -1,9 +1,4 @@
 ---
-import opensourceImg from '@bool/media/images/covers/services-stock-02.jpg';
-import outsystemsImg from '@bool/media/images/covers/services-stock-03.png';
-import powerplatformImg from '@bool/media/images/covers/services-stock-04.jpg';
-import mendixImg from '@bool/media/images/covers/services-stock-05.jpg';
-import expertPhoto from '@bool/media/images/portraits/portrait.png';
 import { COMPANY, ROUTES } from '@bool/shared';
 import ExpertPortrait from '../../compositions/ExpertPortrait/ExpertPortrait.astro';
 import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
@@ -20,12 +15,14 @@ interface TechPlatform {
   role: string;
   name: string;
   body: string;
+  image: ImageMetadata;
   features: string[];
 }
 
 interface Props {
   readinessExpertName: string;
   readinessExpertRole: string;
+  readinessExpertPhoto: ImageMetadata;
   readinessHeading: string;
   readinessBody: string;
   readinessChecks: string[];
@@ -35,11 +32,13 @@ interface Props {
   availableConsultation: string;
   contactExpert: string;
   platforms: TechPlatform[];
+  backgroundImage?: ImageMetadata;
 }
 
 const {
   readinessExpertName,
   readinessExpertRole,
+  readinessExpertPhoto,
   readinessHeading,
   readinessBody,
   readinessChecks,
@@ -49,14 +48,8 @@ const {
   availableConsultation,
   contactExpert,
   platforms,
+  backgroundImage,
 } = Astro.props;
-
-const platformImages: Record<string, ImageMetadata> = {
-  outsystems: outsystemsImg,
-  mendix: mendixImg,
-  powerplatform: powerplatformImg,
-  opensource: opensourceImg,
-};
 ---
 
 <Section
@@ -64,13 +57,21 @@ const platformImages: Record<string, ImageMetadata> = {
   aria-labelledby="tech-heading"
   contentVisibility={false}
   paddingBlock="3rem"
+  backgroundImage={backgroundImage?.src}
 >
-  <SectionContainer class="tech-section-container" style="padding-inline: 1.5rem; max-inline-size: calc(1280px + 3rem);">
-    <article class="readinessCard" aria-labelledby="readiness-heading" style="--color-on-dark-muted: var(--color-on-dark);">
+  <SectionContainer
+    class="tech-section-container"
+    style="padding-inline: 1.5rem; max-inline-size: calc(1280px + 3rem);"
+  >
+    <article
+      class="readinessCard"
+      aria-labelledby="readiness-heading"
+      style="--color-on-dark-muted: var(--color-on-dark);"
+    >
       <ExpertPortrait
         name={readinessExpertName}
         role={readinessExpertRole}
-        photo={expertPhoto}
+        photo={readinessExpertPhoto}
         email={COMPANY.email}
         linkedin="https://linkedin.com"
         colorScheme="dark"
@@ -90,10 +91,16 @@ const platformImages: Record<string, ImageMetadata> = {
           <Fragment slot="heading">{readinessHeading}</Fragment>
           <p>{readinessBody}</p>
         </TextBlock>
-        <ul class="readinessChecklist" role="list" style="--color-success: white; --color-on-dark: var(--color-surface-warm-dark); color: white; --check-border: 2.5px solid var(--white-30);">
-          {readinessChecks.map((item) => (
-            <CheckListItem class="readinessCheckItem">{item}</CheckListItem>
-          ))}
+        <ul
+          class="readinessChecklist"
+          role="list"
+          style="--color-success: white; --color-on-dark: var(--color-surface-warm-dark); color: white; --check-border: 2.5px solid var(--white-30);"
+        >
+          {
+            readinessChecks.map((item) => (
+              <CheckListItem class="readinessCheckItem">{item}</CheckListItem>
+            ))
+          }
         </ul>
         <ButtonLink href={ROUTES.contacts} variant="primary">{readinessCta}</ButtonLink>
       </div>
@@ -105,19 +112,21 @@ const platformImages: Record<string, ImageMetadata> = {
     </SectionIntro>
 
     <div class="tech-cards">
-      {platforms.map((platform, index) => (
-        <TechCard
-          expert={platform.expert}
-          role={platform.role}
-          name={platform.name}
-          body={platform.body}
-          features={platform.features}
-          availableConsultation={availableConsultation}
-          contactExpert={contactExpert}
-          image={platformImages[platform.key] ?? expertPhoto}
-          reversed={index % 2 === 1}
-        />
-      ))}
+      {
+        platforms.map((platform, index) => (
+          <TechCard
+            expert={platform.expert}
+            role={platform.role}
+            name={platform.name}
+            body={platform.body}
+            features={platform.features}
+            availableConsultation={availableConsultation}
+            contactExpert={contactExpert}
+            image={platform.image}
+            reversed={index % 2 === 1}
+          />
+        ))
+      }
     </div>
   </SectionContainer>
 </Section>
@@ -204,5 +213,4 @@ const platformImages: Record<string, ImageMetadata> = {
     flex-direction: column;
     gap: 2rem;
   }
-
 </style>

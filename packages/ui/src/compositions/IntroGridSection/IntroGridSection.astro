@@ -7,11 +7,13 @@ import SectionIntro from '../SectionIntro/SectionIntro.astro';
 interface Props {
   headingId: string;
   background?: string;
+  backgroundImage?: string;
   colorScheme?: 'light' | 'dark';
   introAlign?: 'center' | 'start';
   introSize?: 'default' | 'lg';
   headingSize?: string;
   bodySize?: string;
+  bodyLineHeight?: string;
   headingLevel?: 'h1' | 'h2' | 'h3';
   descriptionMaxWidth?: string;
   introMarginBlockEnd?: string;
@@ -29,11 +31,13 @@ interface Props {
 const {
   headingId,
   background,
+  backgroundImage,
   colorScheme = 'light',
   introAlign = 'center',
   introSize = 'default',
   headingSize,
   bodySize,
+  bodyLineHeight,
   headingLevel,
   descriptionMaxWidth,
   introMarginBlockEnd,
@@ -54,6 +58,7 @@ const hasAction = Astro.slots.has('action');
 
 <Section
   background={background}
+  backgroundImage={backgroundImage}
   aria-labelledby={headingId}
   paddingBlock={paddingBlock}
   contentVisibility={contentVisibility}
@@ -68,6 +73,7 @@ const hasAction = Astro.slots.has('action');
       size={introSize}
       headingSize={headingSize}
       bodySize={bodySize}
+      bodyLineHeight={bodyLineHeight}
       headingLevel={headingLevel}
       descriptionMaxWidth={descriptionMaxWidth}
       marginBlockEnd={introMarginBlockEnd}

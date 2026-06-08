@@ -36,4 +36,25 @@ export default [
       '@typescript-eslint/prefer-nullish-coalescing': 'off',
     },
   },
+  // ── Page-layer boundary ──────────────────────────────────────────────
+  // Astro page files must only import from @bool/ui sections and layout,
+  // never from compositions or primitives directly (those belong to @bool/ui
+  // internals — use the section that wraps them instead).
+  {
+    files: ['src/pages/**/*.{astro,ts}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@bool/ui/compositions/**', '@bool/ui/primitives/**'],
+              message:
+                'Pages may only import from @bool/ui sections or layout — not compositions or primitives.',
+            },
+          ],
+        },
+      ],
+    },
+  },
 ];

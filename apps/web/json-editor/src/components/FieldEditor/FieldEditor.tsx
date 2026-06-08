@@ -48,7 +48,7 @@ export default function FieldEditor({ field, disabled = false }: FieldEditorProp
         (e.target as HTMLElement).blur();
       }
     },
-    [localValue],
+    [localValue]
   );
 
   const handleSpecializedChange = useCallback(
@@ -58,7 +58,7 @@ export default function FieldEditor({ field, disabled = false }: FieldEditorProp
         dispatch({ type: 'UPDATE_FIELD', payload: { key: field.key, value: next } });
       }
     },
-    [dispatch, field.key, field.value],
+    [dispatch, field.key, field.value]
   );
 
   const useTextarea = isLongValue(field.value) || isLongValue(localValue);
@@ -70,7 +70,7 @@ export default function FieldEditor({ field, disabled = false }: FieldEditorProp
         styles.field,
         field.isDirty && styles.fieldDirty,
         isEmpty && !disabled && kind === 'text' && styles.fieldEmpty,
-        disabled && styles.fieldDisabled,
+        disabled && styles.fieldDisabled
       )}
     >
       <label className={styles.keyLabel} title={field.key}>
@@ -90,6 +90,29 @@ export default function FieldEditor({ field, disabled = false }: FieldEditorProp
             onChange={handleSpecializedChange}
             disabled={disabled}
           />
+        ) : kind === 'select' && field.options ? (
+          <select
+            className={cn(styles.input, disabled && styles.inputDisabled)}
+            value={disabled ? field.value : localValue}
+            disabled={disabled}
+            onChange={
+              disabled
+                ? undefined
+                : (e) => {
+                    setLocalValue(e.target.value);
+                    dispatch({
+                      type: 'UPDATE_FIELD',
+                      payload: { key: field.key, value: e.target.value },
+                    });
+                  }
+            }
+          >
+            {field.options.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
         ) : useTextarea ? (
           <textarea
             className={cn(styles.input, styles.textarea, disabled && styles.inputDisabled)}

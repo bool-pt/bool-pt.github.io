@@ -22,9 +22,10 @@ interface Props {
   filters: string[];
   newsItems: NewsItem[];
   labels: { readMore: string; emptyMessage: string; filterAriaLabel: string };
+  backgroundImage?: ImageMetadata;
 }
 
-const { tag, heading, body, filters, newsItems, labels } = Astro.props;
+const { tag, heading, body, filters, newsItems, labels, backgroundImage } = Astro.props;
 ---
 
 <Section
@@ -32,6 +33,7 @@ const { tag, heading, body, filters, newsItems, labels } = Astro.props;
   aria-labelledby="news-heading"
   id="news"
   class="news-section"
+  backgroundImage={backgroundImage?.src}
 >
   <SectionContainer>
     <SectionIntro
@@ -46,12 +48,7 @@ const { tag, heading, body, filters, newsItems, labels } = Astro.props;
       <Fragment slot="description">{body}</Fragment>
     </SectionIntro>
 
-    <NewsGrid
-      client:visible
-      items={newsItems}
-      filters={filters}
-      labels={labels}
-    />
+    <NewsGrid client:visible items={newsItems} filters={filters} labels={labels} />
   </SectionContainer>
 </Section>
 

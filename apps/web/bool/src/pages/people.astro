@@ -1,6 +1,6 @@
 ---
 import { resolveImage } from '@bool/content';
-import { t, tCollection } from '@bool/i18n';
+import { t, tOptional, tCollection } from '@bool/i18n';
 import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
 import BeyondSprintSection from '@bool/ui/sections/BeyondSprintSection.astro';
 import CareersCtaSection from '@bool/ui/sections/CareersCtaSection.astro';
@@ -10,23 +10,40 @@ import PeopleHeroSection from '@bool/ui/sections/PeopleHeroSection.astro';
 import PhotoGallerySection from '@bool/ui/sections/PhotoGallerySection.astro';
 import TestimonialsCarouselSection from '@bool/ui/sections/TestimonialsCarouselSection.astro';
 import ValuesSection from '@bool/ui/sections/ValuesSection.astro';
-import { getHeaderLabels, getFooterLabels, getContactSectionProps, getNewsletterLabels } from '../labels';
+import {
+  getHeaderLabels,
+  getFooterLabels,
+  getContactSectionProps,
+  getNewsletterLabels,
+} from '../labels';
 
-const peopleTestimonials = tCollection('teamTestimonials', ['quote', 'name', 'role', 'avatar'])
-  .map((item) => ({
+const peopleTestimonials = tCollection('teamTestimonials', ['quote', 'name', 'role', 'avatar']).map(
+  (item) => ({
     quote: item.quote,
     company: item.name,
     designation: item.role,
     avatar: resolveImage(item.avatar).src,
-  }));
+  })
+);
 
 const heroStats = tCollection('peopleHero.stats', ['value', 'label']);
 
-const coreValues = tCollection('coreValues', ['title', 'body'])
-  .map((v, i) => ({ ...v, number: String(i + 1).padStart(2, '0') }));
+const coreValues = tCollection('coreValues', ['title', 'body']).map((v, i) => ({
+  ...v,
+  number: String(i + 1).padStart(2, '0'),
+}));
 
-const beyondCards = tCollection('beyondWork.cards', ['label', 'title', 'body', 'image'])
-  .map((c) => ({ label: c.label, title: c.title, body: c.body, image: resolveImage(c.image) }));
+const beyondCards = tCollection('beyondWork.cards', ['label', 'title', 'body', 'image']).map(
+  (c) => ({ label: c.label, title: c.title, body: c.body, image: resolveImage(c.image) })
+);
+
+const coreValuesBg = tOptional('coreValues.backgroundImage');
+const beyondWorkBg = tOptional('beyondWork.backgroundImage');
+const bgPhotoGallery = tOptional('photoGallery.backgroundImage');
+const bgTeamTestimonials = tOptional('teamTestimonials.backgroundImage');
+const bgCareersCta = tOptional('careersCta.backgroundImage');
+const bgNewsletterCta = tOptional('newsletterCta.backgroundImage');
+const bgContactSection = tOptional('contactSection.backgroundImage');
 ---
 
 <BaseLayout
@@ -49,12 +66,14 @@ const beyondCards = tCollection('beyondWork.cards', ['label', 'title', 'body', '
     heading={t('coreValues.heading')}
     subtitle={t('coreValues.subtitle')}
     values={coreValues}
+    backgroundImage={coreValuesBg ? resolveImage(coreValuesBg) : undefined}
   />
   <BeyondSprintSection
     tag={t('beyondWork.tag')}
     heading={t('beyondWork.heading')}
     body={t('beyondWork.body')}
     cards={beyondCards}
+    backgroundImage={beyondWorkBg ? resolveImage(beyondWorkBg) : undefined}
   />
   <PhotoGallerySection
     tag={t('photoGallery.tag')}
@@ -63,6 +82,7 @@ const beyondCards = tCollection('beyondWork.cards', ['label', 'title', 'body', '
     galleryAria={t('photoGallery.gallery.aria')}
     galleryAlts={tCollection('photoGallery.gallery', ['alt']).map((g) => g.alt)}
     images={tCollection('photoGallery.gallery', ['image']).map((g) => resolveImage(g.image))}
+    backgroundImage={bgPhotoGallery ? resolveImage(bgPhotoGallery) : undefined}
   />
   <TestimonialsCarouselSection
     tag={t('teamTestimonials.tag')}
@@ -70,17 +90,24 @@ const beyondCards = tCollection('beyondWork.cards', ['label', 'title', 'body', '
     body={t('teamTestimonials.body')}
     testimonials={peopleTestimonials}
     carouselAriaLabels={{ prev: t('carousel.previous'), next: t('carousel.next') }}
+    backgroundImage={bgTeamTestimonials ? resolveImage(bgTeamTestimonials) : undefined}
   />
   <CareersCtaSection
     tag={t('careersCta.tag')}
     heading={t('careersCta.heading')}
     body={t('careersCta.body')}
     cta={t('careersCta.cta')}
+    backgroundImage={bgCareersCta ? resolveImage(bgCareersCta) : undefined}
   />
-  <ContactSection {...getContactSectionProps()} background="var(--color-surface-black)" />
+  <ContactSection
+    {...getContactSectionProps()}
+    background="var(--color-surface-black)"
+    backgroundImage={bgContactSection ? resolveImage(bgContactSection) : undefined}
+  />
   <NewsletterCTASection
     heading={t('newsletterCta.heading')}
     body={t('newsletterCta.body')}
     newsletterLabels={getNewsletterLabels()}
+    backgroundImage={bgNewsletterCta ? resolveImage(bgNewsletterCta) : undefined}
   />
 </BaseLayout>

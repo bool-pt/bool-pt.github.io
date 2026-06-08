@@ -1,9 +1,13 @@
 ---
-import { t } from '@bool/i18n';
+import { resolveImage } from '@bool/content';
+import { t, tOptional } from '@bool/i18n';
 import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
 import CareersCtaSection from '@bool/ui/sections/CareersCtaSection.astro';
 import CareersHeroSection from '@bool/ui/sections/CareersHeroSection.astro';
 import { getHeaderLabels, getFooterLabels } from '../labels';
+
+const bgCareersHero = tOptional('careers.backgroundImage');
+const bgCareersCta = tOptional('careersCta.backgroundImage');
 ---
 
 <BaseLayout
@@ -17,11 +21,13 @@ import { getHeaderLabels, getFooterLabels } from '../labels';
     ariaLabel={t('careers.heading')}
     heading={t('careers.heading')}
     description={t('careers.description')}
+    backgroundImage={bgCareersHero ? resolveImage(bgCareersHero) : undefined}
   />
   <CareersCtaSection
     tag={t('careersCta.tag')}
     heading={t('careersCta.heading')}
     body={t('careersCta.body')}
     cta={t('careersCta.cta')}
+    backgroundImage={bgCareersCta ? resolveImage(bgCareersCta) : undefined}
   />
 </BaseLayout>

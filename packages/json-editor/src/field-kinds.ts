@@ -1,4 +1,4 @@
-import type { FieldKind } from './types';
+import type { FieldKind, SelectOption } from './types';
 
 /**
  * Classifies a translation field by its key, returning the editor kind to use.
@@ -18,14 +18,27 @@ const MEDIA_SUFFIXES = new Set([
   'thumbnail',
 ]);
 
-const ICON_SUFFIXES = new Set([
-  'iconName',
-  'icon',
-]);
+const ICON_SUFFIXES = new Set(['iconName', 'icon']);
+
+/** Maps key suffix → ordered option list for select fields. */
+const SELECT_OPTIONS: Record<string, SelectOption[]> = {
+  ctaType: [
+    { value: 'link', label: 'Register Now' },
+    { value: 'calendar', label: 'Add to Calendar' },
+    { value: 'internal', label: 'Team Only' },
+    { value: 'meet', label: 'Meet us there' },
+  ],
+};
 
 export function classifyField(key: string): FieldKind {
   const lastSegment = key.slice(key.lastIndexOf('.') + 1);
   if (MEDIA_SUFFIXES.has(lastSegment)) return 'media';
   if (ICON_SUFFIXES.has(lastSegment)) return 'icon';
+  if (SELECT_OPTIONS[lastSegment]) return 'select';
   return 'text';
+}
+
+export function getFieldOptions(key: string): SelectOption[] | undefined {
+  const lastSegment = key.slice(key.lastIndexOf('.') + 1);
+  return SELECT_OPTIONS[lastSegment];
 }

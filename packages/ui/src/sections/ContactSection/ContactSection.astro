@@ -34,6 +34,7 @@ interface Props {
   addressLines: string[];
   contactEmail: string;
   formLabels: ContactFormLabels;
+  backgroundImage?: ImageMetadata;
 }
 
 const {
@@ -44,6 +45,7 @@ const {
   addressLines,
   contactEmail,
   formLabels,
+  backgroundImage,
 } = Astro.props;
 ---
 
@@ -52,6 +54,7 @@ const {
   aria-labelledby="contact-heading"
   style="min-block-size: 588px; block-size: auto"
   class="contact-section"
+  backgroundImage={backgroundImage?.src}
 >
   <SectionContainer>
     <SplitWithForm>

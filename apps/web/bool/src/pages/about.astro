@@ -1,6 +1,6 @@
 ---
 import { getTeamGrid, resolveImage } from '@bool/content';
-import { t, tCollection } from '@bool/i18n';
+import { t, tOptional, tCollection } from '@bool/i18n';
 import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
 import AboutHeroSection from '@bool/ui/sections/AboutHeroSection.astro';
 import BoolInNumbersSection from '@bool/ui/sections/BoolInNumbersSection.astro';
@@ -12,25 +12,35 @@ import TeamGridSection from '@bool/ui/sections/TeamGridSection.astro';
 import { getHeaderLabels, getFooterLabels, getContactSectionProps } from '../labels';
 
 const teamGridPayload = getTeamGrid();
+const teamGridBg = tOptional('teamGrid.backgroundImage');
+const bgBoolInNumbers = tOptional('statsOverview.backgroundImage');
+const bgPowerAi = tOptional('powerAi.backgroundImage');
+const bgFeaturedTech = tOptional('featuredTech.backgroundImage');
+const bgFromPortugal = tOptional('officeLocations.backgroundImage');
+const bgContactSection = tOptional('contactSection.backgroundImage');
 
-const stats = tCollection('statsOverview.items', ['value', 'label'])
-  .map((s) => ({ number: s.value, label: s.label }));
+const stats = tCollection('statsOverview.items', ['value', 'label']).map((s) => ({
+  number: s.value,
+  label: s.label,
+}));
 
-const offices = tCollection('officeLocations.office', ['city', 'building', 'address', 'image'])
-  .map((o) => ({
+const offices = tCollection('officeLocations.office', ['city', 'building', 'address', 'image']).map(
+  (o) => ({
     city: o.city,
     building: o.building,
     address: o.address,
     image: resolveImage(o.image).src,
-  }));
+  })
+);
 
-const technologies = tCollection('featuredTech.items', ['name', 'color', 'href', 'logo'])
-  .map((tech) => ({
+const technologies = tCollection('featuredTech.items', ['name', 'color', 'href', 'logo']).map(
+  (tech) => ({
     name: tech.name,
     color: tech.color,
     href: tech.href,
     logo: resolveImage(tech.logo),
-  }));
+  })
+);
 ---
 
 <BaseLayout
@@ -55,6 +65,7 @@ const technologies = tCollection('featuredTech.items', ['name', 'color', 'href',
     imageAlt={t('statsOverview.image.alt')}
     stats={stats}
     image={resolveImage(t('statsOverview.image'))}
+    backgroundImage={bgBoolInNumbers ? resolveImage(bgBoolInNumbers) : undefined}
   />
   <PowerAISection
     variant="image-left"
@@ -64,6 +75,7 @@ const technologies = tCollection('featuredTech.items', ['name', 'color', 'href',
     cta={t('powerAi.cta')}
     imageAlt={t('powerAi.image.alt')}
     image={resolveImage(t('powerAi.image'))}
+    backgroundImage={bgPowerAi ? resolveImage(bgPowerAi) : undefined}
   />
   <FeaturedTechSection
     heading={t('featuredTech.heading')}
@@ -71,17 +83,26 @@ const technologies = tCollection('featuredTech.items', ['name', 'color', 'href',
     logoSuffix={t('featuredTech.logoSuffix')}
     technologies={technologies}
     learnMoreLabel={t('common.learnMore')}
+    backgroundImage={bgFeaturedTech ? resolveImage(bgFeaturedTech) : undefined}
   />
-  <TeamGridSection payload={teamGridPayload} />
+  <TeamGridSection
+    payload={teamGridPayload}
+    backgroundImage={teamGridBg ? resolveImage(teamGridBg) : undefined}
+  />
   <FromPortugalSection
     heading={t('officeLocations.heading')}
     description={t('officeLocations.body')}
     offices={offices}
     carouselAriaLabels={{
-      prev: t('officeLocations.carousel.prev'),
-      next: t('officeLocations.carousel.next'),
+      prev: t('carousel.previous'),
+      next: t('carousel.next'),
       imageAlt: t('officeLocations.imageAlt'),
     }}
+    backgroundImage={bgFromPortugal ? resolveImage(bgFromPortugal) : undefined}
   />
-  <ContactSection {...getContactSectionProps()} background="var(--color-surface-black)" />
+  <ContactSection
+    {...getContactSectionProps()}
+    background="var(--color-surface-black)"
+    backgroundImage={bgContactSection ? resolveImage(bgContactSection) : undefined}
+  />
 </BaseLayout>

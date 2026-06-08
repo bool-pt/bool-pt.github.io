@@ -13,15 +13,17 @@ interface Props {
   body: string;
   stats: Array<{ value: string; label: string }>;
   recognitions: Array<{ title: string; description: string; iconName: GradientIconName }>;
+  backgroundImage?: ImageMetadata;
 }
 
-const { tag, heading, body, stats, recognitions } = Astro.props;
+const { tag, heading, body, stats, recognitions, backgroundImage } = Astro.props;
 ---
 
 <Section
   aria-labelledby="portfolio-stats-heading"
   background="var(--color-background)"
   paddingBlock="5rem"
+  backgroundImage={backgroundImage?.src}
 >
   <SectionContainer>
     <SectionIntro

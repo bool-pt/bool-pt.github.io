@@ -19,9 +19,16 @@ interface Props {
   testimonials?: TestimonialItem[];
   /** Default avatar shown when an item has no `avatar` of its own. */
   defaultAvatar?: ImageMetadata;
+  backgroundImage?: ImageMetadata;
 }
 
-const { heading, description, testimonials = [], defaultAvatar = avatarFallback } = Astro.props;
+const {
+  heading,
+  description,
+  testimonials = [],
+  defaultAvatar = avatarFallback,
+  backgroundImage,
+} = Astro.props;
 const fallbackSrc = defaultAvatar.src;
 const enrichedTestimonials = testimonials.map((t) => ({ ...t, avatar: t.avatar ?? fallbackSrc }));
 ---
@@ -31,6 +38,7 @@ const enrichedTestimonials = testimonials.map((t) => ({ ...t, avatar: t.avatar ?
   background="var(--black-16)"
   paddingBlock="5rem 3rem"
   style="min-block-size: 652px"
+  backgroundImage={backgroundImage?.src}
 >
   <SectionContainer>
     <div class="testimonials-section">
@@ -44,7 +52,12 @@ const enrichedTestimonials = testimonials.map((t) => ({ ...t, avatar: t.avatar ?
         <Fragment slot="description">{description}</Fragment>
       </SectionIntro>
       <div class="testimonials-carousel-wrap">
-        <TestimonialsCarousel testimonials={enrichedTestimonials} variant="light" avatarSrc={fallbackSrc} client:visible />
+        <TestimonialsCarousel
+          testimonials={enrichedTestimonials}
+          variant="light"
+          avatarSrc={fallbackSrc}
+          client:visible
+        />
       </div>
     </div>
   </SectionContainer>

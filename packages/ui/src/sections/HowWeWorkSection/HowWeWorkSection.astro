@@ -15,15 +15,17 @@ interface HowWeWorkCard {
 interface Props {
   heading: string;
   cards: HowWeWorkCard[];
+  backgroundImage?: ImageMetadata;
 }
 
-const { heading, cards } = Astro.props;
+const { heading, cards, backgroundImage } = Astro.props;
 ---
 
 <Section
   background="var(--color-background)"
   aria-labelledby="how-we-work-heading"
   paddingBlock="5rem 0"
+  backgroundImage={backgroundImage?.src}
 >
   <SectionContainer>
     <div class="hwwGrid">

@@ -6,6 +6,8 @@
     "dev:json-editor": "turbo dev --filter=@bool/json-editor",
     "build": "turbo build",
     "lint": "turbo lint",
+    "knip": "knip --config tooling/knip.config.ts",
+    "freshness": "node tooling/scripts/check-dep-freshness.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "turbo test",
@@ -27,6 +29,7 @@
     "prettier": "catalog:",
     "prettier-plugin-astro": "catalog:",
     "prettier-plugin-tailwindcss": "catalog:",
+    "knip": "catalog:",
     "turbo": "catalog:",
     "typescript": "catalog:"
   },
@@ -44,22 +47,6 @@
     "packages/media/images/**/*": [
       "pnpm -F @bool/content vitest run src/validation.test.ts --"
     ]
-  },
-  "pnpm": {
-    "overrides": {
-      "flatted": ">=3.4.2",
-      "picomatch": ">=4.0.4",
-      "h3": ">=1.15.9",
-      "smol-toml": ">=1.6.1",
-      "brace-expansion": ">=5.0.5",
-      "yaml": ">=2.8.3",
-      "tsconfck": ">=3.1.6"
-    },
-    "peerDependencyRules": {
-      "allowedVersions": {
-        "typescript": ">=6.0.0"
-      }
-    }
   },
   "engines": {
     "node": ">=22.0.0",

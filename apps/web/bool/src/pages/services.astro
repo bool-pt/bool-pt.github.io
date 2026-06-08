@@ -1,6 +1,7 @@
 ---
 import { resolveImage } from '@bool/content';
-import { t, tCollection, tList } from '@bool/i18n';
+import { t, tCollection, tList, tOptional } from '@bool/i18n';
+import AiUseCasesSection from '@bool/ui/sections/AiUseCasesSection.astro';
 import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
 import ContactSection from '@bool/ui/sections/ContactSection.astro';
 import HowWeWorkSection from '@bool/ui/sections/HowWeWorkSection.astro';
@@ -20,14 +21,36 @@ import {
 
 const solutions = tCollection('solutionsRoi', ['name', 'result']);
 
-const platformKeys = ['outsystems', 'powerplatform', 'mendix', 'opensource'] as const;
-const platforms = tCollection('techStack.platforms', ['name', 'expert', 'role', 'body']).map(
-  (p, i) => ({
-    key: platformKeys[i] ?? '',
-    ...p,
-    features: tList(`techStack.platforms.${i + 1}.features`),
+const aiUseCases = tCollection('aiUseCases.items', ['category', 'title', 'image', 'href']).map(
+  (item) => ({
+    category: item.category,
+    title: item.title,
+    href: item.href,
+    image: resolveImage(item.image).src,
   })
 );
+
+const platformKeys = ['outsystems', 'powerplatform', 'mendix', 'opensource'] as const;
+const platforms = tCollection('techStack.platforms', [
+  'name',
+  'expert',
+  'role',
+  'body',
+  'image',
+]).map((p, i) => ({
+  key: platformKeys[i] ?? '',
+  ...p,
+  image: resolveImage(p.image),
+  features: tList(`techStack.platforms.${i + 1}.features`),
+}));
+
+const bgPowerAi = tOptional('powerAi.backgroundImage');
+const bgSolutionsRoi = tOptional('solutionsRoi.backgroundImage');
+const bgAiUseCases = tOptional('aiUseCases.backgroundImage');
+const bgTechStack = tOptional('techStack.backgroundImage');
+const bgHowWeWork = tOptional('howWeWork.backgroundImage');
+const bgNewsletterCta = tOptional('newsletterCta.backgroundImage');
+const bgContactSection = tOptional('contactSection.backgroundImage');
 
 const iconNames = ['shield', 'chart', 'rocket', 'trophy'] as const;
 const howWeWorkCards = tCollection('howWeWork.cards', [
@@ -69,6 +92,7 @@ const howWeWorkCards = tCollection('howWeWork.cards', [
     cta={t('powerAi.cta')}
     imageAlt={t('powerAi.image.alt')}
     image={resolveImage(t('powerAi.image'))}
+    backgroundImage={bgPowerAi ? resolveImage(bgPowerAi) : undefined}
   />
   <SolutionsROISection
     heading={t('solutionsRoi.heading')}
@@ -76,6 +100,17 @@ const howWeWorkCards = tCollection('howWeWork.cards', [
     colResults={t('solutionsRoi.colResults')}
     ariaLabel={t('solutionsRoi.aria')}
     solutions={solutions}
+    backgroundImage={bgSolutionsRoi ? resolveImage(bgSolutionsRoi) : undefined}
+  />
+  <AiUseCasesSection
+    eyebrow={t('aiUseCases.eyebrow')}
+    heading={t('aiUseCases.heading')}
+    description={t('aiUseCases.description')}
+    ctaLabel={t('aiUseCases.ctaLabel')}
+    prevLabel={t('carousel.previous')}
+    nextLabel={t('carousel.next')}
+    items={aiUseCases}
+    backgroundImage={bgAiUseCases ? resolveImage(bgAiUseCases) : undefined}
   />
   <StatsBannerSection
     ariaLabel={t('statsBanner.aiAdoption.aria')}
@@ -87,6 +122,7 @@ const howWeWorkCards = tCollection('howWeWork.cards', [
   <TechStackSection
     readinessExpertName={t('aiReadiness.expertName')}
     readinessExpertRole={t('aiReadiness.expertRole')}
+    readinessExpertPhoto={resolveImage(t('aiReadiness.expertImage'))}
     readinessHeading={t('aiReadiness.heading')}
     readinessBody={t('aiReadiness.body')}
     readinessChecks={tList('aiReadiness.checks')}
@@ -96,18 +132,28 @@ const howWeWorkCards = tCollection('howWeWork.cards', [
     availableConsultation={t('techStack.availableConsultation')}
     contactExpert={t('techStack.contactExpert')}
     platforms={platforms}
+    backgroundImage={bgTechStack ? resolveImage(bgTechStack) : undefined}
   />
-  <HowWeWorkSection heading={t('howWeWork.heading')} cards={howWeWorkCards} />
+  <HowWeWorkSection
+    heading={t('howWeWork.heading')}
+    cards={howWeWorkCards}
+    backgroundImage={bgHowWeWork ? resolveImage(bgHowWeWork) : undefined}
+  />
   <LetsBuildCTASection
     heading={t('ctaBanner.heading')}
     body={t('ctaBanner.body')}
-    button={t('ctaBanner.button')}
+    button={t('common.talkToExpert')}
     backgroundImage={resolveImage(t('ctaBanner.backgroundImage'))}
   />
-  <ContactSection {...getContactSectionProps()} background="var(--color-surface-black)" />
+  <ContactSection
+    {...getContactSectionProps()}
+    background="var(--color-surface-black)"
+    backgroundImage={bgContactSection ? resolveImage(bgContactSection) : undefined}
+  />
   <NewsletterCTASection
     heading={t('newsletterCta.heading')}
     body={t('newsletterCta.body')}
     newsletterLabels={getNewsletterLabels()}
+    backgroundImage={bgNewsletterCta ? resolveImage(bgNewsletterCta) : undefined}
   />
 </BaseLayout>

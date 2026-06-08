@@ -14,14 +14,19 @@ interface Props {
   heading: string;
   body: string;
   cards: Array<{ label: string; title: string; body: string; image?: ImageMetadata }>;
+  backgroundImage?: ImageMetadata;
 }
 
-const { tag, heading, body, cards } = Astro.props;
+const { tag, heading, body, cards, backgroundImage } = Astro.props;
 
 const fallbackImages = [cultureImg1, cultureImg2, cultureImg3, cultureImg4];
 ---
 
-<Section background="var(--color-surface-warm-dark)" aria-labelledby="beyond-sprint-heading">
+<Section
+  background="var(--color-surface-warm-dark)"
+  backgroundImage={backgroundImage?.src}
+  aria-labelledby="beyond-sprint-heading"
+>
   <SectionContainer>
     <SectionIntro
       headingId="beyond-sprint-heading"

@@ -9,15 +9,24 @@ interface Props {
   logoSuffix: string;
   technologies: Array<{ name: string; color: string; href: string; logo: ImageMetadata }>;
   learnMoreLabel?: string;
+  backgroundImage?: ImageMetadata;
 }
 
-const { heading, body, logoSuffix, technologies, learnMoreLabel = 'Learn more' } = Astro.props;
+const {
+  heading,
+  body,
+  logoSuffix,
+  technologies,
+  learnMoreLabel = 'Learn more',
+  backgroundImage,
+} = Astro.props;
 ---
 
 <div class="featured-tech-wrap">
   <IntroGridSection
     headingId="tech-heading"
     background="var(--color-background)"
+    backgroundImage={backgroundImage?.src}
     introAlign="center"
     headingSize="var(--font-size-display)"
     descriptionMaxWidth="50rem"

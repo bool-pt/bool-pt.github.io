@@ -1,23 +1,30 @@
 ---
 import { Image } from 'astro:assets';
-import boolLogoFallback from '@bool/media/images/logos/brand/bool-logo-text.svg';
+import boolLogo from '@bool/media/images/logos/brand/bool-logo-text.svg';
 import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
 import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
 import Section from '../../primitives/Section/Section.astro';
 import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
 
+const logoModules = import.meta.glob<{ default: ImageMetadata }>(
+  '../../../../media/images/client-logos/*.{png,jpg,jpeg,svg,webp,avif}',
+  { eager: true }
+);
+const logos = Object.values(logoModules).map((m) => m.default);
+
+const placeholderRow = Array.from({ length: 8 }, () => boolLogo);
+
+// Duplicate the set — animation moves -50% so the seam is invisible
+const row = logos.length > 0 ? [...logos, ...logos] : [...placeholderRow, ...placeholderRow];
+
 interface Props {
   tag: string;
   heading: string;
   body: string;
-  logoAlt: string;
-  /** Logo to repeat as the decorative background of the section. */
-  logo?: ImageMetadata;
+  backgroundImage?: ImageMetadata;
 }
 
-const { tag, heading, body, logoAlt, logo = boolLogoFallback } = Astro.props;
-
-const logosPerRow = 20;
+const { tag, heading, body, backgroundImage } = Astro.props;
 ---
 
 <Section
@@ -25,6 +32,7 @@ const logosPerRow = 20;
   aria-labelledby="client-logos-heading"
   class="logos-section"
   paddingBlock="4rem 0"
+  backgroundImage={backgroundImage?.src}
 >
   <SectionContainer>
     <SectionIntro
@@ -40,38 +48,44 @@ const logosPerRow = 20;
     </SectionIntro>
   </SectionContainer>
 
-  <div class="logos-rows">
-    <div class="logos-row">
-      {
-        Array.from({ length: logosPerRow }).map(() => (
-          <div class="logo-cell">
-            <Image
-              src={logo}
-              alt={logoAlt}
-              width={107}
-              height={49}
-              class="logo-img"
-              loading="lazy"
-            />
-          </div>
-        ))
-      }
+  <div class="logos-rows" aria-hidden="true">
+    <div class="logos-track">
+      <div class="logos-strip logos-strip--ltr">
+        {
+          row.map((logo) => (
+            <div class="logo-cell">
+              <Image
+                src={logo}
+                alt=""
+                width={logo.width}
+                height={logo.height}
+                class="logo-img"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          ))
+        }
+      </div>
     </div>
-    <div class="logos-row" style="margin-inline-start: -3rem">
-      {
-        Array.from({ length: logosPerRow }).map(() => (
-          <div class="logo-cell">
-            <Image
-              src={logo}
-              alt={logoAlt}
-              width={107}
-              height={49}
-              class="logo-img"
-              loading="lazy"
-            />
-          </div>
-        ))
-      }
+    <div class="logos-track">
+      <div class="logos-strip logos-strip--rtl">
+        {
+          row.map((logo) => (
+            <div class="logo-cell">
+              <Image
+                src={logo}
+                alt=""
+                width={logo.width}
+                height={logo.height}
+                class="logo-img"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          ))
+        }
+      </div>
     </div>
   </div>
 </Section>
@@ -83,19 +97,61 @@ const logosPerRow = 20;
 
   .logos-section {
     overflow: hidden;
-    block-size: 543px;
   }
 
   .logos-rows {
+    margin-block-start: 3rem;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
     padding-block-end: 4rem;
   }
 
-  .logos-row {
+  .logos-track {
+    overflow: hidden;
+    inline-size: 100%;
+  }
+
+  .logos-strip {
     display: flex;
-    gap: 2.5rem;
+    gap: 3rem;
+    inline-size: max-content;
+  }
+
+  .logos-strip--ltr {
+    animation: marquee-ltr 60s linear infinite;
+  }
+
+  .logos-strip--rtl {
+    animation: marquee-rtl 75s linear infinite;
+  }
+
+  @keyframes marquee-ltr {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes marquee-rtl {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  .logos-track:hover .logos-strip {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .logos-strip {
+      animation: none;
+    }
   }
 
   .logo-cell {
@@ -106,8 +162,9 @@ const logosPerRow = 20;
   }
 
   .logo-img {
-    inline-size: 107px;
-    block-size: auto;
+    block-size: 48px;
+    inline-size: auto;
+    object-fit: contain;
     user-select: none;
   }
 </style>

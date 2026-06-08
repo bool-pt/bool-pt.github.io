@@ -13,7 +13,20 @@ export default tseslint.config(
       },
       parserOptions: {
         projectService: {
-          allowDefaultProject: ['*.config.ts', '*.config.mjs', '*.config.js'],
+          allowDefaultProject: [
+            // Root-level config files
+            '*.config.ts',
+            '*.config.mjs',
+            '*.config.js',
+            // One level deep (e.g. tooling/knip.config.ts)
+            '*/*.config.ts',
+            '*/*.config.mjs',
+            '*/*.config.js',
+            // Two levels deep (e.g. packages/ui/eslint.config.mjs)
+            '*/*/*.config.mjs',
+            // Tooling package JS files not named *.config.js (e.g. tooling/eslint/base.js)
+            'tooling/*/*.js',
+          ],
         },
       },
     },
@@ -29,7 +42,10 @@ export default tseslint.config(
       '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-non-null-assertion': 'error',
-      '@typescript-eslint/prefer-nullish-coalescing': ['error', { ignorePrimitives: { string: true } }],
+      '@typescript-eslint/prefer-nullish-coalescing': [
+        'error',
+        { ignorePrimitives: { string: true } },
+      ],
 
       // Disable overly aggressive type-checked rules
       '@typescript-eslint/no-unsafe-argument': 'off',

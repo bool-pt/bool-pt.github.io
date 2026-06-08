@@ -61,6 +61,14 @@ export const iconPaths = {
     mode: 'stroke' as const,
     paths: ['M19 12H5', 'm12 19-7-7 7-7'],
   },
+  'chevron-left': {
+    mode: 'stroke' as const,
+    paths: ['m15 18-6-6 6-6'],
+  },
+  'chevron-right': {
+    mode: 'stroke' as const,
+    paths: ['m9 18 6-6-6-6'],
+  },
   'bar-chart': {
     mode: 'stroke' as const,
     paths: ['M18 20V10', 'M12 20V4', 'M6 20v-6'],
@@ -152,11 +160,19 @@ export const iconPaths = {
     ],
   },
   twitter: {
-    mode: 'fill' as const,
-    viewBox: '5 5 22 22',
-    fillRule: 'evenodd' as const,
+    mode: 'mixed' as const,
+    viewBox: '0 0 32 32',
     paths: [
-      'M25.1349 25.3708L17.7196 14.5536L24.5377 6.60806L22.9294 6.59868L17.0005 13.5008L12.2563 6.58827L6.79828 6.5966L13.9595 17.0446L6.81495 25.3694L8.42156 25.3805L14.6789 18.096L19.6918 25.3978L25.1353 25.3704L25.1349 25.3708Z',
+      {
+        d: 'M25.1349 25.3708L17.7196 14.5536L24.5377 6.60806L22.9294 6.59868L17.0005 13.5008L12.2563 6.58827L6.79828 6.5966L13.9595 17.0446L6.81495 25.3694L8.42156 25.3805L14.6789 18.096L19.6918 25.3978L25.1353 25.3704L25.1349 25.3708Z',
+        fill: 'currentColor',
+        stroke: 'none',
+      },
+      {
+        d: 'M22.9251 24.2123L20.4497 24.2296L9.00586 7.82702L11.4851 7.81348L22.9251 24.2123Z',
+        fill: 'var(--color-background)',
+        stroke: 'none',
+      },
     ],
   },
   youtube: {
