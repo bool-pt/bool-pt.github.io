@@ -14,12 +14,13 @@ export default tseslint.config(
       parserOptions: {
         projectService: {
           allowDefaultProject: [
-            // Root-level config files
+            // Root-level config files (e.g. astro.config.ts, vitest.config.ts)
             '*.config.ts',
             '*.config.mjs',
             '*.config.js',
-            // One level deep (e.g. tooling/knip.config.ts)
-            '*/*.config.ts',
+            // One level deep — .mjs/.js only; .ts is excluded because src/*.config.ts
+            // files are already included by tsconfig "include": ["src"] and having
+            // them in allowDefaultProject too triggers a parser conflict.
             '*/*.config.mjs',
             '*/*.config.js',
             // Two levels deep (e.g. packages/ui/eslint.config.mjs)

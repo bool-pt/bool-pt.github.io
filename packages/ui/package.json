@@ -85,6 +85,7 @@
     "./sections/PhotoGallerySection.astro": "./src/sections/PhotoGallerySection/PhotoGallerySection.astro",
     "./sections/TestimonialsCarouselSection.astro": "./src/sections/TestimonialsCarouselSection/TestimonialsCarouselSection.astro",
     "./sections/CareersCtaSection.astro": "./src/sections/CareersCtaSection/CareersCtaSection.astro",
+    "./sections/NotFoundSection.astro": "./src/sections/NotFoundSection/NotFoundSection.astro",
     "./sections/PortfolioHeroSection.astro": "./src/sections/PortfolioHeroSection/PortfolioHeroSection.astro",
     "./sections/CaseStudyGridSection.astro": "./src/sections/CaseStudyGridSection/CaseStudyGridSection.astro",
     "./sections/PortfolioStatsSection.astro": "./src/sections/PortfolioStatsSection/PortfolioStatsSection.astro",
