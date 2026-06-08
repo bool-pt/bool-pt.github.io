@@ -60,7 +60,7 @@ describe('CookieBanner', () => {
 
     render(<CookieBanner />);
 
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'cookie.aria' })).toBeInTheDocument();
     expect(screen.getByText('cookie.message')).toBeInTheDocument();
   });
 
@@ -132,13 +132,13 @@ describe('CookieBanner', () => {
     render(<CookieBanner />);
 
     // Banner is hidden after consent
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.queryByRole('region', { name: 'cookie.aria' })).not.toBeInTheDocument();
 
     act(() => {
       window.dispatchEvent(new Event('bool:open-preferences'));
     });
 
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'cookie.aria' })).toBeInTheDocument();
     expect(screen.getByText('cookie.save')).toBeInTheDocument();
     expect(screen.getByText('cookie.back')).toBeInTheDocument();
   });
@@ -155,7 +155,7 @@ describe('CookieBanner', () => {
 
     await user.click(screen.getByText('cookie.back'));
 
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.queryByRole('region', { name: 'cookie.aria' })).not.toBeInTheDocument();
   });
 
   it('closes preferences panel after save when opened from footer', async () => {
@@ -171,6 +171,6 @@ describe('CookieBanner', () => {
     await user.click(screen.getByText('cookie.save'));
 
     expect(mockSavePreferences).toHaveBeenCalledOnce();
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.queryByRole('region', { name: 'cookie.aria' })).not.toBeInTheDocument();
   });
 });
