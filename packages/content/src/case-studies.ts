@@ -1,6 +1,6 @@
 import type { ImageMetadata } from 'astro';
 import { z } from 'zod';
-import { defaultLocale, t, tList } from '@bool/i18n';
+import { defaultLocale, t, tList, tCollection } from '@bool/i18n';
 import type { Locale } from '@bool/i18n';
 import { resolveImage } from './media.ts';
 import { collectArray, collectNestedList } from './sections.ts';
@@ -30,6 +30,16 @@ export interface CaseStudyMetric {
   label: string;
 }
 
+/**
+ * A tech filter pill. `key` is a stable slug used for matching items to filters
+ * and never changes; `label` is the Drive-owned display copy and may be renamed
+ * freely without breaking the item↔filter link.
+ */
+export interface TechFilter {
+  key: string;
+  label: string;
+}
+
 export interface CaseStudy {
   /** Cover layer: client name shown above the title (e.g. "BANCO NACIONAL"). */
   client: string;
@@ -41,8 +51,10 @@ export interface CaseStudy {
   coverImage: ImageMetadata;
   /** Filter sector (e.g. "BANKING") — must match a value in `caseStudies.sectors.*`. */
   sector: string;
-  /** Filter tech (e.g. "MENDIX") — must match a value in `caseStudies.techFilters.*`. */
+  /** Display label for the tech (e.g. "MENDIX"), resolved from the item's `techKey`. */
   tech: string;
+  /** Stable tech filter slug (e.g. "mendix") — must match a `caseStudies.techFilters.*.key`. Used for filtering. */
+  techKey: string;
   /** Derived back/modal header: `${sector} · ${tech}`. */
   backHeader: string;
   /** Derived modal subheading: `${client} · ${sector.toLowerCase()}`. */
@@ -72,10 +84,10 @@ function buildMetrics(parsed: z.infer<typeof itemSchema>): CaseStudyMetric[] {
   return candidates.filter((m) => m.value.trim() !== '' && m.label.trim() !== '');
 }
 
-function validateAgainstList(field: string, value: string, allowed: string[]): void {
+function validateSector(value: string, allowed: string[]): void {
   if (!allowed.some((a) => a.toUpperCase() === value.toUpperCase())) {
     throw new Error(
-      `[@bool/content] caseStudies item has ${field}="${value}" which is not in caseStudies.${field === 'sector' ? 'sectors' : 'techFilters'}.*. Allowed: ${allowed.join(', ')}`
+      `[@bool/content] caseStudies item has sector="${value}" which is not in caseStudies.sectors.*. Allowed: ${allowed.join(', ')}`
     );
   }
 }
@@ -97,13 +109,14 @@ export interface CaseStudiesPayload {
     close: string;
   };
   sectors: string[];
-  techFilters: string[];
+  techFilters: TechFilter[];
   items: CaseStudy[];
 }
 
 export function getCaseStudies(locale: Locale = defaultLocale): CaseStudiesPayload {
   const sectors = tList('caseStudies.sectors', locale);
-  const techFilters = tList('caseStudies.techFilters', locale);
+  const techFilters = tCollection('caseStudies.techFilters', ['key', 'label'], locale);
+  const techLabelByKey = new Map(techFilters.map((f) => [f.key, f.label]));
 
   const rawItems = collectArray('caseStudies.items', locale);
   const items: CaseStudy[] = rawItems.map((raw, idx) => {
@@ -115,8 +128,14 @@ export function getCaseStudies(locale: Locale = defaultLocale): CaseStudiesPaylo
     }
     const parsed = parseResult.data;
 
-    validateAgainstList('sector', parsed.sector, sectors);
-    validateAgainstList('tech', parsed.tech, techFilters);
+    validateSector(parsed.sector, sectors);
+
+    const techLabel = techLabelByKey.get(parsed.tech);
+    if (techLabel === undefined) {
+      throw new Error(
+        `[@bool/content] caseStudies item has tech="${parsed.tech}" which is not a caseStudies.techFilters.*.key. Allowed keys: ${[...techLabelByKey.keys()].join(', ')}`
+      );
+    }
 
     return {
       client: parsed.client,
@@ -124,8 +143,9 @@ export function getCaseStudies(locale: Locale = defaultLocale): CaseStudiesPaylo
       subtitle: parsed.subtitle,
       coverImage: resolveImage(parsed.coverImage),
       sector: parsed.sector,
-      tech: parsed.tech,
-      backHeader: `${parsed.sector.toUpperCase()} · ${parsed.tech.toUpperCase()}`,
+      tech: techLabel,
+      techKey: parsed.tech,
+      backHeader: `${parsed.sector.toUpperCase()} · ${techLabel.toUpperCase()}`,
       modalSubheading: `${parsed.client} · ${parsed.sector.toLowerCase()}`,
       metrics: buildMetrics(parsed),
       challenge: parsed.challenge,

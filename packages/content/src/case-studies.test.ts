@@ -21,10 +21,13 @@ describe('getCaseStudies (real en.json)', () => {
 
   it('every sector / tech matches one of the filter values (validated by loader)', () => {
     const sectors = payload.sectors.map((s) => s.toUpperCase());
-    const techs = payload.techFilters.map((t) => t.toUpperCase());
+    const techKeys = payload.techFilters.map((f) => f.key);
+    const labelByKey = new Map(payload.techFilters.map((f) => [f.key, f.label]));
     for (const item of payload.items) {
       expect(sectors).toContain(item.sector.toUpperCase());
-      expect(techs).toContain(item.tech.toUpperCase());
+      // Items reference a stable filter key; the display label is resolved from it.
+      expect(techKeys).toContain(item.techKey);
+      expect(item.tech).toBe(labelByKey.get(item.techKey));
     }
   });
 
