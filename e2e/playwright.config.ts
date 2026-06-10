@@ -5,7 +5,9 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  // GitHub-hosted ubuntu runners have 4 vCPUs; run in parallel (the tests are
+  // I/O-bound on page loads). 1 worker serialized all 58 tests (~24 min).
+  workers: process.env.CI ? 4 : undefined,
   reporter: 'html',
   use: {
     baseURL: 'http://localhost:4321/bool/',
