@@ -29,6 +29,10 @@
  *   Deletions from Drive are NOT propagated (see syncLocales for full rules).
  * - **Hardcoded import warnings**: Astro components with hardcoded `@bool/media` imports
  *   can't be auto-rewritten — the script warns so a developer can update them manually.
+ * - **Per-image size budget (MAX_IMAGE_BYTES)**: sources should arrive already compressed.
+ *   The sync re-encodes (via sharp, lowering quality only — never resizing) to fit any that
+ *   don't, and hard-fails the run if an image still exceeds the budget, so the oversized
+ *   source gets fixed in Drive instead of bloating the repo.
  *
  * ## Setup (one-time)
  *
@@ -70,6 +74,7 @@ import {
 } from 'node:fs';
 import { join, dirname, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import sharp from 'sharp';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const MEDIA_PKG = join(__dirname, '..');
@@ -82,6 +87,12 @@ const BLOG_DIR = join(REPO_ROOT, 'packages', 'content', 'data', 'blog');
 
 const IMAGE_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif', '.svg']);
 const LOCALE_EXTENSIONS = new Set(['.json']);
+
+// Per-image guardrail / compression budget. Sources should arrive already
+// compressed; the sync re-encodes (quality only, never resizing) to try to fit
+// any that don't, and hard-fails if an image still exceeds this — so the source
+// gets fixed in Drive rather than an oversized asset landing in the repo.
+const MAX_IMAGE_BYTES = 1024 * 1024; // 1 MB per image
 
 // Characters illegal in Windows (NTFS) path segments (control chars 0x00-0x1F
 // and trailing dots/spaces are checked separately in windowsUnsafeReasons).
@@ -394,6 +405,34 @@ function windowsUnsafeReasons(localPath) {
   return [...reasons];
 }
 
+/**
+ * Shrink an image to fit MAX_IMAGE_BYTES by re-encoding at progressively lower
+ * quality — dimensions are never changed. Images already under the budget (the
+ * expected case, since sources should arrive pre-compressed) pass through
+ * untouched. Returns the smallest buffer produced; if even the lowest quality
+ * can't fit, returns the best effort and the size guard fails the sync.
+ */
+async function compressImage(buf, ext) {
+  if (ext === '.svg' || !IMAGE_EXTENSIONS.has(ext) || buf.length <= MAX_IMAGE_BYTES) return buf;
+  let best = buf;
+  for (const quality of [80, 70, 60, 50, 40]) {
+    try {
+      const img = sharp(buf, { failOn: 'none' });
+      let out;
+      if (ext === '.png')
+        out = await img.png({ quality, compressionLevel: 9, palette: true }).toBuffer();
+      else if (ext === '.webp') out = await img.webp({ quality }).toBuffer();
+      else if (ext === '.avif') out = await img.avif({ quality }).toBuffer();
+      else out = await img.jpeg({ quality, mozjpeg: true }).toBuffer();
+      if (out.length < best.length) best = out;
+      if (out.length <= MAX_IMAGE_BYTES) break;
+    } catch {
+      return best;
+    }
+  }
+  return best;
+}
+
 // ---------------------------------------------------------------------------
 // Sync: media
 // ---------------------------------------------------------------------------
@@ -482,6 +521,8 @@ async function syncMedia(mediaFolderId, token) {
   // Download new or updated files
   let downloaded = 0;
   let skipped = 0;
+  // Images still over the per-image budget after compression — abort if any.
+  const oversized = [];
 
   for (const file of driveFiles) {
     newManifest[file.id] = file.localPath;
@@ -493,7 +534,9 @@ async function syncMedia(mediaFolderId, token) {
     let needsDownload = true;
     if (existsSync(destPath)) {
       const localStat = statSync(destPath);
-      if (localStat.size === file.size && localStat.mtimeMs >= driveModified) {
+      // mtime-only: compressed local files no longer match the Drive original's
+      // size, so we trust Drive's modifiedTime to decide whether to re-pull.
+      if (localStat.mtimeMs >= driveModified) {
         skipped++;
         needsDownload = false;
       }
@@ -509,10 +552,32 @@ async function syncMedia(mediaFolderId, token) {
 
     mkdirSync(destDir, { recursive: true });
     process.stdout.write(`  Downloading ${file.localPath} (${formatBytes(file.size)})… `);
-    const buf = await downloadFile(file.id, token);
+    const raw = await downloadFile(file.id, token);
+    const buf = await compressImage(raw, extname(file.name).toLowerCase());
     writeFileSync(destPath, buf);
-    console.log('done');
+    console.log(
+      buf.length < raw.length
+        ? `done (compressed ${formatBytes(raw.length)} → ${formatBytes(buf.length)})`
+        : 'done'
+    );
+    if (buf.length > MAX_IMAGE_BYTES) oversized.push({ path: file.localPath, size: buf.length });
     downloaded++;
+  }
+
+  // Size guardrail: any image that still exceeds the budget after compression
+  // hard-fails the sync, so it gets resized/replaced at the source in Drive
+  // instead of an oversized asset landing in the repo.
+  if (oversized.length > 0) {
+    oversized.sort((a, b) => b.size - a.size);
+    console.error(
+      `\n✖ ${oversized.length} image(s) exceed the ${formatBytes(MAX_IMAGE_BYTES)} per-image limit even after compression:`
+    );
+    for (const f of oversized) console.error(`    ${formatBytes(f.size).padStart(9)}  ${f.path}`);
+    console.error(
+      `\n  Downsize these in Google Drive (they should arrive already compressed,` +
+        `\n  well under ${formatBytes(MAX_IMAGE_BYTES)}), then re-sync. Aborting.`
+    );
+    process.exit(1);
   }
 
   // Optionally delete local files not present in Drive

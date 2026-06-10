@@ -18,6 +18,7 @@
     "@bool/tsconfig": "workspace:*",
     "@bool/vitest-config": "workspace:*",
     "eslint": "catalog:",
+    "sharp": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"
   }

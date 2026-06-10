@@ -602,6 +602,9 @@ importers:
       eslint:
         specifier: 'catalog:'
         version: 9.39.4(jiti@2.7.0)
+      sharp:
+        specifier: 'catalog:'
+        version: 0.34.5
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
@@ -6909,7 +6912,7 @@ snapshots:
 
   '@img/sharp-wasm32@0.34.5':
     dependencies:
-      '@emnapi/runtime': 1.9.2
+      '@emnapi/runtime': 1.10.0
     optional: true
 
   '@img/sharp-win32-arm64@0.34.5':
