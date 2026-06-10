@@ -3,18 +3,27 @@ export interface ContactFormData {
   email: string;
   phone?: string;
   message: string;
-  captchaToken: string;
+  turnstileToken: string;
 }
 
 export interface NewsletterData {
   name: string;
   email: string;
-  captchaToken: string;
+  turnstileToken: string;
 }
 
-export interface APIResponse<T = unknown> {
-  success: boolean;
-  data?: T;
+export interface EventScheduleData {
+  eventName: string;
+  name: string;
+  phone: string;
+  email: string;
+  timeSuggestion: string;
+  message: string;
+  turnstileToken: string;
+}
+
+export interface APIResponse {
+  message?: string;
   error?: string;
 }
 

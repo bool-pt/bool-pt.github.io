@@ -82,6 +82,16 @@ const BLOG_DIR = join(REPO_ROOT, 'packages', 'content', 'data', 'blog');
 
 const IMAGE_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.avif', '.svg']);
 const LOCALE_EXTENSIONS = new Set(['.json']);
+
+// Characters illegal in Windows (NTFS) path segments (control chars 0x00-0x1F
+// and trailing dots/spaces are checked separately in windowsUnsafeReasons).
+// Drive files named this way download fine on the Linux CI runner but cannot be
+// checked out on Windows — git aborts with "invalid path" and the contributor is
+// left with a broken working tree (this is exactly what "Case Study: X.jpg" did).
+// We can't rename them here (they mirror Drive, the source of truth), so the sync
+// surfaces a clear warning instead.
+const WINDOWS_ILLEGAL_CHARS = /[<>:"|?*]/;
+const WINDOWS_RESERVED_NAMES = /^(con|prn|aux|nul|com[1-9]|lpt[1-9])(\.|$)/i;
 const DRIVE_API = 'https://www.googleapis.com/drive/v3';
 const TOKEN_URL = 'https://oauth2.googleapis.com/token';
 const SCOPE = 'https://www.googleapis.com/auth/drive.readonly';
@@ -366,6 +376,24 @@ function formatBytes(bytes) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
+/**
+ * Returns the reasons a local path is invalid on Windows, or [] if it is safe.
+ * Such files download fine on the Linux CI runner but break `git checkout` on
+ * Windows, so the sync surfaces them as a warning to be renamed in Drive.
+ */
+function windowsUnsafeReasons(localPath) {
+  const reasons = new Set();
+  for (const segment of localPath.split('/')) {
+    const illegal = segment.match(WINDOWS_ILLEGAL_CHARS);
+    if (illegal) reasons.add(`illegal character "${illegal[0]}"`);
+    // eslint-disable-next-line no-control-regex -- NTFS forbids 0x00-0x1F
+    if ([...segment].some((c) => c.charCodeAt(0) < 32)) reasons.add('control character');
+    if (/[ .]$/.test(segment)) reasons.add('trailing space or dot');
+    if (WINDOWS_RESERVED_NAMES.test(segment)) reasons.add('reserved device name');
+  }
+  return [...reasons];
+}
+
 // ---------------------------------------------------------------------------
 // Sync: media
 // ---------------------------------------------------------------------------
@@ -379,7 +407,26 @@ async function syncMedia(mediaFolderId, token) {
 
   if (driveFiles.length === 0) {
     console.log('No supported image files found.\n');
-    return { moved: 0, downloaded: 0, skipped: 0, deleted: 0 };
+    return { moved: 0, downloaded: 0, skipped: 0, deleted: 0, unsafeNames: [] };
+  }
+
+  // Flag Drive filenames that are invalid on Windows. They download fine on the
+  // Linux CI runner but break `git checkout` for contributors on Windows, leaving
+  // a broken tree. We can't rename them (Drive is the source of truth) — surface
+  // a clear warning so the source files get renamed.
+  const unsafeNames = [];
+  for (const file of driveFiles) {
+    const reasons = windowsUnsafeReasons(file.localPath);
+    if (reasons.length) unsafeNames.push({ path: file.localPath, reasons });
+  }
+  if (unsafeNames.length > 0) {
+    console.warn(`⚠️  ${unsafeNames.length} file(s) have Windows-incompatible names:`);
+    for (const { path, reasons } of unsafeNames) {
+      console.warn(`      ${path} — ${reasons.join('; ')}`);
+    }
+    console.warn('    These sync on Linux CI but break local checkouts on Windows.');
+    console.warn('    Rename the source files in Google Drive (avoid : < > " | ? * and');
+    console.warn('    trailing dots/spaces), then re-sync.\n');
   }
 
   // Load previous manifest to detect moves/renames
@@ -492,7 +539,7 @@ async function syncMedia(mediaFolderId, token) {
     saveManifest(newManifest);
   }
 
-  return { moved: moves.length, downloaded, skipped, deleted };
+  return { moved: moves.length, downloaded, skipped, deleted, unsafeNames };
 }
 
 // ---------------------------------------------------------------------------
@@ -727,7 +774,7 @@ console.log(`  media/:   ${mediaFolderId ? 'found' : 'not found (skipping)'}`);
 console.log(`  locales/: ${localesFolderId ? 'found' : 'not found (skipping)'}\n`);
 
 // Sync media first (moves may rewrite locale file references)
-let mediaSummary = { moved: 0, downloaded: 0, skipped: 0, deleted: 0 };
+let mediaSummary = { moved: 0, downloaded: 0, skipped: 0, deleted: 0, unsafeNames: [] };
 if (mediaFolderId) {
   mediaSummary = await syncMedia(mediaFolderId, token);
 }
@@ -739,18 +786,40 @@ if (localesFolderId) {
   localesSummary = await syncLocales(localesFolderId, token);
 }
 
-// Surface destructive (value-cleared) changes where a reviewer will see them:
-// the Actions run summary and the create-pull-request body (via step output).
+// Surface problems where a reviewer will see them: the Actions run summary and
+// the create-pull-request body (via the multiline "warnings" step output).
+const warningBlocks = [];
+
+// Media: filenames that are invalid on Windows (the recurring "Case Study: X.jpg"
+// breakage). They sync on Linux CI but leave Windows contributors with an
+// un-checkout-able tree, so they must be renamed at the source in Drive.
+const unsafeNames = mediaSummary.unsafeNames ?? [];
+if (unsafeNames.length > 0) {
+  warningBlocks.push(
+    [
+      '> [!WARNING]',
+      `> **${unsafeNames.length} file(s) have names that are invalid on Windows.** They sync on the Linux CI runner but cannot be checked out on Windows — git aborts with "invalid path", leaving contributors with a broken working tree. Rename the source files in Google Drive (avoid the characters \`< > : " | ? *\` and trailing dots/spaces), then re-sync.`,
+      '>',
+      ...unsafeNames.map((u) => `> - \`${u.path}\` — ${u.reasons.join('; ')}`),
+    ].join('\n')
+  );
+}
+
+// Locales: a key that was set locally came down blank from Drive (silent clobber).
 const clearWarnings = localesSummary.warnings ?? [];
 if (clearWarnings.length > 0) {
-  const lines = [
-    '> [!WARNING]',
-    `> **${clearWarnings.length} value(s) were cleared by this sync** — a key that was set locally came down blank from Drive. Review before merging; if unintended, fix the value in Drive and re-sync (or do not merge).`,
-    '>',
-    ...clearWarnings.map((w) => `> - \`${w.key}\` (${w.file}): \`"${w.was}"\` → \`""\``),
-  ];
-  const block = lines.join('\n');
+  warningBlocks.push(
+    [
+      '> [!WARNING]',
+      `> **${clearWarnings.length} value(s) were cleared by this sync** — a key that was set locally came down blank from Drive. Review before merging; if unintended, fix the value in Drive and re-sync (or do not merge).`,
+      '>',
+      ...clearWarnings.map((w) => `> - \`${w.key}\` (${w.file}): \`"${w.was}"\` → \`""\``),
+    ].join('\n')
+  );
+}
 
+const block = warningBlocks.join('\n\n');
+if (block) {
   // 1) Actions run page
   if (process.env.GITHUB_STEP_SUMMARY) {
     appendFileSync(process.env.GITHUB_STEP_SUMMARY, `\n${block}\n`);

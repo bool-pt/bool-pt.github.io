@@ -1,7 +1,16 @@
 import { cleanup, render, screen, act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { submitEventSchedule } from '@bool/api';
 import EventScheduleModal, { type EventScheduleLabels } from './EventScheduleModal';
+
+vi.mock('@bool/api', () => ({
+  submitEventSchedule: vi.fn(() => Promise.resolve()),
+}));
+
+vi.mock('@bool/analytics', () => ({
+  trackEvent: vi.fn(),
+}));
 
 vi.mock('../../primitives/Icon/Icon', () => ({
   default: ({ name }: { name: string }) => <span data-testid={`icon-${name}`} />,
@@ -32,6 +41,8 @@ const labels: EventScheduleLabels = {
   success: 'Your slot has been requested!',
   required: 'Required',
   emailInvalid: 'Invalid email',
+  captchaRequired: 'Please complete the CAPTCHA.',
+  error: 'Something went wrong. Please try again.',
 };
 
 function openModal(title = 'Test Event') {
@@ -42,12 +53,12 @@ function openModal(title = 'Test Event') {
 
 describe('EventScheduleModal', () => {
   it('renders nothing when closed', () => {
-    const { container } = render(<EventScheduleModal labels={labels} />);
+    const { container } = render(<EventScheduleModal labels={labels} captchaSiteKey="" />);
     expect(container.innerHTML).toBe('');
   });
 
   it('opens and displays the event title on bool:open-event-schedule', () => {
-    render(<EventScheduleModal labels={labels} />);
+    render(<EventScheduleModal labels={labels} captchaSiteKey="" />);
     openModal('AI Summit 2025');
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -56,7 +67,7 @@ describe('EventScheduleModal', () => {
   });
 
   it('renders all form fields', () => {
-    render(<EventScheduleModal labels={labels} />);
+    render(<EventScheduleModal labels={labels} captchaSiteKey="" />);
     openModal();
 
     expect(screen.getByLabelText('Full Name')).toBeInTheDocument();
@@ -68,7 +79,7 @@ describe('EventScheduleModal', () => {
   });
 
   it('renders time select options', () => {
-    render(<EventScheduleModal labels={labels} />);
+    render(<EventScheduleModal labels={labels} captchaSiteKey="" />);
     openModal();
 
     const select = screen.getByLabelText('Preferred time');
@@ -79,7 +90,7 @@ describe('EventScheduleModal', () => {
 
   it('shows validation errors when required fields are empty on submit', async () => {
     const user = userEvent.setup();
-    render(<EventScheduleModal labels={labels} />);
+    render(<EventScheduleModal labels={labels} captchaSiteKey="" />);
     openModal();
 
     await user.click(screen.getByRole('button', { name: 'Schedule' }));
@@ -91,7 +102,7 @@ describe('EventScheduleModal', () => {
 
   it('shows invalid email error for malformed email', async () => {
     const user = userEvent.setup();
-    render(<EventScheduleModal labels={labels} />);
+    render(<EventScheduleModal labels={labels} captchaSiteKey="" />);
     openModal();
 
     await user.type(screen.getByLabelText('Email'), 'notanemail');
@@ -104,10 +115,11 @@ describe('EventScheduleModal', () => {
 
   it('shows success view after submitting a valid form', async () => {
     const user = userEvent.setup();
-    render(<EventScheduleModal labels={labels} />);
-    openModal();
+    render(<EventScheduleModal labels={labels} captchaSiteKey="" />);
+    openModal('OutSystems NextStep 2026');
 
     await user.type(screen.getByLabelText('Full Name'), 'Jane Doe');
+    await user.type(screen.getByLabelText('Phone'), '+351 912 345 678');
     await user.type(screen.getByLabelText('Email'), 'jane@example.com');
     await user.selectOptions(screen.getByLabelText('Preferred time'), '11:00');
     await user.type(screen.getByLabelText('Message'), 'Looking forward to it.');
@@ -118,11 +130,20 @@ describe('EventScheduleModal', () => {
       expect(screen.getByText('Your slot has been requested!')).toBeInTheDocument();
     });
     expect(screen.queryByRole('form')).not.toBeInTheDocument();
+    expect(submitEventSchedule).toHaveBeenCalledWith({
+      eventName: 'OutSystems NextStep 2026',
+      name: 'Jane Doe',
+      phone: '+351 912 345 678',
+      email: 'jane@example.com',
+      timeSuggestion: '11:00',
+      message: 'Looking forward to it.',
+      turnstileToken: '',
+    });
   });
 
   it('closes when the X button is clicked', async () => {
     const user = userEvent.setup();
-    render(<EventScheduleModal labels={labels} />);
+    render(<EventScheduleModal labels={labels} captchaSiteKey="" />);
     openModal();
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -136,7 +157,7 @@ describe('EventScheduleModal', () => {
 
   it('resets form when reopened after close', async () => {
     const user = userEvent.setup();
-    render(<EventScheduleModal labels={labels} />);
+    render(<EventScheduleModal labels={labels} captchaSiteKey="" />);
     openModal('First Event');
 
     await user.type(screen.getByLabelText('Full Name'), 'John');

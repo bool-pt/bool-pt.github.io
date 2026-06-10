@@ -35,7 +35,7 @@ const jsonLd = blogPostingJsonLd({
   headerLabels={getHeaderLabels()}
   footerLabels={getFooterLabels()}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   <article>
     <Content />
   </article>

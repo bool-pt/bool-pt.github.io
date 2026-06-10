@@ -59,7 +59,7 @@ const { ariaLabel, heading, sub, newsletterLabels, backgroundImage } = Astro.pro
         <NewsletterForm
           client:visible
           variant="bar"
-          captchaSiteKey={import.meta.env.PUBLIC_HCAPTCHA_SITE_KEY ?? ''}
+          captchaSiteKey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? ''}
           labels={newsletterLabels}
         />
       </div>

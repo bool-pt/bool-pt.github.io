@@ -153,6 +153,8 @@ export function getEventScheduleLabels(locale: Locale = 'en') {
     success: t('eventSchedule.success', locale),
     required: t('eventSchedule.required', locale),
     emailInvalid: t('eventSchedule.emailInvalid', locale),
+    captchaRequired: t('eventSchedule.captchaRequired', locale),
+    error: t('eventSchedule.error', locale),
   };
 }
 

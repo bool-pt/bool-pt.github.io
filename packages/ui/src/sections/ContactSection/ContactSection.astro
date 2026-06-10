@@ -72,7 +72,7 @@ const {
       <ContactForm
         slot="form"
         client:load
-        captchaSiteKey={import.meta.env.PUBLIC_HCAPTCHA_SITE_KEY ?? ''}
+        captchaSiteKey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? ''}
         labels={formLabels}
       />
     </SplitWithForm>

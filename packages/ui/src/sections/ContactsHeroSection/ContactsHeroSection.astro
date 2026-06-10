@@ -71,7 +71,7 @@ const { heading, body, addressLabel, addressLines, contactEmail, formLabels, bac
         client:visible
         variant="dark"
         layout="simple"
-        captchaSiteKey={import.meta.env.PUBLIC_HCAPTCHA_SITE_KEY ?? ''}
+        captchaSiteKey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? ''}
         labels={formLabels}
       />
     </SplitWithForm>

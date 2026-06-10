@@ -114,7 +114,11 @@ const calendarEvents = events.map((e) => ({
     scheduleLabels && (
       <div class="event-schedule-modal-mount">
         {/* client:load — a closed modal has no layout box, so client:visible would never hydrate */}
-        <EventScheduleModal client:load labels={scheduleLabels} />
+        <EventScheduleModal
+          client:load
+          labels={scheduleLabels}
+          captchaSiteKey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? ''}
+        />
       </div>
     )
   }

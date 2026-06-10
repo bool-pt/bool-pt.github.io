@@ -72,9 +72,8 @@ jobs:
       - name: Build all packages and apps
         run: pnpm build
         env:
-          PUBLIC_CONTACT_API_URL: ${{ vars.PUBLIC_CONTACT_API_URL }}
-          PUBLIC_NEWSLETTER_API_URL: ${{ vars.PUBLIC_NEWSLETTER_API_URL }}
-          PUBLIC_HCAPTCHA_SITE_KEY: ${{ vars.PUBLIC_HCAPTCHA_SITE_KEY }}
+          PUBLIC_API_BASE_URL: ${{ vars.PUBLIC_API_BASE_URL }}
+          PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
           PUBLIC_GA_MEASUREMENT_ID: ${{ vars.PUBLIC_GA_MEASUREMENT_ID }}
           PUBLIC_SENTRY_DSN: ${{ vars.PUBLIC_SENTRY_DSN }}
       - name: Merge json-editor into main site output
@@ -100,9 +99,8 @@ jobs:
       - name: Build for E2E
         run: pnpm build
         env:
-          PUBLIC_CONTACT_API_URL: ${{ vars.PUBLIC_CONTACT_API_URL }}
-          PUBLIC_NEWSLETTER_API_URL: ${{ vars.PUBLIC_NEWSLETTER_API_URL }}
-          PUBLIC_HCAPTCHA_SITE_KEY: ${{ vars.PUBLIC_HCAPTCHA_SITE_KEY }}
+          PUBLIC_API_BASE_URL: ${{ vars.PUBLIC_API_BASE_URL }}
+          PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
           PUBLIC_GA_MEASUREMENT_ID: ${{ vars.PUBLIC_GA_MEASUREMENT_ID }}
           PUBLIC_SENTRY_DSN: ${{ vars.PUBLIC_SENTRY_DSN }}
       - name: Run E2E tests

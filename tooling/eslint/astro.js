@@ -28,6 +28,10 @@ export default [
       parserOptions: {
         parser: tseslint.parser,
         extraFileExtensions: ['.astro'],
+        // astro-eslint-parser doesn't support projectService (inherited from
+        // base.js) and warns on every .astro file. Type-checked rules are
+        // disabled below, so the type-aware project service isn't needed here.
+        projectService: false,
       },
     },
     rules: {

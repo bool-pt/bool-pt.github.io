@@ -1,26 +1,22 @@
-import HCaptcha from '@hcaptcha/react-hcaptcha';
-import { useRef, useCallback, useImperativeHandle } from 'react';
-
-type CaptchaProvider = 'hcaptcha';
+import { Turnstile } from '@marsidev/react-turnstile';
+import type { TurnstileInstance } from '@marsidev/react-turnstile';
+import { useCallback, useImperativeHandle, useRef } from 'react';
 
 interface CaptchaProps {
-  provider?: CaptchaProvider;
   siteKey: string;
   onVerify: (token: string) => void;
   onExpire?: () => void;
   onError?: (error: string) => void;
   theme?: 'light' | 'dark';
-  size?: 'normal' | 'compact' | 'invisible';
+  size?: 'normal' | 'flexible' | 'compact';
   ref?: React.Ref<CaptchaHandle>;
 }
 
 export interface CaptchaHandle {
   reset: () => void;
-  execute: () => void;
 }
 
 export default function Captcha({
-  provider = 'hcaptcha',
   siteKey,
   onVerify,
   onExpire,
@@ -29,31 +25,22 @@ export default function Captcha({
   size = 'normal',
   ref,
 }: CaptchaProps) {
-  const hcaptchaRef = useRef<HCaptcha>(null);
+  const turnstileRef = useRef<TurnstileInstance>(null);
 
   const reset = useCallback(() => {
-    hcaptchaRef.current?.resetCaptcha();
+    turnstileRef.current?.reset();
   }, []);
 
-  const execute = useCallback(() => {
-    hcaptchaRef.current?.execute();
-  }, []);
+  useImperativeHandle(ref, () => ({ reset }), [reset]);
 
-  useImperativeHandle(ref, () => ({ reset, execute }), [reset, execute]);
-
-  if (provider === 'hcaptcha') {
-    return (
-      <HCaptcha
-        ref={hcaptchaRef}
-        sitekey={siteKey}
-        onVerify={onVerify}
-        onExpire={onExpire}
-        onError={onError}
-        theme={theme}
-        size={size}
-      />
-    );
-  }
-
-  return null;
+  return (
+    <Turnstile
+      ref={turnstileRef}
+      siteKey={siteKey}
+      onSuccess={onVerify}
+      onExpire={onExpire}
+      onError={() => onError?.('error')}
+      options={{ theme, size }}
+    />
+  );
 }

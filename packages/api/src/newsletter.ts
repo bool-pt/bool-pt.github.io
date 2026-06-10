@@ -1,13 +1,14 @@
-import type { NewsletterData } from '@bool/shared';
-import { createSubmitter } from './submitters';
+import type { APIResponse, NewsletterData } from '@bool/shared';
+import { post } from './submitters';
 
-function getNewsletterApiUrl(): string {
-  const url = import.meta.env.PUBLIC_NEWSLETTER_API_URL;
-  if (!url) throw new Error('Missing PUBLIC_NEWSLETTER_API_URL environment variable');
-  return url;
+export function submitNewsletter(data: NewsletterData): Promise<APIResponse> {
+  return post(
+    '/subscribe',
+    {
+      name: data.name,
+      email: data.email,
+      turnstile_token: data.turnstileToken,
+    },
+    'Newsletter subscription'
+  );
 }
-
-export const submitNewsletter = createSubmitter<NewsletterData>(
-  getNewsletterApiUrl,
-  'Newsletter subscription',
-);

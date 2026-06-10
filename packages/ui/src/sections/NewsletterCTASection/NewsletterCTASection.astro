@@ -73,7 +73,7 @@ const { heading, body, newsletterLabels, backgroundImage } = Astro.props;
         <NewsletterForm
           client:visible
           variant="cta"
-          captchaSiteKey={import.meta.env.PUBLIC_HCAPTCHA_SITE_KEY ?? ''}
+          captchaSiteKey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? ''}
           labels={newsletterLabels}
         />
       </div>
