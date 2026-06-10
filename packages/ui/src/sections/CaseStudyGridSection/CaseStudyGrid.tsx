@@ -11,6 +11,7 @@ export interface CaseFlipItem {
   coverImageSrc: string;
   sector: string;
   tech: string;
+  techKey: string;
   backHeader: string;
   modalSubheading: string;
   metrics: Array<{ value: string; label: string }>;
@@ -25,7 +26,7 @@ export interface CaseFlipItem {
 interface Props {
   cases: CaseFlipItem[];
   sectors: string[];
-  techFilters: string[];
+  techFilters: Array<{ key: string; label: string }>;
   labels: {
     close: string;
     fullCaseStudy: string;
@@ -124,13 +125,17 @@ export default function CaseStudyGrid({ cases, sectors, techFilters, labels }: P
         data={cases}
         filterGroups={[
           { items: sectors, ariaLabel: labels.filterAriaLabel },
-          { items: techFilters, ariaLabel: labels.filterAriaLabel, toggle: true },
+          {
+            items: techFilters.map((f) => f.label),
+            ariaLabel: labels.filterAriaLabel,
+            toggle: true,
+          },
         ]}
         matchFilter={(item, groupIndex, activeIndex) => {
           if (groupIndex === 0) {
             return activeIndex === 0 || item.sector.toUpperCase() === sectors[activeIndex];
           }
-          return activeIndex === -1 || item.tech.toUpperCase() === techFilters[activeIndex];
+          return activeIndex === -1 || item.techKey === techFilters[activeIndex].key;
         }}
         renderItem={(item, i) => (
           <CaseFlipCard

@@ -19,6 +19,7 @@ const cases: CaseFlipItem[] = [
     coverImageSrc: '/img/acme.jpg',
     sector: 'FINTECH',
     tech: 'REACT',
+    techKey: 'react',
     backHeader: 'FINTECH · REACT',
     modalSubheading: 'Acme Corp · fintech',
     metrics: [{ value: '40%', label: 'Faster' }],
@@ -36,6 +37,7 @@ const cases: CaseFlipItem[] = [
     coverImageSrc: '/img/dataco.jpg',
     sector: 'HEALTHTECH',
     tech: 'PYTHON',
+    techKey: 'python',
     backHeader: 'HEALTHTECH · PYTHON',
     modalSubheading: 'DataCo · healthtech',
     metrics: [],
@@ -49,7 +51,10 @@ const cases: CaseFlipItem[] = [
 ];
 
 const sectors = ['All', 'FINTECH', 'HEALTHTECH'];
-const techFilters = ['REACT', 'PYTHON'];
+const techFilters = [
+  { key: 'react', label: 'REACT' },
+  { key: 'python', label: 'PYTHON' },
+];
 
 const labels = {
   close: 'Close',
@@ -67,12 +72,7 @@ const labels = {
 describe('CaseStudyGrid', () => {
   it('renders the subtitle (front + back) for each case', () => {
     render(
-      <CaseStudyGrid
-        cases={cases}
-        sectors={sectors}
-        techFilters={techFilters}
-        labels={labels}
-      />,
+      <CaseStudyGrid cases={cases} sectors={sectors} techFilters={techFilters} labels={labels} />
     );
 
     expect(screen.getAllByText('Platform Modernization').length).toBeGreaterThanOrEqual(1);
@@ -81,12 +81,7 @@ describe('CaseStudyGrid', () => {
 
   it('renders the derived back header `{sector} · {tech}` on each card back', () => {
     render(
-      <CaseStudyGrid
-        cases={cases}
-        sectors={sectors}
-        techFilters={techFilters}
-        labels={labels}
-      />,
+      <CaseStudyGrid cases={cases} sectors={sectors} techFilters={techFilters} labels={labels} />
     );
 
     expect(screen.getByText('FINTECH · REACT')).toBeInTheDocument();
@@ -95,12 +90,7 @@ describe('CaseStudyGrid', () => {
 
   it('renders filter groups', () => {
     render(
-      <CaseStudyGrid
-        cases={cases}
-        sectors={sectors}
-        techFilters={techFilters}
-        labels={labels}
-      />,
+      <CaseStudyGrid cases={cases} sectors={sectors} techFilters={techFilters} labels={labels} />
     );
 
     const tablists = screen.getAllByRole('tablist');
@@ -115,12 +105,7 @@ describe('CaseStudyGrid', () => {
 
   it('renders metrics on the back when present, omits when empty', () => {
     render(
-      <CaseStudyGrid
-        cases={cases}
-        sectors={sectors}
-        techFilters={techFilters}
-        labels={labels}
-      />,
+      <CaseStudyGrid cases={cases} sectors={sectors} techFilters={techFilters} labels={labels} />
     );
 
     // Acme has one metric
