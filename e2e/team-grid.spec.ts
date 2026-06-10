@@ -16,11 +16,10 @@ test.describe('Team grid', () => {
     const count = await cards.count();
     expect(count).toBeGreaterThanOrEqual(6);
 
-    // Portraits use loading="lazy"; scroll the grid into view and let the
-    // network settle before checking each <img>.
+    // Portraits use loading="lazy"; scroll the grid into view so they start
+    // loading before we check each <img> below (which waits per-image).
     await cards.first().scrollIntoViewIfNeeded();
     await cards.last().scrollIntoViewIfNeeded();
-    await page.waitForLoadState('networkidle');
 
     const broken = await cards.locator('img.pcv2-photo').evaluateAll((imgs) =>
       Promise.all(
@@ -36,10 +35,12 @@ test.describe('Team grid', () => {
               });
             }
             return img.complete && img.naturalWidth > 0 ? null : img.src;
-          }),
-      ).then((results) => results.filter((src): src is string => src !== null)),
+          })
+      ).then((results) => results.filter((src): src is string => src !== null))
     );
-    expect(broken, `${broken.length} portrait(s) failed to load:\n${broken.join('\n')}`).toEqual([]);
+    expect(broken, `${broken.length} portrait(s) failed to load:\n${broken.join('\n')}`).toEqual(
+      []
+    );
   });
 
   test('clicking a card opens the detail panel with bio + tags', async ({ page }) => {

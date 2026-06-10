@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { ROUTES } from '@bool/shared';
-import { dismissCookieBanner } from './helpers';
+import { dismissCookieBanner, waitForImages } from './helpers';
 
 const PAGES_TO_CHECK = [
   { path: ROUTES.home, name: 'Home' },
@@ -25,8 +25,10 @@ for (const { path, name } of PAGES_TO_CHECK) {
       const url = response.url();
       // Only flag asset URLs (images / fonts / SVGs). Skip API/HTML 4xx
       // (those have their own tests).
-      if (!/\.(jpg|jpeg|png|webp|avif|svg|woff2?|gif)(\?|$)/i.test(url) &&
-          !url.includes('/_image?')) {
+      if (
+        !/\.(jpg|jpeg|png|webp|avif|svg|woff2?|gif)(\?|$)/i.test(url) &&
+        !url.includes('/_image?')
+      ) {
         return;
       }
       failures.push({ url, status });
@@ -34,7 +36,6 @@ for (const { path, name } of PAGES_TO_CHECK) {
 
     await page.goto(path);
     await dismissCookieBanner(page);
-    await page.waitForLoadState('networkidle');
 
     // Force lazy-loaded images: scroll to the bottom and back.
     await page.evaluate(async () => {
@@ -43,13 +44,13 @@ for (const { path, name } of PAGES_TO_CHECK) {
       window.scrollTo(0, 0);
       await new Promise((r) => setTimeout(r, 200));
     });
-    await page.waitForLoadState('networkidle');
+    await waitForImages(page);
 
     expect(
       failures,
       `${name}: ${failures.length} asset response(s) with non-OK status:\n${failures
         .map((f) => `  - ${f.status} ${f.url}`)
-        .join('\n')}`,
+        .join('\n')}`
     ).toEqual([]);
   });
 }

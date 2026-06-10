@@ -1,5 +1,5 @@
-import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { test, expect } from '@playwright/test';
 import { ROUTES } from '@bool/shared';
 import { dismissCookieBanner, getHydratedRoot } from './helpers';
 
@@ -32,10 +32,24 @@ const DISABLED_RULES = [
 ];
 
 for (const { path, name } of criticalPages) {
-  test(`${name} page (${path}) has no critical accessibility violations`, async ({ page }) => {
+  test(`${name} page (${path}) — no critical a11y violations + every image has alt`, async ({
+    page,
+  }) => {
     await page.goto(path);
     await dismissCookieBanner(page);
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
+
+    // Cheap DOM check first: every image must have an alt attribute. Folded in
+    // here so each page is navigated once (was a second per-page loop below).
+    const imagesWithoutAlt = await page.evaluate(() =>
+      Array.from(document.querySelectorAll('img'))
+        .filter((img) => !img.hasAttribute('alt'))
+        .map((img) => img.src)
+    );
+    expect(
+      imagesWithoutAlt,
+      `${name}: ${imagesWithoutAlt.length} image(s) missing alt:\n${imagesWithoutAlt.join('\n')}`
+    ).toEqual([]);
 
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
@@ -44,14 +58,14 @@ for (const { path, name } of criticalPages) {
       .analyze();
 
     const critical = results.violations.filter(
-      (v) => v.impact === 'critical' || v.impact === 'serious',
+      (v) => v.impact === 'critical' || v.impact === 'serious'
     );
 
     expect(
       critical,
       `${name} page has ${critical.length} critical/serious a11y violations:\n${critical
         .map((v) => `  - ${v.id}: ${v.description} (${v.nodes.length} nodes)`)
-        .join('\n')}`,
+        .join('\n')}`
     ).toHaveLength(0);
   });
 }
@@ -59,7 +73,7 @@ for (const { path, name } of criticalPages) {
 test('homepage has proper heading hierarchy', async ({ page }) => {
   await page.goto(ROUTES.home);
   await dismissCookieBanner(page);
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('load');
 
   const headings = await page.evaluate(() => {
     const els = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
@@ -77,34 +91,16 @@ test('homepage has proper heading hierarchy', async ({ page }) => {
 
   // Headings should not skip levels (e.g., h1 -> h3 with no h2)
   for (let i = 1; i < headings.length; i++) {
-    const current = headings[i]!;
-    const previous = headings[i - 1]!;
+    const current = headings[i];
+    const previous = headings[i - 1];
+    if (!current || !previous) continue;
     const skippedLevel = current.level > previous.level + 1;
     expect(
       skippedLevel,
-      `Heading "${current.text}" (h${current.level}) skips level after "${previous.text}" (h${previous.level})`,
+      `Heading "${current.text}" (h${current.level}) skips level after "${previous.text}" (h${previous.level})`
     ).toBe(false);
   }
 });
-
-for (const { path, name } of criticalPages) {
-  test(`${name} (${path}) — all images have an alt attribute`, async ({ page }) => {
-    await page.goto(path);
-    await dismissCookieBanner(page);
-    await page.waitForLoadState('networkidle');
-
-    const imagesWithoutAlt = await page.evaluate(() =>
-      Array.from(document.querySelectorAll('img'))
-        .filter((img) => !img.hasAttribute('alt'))
-        .map((img) => img.src),
-    );
-
-    expect(
-      imagesWithoutAlt,
-      `${name}: ${imagesWithoutAlt.length} image(s) missing alt:\n${imagesWithoutAlt.join('\n')}`,
-    ).toEqual([]);
-  });
-}
 
 test('Portfolio case-study modal passes axe-core when open', async ({ page }) => {
   await page.goto(ROUTES.portfolio);
@@ -117,7 +113,10 @@ test('Portfolio case-study modal passes axe-core when open', async ({ page }) =>
   const firstCard = grid.locator('[class*="flipCard"]').first();
   await firstCard.scrollIntoViewIfNeeded();
   await firstCard.click();
-  await grid.locator('button', { hasText: /^Full Case Study$/i }).first().click();
+  await grid
+    .locator('button', { hasText: /^Full Case Study$/i })
+    .first()
+    .click();
   const modal = page.getByRole('dialog');
   await expect(modal).toBeVisible();
 
@@ -131,20 +130,20 @@ test('Portfolio case-study modal passes axe-core when open', async ({ page }) =>
     .analyze();
 
   const critical = results.violations.filter(
-    (v) => v.impact === 'critical' || v.impact === 'serious',
+    (v) => v.impact === 'critical' || v.impact === 'serious'
   );
 
   expect(
     critical,
     `Case-study modal has ${critical.length} critical/serious a11y violations:\n${critical
       .map((v) => `  - ${v.id}: ${v.description} (${v.nodes.length} nodes)`)
-      .join('\n')}`,
+      .join('\n')}`
   ).toHaveLength(0);
 });
 
 test('interactive elements are keyboard accessible', async ({ page }) => {
   await page.goto(ROUTES.home);
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState('load');
 
   // Tab through the page and verify focus is visible
   await page.keyboard.press('Tab');
