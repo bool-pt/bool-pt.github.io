@@ -1,6 +1,11 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["tooling/vite/src/**", "tooling/vitest/**"],
+  "globalDependencies": [
+    "tooling/vite/src/**",
+    "tooling/vitest/**",
+    "packages/media/images/**",
+    "packages/i18n/src/locales/**"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
