@@ -1,6 +1,23 @@
 import type { Locator, Page } from '@playwright/test';
 
 /**
+ * Wait for the page to load and every <img> to settle (loaded or errored),
+ * WITHOUT `networkidle` — which never fires on this site because analytics,
+ * the Cloudflare Turnstile widget, and similar third parties keep background
+ * connections open. Resolves once the load event has fired and no image is
+ * still pending, or after `timeout` (fail-soft; the test's own assertion
+ * decides pass/fail).
+ */
+export async function waitForImages(page: Page, timeout = 15_000): Promise<void> {
+  await page.waitForLoadState('load');
+  await page
+    .waitForFunction(() => Array.from(document.images).every((img) => img.complete), undefined, {
+      timeout,
+    })
+    .catch(() => {});
+}
+
+/**
  * Dismiss the cookie banner if it's currently visible.
  *
  * No-op when the banner isn't present (e.g. consent already persisted in

@@ -68,7 +68,7 @@ test.describe('Cookie Consent', () => {
       await expect(banner).toBeHidden();
 
       await page.reload();
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('load');
       // Either gone from DOM or still hidden — both acceptable.
       const stillVisible = await banner.isVisible().catch(() => false);
       expect(stillVisible).toBe(false);
