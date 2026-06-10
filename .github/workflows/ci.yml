@@ -11,8 +11,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint:
-    name: Lint
+  # Lint, typecheck and test share one install and run in parallel via Turbo
+  # (was three separate jobs, each paying a full `pnpm install`).
+  verify:
+    name: Lint · Typecheck · Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -22,33 +24,14 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm lint
-
-  typecheck:
-    name: Typecheck
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-      - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v5
+      - name: Cache Turbo
+        uses: actions/cache@v4
         with:
-          node-version: 22
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm typecheck
-
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-      - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v5
-        with:
-          node-version: 22
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm test
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ github.sha }}
+          restore-keys: turbo-${{ runner.os }}-
+      - name: Lint, typecheck and test
+        run: pnpm exec turbo run lint typecheck test --continue
       - name: Upload coverage
         if: always()
         uses: actions/upload-artifact@v6
@@ -60,7 +43,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    needs: [lint, typecheck, test]
+    needs: verify
     steps:
       - uses: actions/checkout@v5
       - uses: pnpm/action-setup@v6
@@ -69,6 +52,20 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Cache Turbo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ github.sha }}
+          restore-keys: turbo-${{ runner.os }}-
+      # Persist Astro's sharp image-optimization cache so unchanged images
+      # aren't re-encoded every run (the case-study set is large).
+      - name: Cache Astro image optimization
+        uses: actions/cache@v4
+        with:
+          path: apps/web/bool/node_modules/.astro
+          key: astro-cache-${{ runner.os }}-${{ github.sha }}
+          restore-keys: astro-cache-${{ runner.os }}-
       - name: Build all packages and apps
         run: pnpm build
         env:
@@ -78,9 +75,14 @@ jobs:
           PUBLIC_SENTRY_DSN: ${{ vars.PUBLIC_SENTRY_DSN }}
       - name: Merge json-editor into main site output
         run: cp -r apps/web/json-editor/dist apps/web/bool/dist/json-editor
-      - uses: actions/upload-pages-artifact@v4
+      # Reused by the e2e job so it doesn't rebuild the whole site from scratch.
+      - name: Upload built site
+        uses: actions/upload-artifact@v6
         with:
+          name: site-dist
           path: apps/web/bool/dist
+          retention-days: 1
+          include-hidden-files: true
 
   e2e:
     name: E2E Tests
@@ -94,15 +96,24 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Install Playwright browsers
+      # Reuse the build job's output instead of rebuilding (astro preview serves dist).
+      - name: Download built site
+        uses: actions/download-artifact@v6
+        with:
+          name: site-dist
+          path: apps/web/bool/dist
+      - name: Cache Playwright browsers
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+      - name: Install Playwright browsers + OS deps
+        if: steps.pw-cache.outputs.cache-hit != 'true'
         run: pnpm exec playwright install --with-deps chromium
-      - name: Build for E2E
-        run: pnpm build
-        env:
-          PUBLIC_API_BASE_URL: ${{ vars.PUBLIC_API_BASE_URL }}
-          PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
-          PUBLIC_GA_MEASUREMENT_ID: ${{ vars.PUBLIC_GA_MEASUREMENT_ID }}
-          PUBLIC_SENTRY_DSN: ${{ vars.PUBLIC_SENTRY_DSN }}
+      - name: Install Playwright OS deps (browsers cached)
+        if: steps.pw-cache.outputs.cache-hit == 'true'
+        run: pnpm exec playwright install-deps chromium
       - name: Run E2E tests
         run: pnpm test:e2e
       - name: Upload test results
