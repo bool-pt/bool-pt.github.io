@@ -1,19 +1,24 @@
 import type { Locator, Page } from '@playwright/test';
 
 /**
- * Wait for the page to load and every <img> to settle (loaded or errored),
- * WITHOUT `networkidle` — which never fires on this site because analytics,
- * the Cloudflare Turnstile widget, and similar third parties keep background
- * connections open. Resolves once the load event has fired and no image is
- * still pending, or after `timeout` (fail-soft; the test's own assertion
- * decides pass/fail).
+ * Wait for the page to load and any in-flight images to settle, WITHOUT
+ * `networkidle` — which never fires on this site because analytics, the
+ * Cloudflare Turnstile widget, and similar third parties keep background
+ * connections open.
+ *
+ * Only images that have actually started loading (`currentSrc` set) need to
+ * reach `complete`; lazy/off-screen images that haven't begun are ignored, so
+ * this resolves quickly instead of hanging on images that never enter the
+ * viewport. Fail-soft — the test's own assertion decides pass/fail.
  */
-export async function waitForImages(page: Page, timeout = 15_000): Promise<void> {
+export async function waitForImages(page: Page, timeout = 8_000): Promise<void> {
   await page.waitForLoadState('load');
   await page
-    .waitForFunction(() => Array.from(document.images).every((img) => img.complete), undefined, {
-      timeout,
-    })
+    .waitForFunction(
+      () => Array.from(document.images).every((img) => !img.currentSrc || img.complete),
+      undefined,
+      { timeout }
+    )
     .catch(() => {});
 }
 

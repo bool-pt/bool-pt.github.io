@@ -36,7 +36,6 @@ for (const { path, name } of PAGES_TO_CHECK) {
 
     await page.goto(path);
     await dismissCookieBanner(page);
-    await waitForImages(page);
 
     // Force lazy-loaded images: scroll to the bottom and back.
     await page.evaluate(async () => {
