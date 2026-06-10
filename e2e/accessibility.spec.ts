@@ -32,10 +32,24 @@ const DISABLED_RULES = [
 ];
 
 for (const { path, name } of criticalPages) {
-  test(`${name} page (${path}) has no critical accessibility violations`, async ({ page }) => {
+  test(`${name} page (${path}) — no critical a11y violations + every image has alt`, async ({
+    page,
+  }) => {
     await page.goto(path);
     await dismissCookieBanner(page);
     await page.waitForLoadState('load');
+
+    // Cheap DOM check first: every image must have an alt attribute. Folded in
+    // here so each page is navigated once (was a second per-page loop below).
+    const imagesWithoutAlt = await page.evaluate(() =>
+      Array.from(document.querySelectorAll('img'))
+        .filter((img) => !img.hasAttribute('alt'))
+        .map((img) => img.src)
+    );
+    expect(
+      imagesWithoutAlt,
+      `${name}: ${imagesWithoutAlt.length} image(s) missing alt:\n${imagesWithoutAlt.join('\n')}`
+    ).toEqual([]);
 
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
@@ -87,25 +101,6 @@ test('homepage has proper heading hierarchy', async ({ page }) => {
     ).toBe(false);
   }
 });
-
-for (const { path, name } of criticalPages) {
-  test(`${name} (${path}) — all images have an alt attribute`, async ({ page }) => {
-    await page.goto(path);
-    await dismissCookieBanner(page);
-    await page.waitForLoadState('load');
-
-    const imagesWithoutAlt = await page.evaluate(() =>
-      Array.from(document.querySelectorAll('img'))
-        .filter((img) => !img.hasAttribute('alt'))
-        .map((img) => img.src)
-    );
-
-    expect(
-      imagesWithoutAlt,
-      `${name}: ${imagesWithoutAlt.length} image(s) missing alt:\n${imagesWithoutAlt.join('\n')}`
-    ).toEqual([]);
-  });
-}
 
 test('Portfolio case-study modal passes axe-core when open', async ({ page }) => {
   await page.goto(ROUTES.portfolio);
