@@ -63,7 +63,7 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
 
     setStatus('loading');
     try {
-      await submitNewsletter({ name, email, captchaToken: captchaToken || '' });
+      await submitNewsletter({ name, email, turnstileToken: captchaToken || '' });
       trackEvent('form_submission', { type: 'newsletter' });
       setStatus('success');
       setName('');

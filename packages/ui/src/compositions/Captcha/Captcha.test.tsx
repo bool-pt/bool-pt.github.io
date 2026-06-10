@@ -2,23 +2,26 @@ import { render, cleanup } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import Captcha from './Captcha';
 
-vi.mock('@hcaptcha/react-hcaptcha', () => ({
-  default: vi.fn(({ sitekey, onVerify, theme, size }: {
-    sitekey: string;
-    onVerify: (token: string) => void;
+vi.mock('@marsidev/react-turnstile', () => ({
+  Turnstile: ({
+    siteKey,
+    onSuccess,
+    options,
+  }: {
+    siteKey: string;
+    onSuccess: (token: string) => void;
     onExpire?: () => void;
-    onError?: (err: string) => void;
-    theme?: string;
-    size?: string;
+    onError?: () => void;
+    options?: { theme?: string; size?: string };
   }) => (
     <div
-      data-testid="hcaptcha"
-      data-sitekey={sitekey}
-      data-theme={theme}
-      data-size={size}
-      onClick={() => onVerify('mock-token')}
+      data-testid="turnstile"
+      data-sitekey={siteKey}
+      data-theme={options?.theme}
+      data-size={options?.size}
+      onClick={() => onSuccess('mock-token')}
     />
-  )),
+  ),
 }));
 
 afterEach(() => {
@@ -27,38 +30,26 @@ afterEach(() => {
 });
 
 describe('Captcha', () => {
-  it('renders hCaptcha with correct sitekey', () => {
-    const { getByTestId } = render(
-      <Captcha siteKey="test-site-key" onVerify={vi.fn()} />,
-    );
+  it('renders Turnstile with correct site key', () => {
+    const { getByTestId } = render(<Captcha siteKey="test-site-key" onVerify={vi.fn()} />);
 
-    expect(getByTestId('hcaptcha')).toHaveAttribute('data-sitekey', 'test-site-key');
+    expect(getByTestId('turnstile')).toHaveAttribute('data-sitekey', 'test-site-key');
   });
 
-  it('passes theme and size to hCaptcha', () => {
+  it('passes theme and size to Turnstile', () => {
     const { getByTestId } = render(
-      <Captcha siteKey="test-key" onVerify={vi.fn()} theme="light" size="compact" />,
+      <Captcha siteKey="test-key" onVerify={vi.fn()} theme="light" size="compact" />
     );
 
-    expect(getByTestId('hcaptcha')).toHaveAttribute('data-theme', 'light');
-    expect(getByTestId('hcaptcha')).toHaveAttribute('data-size', 'compact');
+    expect(getByTestId('turnstile')).toHaveAttribute('data-theme', 'light');
+    expect(getByTestId('turnstile')).toHaveAttribute('data-size', 'compact');
   });
 
-  it('calls onVerify when captcha is verified', () => {
+  it('calls onVerify when the captcha is solved', () => {
     const onVerify = vi.fn();
-    const { getByTestId } = render(
-      <Captcha siteKey="test-key" onVerify={onVerify} />,
-    );
+    const { getByTestId } = render(<Captcha siteKey="test-key" onVerify={onVerify} />);
 
-    getByTestId('hcaptcha').click();
+    getByTestId('turnstile').click();
     expect(onVerify).toHaveBeenCalledWith('mock-token');
-  });
-
-  it('returns null for unsupported provider', () => {
-    const { container } = render(
-      <Captcha provider={'unknown' as 'hcaptcha'} siteKey="test-key" onVerify={vi.fn()} />,
-    );
-
-    expect(container.innerHTML).toBe('');
   });
 });

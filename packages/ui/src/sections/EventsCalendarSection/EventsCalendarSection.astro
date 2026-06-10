@@ -97,7 +97,11 @@ const calendarEvents = events.map((e) => ({
 {
   scheduleLabels && (
     <div class="events-calendar-schedule-modal">
-      <EventScheduleModal client:load labels={scheduleLabels} />
+      <EventScheduleModal
+        client:load
+        labels={scheduleLabels}
+        captchaSiteKey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? ''}
+      />
     </div>
   )
 }

@@ -140,7 +140,7 @@ describe('ContactForm', { timeout: 15_000 }, () => {
       email: 'john@example.com',
       phone: undefined,
       message: 'This is a test message that is long enough.',
-      captchaToken: 'test-captcha-token',
+      turnstileToken: 'test-captcha-token',
     });
     expect(trackEvent).toHaveBeenCalledWith('form_submission', {
       type: 'contact',

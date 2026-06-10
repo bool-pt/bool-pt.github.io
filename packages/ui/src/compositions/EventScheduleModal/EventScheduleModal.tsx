@@ -1,7 +1,11 @@
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { CheckCircle, ChevronDown, X } from 'lucide-react';
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { trackEvent } from '@bool/analytics';
+import { submitEventSchedule } from '@bool/api';
+import Captcha from '../Captcha/Captcha';
+import type { CaptchaHandle } from '../Captcha/Captcha';
 import styles from './EventScheduleModal.module.css';
 
 export interface EventScheduleLabels {
@@ -24,6 +28,8 @@ export interface EventScheduleLabels {
   success: string;
   required: string;
   emailInvalid: string;
+  captchaRequired: string;
+  error: string;
 }
 
 interface FormFields {
@@ -43,18 +49,23 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 interface Props {
   labels: EventScheduleLabels;
+  captchaSiteKey: string;
 }
 
-export default function EventScheduleModal({ labels }: Props) {
+export default function EventScheduleModal({ labels, captchaSiteKey }: Props) {
   const formId = useId();
+  const captchaRef = useRef<CaptchaHandle>(null);
   const [open, setOpen] = useState(false);
   const [eventTitle, setEventTitle] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState('');
+  const [captchaError, setCaptchaError] = useState(false);
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    setError,
+    formState: { errors, isSubmitting },
   } = useForm<FormFields>();
 
   useEffect(() => {
@@ -62,6 +73,8 @@ export default function EventScheduleModal({ labels }: Props) {
       const detail = (event as CustomEvent<OpenEventDetail>).detail;
       setEventTitle(detail?.title ?? '');
       setSubmitted(false);
+      setCaptchaToken('');
+      setCaptchaError(false);
       reset();
       setOpen(true);
     }
@@ -69,9 +82,39 @@ export default function EventScheduleModal({ labels }: Props) {
     return () => window.removeEventListener('bool:open-event-schedule', handleOpen);
   }, [reset]);
 
-  // UI-only: no network call. Flip to the confirmation view on valid submit.
-  function onSubmit() {
-    setSubmitted(true);
+  async function onSubmit(data: FormFields) {
+    if (captchaSiteKey && !captchaToken) {
+      setCaptchaError(true);
+      return;
+    }
+    setCaptchaError(false);
+
+    try {
+      await submitEventSchedule({
+        eventName: eventTitle,
+        name: data.fullName,
+        phone: data.phone,
+        email: data.email,
+        timeSuggestion: data.time,
+        message: data.message,
+        turnstileToken: captchaToken || '',
+      });
+      trackEvent('form_submission', { type: 'event' });
+      setSubmitted(true);
+    } catch {
+      setError('root', { message: labels.error });
+      setCaptchaToken('');
+      captchaRef.current?.reset();
+    }
+  }
+
+  function handleCaptchaVerify(token: string) {
+    setCaptchaToken(token);
+    setCaptchaError(false);
+  }
+
+  function handleCaptchaExpire() {
+    setCaptchaToken('');
   }
 
   function handleOpenChange(next: boolean) {
@@ -79,6 +122,8 @@ export default function EventScheduleModal({ labels }: Props) {
     if (!next) {
       reset();
       setSubmitted(false);
+      setCaptchaToken('');
+      setCaptchaError(false);
     }
   }
 
@@ -204,7 +249,23 @@ export default function EventScheduleModal({ labels }: Props) {
                 {errors.message && <p className={styles.fieldError}>{errors.message.message}</p>}
               </div>
 
-              <button type="submit" className={styles.submitBtn}>
+              {captchaSiteKey && (
+                <div className={styles.field}>
+                  <Captcha
+                    ref={captchaRef}
+                    siteKey={captchaSiteKey}
+                    onVerify={handleCaptchaVerify}
+                    onExpire={handleCaptchaExpire}
+                    theme="dark"
+                    size="compact"
+                  />
+                  {captchaError && <p className={styles.fieldError}>{labels.captchaRequired}</p>}
+                </div>
+              )}
+
+              {errors.root && <p className={styles.fieldError}>{errors.root.message}</p>}
+
+              <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
                 {labels.submit}
               </button>
             </form>

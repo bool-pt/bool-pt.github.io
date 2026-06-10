@@ -14,7 +14,7 @@ Five GitHub Actions workflows:
 | **Lighthouse** (`.github/workflows/lighthouse.yml`)                       | PRs to `main`                | Lighthouse performance audit                                                            |
 | **Test Drive Connection** (`.github/workflows/test-drive-connection.yml`) | Manual (`workflow_dispatch`) | Verify Google Drive service account credential (`pnpm --filter @bool/media test:drive`) |
 
-> **Note on form submissions:** the site's contact + newsletter forms are wired to call `PUBLIC_CONTACT_API_URL` / `PUBLIC_NEWSLETTER_API_URL`. The previous AWS Lambda + SES + Sheets backend that served those endpoints has been removed pending a decision on the new email provider (Postmark or similar). Until a new backend is wired up, form submissions will fail at runtime — the site is not yet in production.
+> **Note on form submissions:** the contact, newsletter, and event-schedule forms POST to a single AWS API Gateway base URL (`PUBLIC_API_BASE_URL`) on the paths `/contact`, `/subscribe`, and `/event`. Each Lambda validates a Cloudflare Turnstile token (`turnstile_token`) server-side before sending email via SES. The frontend renders the Turnstile widget with `PUBLIC_TURNSTILE_SITE_KEY` (public site key); the matching **secret key** lives in the Lambda's own environment, not in this repo. Turnstile is bound to hostnames (`bool.pt`, `www.bool.pt`, plus `localhost` for dev) — no IP configuration is required. CORS on the API allows `bool.pt` / `www.bool.pt` only, so form submits from `localhost` are blocked unless the backend allowlists it.
 
 ### Workflow rules
 
@@ -31,13 +31,12 @@ All configuration lives in GitHub — no `.env.local` files needed. Configure at
 
 ### Variables (`vars.*`) — non-sensitive, visible in logs
 
-| Variable                    | Used by                | Description                                                |
-| --------------------------- | ---------------------- | ---------------------------------------------------------- |
-| `PUBLIC_CONTACT_API_URL`    | CI, Deploy, Lighthouse | Contact form endpoint URL (used by the frontend at submit) |
-| `PUBLIC_NEWSLETTER_API_URL` | CI, Deploy, Lighthouse | Newsletter endpoint URL (used by the frontend at submit)   |
-| `PUBLIC_HCAPTCHA_SITE_KEY`  | CI, Deploy, Lighthouse | hCaptcha site key (public, identifies site)                |
-| `PUBLIC_GA_MEASUREMENT_ID`  | CI, Deploy, Lighthouse | Google Analytics 4 measurement ID                          |
-| `PUBLIC_SENTRY_DSN`         | CI, Deploy             | Sentry DSN for error monitoring                            |
+| Variable                    | Used by                | Description                                                              |
+| --------------------------- | ---------------------- | ------------------------------------------------------------------------ |
+| `PUBLIC_API_BASE_URL`       | CI, Deploy, Lighthouse | Form API base URL; paths `/contact`, `/subscribe`, `/event` are appended |
+| `PUBLIC_TURNSTILE_SITE_KEY` | CI, Deploy, Lighthouse | Cloudflare Turnstile site key (public, identifies site)                  |
+| `PUBLIC_GA_MEASUREMENT_ID`  | CI, Deploy, Lighthouse | Google Analytics 4 measurement ID                                        |
+| `PUBLIC_SENTRY_DSN`         | CI, Deploy             | Sentry DSN for error monitoring                                          |
 
 ### Secrets (`secrets.*`) — encrypted, masked in logs
 

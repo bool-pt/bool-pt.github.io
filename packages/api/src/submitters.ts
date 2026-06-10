@@ -2,17 +2,23 @@ import type { APIResponse } from '@bool/shared';
 import { apiFetch } from './client';
 import { ApiError } from './errors';
 
-export function createSubmitter<T>(getUrl: () => string, operation: string) {
-  return async (data: T): Promise<APIResponse> => {
-    const url = getUrl();
+function getApiBaseUrl(): string {
+  const url = import.meta.env.PUBLIC_API_BASE_URL;
+  if (!url) throw new Error('Missing PUBLIC_API_BASE_URL environment variable');
+  return url.replace(/\/+$/, '');
+}
 
-    try {
-      return await apiFetch<APIResponse>(url, { method: 'POST', body: data });
-    } catch (err) {
-      if (err instanceof ApiError) {
-        throw new ApiError(err.status, err.body, operation);
-      }
-      throw err;
+export async function post(
+  path: string,
+  body: Record<string, unknown>,
+  operation: string
+): Promise<APIResponse> {
+  try {
+    return await apiFetch<APIResponse>(`${getApiBaseUrl()}${path}`, { method: 'POST', body });
+  } catch (err) {
+    if (err instanceof ApiError) {
+      throw new ApiError(err.status, err.body, operation);
     }
-  };
+    throw err;
+  }
 }

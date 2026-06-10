@@ -84,7 +84,7 @@ export default function ContactForm({
           email: data.email,
           phone: data.phone ?? undefined,
           message: data.message,
-          captchaToken: captchaToken || '',
+          turnstileToken: captchaToken || '',
         });
         trackEvent('form_submission', { type: 'contact', layout });
         reset();
@@ -94,7 +94,7 @@ export default function ContactForm({
         setError('root', { message: labels.error });
       }
     },
-    [captchaSiteKey, captchaToken, layout, labels.error, reset, setError],
+    [captchaSiteKey, captchaToken, layout, labels.error, reset, setError]
   );
 
   function handleCaptchaVerify(token: string) {
@@ -146,7 +146,9 @@ export default function ContactForm({
   const privacyNotice = (
     <p className={styles.privacyNotice}>
       {labels.privacyNoticeBefore}
-      <a href={ROUTES.privacy} className={styles.privacyLink}>{labels.privacyNoticeLinkText}</a>
+      <a href={ROUTES.privacy} className={styles.privacyLink}>
+        {labels.privacyNoticeLinkText}
+      </a>
       {labels.privacyNoticeAfter}
     </p>
   );
