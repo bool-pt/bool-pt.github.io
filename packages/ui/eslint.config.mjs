@@ -28,11 +28,36 @@ export default [
         {
           default: 'disallow',
           rules: [
-            { from: ['lib'], allow: [] },
-            { from: ['primitives'], allow: ['primitives', 'lib'] },
-            { from: ['compositions'], allow: ['compositions', 'primitives', 'lib'] },
-            { from: ['sections'], allow: ['compositions', 'primitives', 'lib'] },
-            { from: ['layout'], allow: ['layout', 'compositions', 'primitives', 'lib'] },
+            { from: [{ type: 'lib' }], allow: [] },
+            {
+              from: [{ type: 'primitives' }],
+              allow: [{ to: { type: 'primitives' } }, { to: { type: 'lib' } }],
+            },
+            {
+              from: [{ type: 'compositions' }],
+              allow: [
+                { to: { type: 'compositions' } },
+                { to: { type: 'primitives' } },
+                { to: { type: 'lib' } },
+              ],
+            },
+            {
+              from: [{ type: 'sections' }],
+              allow: [
+                { to: { type: 'compositions' } },
+                { to: { type: 'primitives' } },
+                { to: { type: 'lib' } },
+              ],
+            },
+            {
+              from: [{ type: 'layout' }],
+              allow: [
+                { to: { type: 'layout' } },
+                { to: { type: 'compositions' } },
+                { to: { type: 'primitives' } },
+                { to: { type: 'lib' } },
+              ],
+            },
           ],
         },
       ],

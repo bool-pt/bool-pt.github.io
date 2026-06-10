@@ -1,5 +1,5 @@
 import { Search, X } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { cn } from '../../lib/cn.ts';
 import {
   defaultFolderForField,
@@ -25,11 +25,15 @@ export default function MediaPicker({ fieldKey, value, onChange, disabled = fals
   });
   const [search, setSearch] = useState('');
 
-  // When the field's stored value changes externally, snap the picker's folder to it.
-  useEffect(() => {
+  // When the field's stored value changes externally, snap the picker's folder to
+  // it. Done during render (not in an effect) per React's "adjusting state when a
+  // prop changes" guidance — avoids the extra cascading render.
+  const [prevValue, setPrevValue] = useState(value);
+  if (value !== prevValue) {
+    setPrevValue(value);
     const existing = findByPath(value);
     if (existing) setFolder(existing.folder);
-  }, [value]);
+  }
 
   const currentEntry = findByPath(value);
   const isMissing = value.trim() !== '' && !currentEntry;
