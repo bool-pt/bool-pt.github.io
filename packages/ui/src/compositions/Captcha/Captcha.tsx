@@ -14,6 +14,11 @@ interface CaptchaProps {
 
 export interface CaptchaHandle {
   reset: () => void;
+  /**
+   * Runs the challenge on demand and resolves with the verification token.
+   * Resolves to an empty string if the widget is unavailable, errors, or times out.
+   */
+  execute: () => Promise<string>;
 }
 
 export default function Captcha({
@@ -31,7 +36,20 @@ export default function Captcha({
     turnstileRef.current?.reset();
   }, []);
 
-  useImperativeHandle(ref, () => ({ reset }), [reset]);
+  const execute = useCallback(async () => {
+    const widget = turnstileRef.current;
+    if (!widget) return '';
+    const existing = widget.getResponse();
+    if (existing) return existing;
+    try {
+      widget.execute();
+      return await widget.getResponsePromise();
+    } catch {
+      return '';
+    }
+  }, []);
+
+  useImperativeHandle(ref, () => ({ reset, execute }), [reset, execute]);
 
   return (
     <Turnstile
@@ -40,7 +58,10 @@ export default function Captcha({
       onSuccess={onVerify}
       onExpire={onExpire}
       onError={() => onError?.('error')}
-      options={{ theme, size }}
+      // `execution: 'execute'` defers the challenge until execute() is called on
+      // submit; `interaction-only` keeps the widget hidden unless interaction is
+      // actually required.
+      options={{ theme, size, appearance: 'interaction-only', execution: 'execute' }}
     />
   );
 }

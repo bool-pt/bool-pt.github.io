@@ -56,14 +56,18 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
       return;
     }
 
-    if (captchaSiteKey && !captchaToken) {
+    let token = captchaToken;
+    if (captchaSiteKey && !token) {
+      token = (await captchaRef.current?.execute()) ?? '';
+    }
+    if (captchaSiteKey && !token) {
       setStatus('captcha-needed');
       return;
     }
 
     setStatus('loading');
     try {
-      await submitNewsletter({ name, email, turnstileToken: captchaToken || '' });
+      await submitNewsletter({ name, email, turnstileToken: token || '' });
       trackEvent('form_submission', { type: 'newsletter' });
       setStatus('success');
       setName('');
