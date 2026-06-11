@@ -114,13 +114,7 @@ export default function ContactForm({
   if (isSubmitSuccessful) {
     return (
       <div className={successClass}>
-        <CheckCircle
-          size={48}
-          stroke="var(--color-primary)"
-          strokeWidth={1.5}
-          className={styles.successIcon}
-          aria-hidden="true"
-        />
+        <CheckCircle size={48} stroke="var(--color-primary)" strokeWidth={1.5} aria-hidden="true" />
         <p className={styles.successText}>{labels.success}</p>
       </div>
     );

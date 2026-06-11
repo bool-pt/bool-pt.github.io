@@ -91,6 +91,10 @@
 }
 
 .lightSuccess {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
   padding: 2rem;
   text-align: center;
   color: var(--color-muted-foreground);
@@ -121,13 +125,13 @@
 }
 
 .success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
   padding: 2rem;
   text-align: center;
   color: var(--color-on-dark-muted);
-}
-
-.successIcon {
-  margin-block-end: 1rem;
 }
 
 .successText {
