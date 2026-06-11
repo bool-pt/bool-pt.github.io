@@ -88,6 +88,9 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
 
   const isBar = variant === 'bar';
   const isDisabled = status === 'loading' || status === 'success';
+  // Only mount the captcha once the user starts filling the form — avoids an
+  // idle widget on every page load.
+  const hasInput = name.trim() !== '' || email.trim() !== '';
 
   const buttonText =
     status === 'success'
@@ -152,7 +155,7 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
       {status === 'consent-needed' && (
         <p className={styles.consentError}>{labels.consentRequired}</p>
       )}
-      {captchaSiteKey && (
+      {captchaSiteKey && hasInput && (
         <div className={styles.captchaWrapper}>
           <Captcha
             ref={captchaRef}
@@ -160,7 +163,7 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
             onVerify={handleCaptchaVerify}
             onExpire={handleCaptchaExpire}
             theme={isBar ? 'light' : 'dark'}
-            size="compact"
+            size="flexible"
           />
           {status === 'captcha-needed' && (
             <p className={styles.consentError}>{labels.captchaRequired}</p>
