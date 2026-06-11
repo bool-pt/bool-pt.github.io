@@ -71,7 +71,11 @@ export default function ContactForm({
 
   const onSubmit = useCallback(
     async (data: ContactFormFields) => {
-      if (captchaSiteKey && !captchaToken) {
+      let token = captchaToken;
+      if (captchaSiteKey && !token) {
+        token = (await captchaRef.current?.execute()) ?? '';
+      }
+      if (captchaSiteKey && !token) {
         setCaptchaError(true);
         return;
       }
@@ -84,7 +88,7 @@ export default function ContactForm({
           email: data.email,
           phone: data.phone ?? undefined,
           message: data.message,
-          turnstileToken: captchaToken || '',
+          turnstileToken: token || '',
         });
         trackEvent('form_submission', { type: 'contact', layout });
         reset();

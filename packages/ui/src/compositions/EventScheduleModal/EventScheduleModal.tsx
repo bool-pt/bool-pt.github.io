@@ -83,7 +83,11 @@ export default function EventScheduleModal({ labels, captchaSiteKey }: Props) {
   }, [reset]);
 
   async function onSubmit(data: FormFields) {
-    if (captchaSiteKey && !captchaToken) {
+    let token = captchaToken;
+    if (captchaSiteKey && !token) {
+      token = (await captchaRef.current?.execute()) ?? '';
+    }
+    if (captchaSiteKey && !token) {
       setCaptchaError(true);
       return;
     }
@@ -97,7 +101,7 @@ export default function EventScheduleModal({ labels, captchaSiteKey }: Props) {
         email: data.email,
         timeSuggestion: data.time,
         message: data.message,
-        turnstileToken: captchaToken || '',
+        turnstileToken: token || '',
       });
       trackEvent('form_submission', { type: 'event' });
       setSubmitted(true);
