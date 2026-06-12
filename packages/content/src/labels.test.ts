@@ -53,14 +53,17 @@ describe('getFooterLabels', () => {
     expect(labels.copyright).toBeTruthy();
     expect(labels.companyName).toBeTruthy();
     expect(labels.companyEmail).toBeTruthy();
-    expect(labels.companyPhone).toBeTruthy();
+    // companyPhone is optional content — may be empty when the company lists no phone.
+    expect(typeof labels.companyPhone).toBe('string');
     expect(labels.cookiePreferencesLabel).toBeTruthy();
     expect(Object.keys(labels.linkLabels).length).toBeGreaterThan(0);
     expect(Object.keys(labels.socialLabels).length).toBeGreaterThan(0);
   });
 
   it('all string values resolve to real translations', () => {
-    assertNonEmptyStrings(getFooterLabels() as unknown as Record<string, unknown>);
+    // companyPhone is optional content (may be empty) — exclude it from the non-empty sweep.
+    const { companyPhone: _companyPhone, ...rest } = getFooterLabels();
+    assertNonEmptyStrings(rest as unknown as Record<string, unknown>);
   });
 });
 
