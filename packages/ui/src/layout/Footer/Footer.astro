@@ -102,11 +102,15 @@ const socialLinks = [
           label={labels.companyEmail}
           class="footer-link"
         />
-        <ObfuscatedLink
-          href={`tel:${labels.companyPhone.replace(/\s/g, '')}`}
-          label={labels.companyPhone}
-          class="footer-link"
-        />
+        {
+          labels.companyPhone && (
+            <ObfuscatedLink
+              href={`tel:${labels.companyPhone.replace(/\s/g, '')}`}
+              label={labels.companyPhone}
+              class="footer-link"
+            />
+          )
+        }
       </address>
     </div>
   </div>
