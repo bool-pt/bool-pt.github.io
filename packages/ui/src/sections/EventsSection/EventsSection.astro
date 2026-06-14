@@ -22,6 +22,7 @@ interface Props {
   description: string;
   cardHeading: string;
   cta: string;
+  ctaHref?: string;
   meetCta?: string;
   meetHref?: string;
   calendarLabels: CalendarLabels;
@@ -35,6 +36,7 @@ const {
   description,
   cardHeading,
   cta,
+  ctaHref = ROUTES.events,
   meetCta,
   meetHref,
   calendarLabels,
@@ -100,7 +102,7 @@ const calendarEvents = events.map((e) => ({
         {
           hasMore && (
             <div class="events-cta-wrap">
-              <ButtonLink href={ROUTES.events} variant="outline" class="events-expand-trigger">
+              <ButtonLink href={ctaHref} variant="outline" class="events-expand-trigger">
                 {cta}
               </ButtonLink>
             </div>

@@ -76,20 +76,27 @@ const heroSlides = tCollection(
   [
     'title',
     'subtitle',
+    'backgroundImage',
     'cta.primary.label',
     'cta.primary.href',
     'cta.secondary.label',
     'cta.secondary.href',
   ],
   locale
-).map((s) => ({
-  title: s.title,
-  subtitle: s.subtitle,
-  ctas: {
-    primary: { label: s['cta.primary.label'], href: s['cta.primary.href'] },
-    secondary: { label: s['cta.secondary.label'], href: s['cta.secondary.href'] },
-  },
-}));
+).map((s) => {
+  const slideBg = s.backgroundImage ? resolveImage(s.backgroundImage) : undefined;
+  return {
+    title: s.title,
+    subtitle: s.subtitle,
+    backgroundImage: slideBg
+      ? { src: slideBg.src, width: slideBg.width, height: slideBg.height }
+      : undefined,
+    ctas: {
+      primary: { label: s['cta.primary.label'], href: s['cta.primary.href'] },
+      secondary: { label: s['cta.secondary.label'], href: s['cta.secondary.href'] },
+    },
+  };
+});
 
 const bgNewsletterBar = tOptional('newsletterBar.backgroundImage');
 const bgPowerAi = tOptional('powerAi.backgroundImage');
@@ -110,88 +117,115 @@ const bgContactSection = tOptional('contactSection.backgroundImage');
   headerLabels={getHeaderLabels(locale)}
   footerLabels={getFooterLabels(locale)}
 >
-  <HeroSection
-    ariaLabel={t('hero.aria', locale)}
-    slides={heroSlides}
-    backgroundImage={resolveImage(t('hero.backgroundImage', locale))}
-    carouselAriaLabels={{
-      slideIndicators: t('carousel.slideIndicators.aria', locale),
-      slide: t('carousel.slideN.aria', locale),
-    }}
-  />
-  <NewsletterBarSection
-    ariaLabel={t('newsletter.subscription.aria', locale)}
-    heading={t('newsletterBar.heading', locale)}
-    sub={t('newsletterBar.sub', locale)}
-    newsletterLabels={getNewsletterLabels(locale)}
-    backgroundImage={bgNewsletterBar ? resolveImage(bgNewsletterBar) : undefined}
-  />
-  <PowerAISection
-    heading={t('powerAi.heading', locale)}
-    body1={t('powerAi.body1', locale)}
-    body2={t('powerAi.body2', locale)}
-    cta={t('powerAi.cta', locale)}
-    imageAlt={t('powerAi.image.alt', locale)}
-    image={resolveImage(t('powerAi.image', locale))}
-    backgroundImage={bgPowerAi ? resolveImage(bgPowerAi) : undefined}
-  />
-  <ServicesSection
-    heading={t('serviceCards.heading', locale)}
-    services={serviceItems}
-    learnMoreLabel={t('common.learnMore', locale)}
-    backgroundImage={bgServices ? resolveImage(bgServices) : undefined}
-  />
-  <PromiseSection
-    heading={t('ourPromise.heading', locale)}
-    body1={t('ourPromise.body1', locale)}
-    body2={t('ourPromise.body2', locale)}
-    cta={t('ourPromise.cta', locale)}
-    models={modelItems}
-    learnMoreLabel={t('common.learnMore', locale)}
-    backgroundImage={bgPromise ? resolveImage(bgPromise) : undefined}
-  />
-  <TestimonialsSection
-    heading={t('testimonials.heading', locale)}
-    description={t('testimonials.description', locale)}
-    testimonials={testimonialItems}
-    backgroundImage={bgTestimonials ? resolveImage(bgTestimonials) : undefined}
-  />
-  <PeopleSection
-    imageAlt={t('teamPreview.image.alt', locale)}
-    heading={t('teamPreview.heading', locale)}
-    body={t('teamPreview.body', locale)}
-    ctaJoin={t('teamPreview.cta.join', locale)}
-    ctaMeet={t('teamPreview.cta.meet', locale)}
-    image={resolveImage(t('teamPreview.image', locale))}
-    backgroundImage={bgPeople ? resolveImage(bgPeople) : undefined}
-  />
-  <InsightsSection
-    heading={t('insightsPreview.heading', locale)}
-    description={t('insightsPreview.description', locale)}
-    posts={postItems}
-    readMoreLabel={t('common.readMore', locale)}
-    backgroundImage={bgInsights ? resolveImage(bgInsights) : undefined}
-  />
-  <EventsSection
-    heading={t('eventsPreview.heading', locale)}
-    description={t('eventsPreview.description', locale)}
-    cardHeading={t('eventsPreview.cardHeading', locale)}
-    cta={t('eventsPreview.cta', locale)}
-    meetCta={t('eventsPreview.meetCta', locale)}
-    meetHref={t('eventsPreview.meetHref', locale)}
-    calendarLabels={getCalendarLabels(locale)}
-    scheduleLabels={getEventScheduleLabels(locale)}
-    events={eventItems}
-    backgroundImage={bgEvents ? resolveImage(bgEvents) : undefined}
-  />
-  <ContactSection
-    {...getContactSectionProps(locale)}
-    backgroundImage={bgContactSection ? resolveImage(bgContactSection) : undefined}
-  />
-  <NewsletterCTASection
-    heading={t('newsletterCta.heading', locale)}
-    body={t('newsletterCta.body', locale)}
-    newsletterLabels={getNewsletterLabels(locale)}
-    backgroundImage={bgNewsletterCta ? resolveImage(bgNewsletterCta) : undefined}
-  />
+  <div id="hero" class="section-anchor">
+    <HeroSection
+      ariaLabel={t('hero.aria', locale)}
+      slides={heroSlides}
+      backgroundImage={resolveImage(t('hero.backgroundImage', locale))}
+      carouselAriaLabels={{
+        slideIndicators: t('carousel.slideIndicators.aria', locale),
+        slide: t('carousel.slideN.aria', locale),
+      }}
+    />
+  </div>
+  <div id="newsletterBar" class="section-anchor">
+    <NewsletterBarSection
+      ariaLabel={t('newsletter.subscription.aria', locale)}
+      heading={t('newsletterBar.heading', locale)}
+      sub={t('newsletterBar.sub', locale)}
+      newsletterLabels={getNewsletterLabels(locale)}
+      backgroundImage={bgNewsletterBar ? resolveImage(bgNewsletterBar) : undefined}
+    />
+  </div>
+  <div id="powerAi" class="section-anchor">
+    <PowerAISection
+      heading={t('powerAi.heading', locale)}
+      body1={t('powerAi.body1', locale)}
+      body2={t('powerAi.body2', locale)}
+      cta={t('powerAi.cta', locale)}
+      ctaHref={t('powerAi.cta.href', locale)}
+      imageAlt={t('powerAi.image.alt', locale)}
+      image={resolveImage(t('powerAi.image', locale))}
+      backgroundImage={bgPowerAi ? resolveImage(bgPowerAi) : undefined}
+    />
+  </div>
+  <div id="serviceCards" class="section-anchor">
+    <ServicesSection
+      heading={t('serviceCards.heading', locale)}
+      services={serviceItems}
+      learnMoreLabel={t('common.learnMore', locale)}
+      backgroundImage={bgServices ? resolveImage(bgServices) : undefined}
+    />
+  </div>
+  <div id="ourPromise" class="section-anchor">
+    <PromiseSection
+      heading={t('ourPromise.heading', locale)}
+      body1={t('ourPromise.body1', locale)}
+      body2={t('ourPromise.body2', locale)}
+      cta={t('ourPromise.cta', locale)}
+      ctaHref={t('ourPromise.cta.href', locale)}
+      models={modelItems}
+      learnMoreLabel={t('common.learnMore', locale)}
+      backgroundImage={bgPromise ? resolveImage(bgPromise) : undefined}
+    />
+  </div>
+  <div id="testimonials" class="section-anchor">
+    <TestimonialsSection
+      heading={t('testimonials.heading', locale)}
+      description={t('testimonials.description', locale)}
+      testimonials={testimonialItems}
+      backgroundImage={bgTestimonials ? resolveImage(bgTestimonials) : undefined}
+    />
+  </div>
+  <div id="teamPreview" class="section-anchor">
+    <PeopleSection
+      imageAlt={t('teamPreview.image.alt', locale)}
+      heading={t('teamPreview.heading', locale)}
+      body={t('teamPreview.body', locale)}
+      ctaJoin={t('teamPreview.cta.join', locale)}
+      ctaJoinHref={t('teamPreview.cta.join.href', locale)}
+      ctaMeet={t('teamPreview.cta.meet', locale)}
+      ctaMeetHref={t('teamPreview.cta.meet.href', locale)}
+      image={resolveImage(t('teamPreview.image', locale))}
+      backgroundImage={bgPeople ? resolveImage(bgPeople) : undefined}
+    />
+  </div>
+  <div id="insightsPreview" class="section-anchor">
+    <InsightsSection
+      heading={t('insightsPreview.heading', locale)}
+      description={t('insightsPreview.description', locale)}
+      posts={postItems}
+      readMoreLabel={t('common.readMore', locale)}
+      backgroundImage={bgInsights ? resolveImage(bgInsights) : undefined}
+    />
+  </div>
+  <div id="eventsPreview" class="section-anchor">
+    <EventsSection
+      heading={t('eventsPreview.heading', locale)}
+      description={t('eventsPreview.description', locale)}
+      cardHeading={t('eventsPreview.cardHeading', locale)}
+      cta={t('eventsPreview.cta', locale)}
+      ctaHref={t('eventsPreview.cta.href', locale)}
+      meetCta={t('eventsPreview.meetCta', locale)}
+      meetHref={t('eventsPreview.meetHref', locale)}
+      calendarLabels={getCalendarLabels(locale)}
+      scheduleLabels={getEventScheduleLabels(locale)}
+      events={eventItems}
+      backgroundImage={bgEvents ? resolveImage(bgEvents) : undefined}
+    />
+  </div>
+  <div id="contactSection" class="section-anchor">
+    <ContactSection
+      {...getContactSectionProps(locale)}
+      backgroundImage={bgContactSection ? resolveImage(bgContactSection) : undefined}
+    />
+  </div>
+  <div id="newsletterCta" class="section-anchor">
+    <NewsletterCTASection
+      heading={t('newsletterCta.heading', locale)}
+      body={t('newsletterCta.body', locale)}
+      newsletterLabels={getNewsletterLabels(locale)}
+      backgroundImage={bgNewsletterCta ? resolveImage(bgNewsletterCta) : undefined}
+    />
+  </div>
 </BaseLayout>

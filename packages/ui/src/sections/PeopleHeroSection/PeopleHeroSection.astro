@@ -15,12 +15,24 @@ interface Props {
   heading: string;
   body: string;
   ctaMeet: string;
+  ctaMeetHref?: string;
   ctaJoin: string;
+  ctaJoinHref?: string;
   stats: Array<{ value: string; label: string }>;
   backgroundImage?: ImageMetadata;
 }
 
-const { tag, heading, body, ctaMeet, ctaJoin, stats, backgroundImage = heroBgFallback } = Astro.props;
+const {
+  tag,
+  heading,
+  body,
+  ctaMeet,
+  ctaMeetHref = '#team',
+  ctaJoin,
+  ctaJoinHref = ROUTES.contacts,
+  stats,
+  backgroundImage = heroBgFallback,
+} = Astro.props;
 ---
 
 <DarkPageHero
@@ -52,8 +64,8 @@ const { tag, heading, body, ctaMeet, ctaJoin, stats, backgroundImage = heroBgFal
       <Fragment slot="description">{body}</Fragment>
     </SectionIntro>
     <ActionRow class="hero-content-actions">
-      <ButtonLink href="#team" variant="primary">{ctaMeet}</ButtonLink>
-      <ButtonLink href={ROUTES.contacts} variant="outline">{ctaJoin}</ButtonLink>
+      <ButtonLink href={ctaMeetHref} variant="primary">{ctaMeet}</ButtonLink>
+      <ButtonLink href={ctaJoinHref} variant="outline">{ctaJoin}</ButtonLink>
     </ActionRow>
 
     <div class="hero-stats">

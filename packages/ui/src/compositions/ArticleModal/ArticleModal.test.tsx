@@ -29,6 +29,7 @@ const fullArticle: ArticleModalData = {
   frontImage: '/images/platform.jpg',
   challenge: 'Legacy systems were fragmented',
   solution: 'Unified microservices architecture',
+  benefits: 'Reduced costs and faster delivery',
   metrics: [
     { value: '50%', label: 'Cost Reduction' },
     { value: '3x', label: 'Faster Deploys' },
@@ -48,21 +49,19 @@ describe('ArticleModal', () => {
   });
 
   it('renders article title, category, and subtitle when open', () => {
-    render(
-      <ArticleModal article={fullArticle} open={true} onClose={vi.fn()} labels={labels} />
-    );
+    render(<ArticleModal article={fullArticle} open={true} onClose={vi.fn()} labels={labels} />);
 
     // Title appears twice: in h2 and in sr-only DialogPrimitive.Title
     expect(screen.getAllByText('Building a Platform').length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText('Engineering')).toBeInTheDocument();
     // Subtitle appears twice: in DialogPrimitive.Description (sr-only) and visible p
-    expect(screen.getAllByText('A deep dive into platform engineering').length).toBeGreaterThanOrEqual(1);
+    expect(
+      screen.getAllByText('A deep dive into platform engineering').length
+    ).toBeGreaterThanOrEqual(1);
   });
 
   it('renders challenge and solution sections', () => {
-    render(
-      <ArticleModal article={fullArticle} open={true} onClose={vi.fn()} labels={labels} />
-    );
+    render(<ArticleModal article={fullArticle} open={true} onClose={vi.fn()} labels={labels} />);
 
     expect(screen.getByText('Challenge')).toBeInTheDocument();
     expect(screen.getByText('Legacy systems were fragmented')).toBeInTheDocument();
@@ -71,9 +70,7 @@ describe('ArticleModal', () => {
   });
 
   it('renders metrics values and labels', () => {
-    render(
-      <ArticleModal article={fullArticle} open={true} onClose={vi.fn()} labels={labels} />
-    );
+    render(<ArticleModal article={fullArticle} open={true} onClose={vi.fn()} labels={labels} />);
 
     expect(screen.getByText('50%')).toBeInTheDocument();
     expect(screen.getByText('Cost Reduction')).toBeInTheDocument();
@@ -82,9 +79,7 @@ describe('ArticleModal', () => {
   });
 
   it('renders tech stack pills', () => {
-    render(
-      <ArticleModal article={fullArticle} open={true} onClose={vi.fn()} labels={labels} />
-    );
+    render(<ArticleModal article={fullArticle} open={true} onClose={vi.fn()} labels={labels} />);
 
     expect(screen.getByText('React')).toBeInTheDocument();
     expect(screen.getByText('Node.js')).toBeInTheDocument();
@@ -95,9 +90,7 @@ describe('ArticleModal', () => {
     const user = userEvent.setup();
     const onClose = vi.fn();
 
-    render(
-      <ArticleModal article={fullArticle} open={true} onClose={onClose} labels={labels} />
-    );
+    render(<ArticleModal article={fullArticle} open={true} onClose={onClose} labels={labels} />);
 
     const backButton = screen.getByRole('button', { name: /back to articles/i });
     await user.click(backButton);

@@ -1,5 +1,5 @@
 ---
-import { COMPANY, ROUTES } from '@bool/shared';
+import { COMPANY, ROUTES, SOCIAL } from '@bool/shared';
 import ExpertPortrait from '../../compositions/ExpertPortrait/ExpertPortrait.astro';
 import ActionRow from '../../primitives/ActionRow/ActionRow.astro';
 import ButtonLink from '../../primitives/ButtonLink/ButtonLink.astro';
@@ -15,21 +15,40 @@ interface Props {
   features: string[];
   availableConsultation: string;
   contactExpert: string;
+  contactExpertHref?: string;
+  email?: string;
+  linkedin?: string;
   image: ImageMetadata;
   reversed?: boolean;
+  /** Per-card anchor id, so links can target this specific card. */
+  id?: string;
 }
 
-const { expert, role, name, body, features, availableConsultation, contactExpert, image, reversed = false } = Astro.props;
+const {
+  expert,
+  role,
+  name,
+  body,
+  features,
+  availableConsultation,
+  contactExpert,
+  contactExpertHref = ROUTES.contacts,
+  email = COMPANY.email,
+  linkedin = SOCIAL.linkedin,
+  image,
+  reversed = false,
+  id,
+} = Astro.props;
 ---
 
-<article class:list={['techCard', { 'techCard--reversed': reversed }]}>
+<article id={id} class:list={['techCard', { 'techCard--reversed': reversed }]}>
   <div class="techCardPersonWrap">
     <ExpertPortrait
       name={expert}
       role={role}
       photo={image}
-      email={COMPANY.email}
-      linkedin="https://linkedin.com"
+      email={email}
+      linkedin={linkedin}
       colorScheme="light"
       class="techCardExpert"
     />
@@ -48,21 +67,19 @@ const { expert, role, name, body, features, availableConsultation, contactExpert
       <Fragment slot="heading">{name}</Fragment>
       <p>{body}</p>
     </TextBlock>
-    <ul class="techCardFeatures" role="list" style="--color-success: var(--color-surface-warm-dark); --check-border: 2.5px solid var(--black-10);">
-      {
-        features.map((feature) => (
-          <CheckListItem class="techCardFeature">
-            {feature}
-          </CheckListItem>
-        ))
-      }
+    <ul
+      class="techCardFeatures"
+      role="list"
+      style="--color-success: var(--color-surface-warm-dark); --check-border: 2.5px solid var(--black-10);"
+    >
+      {features.map((feature) => <CheckListItem class="techCardFeature">{feature}</CheckListItem>)}
     </ul>
     <ActionRow gap="2.5rem" class="techCardActions">
       <span class="techCardConsultation">
         <Icon name="calendar" size={20} />
         <span>{availableConsultation}</span>
       </span>
-      <ButtonLink href={ROUTES.contacts} variant="primary">{contactExpert}</ButtonLink>
+      <ButtonLink href={contactExpertHref} variant="primary">{contactExpert}</ButtonLink>
     </ActionRow>
   </div>
 </article>
@@ -78,6 +95,7 @@ const { expert, role, name, body, features, availableConsultation, contactExpert
     max-inline-size: 100%;
     margin-inline: auto;
     overflow: hidden;
+    scroll-margin-block-start: 7rem;
   }
 
   @media (min-width: 768px) {

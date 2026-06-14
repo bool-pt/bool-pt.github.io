@@ -24,6 +24,7 @@ export {
   addNestedItem,
   removeNestedItem,
   reorderNestedItem,
+  upsertModalField,
 } from './src/operations.ts';
 export { classifyField } from './src/field-kinds.ts';
 export type { FieldKind as FieldKindType } from './src/types.ts';

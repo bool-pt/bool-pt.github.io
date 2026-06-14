@@ -17,7 +17,9 @@ interface Props {
   body: string;
   sectors: string[];
   ctaStories: string;
+  ctaStoriesHref?: string;
   ctaServices: string;
+  ctaServicesHref?: string;
   statsHighlight?: { value: string; label: string };
   stats: Array<{ value: string; label: string }>;
   backgroundImage?: ImageMetadata;
@@ -29,7 +31,9 @@ const {
   body,
   sectors,
   ctaStories,
+  ctaStoriesHref = '#caseStudies',
   ctaServices,
+  ctaServicesHref = ROUTES.services,
   statsHighlight,
   stats,
   backgroundImage = heroBgFallback,
@@ -82,8 +86,8 @@ const {
             <SectorTagGrid sectors={sectors} />
           </div>
           <div class="portfolio-hero-actions">
-            <ButtonLink href="#case-studies" variant="primary">{ctaStories}</ButtonLink>
-            <ButtonLink href={ROUTES.services} variant="outline">{ctaServices}</ButtonLink>
+            <ButtonLink href={ctaStoriesHref} variant="primary">{ctaStories}</ButtonLink>
+            <ButtonLink href={ctaServicesHref} variant="outline">{ctaServices}</ButtonLink>
           </div>
         </div>
         <StatsCardGrid highlight={statsHighlight} stats={stats} />

@@ -49,60 +49,75 @@ const technologies = tCollection('featuredTech.items', ['name', 'color', 'href',
   headerLabels={getHeaderLabels()}
   footerLabels={getFooterLabels()}
 >
-  <AboutHeroSection
-    heading={t('aboutHero.heading')}
-    body1={t('aboutHero.body1')}
-    body2={t('aboutHero.body2')}
-    missionTitle={t('aboutHero.mission.title')}
-    missionBody={t('aboutHero.mission.body')}
-    visionTitle={t('aboutHero.vision.title')}
-    visionBody={t('aboutHero.vision.body')}
-    backgroundImage={resolveImage(t('aboutHero.backgroundImage'))}
-  />
-  <BoolInNumbersSection
-    heading={t('statsOverview.heading')}
-    body={t('statsOverview.body')}
-    imageAlt={t('statsOverview.image.alt')}
-    stats={stats}
-    image={resolveImage(t('statsOverview.image'))}
-    backgroundImage={bgBoolInNumbers ? resolveImage(bgBoolInNumbers) : undefined}
-  />
-  <PowerAISection
-    variant="image-left"
-    heading={t('powerAi.heading')}
-    body1={t('powerAi.body1')}
-    body2={t('powerAi.body2')}
-    cta={t('powerAi.cta')}
-    imageAlt={t('powerAi.image.alt')}
-    image={resolveImage(t('powerAi.image'))}
-    backgroundImage={bgPowerAi ? resolveImage(bgPowerAi) : undefined}
-  />
-  <FeaturedTechSection
-    heading={t('featuredTech.heading')}
-    body={t('featuredTech.body')}
-    logoSuffix={t('featuredTech.logoSuffix')}
-    technologies={technologies}
-    learnMoreLabel={t('common.learnMore')}
-    backgroundImage={bgFeaturedTech ? resolveImage(bgFeaturedTech) : undefined}
-  />
-  <TeamGridSection
-    payload={teamGridPayload}
-    backgroundImage={teamGridBg ? resolveImage(teamGridBg) : undefined}
-  />
-  <FromPortugalSection
-    heading={t('officeLocations.heading')}
-    description={t('officeLocations.body')}
-    offices={offices}
-    carouselAriaLabels={{
-      prev: t('carousel.previous'),
-      next: t('carousel.next'),
-      imageAlt: t('officeLocations.imageAlt'),
-    }}
-    backgroundImage={bgFromPortugal ? resolveImage(bgFromPortugal) : undefined}
-  />
-  <ContactSection
-    {...getContactSectionProps()}
-    background="var(--color-surface-black)"
-    backgroundImage={bgContactSection ? resolveImage(bgContactSection) : undefined}
-  />
+  <div id="aboutHero" class="section-anchor">
+    <AboutHeroSection
+      heading={t('aboutHero.heading')}
+      body1={t('aboutHero.body1')}
+      body2={t('aboutHero.body2')}
+      missionTitle={t('aboutHero.mission.title')}
+      missionBody={t('aboutHero.mission.body')}
+      visionTitle={t('aboutHero.vision.title')}
+      visionBody={t('aboutHero.vision.body')}
+      backgroundImage={resolveImage(t('aboutHero.backgroundImage'))}
+    />
+  </div>
+  <div id="statsOverview" class="section-anchor">
+    <BoolInNumbersSection
+      heading={t('statsOverview.heading')}
+      body={t('statsOverview.body')}
+      imageAlt={t('statsOverview.image.alt')}
+      stats={stats}
+      image={resolveImage(t('statsOverview.image'))}
+      backgroundImage={bgBoolInNumbers ? resolveImage(bgBoolInNumbers) : undefined}
+    />
+  </div>
+  <div id="powerAi" class="section-anchor">
+    <PowerAISection
+      variant="image-left"
+      heading={t('powerAi.heading')}
+      body1={t('powerAi.body1')}
+      body2={t('powerAi.body2')}
+      cta={t('powerAi.cta')}
+      ctaHref={t('powerAi.cta.href')}
+      imageAlt={t('powerAi.image.alt')}
+      image={resolveImage(t('powerAi.image'))}
+      backgroundImage={bgPowerAi ? resolveImage(bgPowerAi) : undefined}
+    />
+  </div>
+  <div id="featuredTech" class="section-anchor">
+    <FeaturedTechSection
+      heading={t('featuredTech.heading')}
+      body={t('featuredTech.body')}
+      logoSuffix={t('featuredTech.logoSuffix')}
+      technologies={technologies}
+      learnMoreLabel={t('common.learnMore')}
+      backgroundImage={bgFeaturedTech ? resolveImage(bgFeaturedTech) : undefined}
+    />
+  </div>
+  <div id="teamGrid" class="section-anchor">
+    <TeamGridSection
+      payload={teamGridPayload}
+      backgroundImage={teamGridBg ? resolveImage(teamGridBg) : undefined}
+    />
+  </div>
+  <div id="officeLocations" class="section-anchor">
+    <FromPortugalSection
+      heading={t('officeLocations.heading')}
+      description={t('officeLocations.body')}
+      offices={offices}
+      carouselAriaLabels={{
+        prev: t('carousel.previous'),
+        next: t('carousel.next'),
+        imageAlt: t('officeLocations.imageAlt'),
+      }}
+      backgroundImage={bgFromPortugal ? resolveImage(bgFromPortugal) : undefined}
+    />
+  </div>
+  <div id="contactSection" class="section-anchor">
+    <ContactSection
+      {...getContactSectionProps()}
+      background="var(--color-surface-black)"
+      backgroundImage={bgContactSection ? resolveImage(bgContactSection) : undefined}
+    />
+  </div>
 </BaseLayout>

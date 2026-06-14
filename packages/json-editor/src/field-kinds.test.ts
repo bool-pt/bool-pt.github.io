@@ -42,6 +42,17 @@ describe('classifyField', () => {
     });
   });
 
+  describe('link kind', () => {
+    it.each([
+      ['serviceCards.items.1.href'],
+      ['ourPromise.items.2.href'],
+      ['hero.slides.1.cta.primary.href'],
+      ['featuredTech.items.1.href'],
+    ])('classifies %s as link', (key) => {
+      expect(classifyField(key)).toBe('link');
+    });
+  });
+
   it('matches only the last dot-segment, not arbitrary substrings', () => {
     // 'image' appears as a sub-segment but the suffix is 'alt'
     expect(classifyField('teamPreview.image.alt')).toBe('text');

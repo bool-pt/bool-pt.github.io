@@ -79,6 +79,9 @@ describe('addItem', () => {
     expect(group?.items[3]?.index).toBe('4');
     expect(group?.items[3]?.fields.every((f) => f.value === '')).toBe(true);
     expect(group?.items[3]?.fields.every((f) => f.isDirty === true)).toBe(true);
+    // New fields must be classified (media/icon/link/...), not left undefined,
+    // so they render the correct editor instead of a plain text input.
+    expect(group?.items[3]?.fields.every((f) => f.kind !== undefined)).toBe(true);
   });
 
   it('returns sections unchanged for nonexistent group prefix', () => {
@@ -103,9 +106,7 @@ describe('removeItem', () => {
     expect(group?.items[0]?.index).toBe('1');
     expect(group?.items[1]?.index).toBe('2');
     // The renamed item should have Charlie's data
-    const renamedQuote = group?.items[1]?.fields.find((f) =>
-      f.key.endsWith('.quote'),
-    );
+    const renamedQuote = group?.items[1]?.fields.find((f) => f.key.endsWith('.quote'));
     expect(renamedQuote?.value).toBe('Excellent!');
   });
 
@@ -156,7 +157,7 @@ describe('reorderItem', () => {
     const updatedSection = updated.find((s) => s.name === 'testimonials');
     const originalSection = sections.find((s) => s.name === 'testimonials');
     expect(updatedSection?.repeatingGroups[0]?.items.length).toBe(
-      originalSection?.repeatingGroups[0]?.items.length,
+      originalSection?.repeatingGroups[0]?.items.length
     );
   });
 });

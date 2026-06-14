@@ -144,11 +144,23 @@ export default function MediaPicker({ fieldKey, value, onChange, disabled = fals
                   />
                 </div>
 
-                {visibleEntries.length === 0 ? (
-                  <p className={styles.empty}>No files in this folder.</p>
-                ) : (
-                  <div className={styles.grid}>
-                    {visibleEntries.map((entry) => {
+                <div className={styles.grid}>
+                  <button
+                    type="button"
+                    className={cn(styles.tile, value.trim() === '' && styles.tileActive)}
+                    onClick={() => {
+                      onChange('');
+                      setOpen(false);
+                    }}
+                    title="Leave empty (no image)"
+                  >
+                    <span className={styles.tileNoneThumb} aria-hidden="true">
+                      <X size={28} />
+                    </span>
+                    <span className={styles.tileLabel}>No image</span>
+                  </button>
+                  {visibleEntries.length > 0 &&
+                    visibleEntries.map((entry) => {
                       const isActive = entry.relativePath === value;
                       return (
                         <button
@@ -183,7 +195,9 @@ export default function MediaPicker({ fieldKey, value, onChange, disabled = fals
                         </button>
                       );
                     })}
-                  </div>
+                </div>
+                {visibleEntries.length === 0 && (
+                  <p className={styles.empty}>No files in this folder.</p>
                 )}
 
                 <p className={styles.footerNote}>

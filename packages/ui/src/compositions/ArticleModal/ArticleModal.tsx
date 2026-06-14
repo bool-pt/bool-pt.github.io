@@ -15,6 +15,7 @@ export interface ArticleModalData {
   frontImage?: string;
   challenge?: string;
   solution?: string;
+  benefits?: string;
   metrics?: Metric[];
   techStack?: string[];
 }
@@ -61,6 +62,8 @@ export default function ArticleModal({ article, open, onClose, labels }: Props) 
             <DialogPrimitive.Description className="sr-only">
               {article.category} — {article.title}
             </DialogPrimitive.Description>
+
+            {article.benefits && <p className={styles.benefits}>{article.benefits}</p>}
 
             {article.frontImage && (
               <div className={styles.imageWrap}>

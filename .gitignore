@@ -52,9 +52,10 @@ pnpm-debug.log*
 # Anthropic-managed skill assets (binary fonts, templates) — installed per-machine by Claude Code
 .claude/skills/anthropic/
 
-# Google Drive synced media — populated by sync-drive.yml, never commit
+# Google Drive synced media — populated by sync-drive.yml, never commit.
+# (client-logos is intentionally NOT ignored: those brand assets are committed
+#  so they're version-controlled and present at build without a Drive sync.)
 packages/media/images/blog-posts/
-packages/media/images/client-logos/
 packages/media/images/events/
 packages/media/images/knowledge-center/
 packages/media/images/news/

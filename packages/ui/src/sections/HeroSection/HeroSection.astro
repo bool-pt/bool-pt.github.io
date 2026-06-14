@@ -9,6 +9,7 @@ interface Props {
   slides: Array<{
     title: string;
     subtitle: string;
+    backgroundImage?: { src: string; width: number; height: number };
     ctas: {
       primary: { label: string; href: string };
       secondary: { label: string; href: string };

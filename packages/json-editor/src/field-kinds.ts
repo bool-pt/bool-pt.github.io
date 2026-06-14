@@ -20,6 +20,8 @@ const MEDIA_SUFFIXES = new Set([
 
 const ICON_SUFFIXES = new Set(['iconName', 'icon']);
 
+const LINK_SUFFIXES = new Set(['href', 'url', 'link']);
+
 /** Maps key suffix → ordered option list for select fields. */
 const SELECT_OPTIONS: Record<string, SelectOption[]> = {
   ctaType: [
@@ -35,6 +37,7 @@ export function classifyField(key: string): FieldKind {
   if (MEDIA_SUFFIXES.has(lastSegment)) return 'media';
   if (ICON_SUFFIXES.has(lastSegment)) return 'icon';
   if (SELECT_OPTIONS[lastSegment]) return 'select';
+  if (LINK_SUFFIXES.has(lastSegment)) return 'link';
   return 'text';
 }
 

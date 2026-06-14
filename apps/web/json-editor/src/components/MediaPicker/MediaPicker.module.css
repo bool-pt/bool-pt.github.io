@@ -259,6 +259,18 @@
   background: var(--editor-muted-bg);
 }
 
+.tileNoneThumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-sm, 0.125rem);
+  background: var(--editor-muted-bg);
+  border: 1px dashed var(--editor-input-border);
+  color: var(--editor-text-muted);
+}
+
 .tileLabel {
   font-family: var(--font-mono, monospace);
   font-size: 0.6875rem;

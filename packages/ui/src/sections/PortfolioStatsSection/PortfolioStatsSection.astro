@@ -91,12 +91,14 @@ const { tag, heading, body, stats, recognitions, backgroundImage } = Astro.props
     }
   }
 
+  /* Mobile-first: plain (unskewed) card that grows with its content. The skew
+     is a desktop-only flourish — on narrow screens it causes horizontal
+     overflow, and a fixed height clips the multi-line recognition items. */
   .recognitions-card {
     background-color: var(--color-background);
     border-radius: 0.75rem;
     box-shadow: var(--shadow-card);
     padding: 1.5rem;
-    transform: skewX(-6deg);
     max-inline-size: 1216px;
     margin-inline: auto;
     display: flex;
@@ -107,15 +109,15 @@ const { tag, heading, body, stats, recognitions, backgroundImage } = Astro.props
     .recognitions-card {
       transform: skewX(-12deg);
       padding: 2.5rem 4rem;
-      block-size: 250px;
+      /* min, not fixed — lets tall items expand the card instead of overflowing */
+      min-block-size: 250px;
     }
   }
 
   .recognitions-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2rem;
-    transform: skewX(6deg);
+    gap: 1.5rem;
     inline-size: 100%;
   }
 
