@@ -8,10 +8,17 @@ interface Props {
   heading: string;
   body: string;
   button: string;
+  buttonHref?: string;
   backgroundImage?: ImageMetadata;
 }
 
-const { heading, body, button, backgroundImage = ctaBgFallback } = Astro.props;
+const {
+  heading,
+  body,
+  button,
+  buttonHref = ROUTES.contacts,
+  backgroundImage = ctaBgFallback,
+} = Astro.props;
 ---
 
 <CTASection
@@ -24,7 +31,7 @@ const { heading, body, button, backgroundImage = ctaBgFallback } = Astro.props;
 >
   <Fragment slot="heading">{heading}</Fragment>
   <Fragment slot="body">{body}</Fragment>
-  <ButtonLink href={ROUTES.contacts} variant="primary">{button}</ButtonLink>
+  <ButtonLink href={buttonHref} variant="primary">{button}</ButtonLink>
 </CTASection>
 
 <style>

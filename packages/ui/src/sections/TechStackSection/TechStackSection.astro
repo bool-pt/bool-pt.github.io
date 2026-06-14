@@ -1,5 +1,5 @@
 ---
-import { COMPANY, ROUTES } from '@bool/shared';
+import { COMPANY, ROUTES, SOCIAL, slugify } from '@bool/shared';
 import ExpertPortrait from '../../compositions/ExpertPortrait/ExpertPortrait.astro';
 import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
 import ButtonLink from '../../primitives/ButtonLink/ButtonLink.astro';
@@ -17,20 +17,26 @@ interface TechPlatform {
   body: string;
   image: ImageMetadata;
   features: string[];
+  email?: string;
+  linkedin?: string;
 }
 
 interface Props {
   readinessExpertName: string;
   readinessExpertRole: string;
   readinessExpertPhoto: ImageMetadata;
+  readinessExpertEmail?: string;
+  readinessExpertLinkedin?: string;
   readinessHeading: string;
   readinessBody: string;
   readinessChecks: string[];
   readinessCta: string;
+  readinessCtaHref?: string;
   techHeading: string;
   techBody: string;
   availableConsultation: string;
   contactExpert: string;
+  contactExpertHref?: string;
   platforms: TechPlatform[];
   backgroundImage?: ImageMetadata;
 }
@@ -39,14 +45,18 @@ const {
   readinessExpertName,
   readinessExpertRole,
   readinessExpertPhoto,
+  readinessExpertEmail = COMPANY.email,
+  readinessExpertLinkedin = SOCIAL.linkedin,
   readinessHeading,
   readinessBody,
   readinessChecks,
   readinessCta,
+  readinessCtaHref = ROUTES.contacts,
   techHeading,
   techBody,
   availableConsultation,
   contactExpert,
+  contactExpertHref = ROUTES.contacts,
   platforms,
   backgroundImage,
 } = Astro.props;
@@ -72,8 +82,8 @@ const {
         name={readinessExpertName}
         role={readinessExpertRole}
         photo={readinessExpertPhoto}
-        email={COMPANY.email}
-        linkedin="https://linkedin.com"
+        email={readinessExpertEmail}
+        linkedin={readinessExpertLinkedin}
         colorScheme="dark"
         class="readinessExpert"
       />
@@ -102,7 +112,7 @@ const {
             ))
           }
         </ul>
-        <ButtonLink href={ROUTES.contacts} variant="primary">{readinessCta}</ButtonLink>
+        <ButtonLink href={readinessCtaHref} variant="primary">{readinessCta}</ButtonLink>
       </div>
     </article>
 
@@ -115,6 +125,7 @@ const {
       {
         platforms.map((platform, index) => (
           <TechCard
+            id={`techStack-${slugify(platform.name)}`}
             expert={platform.expert}
             role={platform.role}
             name={platform.name}
@@ -122,6 +133,9 @@ const {
             features={platform.features}
             availableConsultation={availableConsultation}
             contactExpert={contactExpert}
+            contactExpertHref={contactExpertHref}
+            email={platform.email}
+            linkedin={platform.linkedin}
             image={platform.image}
             reversed={index % 2 === 1}
           />

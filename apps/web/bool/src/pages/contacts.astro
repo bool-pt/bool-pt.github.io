@@ -21,19 +21,23 @@ const bgNewsletterCta = tOptional('newsletterCta.backgroundImage');
   headerLabels={getHeaderLabels()}
   footerLabels={getFooterLabels()}
 >
-  <ContactsHeroSection
-    heading={t('contactsHero.heading')}
-    body={t('contactForm.body')}
-    addressLabel={t('contactForm.addressLabel')}
-    addressLines={tList('contactForm.addressLines')}
-    contactEmail={t('company.email')}
-    formLabels={getContactFormLabels()}
-    backgroundImage={bgContactsHero ? resolveImage(bgContactsHero) : undefined}
-  />
-  <NewsletterCTASection
-    heading={t('newsletterCta.heading')}
-    body={t('newsletterCta.body')}
-    newsletterLabels={getNewsletterLabels()}
-    backgroundImage={bgNewsletterCta ? resolveImage(bgNewsletterCta) : undefined}
-  />
+  <div id="contactsHero" class="section-anchor">
+    <ContactsHeroSection
+      heading={t('contactsHero.heading')}
+      body={t('contactForm.body')}
+      addressLabel={t('contactForm.addressLabel')}
+      addressLines={tList('contactForm.addressLines')}
+      contactEmail={t('company.email')}
+      formLabels={getContactFormLabels()}
+      backgroundImage={bgContactsHero ? resolveImage(bgContactsHero) : undefined}
+    />
+  </div>
+  <div id="newsletterCta" class="section-anchor">
+    <NewsletterCTASection
+      heading={t('newsletterCta.heading')}
+      body={t('newsletterCta.body')}
+      newsletterLabels={getNewsletterLabels()}
+      backgroundImage={bgNewsletterCta ? resolveImage(bgNewsletterCta) : undefined}
+    />
+  </div>
 </BaseLayout>

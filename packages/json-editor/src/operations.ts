@@ -102,12 +102,19 @@ export function addItem(sections: Section[], groupPrefix: string): Section[] {
 
     const nextIndex = numericIndices.length > 0 ? String(Math.max(...numericIndices) + 1) : '1';
 
-    // Create new item with empty fields from the template
-    const newFields: TranslationField[] = template.fieldSuffixes.map((suffix) => ({
-      key: suffix ? `${groupPrefix}.${nextIndex}.${suffix}` : `${groupPrefix}.${nextIndex}`,
-      value: '',
-      isDirty: true,
-    }));
+    // Create new item with empty fields from the template. Classify each field
+    // (media/icon/link/select/text) so it renders the right editor, just like
+    // freshly-parsed fields and addNestedItem do.
+    const newFields: TranslationField[] = template.fieldSuffixes.map((suffix) => {
+      const key = suffix ? `${groupPrefix}.${nextIndex}.${suffix}` : `${groupPrefix}.${nextIndex}`;
+      return {
+        key,
+        value: '',
+        isDirty: true,
+        kind: classifyField(key),
+        options: getFieldOptions(key),
+      };
+    });
 
     const newItem = { index: nextIndex, fields: newFields };
     const newItems = [...items, newItem];
@@ -402,4 +409,51 @@ function mapNestedGroup(
     newGroups[gi] = newGroup;
     return { ...section, repeatingGroups: newGroups };
   });
+}
+
+/**
+ * Create or update a single field of a content modal (`modals.<key>.<suffix>`).
+ * Used by the link picker to author modals inline. Adds the field to the
+ * `modals` section, creating that section if it doesn't exist yet.
+ */
+export function upsertModalField(
+  sections: Section[],
+  modalKey: string,
+  suffix: string,
+  value: string
+): Section[] {
+  const fullKey = `modals.${modalKey}.${suffix}`;
+  const makeField = (): TranslationField => ({
+    key: fullKey,
+    value,
+    isDirty: true,
+    kind: classifyField(fullKey),
+    options: getFieldOptions(fullKey),
+  });
+
+  let found = false;
+  const next = sections.map((section) => {
+    if (section.name !== 'modals') return section;
+    found = true;
+    const idx = section.fields.findIndex((f) => f.key === fullKey);
+    const existing = section.fields[idx];
+    if (existing) {
+      const newFields = [...section.fields];
+      newFields[idx] = { ...existing, value, isDirty: true };
+      return { ...section, fields: newFields };
+    }
+    return {
+      ...section,
+      fields: [...section.fields, makeField()],
+      keyCount: section.keyCount + 1,
+    };
+  });
+
+  if (found) return next;
+
+  // No `modals` section yet — create one.
+  return [
+    ...sections,
+    { name: 'modals', label: 'Modals', fields: [makeField()], repeatingGroups: [], keyCount: 1 },
+  ];
 }

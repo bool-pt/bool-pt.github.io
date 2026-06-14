@@ -5,6 +5,7 @@ import { useEditor } from '../../context/EditorContext.tsx';
 import { cn } from '../../lib/cn.ts';
 import { l } from '../../locales/index.ts';
 import IconPicker from '../IconPicker/IconPicker.tsx';
+import LinkPicker from '../LinkPicker/LinkPicker.tsx';
 import MediaPicker from '../MediaPicker/MediaPicker.tsx';
 import styles from './FieldEditor.module.css';
 
@@ -41,14 +42,41 @@ export default function FieldEditor({ field, disabled = false }: FieldEditorProp
     }
   }, [localValue, field.key, field.value, dispatch]);
 
+  // Undo/redo while the field is focused. First Ctrl+Z reverts uncommitted
+  // typing to the last committed value; with nothing pending it falls through
+  // to app-level undo. Returns true when it handled the event.
+  const handleUndoRedo = useCallback(
+    (e: React.KeyboardEvent): boolean => {
+      if (!(e.ctrlKey || e.metaKey)) return false;
+      const key = e.key.toLowerCase();
+      if (key === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        if (localValue !== field.value) {
+          setLocalValue(field.value);
+        } else {
+          dispatch({ type: 'UNDO' });
+        }
+        return true;
+      }
+      if (key === 'y' || (key === 'z' && e.shiftKey)) {
+        e.preventDefault();
+        dispatch({ type: 'REDO' });
+        return true;
+      }
+      return false;
+    },
+    [localValue, field.value, dispatch]
+  );
+
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
+      if (handleUndoRedo(e)) return;
       if (e.key === 'Enter' && !isLongValue(localValue)) {
         e.preventDefault();
         (e.target as HTMLElement).blur();
       }
     },
-    [localValue]
+    [handleUndoRedo, localValue]
   );
 
   const handleSpecializedChange = useCallback(
@@ -90,6 +118,12 @@ export default function FieldEditor({ field, disabled = false }: FieldEditorProp
             onChange={handleSpecializedChange}
             disabled={disabled}
           />
+        ) : kind === 'link' ? (
+          <LinkPicker
+            value={disabled ? field.value : localValue}
+            onChange={handleSpecializedChange}
+            disabled={disabled}
+          />
         ) : kind === 'select' && field.options ? (
           <select
             className={cn(styles.input, disabled && styles.inputDisabled)}
@@ -119,6 +153,7 @@ export default function FieldEditor({ field, disabled = false }: FieldEditorProp
             value={disabled ? field.value : localValue}
             onChange={disabled ? undefined : (e) => setLocalValue(e.target.value)}
             onBlur={disabled ? undefined : handleBlur}
+            onKeyDown={disabled ? undefined : handleUndoRedo}
             rows={3}
             disabled={disabled}
           />

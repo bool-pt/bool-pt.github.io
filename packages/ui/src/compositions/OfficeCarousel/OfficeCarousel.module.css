@@ -37,12 +37,6 @@
   flex: 1;
 }
 
-@media (min-width: 768px) {
-  .viewport {
-    margin-inline-end: calc(-50vw + 50%);
-  }
-}
-
 .track {
   display: flex;
   gap: 1.5rem;

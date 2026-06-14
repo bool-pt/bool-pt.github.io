@@ -13,11 +13,22 @@ interface Props {
   heading: string;
   body: string;
   ctaExplore: string;
+  ctaExploreHref?: string;
   ctaSubscribe: string;
+  ctaSubscribeHref?: string;
   backgroundImage?: ImageMetadata;
 }
 
-const { tag, heading, body, ctaExplore, ctaSubscribe, backgroundImage = heroBgFallback } = Astro.props;
+const {
+  tag,
+  heading,
+  body,
+  ctaExplore,
+  ctaExploreHref = '#knowledgeCenter',
+  ctaSubscribe,
+  ctaSubscribeHref = '#newsletter',
+  backgroundImage = heroBgFallback,
+} = Astro.props;
 ---
 
 <DarkPageHero
@@ -51,8 +62,8 @@ const { tag, heading, body, ctaExplore, ctaSubscribe, backgroundImage = heroBgFa
       <Fragment slot="description">{body}</Fragment>
     </SectionIntro>
     <ActionRow class="insights-hero-actions">
-      <ButtonLink href="#knowledge" variant="primary">{ctaExplore}</ButtonLink>
-      <ButtonLink href="#newsletter" variant="outline" class="hero-btn--subscribe"
+      <ButtonLink href={ctaExploreHref} variant="primary">{ctaExplore}</ButtonLink>
+      <ButtonLink href={ctaSubscribeHref} variant="outline" class="hero-btn--subscribe"
         >{ctaSubscribe}</ButtonLink
       >
     </ActionRow>

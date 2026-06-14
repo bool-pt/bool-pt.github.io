@@ -142,6 +142,20 @@
   margin-block-end: clamp(1rem, 3vw, 2rem);
 }
 
+.backBenefits {
+  font-size: clamp(0.8125rem, 2vw, 15px);
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--color-on-dark);
+  margin: 0 0 clamp(0.75rem, 2vw, 1rem);
+  /* Clamp the long benefits copy so it never overflows the flip card */
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 /* Metrics */
 .metricsStrip {
   display: flex;

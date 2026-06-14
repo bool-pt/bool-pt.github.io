@@ -1,9 +1,11 @@
 ---
 import GoogleAnalytics from '@bool/analytics/GoogleAnalytics.astro';
 import { CookieBanner } from '@bool/compliance';
+import { enKeys, t, tOptional } from '@bool/i18n';
 import { organizationJsonLd, websiteJsonLd } from '@bool/seo';
 import SecurityHeaders from '@bool/seo/SecurityHeaders.astro';
 import SEOHead from '@bool/seo/SEOHead.astro';
+import ModalHost from '../../compositions/ModalHost/ModalHost';
 import Footer from '../Footer/Footer.astro';
 import Header from '../Header/Header.astro';
 import '@bool/ui/styles';
@@ -80,6 +82,37 @@ const {
 const globalJsonLd = [organizationJsonLd(), websiteJsonLd()];
 const pageJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 const allJsonLd = [...globalJsonLd, ...pageJsonLd];
+
+// Content modals (opened from any button via `modal:<key>`). Authored in
+// en.json under `modals.<key>.*`. Resolved here once so a single ModalHost
+// island can render whichever modal a button targets.
+const modalImageModules = import.meta.glob<string>(
+  '../../../../media/images/**/*.{jpg,jpeg,png,webp,avif,svg}',
+  { eager: true, query: '?url', import: 'default' }
+);
+function resolveModalImage(path: string | undefined): string | undefined {
+  if (!path) return undefined;
+  const suffix = `/media/images/${path}`;
+  for (const [key, url] of Object.entries(modalImageModules)) {
+    if (key.endsWith(suffix)) return url;
+  }
+  return undefined;
+}
+const modalKeys = [
+  ...new Set(
+    enKeys
+      .filter((key) => /^modals\.[^.]+\.title$/.test(key))
+      .map((key) => key.split('.')[1] as string)
+  ),
+];
+const modals = modalKeys.map((key) => ({
+  key,
+  title: t(`modals.${key}.title`),
+  body: t(`modals.${key}.body`),
+  image: resolveModalImage(tOptional(`modals.${key}.image`)),
+  ctaLabel: tOptional(`modals.${key}.cta.label`),
+  ctaHref: tOptional(`modals.${key}.cta.href`),
+}));
 ---
 
 <!doctype html>
@@ -155,5 +188,6 @@ const allJsonLd = [...globalJsonLd, ...pageJsonLd];
     </main>
     <Footer labels={footerLabels} />
     <CookieBanner client:load />
+    {modals.length > 0 && <ModalHost client:idle modals={modals} closeLabel={t('common.close')} />}
   </body>
 </html>

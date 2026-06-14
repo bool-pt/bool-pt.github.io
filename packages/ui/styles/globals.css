@@ -435,6 +435,12 @@ video {
   border: 0;
 }
 
+/* Anchor wrapper for in-page section links (#sectionKey). Offsets the fixed
+   header (5.625rem tall) so anchored scrolls don't land underneath it. */
+.section-anchor {
+  scroll-margin-block-start: 7rem;
+}
+
 .skip-nav {
   position: absolute;
   inset-inline-start: -9999px;

@@ -11,10 +11,11 @@ interface Props {
   heading: string;
   body: string;
   cta: string;
+  ctaHref?: string;
   backgroundImage?: ImageMetadata;
 }
 
-const { tag, heading, body, cta, backgroundImage } = Astro.props;
+const { tag, heading, body, cta, ctaHref = ROUTES.contacts, backgroundImage } = Astro.props;
 ---
 
 <CTASection
@@ -28,7 +29,7 @@ const { tag, heading, body, cta, backgroundImage } = Astro.props;
   <SectionTag slot="tag" tagColor="primary">{tag}</SectionTag>
   <Fragment slot="heading">{heading}</Fragment>
   <Fragment slot="body">{body}</Fragment>
-  <ButtonLink href={ROUTES.contacts} variant="primary">{cta}</ButtonLink>
+  <ButtonLink href={ctaHref} variant="primary">{cta}</ButtonLink>
   <div class="careers-letters">
     <BoolLettersOverlay opacity={0.15} variant="compact" />
   </div>

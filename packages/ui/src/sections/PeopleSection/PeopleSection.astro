@@ -12,7 +12,9 @@ interface Props {
   heading: string;
   body: string;
   ctaJoin: string;
+  ctaJoinHref?: string;
   ctaMeet: string;
+  ctaMeetHref?: string;
   image?: ImageMetadata;
   backgroundImage?: ImageMetadata;
 }
@@ -22,7 +24,9 @@ const {
   heading,
   body,
   ctaJoin,
+  ctaJoinHref = ROUTES.careers,
   ctaMeet,
+  ctaMeetHref = ROUTES.people,
   image = peopleTeamFallback,
   backgroundImage,
 } = Astro.props;
@@ -48,8 +52,8 @@ const {
       <Fragment slot="heading" set:html={heading} />
       <p>{body}</p>
       <ActionRow slot="actions">
-        <ButtonLink href={ROUTES.careers} variant="primary">{ctaJoin}</ButtonLink>
-        <ButtonLink href={ROUTES.people} variant="outline">{ctaMeet}</ButtonLink>
+        <ButtonLink href={ctaJoinHref} variant="primary">{ctaJoin}</ButtonLink>
+        <ButtonLink href={ctaMeetHref} variant="outline">{ctaMeet}</ButtonLink>
       </ActionRow>
     </TextBlockWithActions>
   </ImageTextBanner>

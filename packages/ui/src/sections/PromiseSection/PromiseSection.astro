@@ -22,6 +22,7 @@ interface Props {
   body1: string;
   body2: string;
   cta: string;
+  ctaHref?: string;
   models?: ModelItem[];
   learnMoreLabel?: string;
   backgroundImage?: ImageMetadata;
@@ -32,6 +33,7 @@ const {
   body1,
   body2,
   cta,
+  ctaHref = ROUTES.about,
   models = [],
   learnMoreLabel = 'Learn more',
   backgroundImage,
@@ -59,7 +61,7 @@ const {
           <Fragment slot="heading" set:html={heading} />
           <p>{body1}</p>
           <p>{body2}</p>
-          <ButtonLink slot="actions" href={ROUTES.about} variant="primary">{cta}</ButtonLink>
+          <ButtonLink slot="actions" href={ctaHref} variant="primary">{cta}</ButtonLink>
         </TextBlockWithActions>
 
         <ResponsiveGrid slot="end" columns={2} collapseAt="sm" class="promise-models">

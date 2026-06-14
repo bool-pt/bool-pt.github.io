@@ -16,6 +16,7 @@ import {
   addNestedItem,
   removeNestedItem,
   reorderNestedItem,
+  upsertModalField,
   type EditorState,
 } from '@bool/json-editor-core';
 
@@ -61,6 +62,7 @@ export type EditorAction =
   | { type: 'SET_SIDEBAR_WIDTH'; payload: number }
   | { type: 'TOGGLE_THEME' }
   | { type: 'SET_SEARCH_QUERY'; payload: string }
+  | { type: 'UPSERT_MODAL'; payload: { key: string; suffix: string; value: string } }
   | { type: 'UNDO' }
   | { type: 'REDO' };
 
@@ -115,7 +117,11 @@ function hasDangerousKeys(obj: unknown, depth = 0): boolean {
   if (depth > 10 || !obj || typeof obj !== 'object') return false;
   for (const key of Object.keys(obj as Record<string, unknown>)) {
     if (key === '__proto__' || key === 'constructor' || key === 'prototype') return true;
-    if (typeof (obj as Record<string, unknown>)[key] === 'object' && hasDangerousKeys((obj as Record<string, unknown>)[key], depth + 1)) return true;
+    if (
+      typeof (obj as Record<string, unknown>)[key] === 'object' &&
+      hasDangerousKeys((obj as Record<string, unknown>)[key], depth + 1)
+    )
+      return true;
   }
   return false;
 }
@@ -139,7 +145,11 @@ function restoreSession(): HistoryState | null {
         pages: parsed.pages,
         sharedSections: parsed.sharedSections,
         metaKeys: parsed.metaKeys,
-        activeSection: data.activeSection ?? parsed.pages[0]?.sectionNames[0] ?? parsed.sections[0]?.name ?? null,
+        activeSection:
+          data.activeSection ??
+          parsed.pages[0]?.sectionNames[0] ??
+          parsed.sections[0]?.name ??
+          null,
         activeSectionContext: 'page',
         searchQuery: '',
         showPreview: false,
@@ -257,7 +267,11 @@ function editorReducerInner(state: HistoryState, action: EditorAction): HistoryS
     }
 
     case 'REMOVE_ITEM': {
-      const sections = removeItem(current.sections, action.payload.groupPrefix, action.payload.index);
+      const sections = removeItem(
+        current.sections,
+        action.payload.groupPrefix,
+        action.payload.index
+      );
       const totalKeys = sections.reduce((sum, s) => sum + s.keyCount, 0);
       return pushHistory(state, { ...current, sections, totalKeys, isDirty: true });
     }
@@ -267,7 +281,7 @@ function editorReducerInner(state: HistoryState, action: EditorAction): HistoryS
         current.sections,
         action.payload.groupPrefix,
         action.payload.from,
-        action.payload.to,
+        action.payload.to
       );
       return pushHistory(state, { ...current, sections, isDirty: true });
     }
@@ -277,7 +291,7 @@ function editorReducerInner(state: HistoryState, action: EditorAction): HistoryS
         current.sections,
         action.payload.parentGroupPrefix,
         action.payload.parentIndex,
-        action.payload.innerPrefix,
+        action.payload.innerPrefix
       );
       const totalKeys = sections.reduce((sum, s) => sum + s.keyCount, 0);
       return pushHistory(state, { ...current, sections, totalKeys, isDirty: true });
@@ -289,7 +303,7 @@ function editorReducerInner(state: HistoryState, action: EditorAction): HistoryS
         action.payload.parentGroupPrefix,
         action.payload.parentIndex,
         action.payload.innerPrefix,
-        action.payload.index,
+        action.payload.index
       );
       const totalKeys = sections.reduce((sum, s) => sum + s.keyCount, 0);
       return pushHistory(state, { ...current, sections, totalKeys, isDirty: true });
@@ -302,13 +316,20 @@ function editorReducerInner(state: HistoryState, action: EditorAction): HistoryS
         action.payload.parentIndex,
         action.payload.innerPrefix,
         action.payload.from,
-        action.payload.to,
+        action.payload.to
       );
       return pushHistory(state, { ...current, sections, isDirty: true });
     }
 
     case 'SET_ACTIVE_SECTION':
-      return { ...state, current: { ...current, activeSection: action.payload.name, activeSectionContext: action.payload.context } };
+      return {
+        ...state,
+        current: {
+          ...current,
+          activeSection: action.payload.name,
+          activeSectionContext: action.payload.context,
+        },
+      };
 
     case 'TOGGLE_PREVIEW':
       return { ...state, current: { ...current, showPreview: !current.showPreview } };
@@ -327,6 +348,17 @@ function editorReducerInner(state: HistoryState, action: EditorAction): HistoryS
 
     case 'SET_SEARCH_QUERY':
       return { ...state, current: { ...current, searchQuery: action.payload } };
+
+    case 'UPSERT_MODAL': {
+      const sections = upsertModalField(
+        current.sections,
+        action.payload.key,
+        action.payload.suffix,
+        action.payload.value
+      );
+      const totalKeys = sections.reduce((sum, s) => sum + s.keyCount, 0);
+      return pushHistory(state, { ...current, sections, totalKeys, isDirty: true });
+    }
 
     case 'UNDO': {
       if (state.past.length === 0) return state;
@@ -376,7 +408,11 @@ interface EditorContextValue {
 const EditorContext = createContext<EditorContextValue | null>(null);
 
 export function EditorProvider({ children }: { children: ReactNode }) {
-  const [history, dispatch] = useReducer(editorReducer, initialHistory, () => restoreSession() ?? initialHistory);
+  const [history, dispatch] = useReducer(
+    editorReducer,
+    initialHistory,
+    () => restoreSession() ?? initialHistory
+  );
 
   const dirtyCount = useMemo(() => {
     let count = 0;
@@ -416,7 +452,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
       canRedo: history.future.length > 0,
       dirtyCount,
     }),
-    [history, dirtyCount, dispatch],
+    [history, dirtyCount, dispatch]
   );
 
   return <EditorContext value={value}>{children}</EditorContext>;

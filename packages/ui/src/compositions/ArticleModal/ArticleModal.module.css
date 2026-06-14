@@ -127,6 +127,13 @@
   }
 }
 
+.benefits {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--color-on-dark);
+  margin: 0 0 1.5rem;
+}
+
 .columnLabel {
   font-size: 0.875rem;
   font-weight: 700;

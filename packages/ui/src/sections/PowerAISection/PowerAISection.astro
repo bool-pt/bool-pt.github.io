@@ -13,6 +13,7 @@ interface Props {
   body1: string;
   body2?: string;
   cta: string;
+  ctaHref?: string;
   imageAlt: string;
   variant?: 'default' | 'image-left';
   showCta?: boolean;
@@ -28,6 +29,7 @@ const {
   body1,
   body2,
   cta,
+  ctaHref = ROUTES.services,
   imageAlt,
   variant = 'default',
   showCta = true,
@@ -72,7 +74,7 @@ const textSlot = isImageLeft ? 'end' : 'start';
           {body2 && <p>{body2}</p>}
           {
             showCta && (
-              <ButtonLink slot="actions" href={ROUTES.services} variant="primary">
+              <ButtonLink slot="actions" href={ctaHref} variant="primary">
                 {cta}
               </ButtonLink>
             )

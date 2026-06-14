@@ -6,6 +6,7 @@ import styles from './HeroCarousel.module.css';
 interface SlideData {
   title: string;
   subtitle: string;
+  backgroundImage?: { src: string; width: number; height: number };
   ctas: {
     primary: { label: string; href: string };
     secondary: { label: string; href: string };
@@ -88,6 +89,20 @@ export default function HeroCarousel({ slides, className, ariaLabels }: Props) {
           aria-roledescription="slide"
           aria-label={`${ariaLabels?.slide ?? ''} ${i + 1}`}
         >
+          {slide.backgroundImage && (
+            <div className={styles.slideBg} aria-hidden="true">
+              <img
+                src={slide.backgroundImage.src}
+                alt=""
+                width={slide.backgroundImage.width}
+                height={slide.backgroundImage.height}
+                className={styles.slideBgImg}
+                loading="eager"
+                decoding="async"
+              />
+              <div className={styles.slideBgOverlay} />
+            </div>
+          )}
           <div className={styles.slideInner}>
             <div className={styles.slideLayout}>
               <div className={styles.content}>

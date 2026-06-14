@@ -41,12 +41,21 @@ const recognitions = tCollection('portfolioStats.recognition', ['title', 'descri
   (r, i) => ({ ...r, iconName: recognitionIcons[i] ?? ('trophy' as const) })
 );
 
-const certifications = tCollection('certifications.items', ['name', 'count', 'logo']).map((c) => ({
-  name: c.name,
-  count: c.count,
-  label: t('certifications.label'),
-  logo: c.logo ? resolveImage(c.logo) : null,
-}));
+const certifications = tCollection('certifications.items', ['name', 'count', 'label', 'logo']).map(
+  (c) => ({
+    name: c.name,
+    count: c.count,
+    label: c.label,
+    logo: c.logo ? resolveImage(c.logo) : null,
+  })
+);
+
+// Curated client logos. Empty entries are ignored; when none are set the
+// section falls back to the full client-logos media folder, then a placeholder.
+const clientLogos = tCollection('clientLogos.logos', ['image'])
+  .map((l) => l.image)
+  .filter(Boolean)
+  .map((path) => resolveImage(path));
 
 const bgClientTestimonials = tOptional('clientTestimonials.backgroundImage');
 const bgPortfolioStats = tOptional('portfolioStats.backgroundImage');
@@ -62,61 +71,83 @@ const bgContactSection = tOptional('contactSection.backgroundImage');
   headerLabels={getHeaderLabels()}
   footerLabels={getFooterLabels()}
 >
-  <PortfolioHeroSection
-    tag={t('portfolioHero.tag')}
-    heading={t('portfolioHero.heading')}
-    body={t('portfolioHero.body')}
-    sectors={sectors}
-    ctaStories={t('portfolioHero.cta.stories')}
-    ctaServices={t('portfolioHero.cta.services')}
-    stats={portfolioStats}
-    backgroundImage={resolveImage(t('portfolioHero.backgroundImage'))}
-  />
-  <CaseStudyGridSection payload={caseStudiesPayload} />
-  <TestimonialsCarouselSection
-    tag={t('clientTestimonials.tag')}
-    heading={t('clientTestimonials.heading')}
-    body={t('clientTestimonials.body')}
-    testimonials={clientTestimonials}
-    carouselAriaLabels={{ prev: t('carousel.previous'), next: t('carousel.next') }}
-    backgroundImage={bgClientTestimonials ? resolveImage(bgClientTestimonials) : undefined}
-  />
-  <PortfolioStatsSection
-    tag={t('portfolioStats.tag')}
-    heading={t('portfolioStats.heading')}
-    body={t('portfolioStats.body')}
-    stats={portfolioStats}
-    recognitions={recognitions}
-    backgroundImage={bgPortfolioStats ? resolveImage(bgPortfolioStats) : undefined}
-  />
-  <CertificationsSection
-    tag={t('certifications.tag')}
-    heading={t('certifications.heading')}
-    body={t('certifications.body')}
-    certifications={certifications}
-    backgroundImage={bgCertifications ? resolveImage(bgCertifications) : undefined}
-  />
-  <ClientLogosSection
-    tag={t('clientLogos.tag')}
-    heading={t('clientLogos.heading')}
-    body={t('clientLogos.body')}
-    backgroundImage={bgClientLogos ? resolveImage(bgClientLogos) : undefined}
-  />
-  <LetsBuildCTASection
-    heading={t('ctaBanner.heading')}
-    body={t('ctaBanner.body')}
-    button={t('common.talkToExpert')}
-    backgroundImage={resolveImage(t('ctaBanner.backgroundImage'))}
-  />
-  <ContactSection
-    {...getContactSectionProps()}
-    background="var(--color-surface-black)"
-    backgroundImage={bgContactSection ? resolveImage(bgContactSection) : undefined}
-  />
-  <NewsletterCTASection
-    heading={t('newsletterCta.heading')}
-    body={t('newsletterCta.body')}
-    newsletterLabels={getNewsletterLabels()}
-    backgroundImage={bgNewsletterCta ? resolveImage(bgNewsletterCta) : undefined}
-  />
+  <div id="portfolioHero" class="section-anchor">
+    <PortfolioHeroSection
+      tag={t('portfolioHero.tag')}
+      heading={t('portfolioHero.heading')}
+      body={t('portfolioHero.body')}
+      sectors={sectors}
+      ctaStories={t('portfolioHero.cta.stories')}
+      ctaStoriesHref={t('portfolioHero.cta.stories.href')}
+      ctaServices={t('portfolioHero.cta.services')}
+      ctaServicesHref={t('portfolioHero.cta.services.href')}
+      stats={portfolioStats}
+      backgroundImage={resolveImage(t('portfolioHero.backgroundImage'))}
+    />
+  </div>
+  <div id="caseStudies" class="section-anchor">
+    <CaseStudyGridSection payload={caseStudiesPayload} />
+  </div>
+  <div id="clientTestimonials" class="section-anchor">
+    <TestimonialsCarouselSection
+      tag={t('clientTestimonials.tag')}
+      heading={t('clientTestimonials.heading')}
+      body={t('clientTestimonials.body')}
+      testimonials={clientTestimonials}
+      carouselAriaLabels={{ prev: t('carousel.previous'), next: t('carousel.next') }}
+      backgroundImage={bgClientTestimonials ? resolveImage(bgClientTestimonials) : undefined}
+    />
+  </div>
+  <div id="portfolioStats" class="section-anchor">
+    <PortfolioStatsSection
+      tag={t('portfolioStats.tag')}
+      heading={t('portfolioStats.heading')}
+      body={t('portfolioStats.body')}
+      stats={portfolioStats}
+      recognitions={recognitions}
+      backgroundImage={bgPortfolioStats ? resolveImage(bgPortfolioStats) : undefined}
+    />
+  </div>
+  <div id="certifications" class="section-anchor">
+    <CertificationsSection
+      tag={t('certifications.tag')}
+      heading={t('certifications.heading')}
+      body={t('certifications.body')}
+      certifications={certifications}
+      backgroundImage={bgCertifications ? resolveImage(bgCertifications) : undefined}
+    />
+  </div>
+  <div id="clientLogos" class="section-anchor">
+    <ClientLogosSection
+      tag={t('clientLogos.tag')}
+      heading={t('clientLogos.heading')}
+      body={t('clientLogos.body')}
+      logos={clientLogos}
+      backgroundImage={bgClientLogos ? resolveImage(bgClientLogos) : undefined}
+    />
+  </div>
+  <div id="ctaBanner" class="section-anchor">
+    <LetsBuildCTASection
+      heading={t('ctaBanner.heading')}
+      body={t('ctaBanner.body')}
+      button={t('common.talkToExpert')}
+      buttonHref={t('ctaBanner.cta.href')}
+      backgroundImage={resolveImage(t('ctaBanner.backgroundImage'))}
+    />
+  </div>
+  <div id="contactSection" class="section-anchor">
+    <ContactSection
+      {...getContactSectionProps()}
+      background="var(--color-surface-black)"
+      backgroundImage={bgContactSection ? resolveImage(bgContactSection) : undefined}
+    />
+  </div>
+  <div id="newsletterCta" class="section-anchor">
+    <NewsletterCTASection
+      heading={t('newsletterCta.heading')}
+      body={t('newsletterCta.body')}
+      newsletterLabels={getNewsletterLabels()}
+      backgroundImage={bgNewsletterCta ? resolveImage(bgNewsletterCta) : undefined}
+    />
+  </div>
 </BaseLayout>

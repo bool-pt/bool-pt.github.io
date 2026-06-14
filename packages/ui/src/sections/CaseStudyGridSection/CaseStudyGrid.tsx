@@ -1,8 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ArticleModal from '../../compositions/ArticleModal/ArticleModal';
 import FilterableGrid from '../../compositions/FilterableGrid/FilterableGrid';
 import FlipCard, { flipCardStyles as styles } from '../../compositions/FlipCard/FlipCard';
 import Icon from '../../primitives/Icon/Icon';
+
+/** Shuffle a list (new array, input untouched) so the grid doesn't always lead
+ *  with the same cards. Decorate-sort-undecorate avoids index assertions. */
+function shuffle<T>(input: T[]): T[] {
+  return input
+    .map((value) => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map((entry) => entry.value);
+}
 
 export interface CaseFlipItem {
   client: string;
@@ -75,7 +84,8 @@ function CaseFlipCard({
           <div className={styles.backOverlay} />
           <div className={styles.backContent}>
             <span className={styles.backTag}>{item.backHeader}</span>
-            <h3 className={styles.backTitle}>{item.subtitle}</h3>
+            {item.subtitle && <h3 className={styles.backTitle}>{item.subtitle}</h3>}
+            {item.benefits && <p className={styles.backBenefits}>{item.benefits}</p>}
             {item.metrics.length > 0 && (
               <div className={styles.metricsStrip}>
                 {item.metrics.map((metric) => (
@@ -107,6 +117,32 @@ function CaseFlipCard({
 export default function CaseStudyGrid({ cases, sectors, techFilters, labels }: Props) {
   const [selectedCase, setSelectedCase] = useState<CaseFlipItem | null>(null);
 
+  // Randomise card order so the "All" view doesn't always lead with the same
+  // cases. The shuffle is client-only (per visit): `orderedCases` starts null
+  // (render a skeleton, not the SSR order) and is filled once on mount, so the
+  // first real paint is already shuffled and there's no hydration mismatch.
+  const [orderedCases, setOrderedCases] = useState<CaseFlipItem[] | null>(null);
+  useEffect(() => {
+    setOrderedCases(shuffle(cases));
+  }, [cases]);
+
+  if (orderedCases === null) {
+    return (
+      <div data-testid="case-study-grid">
+        <div className="cs-skeleton-pills" aria-hidden="true">
+          {Array.from({ length: 7 }).map((_, i) => (
+            <span key={i} className="cs-skeleton-pill" />
+          ))}
+        </div>
+        <div className="cs-skeleton-grid" aria-hidden="true">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="cs-skeleton-card" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   const modalArticle = selectedCase
     ? {
         category: selectedCase.backHeader,
@@ -114,6 +150,7 @@ export default function CaseStudyGrid({ cases, sectors, techFilters, labels }: P
         frontImage: selectedCase.coverImageSrc,
         challenge: selectedCase.challenge,
         solution: selectedCase.solution,
+        benefits: selectedCase.benefits,
         metrics: selectedCase.metrics,
         techStack: selectedCase.tags,
       }
@@ -122,7 +159,7 @@ export default function CaseStudyGrid({ cases, sectors, techFilters, labels }: P
   return (
     <div data-testid="case-study-grid">
       <FilterableGrid
-        data={cases}
+        data={orderedCases}
         filterGroups={[
           { items: sectors, ariaLabel: labels.filterAriaLabel },
           {

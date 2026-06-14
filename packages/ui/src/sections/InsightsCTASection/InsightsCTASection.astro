@@ -11,10 +11,19 @@ interface Props {
   headingLine2: string;
   body: string;
   button: string;
+  buttonHref?: string;
   backgroundImage?: ImageMetadata;
 }
 
-const { tag, headingLine1, headingLine2, body, button, backgroundImage } = Astro.props;
+const {
+  tag,
+  headingLine1,
+  headingLine2,
+  body,
+  button,
+  buttonHref = ROUTES.contacts,
+  backgroundImage,
+} = Astro.props;
 ---
 
 <div class="insights-cta">
@@ -31,7 +40,7 @@ const { tag, headingLine1, headingLine2, body, button, backgroundImage } = Astro
       <span class="heading-bold">{headingLine2}</span>
     </Fragment>
     <Fragment slot="body">{body}</Fragment>
-    <ButtonLink href={ROUTES.contacts} variant="primary">{button}</ButtonLink>
+    <ButtonLink href={buttonHref} variant="primary">{button}</ButtonLink>
   </CTASection>
 </div>
 

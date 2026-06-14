@@ -10,21 +10,29 @@ const logoModules = import.meta.glob<{ default: ImageMetadata }>(
   '../../../../media/images/client-logos/*.{png,jpg,jpeg,svg,webp,avif}',
   { eager: true }
 );
-const logos = Object.values(logoModules).map((m) => m.default);
+const folderLogos = Object.values(logoModules).map((m) => m.default);
 
 const placeholderRow = Array.from({ length: 8 }, () => boolLogo);
-
-// Duplicate the set — animation moves -50% so the seam is invisible
-const row = logos.length > 0 ? [...logos, ...logos] : [...placeholderRow, ...placeholderRow];
 
 interface Props {
   tag: string;
   heading: string;
   body: string;
+  /**
+   * Curated logos to display. When omitted/empty, falls back to every image in
+   * the `client-logos` media folder; when that's empty too, a placeholder row.
+   */
+  logos?: ImageMetadata[];
   backgroundImage?: ImageMetadata;
 }
 
-const { tag, heading, body, backgroundImage } = Astro.props;
+const { tag, heading, body, logos, backgroundImage } = Astro.props;
+
+const selected = logos && logos.length > 0 ? logos : folderLogos;
+
+// Duplicate the set — animation moves -50% so the seam is invisible
+const row =
+  selected.length > 0 ? [...selected, ...selected] : [...placeholderRow, ...placeholderRow];
 ---
 
 <Section

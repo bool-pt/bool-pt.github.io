@@ -1,5 +1,5 @@
 /** What kind of editor a field should render in the UI. */
-export type FieldKind = 'text' | 'media' | 'icon' | 'select';
+export type FieldKind = 'text' | 'media' | 'icon' | 'select' | 'link';
 
 export interface SelectOption {
   value: string;
