@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "e2e": "playwright test --config playwright.config.ts"
+    "e2e": "playwright test --config playwright.config.ts",
+    "lint": "eslint ."
   },
   "devDependencies": {
     "@axe-core/playwright": "catalog:",

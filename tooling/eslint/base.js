@@ -30,6 +30,8 @@ export default tseslint.config(
             // Exact path (not a `*/*.config.ts` glob, which would also match src
             // configs and trigger the parser conflict noted above).
             'tooling/knip.config.ts',
+            // Standalone tooling scripts (not under a src/ tsconfig include).
+            'tooling/scripts/*.ts',
           ],
         },
       },
@@ -78,6 +80,14 @@ export default tseslint.config(
           alphabetize: { order: 'asc', caseInsensitive: true },
         },
       ],
+    },
+  },
+  {
+    // Playwright e2e specs: non-null assertions on locators (`page.locator(...)!`)
+    // are idiomatic and safe within a test's controlled context.
+    files: ['**/*.spec.ts'],
+    rules: {
+      '@typescript-eslint/no-non-null-assertion': 'off',
     },
   },
   {
