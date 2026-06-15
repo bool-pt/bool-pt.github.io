@@ -34,7 +34,6 @@ export default {
       project: ['src/**/*.{ts,tsx}'],
       ignoreDependencies: [
         '@bool/media',
-        '@bool/shared',
         'tailwindcss',
         '@tailwindcss/vite',
         '@testing-library/user-event',
@@ -65,13 +64,7 @@ export default {
         'src/primitives/dropdown-menu/dropdown-menu.tsx',
         'src/primitives/sheet/sheet.tsx',
       ],
-      ignoreDependencies: [
-        'astro',
-        '@bool/i18n',
-        'clsx',
-        'tailwind-merge',
-        '@bool/tailwind-preset',
-      ],
+      ignoreDependencies: ['astro', 'clsx', 'tailwind-merge', '@bool/tailwind-preset'],
     },
 
     'packages/shared': {},

@@ -27,6 +27,9 @@ export default tseslint.config(
             '*/*/*.config.mjs',
             // Tooling package JS files not named *.config.js (e.g. tooling/eslint/base.js)
             'tooling/*/*.js',
+            // Exact path (not a `*/*.config.ts` glob, which would also match src
+            // configs and trigger the parser conflict noted above).
+            'tooling/knip.config.ts',
           ],
         },
       },
