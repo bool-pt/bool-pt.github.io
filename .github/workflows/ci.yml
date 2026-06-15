@@ -32,6 +32,8 @@ jobs:
           restore-keys: turbo-${{ runner.os }}-
       - name: Lint, typecheck and test
         run: pnpm exec turbo run lint typecheck test --continue
+      - name: Dead-code check (knip)
+        run: pnpm knip
       - name: Upload coverage
         if: always()
         uses: actions/upload-artifact@v6
@@ -76,7 +78,9 @@ jobs:
           PUBLIC_GA_MEASUREMENT_ID: ${{ vars.PUBLIC_GA_MEASUREMENT_ID }}
           PUBLIC_SENTRY_DSN: ${{ vars.PUBLIC_SENTRY_DSN }}
       - name: Merge json-editor into main site output
-        run: cp -r apps/web/json-editor/dist apps/web/bool/dist/json-editor
+        run: |
+          test -d apps/web/json-editor/dist || { echo "::error::json-editor build output missing — aborting merge"; exit 1; }
+          cp -r apps/web/json-editor/dist apps/web/bool/dist/json-editor
       # Reused by the e2e job so it doesn't rebuild the whole site from scratch.
       - name: Upload built site
         uses: actions/upload-artifact@v6
