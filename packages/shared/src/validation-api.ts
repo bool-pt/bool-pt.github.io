@@ -15,7 +15,8 @@ export type ValidationResult<T> =
 
 type SafeParseResult<T> =
   | { success: true; data: T }
-  | { success: false; error: { issues: Array<{ path: Array<string | number>; message: string }> } };
+  // Zod v4 issue paths are PropertyKey[] (may include symbol keys).
+  | { success: false; error: { issues: Array<{ path: PropertyKey[]; message: string }> } };
 
 function toResult<T>(parsed: SafeParseResult<T>): ValidationResult<T> {
   if (parsed.success) return { success: true, data: parsed.data };

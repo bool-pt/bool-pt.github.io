@@ -39,7 +39,7 @@ describe('validateContactForm', () => {
     });
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.errors[0].path).toBe('firstName');
+      expect(result.errors[0]?.path).toBe('firstName');
     }
   });
 
@@ -52,7 +52,7 @@ describe('validateContactForm', () => {
     });
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.errors[0].path).toBe('email');
+      expect(result.errors[0]?.path).toBe('email');
     }
   });
 
@@ -65,7 +65,7 @@ describe('validateContactForm', () => {
     });
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.errors[0].path).toBe('message');
+      expect(result.errors[0]?.path).toBe('message');
     }
   });
 
@@ -79,7 +79,7 @@ describe('validateContactForm', () => {
     });
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.errors[0].path).toBe('phone');
+      expect(result.errors[0]?.path).toBe('phone');
     }
   });
 });
@@ -113,8 +113,8 @@ describe('validateNewsletter', () => {
     const result = validateNewsletter({ name: 'John Doe', email: 'not-valid' });
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.errors[0].path).toBe('email');
-      expect(result.errors[0].message).toBe('Invalid email address');
+      expect(result.errors[0]?.path).toBe('email');
+      expect(result.errors[0]?.message).toBe('Invalid email address');
     }
   });
 
