@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { ConsentState } from '@bool/shared';
+import { CONSENT_CATEGORIES } from './config';
 import { getConsent, setConsent, clearConsent, isConsentExpired } from './consent';
 
 export function useConsent() {
@@ -25,7 +26,11 @@ export function useConsent() {
   }, []);
 
   const acceptAll = useCallback(() => {
-    setConsent({ analytics: true, marketing: true });
+    // "Accept all" grants only the categories actually offered to the user.
+    setConsent({
+      analytics: CONSENT_CATEGORIES.analytics.available,
+      marketing: CONSENT_CATEGORIES.marketing.available,
+    });
     setConsentState(getConsent());
     setHasDecided(true);
   }, []);
