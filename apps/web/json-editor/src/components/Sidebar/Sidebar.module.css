@@ -84,7 +84,9 @@
   text-transform: uppercase;
   text-align: start;
   cursor: pointer;
-  transition: color 150ms, background-color 150ms;
+  transition:
+    color 150ms,
+    background-color 150ms;
   min-block-size: 44px;
 }
 
@@ -148,7 +150,10 @@
   text-align: start;
   inline-size: 100%;
   min-block-size: 44px;
-  transition: background-color 150ms, color 150ms, border-color 150ms;
+  transition:
+    background-color 150ms,
+    color 150ms,
+    border-color 150ms;
 }
 
 .item:hover {
@@ -202,7 +207,9 @@
   background: none;
   color: var(--color-on-dark-muted, rgba(255, 255, 255, 0.7));
   cursor: pointer;
-  transition: background-color 150ms, color 150ms;
+  transition:
+    background-color 150ms,
+    color 150ms;
 }
 
 .collapseButton:hover {
@@ -257,7 +264,6 @@
     padding: 0.625rem 1.25rem;
     min-block-size: unset;
   }
-
 
   .collapseButton {
     min-inline-size: 36px;

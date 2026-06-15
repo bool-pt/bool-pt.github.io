@@ -19,11 +19,7 @@ function humanizeInnerPrefix(innerPrefix: string): string {
     .trim();
 }
 
-export default function NestedRepeatingGroup({
-  parentGroupPrefix,
-  parentIndex,
-  group,
-}: Props) {
+export default function NestedRepeatingGroup({ parentGroupPrefix, parentIndex, group }: Props) {
   const { dispatch } = useEditor();
   const [confirmRemove, setConfirmRemove] = useState<string | null>(null);
 
@@ -51,7 +47,7 @@ export default function NestedRepeatingGroup({
       });
       setConfirmRemove(null);
     },
-    [dispatch, parentGroupPrefix, parentIndex, group.innerPrefix],
+    [dispatch, parentGroupPrefix, parentIndex, group.innerPrefix]
   );
 
   const isBareValueList =

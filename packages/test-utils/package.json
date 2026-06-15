@@ -17,10 +17,18 @@
     "vitest": "catalog:"
   },
   "peerDependenciesMeta": {
-    "react": { "optional": true },
-    "react-dom": { "optional": true },
-    "@testing-library/react": { "optional": true },
-    "@testing-library/user-event": { "optional": true }
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    },
+    "@testing-library/react": {
+      "optional": true
+    },
+    "@testing-library/user-event": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@bool/tsconfig": "workspace:*",

@@ -40,7 +40,7 @@ export function tList(prefix: string, locale?: Locale): string[] {
 export function tCollection<F extends string>(
   prefix: string,
   fields: F[],
-  locale?: Locale,
+  locale?: Locale
 ): Record<F, string>[] {
   const prefixDot = prefix + '.';
   const firstField = fields[0];

@@ -57,8 +57,6 @@ describe('blogSchema', () => {
   });
 });
 
-
-
 describe('eventSchema', () => {
   const valid = {
     title: 'Tech Meetup',

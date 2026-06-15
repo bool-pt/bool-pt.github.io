@@ -33,7 +33,8 @@ interface Props {
   languageSelectLabels: LanguageSelectLabels;
 }
 
-const { navAria, logoAria, ctaLabel, linkLabels, mobileNavLabels, _languageSelectLabels } = Astro.props;
+const { navAria, logoAria, ctaLabel, linkLabels, mobileNavLabels, _languageSelectLabels } =
+  Astro.props;
 const currentPath = Astro.url.pathname;
 ---
 
@@ -69,7 +70,13 @@ const currentPath = Astro.url.pathname;
         locales={languageSelectLabels.locales}
         ariaLabel={languageSelectLabels.ariaLabel}
       /> -->
-      <MobileNav client:load links={NAV_LINKS} logoSrc={logo.src} homeHref={ROUTES.home} labels={mobileNavLabels} />
+      <MobileNav
+        client:load
+        links={NAV_LINKS}
+        logoSrc={logo.src}
+        homeHref={ROUTES.home}
+        labels={mobileNavLabels}
+      />
     </div>
   </nav>
 </header>

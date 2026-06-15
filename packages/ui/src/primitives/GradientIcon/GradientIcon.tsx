@@ -77,14 +77,9 @@ export default function GradientIcon({ name, size = 24, className }: GradientIco
                 width={group.mask.width}
                 height={group.mask.height}
               >
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d={group.mask.rectPath}
-                  fill="white"
-                />
+                <path fillRule="evenodd" clipRule="evenodd" d={group.mask.rectPath} fill="white" />
               </mask>
-            ),
+            )
         )}
       </defs>
 

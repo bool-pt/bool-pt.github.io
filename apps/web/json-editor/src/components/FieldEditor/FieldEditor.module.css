@@ -7,7 +7,9 @@
   padding-inline: 0.75rem;
   border-inline-start: 4px solid transparent;
   border-radius: var(--radius-sm, 0.125rem);
-  transition: background-color 150ms, border-color 150ms;
+  transition:
+    background-color 150ms,
+    border-color 150ms;
 }
 
 .field:hover {
@@ -41,7 +43,9 @@
   font-size: 1rem;
   line-height: 1.5;
   outline: none;
-  transition: border-color 150ms, box-shadow 150ms;
+  transition:
+    border-color 150ms,
+    box-shadow 150ms;
   resize: vertical;
 }
 

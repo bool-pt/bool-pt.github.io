@@ -33,41 +33,36 @@ const alt = photoAlt ?? `${name}, ${role}`;
 
 <div class:list={['ep', `ep--${colorScheme}`, className]}>
   <div class="ep-photo-wrap">
-    <Image
-      src={photo}
-      alt={alt}
-      class="ep-photo"
-      width={318}
-      height={318}
-      loading="lazy"
-    />
+    <Image src={photo} alt={alt} class="ep-photo" width={318} height={318} loading="lazy" />
   </div>
   <p class="ep-name">{name}</p>
   <p class="ep-role">{role}</p>
-  {(email || linkedin) && (
-    <div class="ep-icons">
-      {email && (
-        <a
-          href={`mailto:${email}`}
-          class="ep-icon-link"
-          aria-label={`${emailAriaPrefix} ${name}`}
-        >
-          <Icon name="mail" size={24} strokeWidth={2} />
-        </a>
-      )}
-      {linkedin && (
-        <a
-          href={linkedin}
-          class="ep-icon-link"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={`${name} ${linkedinAriaSuffix}`}
-        >
-          <Icon name="linkedin" size={24} strokeWidth={2} />
-        </a>
-      )}
-    </div>
-  )}
+  {
+    (email || linkedin) && (
+      <div class="ep-icons">
+        {email && (
+          <a
+            href={`mailto:${email}`}
+            class="ep-icon-link"
+            aria-label={`${emailAriaPrefix} ${name}`}
+          >
+            <Icon name="mail" size={24} strokeWidth={2} />
+          </a>
+        )}
+        {linkedin && (
+          <a
+            href={linkedin}
+            class="ep-icon-link"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${name} ${linkedinAriaSuffix}`}
+          >
+            <Icon name="linkedin" size={24} strokeWidth={2} />
+          </a>
+        )}
+      </div>
+    )
+  }
 </div>
 
 <style>

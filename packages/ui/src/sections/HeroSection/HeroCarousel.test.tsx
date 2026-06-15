@@ -47,9 +47,7 @@ const ariaLabels = { slideIndicators: 'Slide indicators', slide: 'Slide' };
 describe('HeroCarousel', () => {
   it('renders all slides with correct titles', () => {
     vi.useFakeTimers();
-    render(
-      <HeroCarousel slides={slides} backgroundImage="/hero.jpg" ariaLabels={ariaLabels} />,
-    );
+    render(<HeroCarousel slides={slides} backgroundImage="/hero.jpg" ariaLabels={ariaLabels} />);
 
     expect(screen.getByText('First Slide')).toBeInTheDocument();
     expect(screen.getByText('Second Slide')).toBeInTheDocument();
@@ -58,9 +56,7 @@ describe('HeroCarousel', () => {
 
   it('renders dot indicators matching slide count', () => {
     vi.useFakeTimers();
-    render(
-      <HeroCarousel slides={slides} backgroundImage="/hero.jpg" ariaLabels={ariaLabels} />,
-    );
+    render(<HeroCarousel slides={slides} backgroundImage="/hero.jpg" ariaLabels={ariaLabels} />);
 
     const tabs = screen.getAllByRole('tab');
     expect(tabs).toHaveLength(slides.length);
@@ -68,9 +64,7 @@ describe('HeroCarousel', () => {
 
   it('clicking a dot changes active slide', () => {
     vi.useFakeTimers();
-    render(
-      <HeroCarousel slides={slides} backgroundImage="/hero.jpg" ariaLabels={ariaLabels} />,
-    );
+    render(<HeroCarousel slides={slides} backgroundImage="/hero.jpg" ariaLabels={ariaLabels} />);
 
     const tabs = screen.getAllByRole('tab');
     expect(tabs[0]).toHaveAttribute('aria-selected', 'true');
@@ -86,9 +80,7 @@ describe('HeroCarousel', () => {
 
   it('renders CTA links with correct hrefs', () => {
     vi.useFakeTimers();
-    render(
-      <HeroCarousel slides={slides} backgroundImage="/hero.jpg" ariaLabels={ariaLabels} />,
-    );
+    render(<HeroCarousel slides={slides} backgroundImage="/hero.jpg" ariaLabels={ariaLabels} />);
 
     expect(screen.getByRole('link', { name: 'Get Started' })).toHaveAttribute('href', '/start');
     expect(screen.getByRole('link', { name: 'Learn More' })).toHaveAttribute('href', '/learn');
@@ -97,9 +89,7 @@ describe('HeroCarousel', () => {
 
   it('has carousel aria-roledescription', () => {
     vi.useFakeTimers();
-    render(
-      <HeroCarousel slides={slides} backgroundImage="/hero.jpg" ariaLabels={ariaLabels} />,
-    );
+    render(<HeroCarousel slides={slides} backgroundImage="/hero.jpg" ariaLabels={ariaLabels} />);
 
     const carousel = document.querySelector('[aria-roledescription="carousel"]');
     expect(carousel).toBeInTheDocument();

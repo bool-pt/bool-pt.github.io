@@ -8,7 +8,11 @@ import FieldEditor from '../FieldEditor/FieldEditor.tsx';
 import NestedRepeatingGroup from '../NestedRepeatingGroup/NestedRepeatingGroup.tsx';
 import styles from './RepeatingGroup.module.css';
 
-const previewStyle: React.CSSProperties = { fontWeight: 400, opacity: 0.6, marginInlineStart: '0.5rem' };
+const previewStyle: React.CSSProperties = {
+  fontWeight: 400,
+  opacity: 0.6,
+  marginInlineStart: '0.5rem',
+};
 
 interface RepeatingGroupProps {
   group: RepeatingGroupType;
@@ -39,7 +43,7 @@ export default function RepeatingGroup({ group }: RepeatingGroupProps) {
       dispatch({ type: 'REMOVE_ITEM', payload: { groupPrefix: group.prefix, index } });
       setConfirmRemove(null);
     },
-    [dispatch, group.prefix],
+    [dispatch, group.prefix]
   );
 
   const handleDragStart = useCallback((idx: number) => {
@@ -66,7 +70,9 @@ export default function RepeatingGroup({ group }: RepeatingGroupProps) {
     <div className={styles.group}>
       <div className={styles.groupHeader}>
         <span className={styles.groupLabel}>{group.label}</span>
-        <span className={styles.itemCount}>{group.items.length} {l('repeatingGroup.items')}</span>
+        <span className={styles.itemCount}>
+          {group.items.length} {l('repeatingGroup.items')}
+        </span>
         <button type="button" className={styles.addButton} onClick={handleAdd}>
           <Plus size={14} />
           {l('repeatingGroup.add')}
@@ -94,19 +100,12 @@ export default function RepeatingGroup({ group }: RepeatingGroupProps) {
               onDragEnd={() => setDragIdx(null)}
             >
               <div className={styles.itemHeader} onClick={() => toggleCollapse(item.index)}>
-                <span
-                  className={styles.dragHandle}
-                  onMouseDown={(e) => e.stopPropagation()}
-                >
+                <span className={styles.dragHandle} onMouseDown={(e) => e.stopPropagation()}>
                   <GripVertical size={16} />
                 </span>
                 <span className={styles.itemLabel}>
                   {group.label} #{item.index}
-                  {previewLabel && (
-                    <span style={previewStyle}>
-                      — {previewLabel}
-                    </span>
-                  )}
+                  {previewLabel && <span style={previewStyle}>— {previewLabel}</span>}
                 </span>
                 <button
                   type="button"

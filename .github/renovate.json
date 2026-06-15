@@ -32,7 +32,12 @@
     {
       "description": "Group Tailwind packages",
       "groupName": "tailwind",
-      "matchPackagePatterns": ["tailwindcss", "@tailwindcss/", "tailwind-merge", "prettier-plugin-tailwindcss"]
+      "matchPackagePatterns": [
+        "tailwindcss",
+        "@tailwindcss/",
+        "tailwind-merge",
+        "prettier-plugin-tailwindcss"
+      ]
     },
     {
       "description": "Automerge patch updates for dev dependencies",

@@ -28,7 +28,11 @@ function matchFilter(item: Item, _groupIndex: number, activeIndex: number): bool
 }
 
 function renderItem(item: Item) {
-  return <div key={item.name} data-testid={`item-${item.name}`}>{item.name}</div>;
+  return (
+    <div key={item.name} data-testid={`item-${item.name}`}>
+      {item.name}
+    </div>
+  );
 }
 
 describe('FilterableGrid', () => {
@@ -39,7 +43,7 @@ describe('FilterableGrid', () => {
         filterGroups={filterGroups}
         matchFilter={matchFilter}
         renderItem={renderItem}
-      />,
+      />
     );
     const scope = within(container);
 
@@ -56,7 +60,7 @@ describe('FilterableGrid', () => {
         filterGroups={filterGroups}
         matchFilter={matchFilter}
         renderItem={renderItem}
-      />,
+      />
     );
     const scope = within(container);
 
@@ -69,9 +73,7 @@ describe('FilterableGrid', () => {
 
   it('shows empty message when no items match', async () => {
     const user = userEvent.setup();
-    const emptyFilter = [
-      { items: ['All', 'None'], ariaLabel: 'Filter' },
-    ];
+    const emptyFilter = [{ items: ['All', 'None'], ariaLabel: 'Filter' }];
 
     const { container } = render(
       <FilterableGrid
@@ -80,7 +82,7 @@ describe('FilterableGrid', () => {
         matchFilter={(_item, _gi, activeIndex) => activeIndex === 0}
         renderItem={renderItem}
         emptyMessage="No results found"
-      />,
+      />
     );
     const scope = within(container);
 
@@ -96,7 +98,7 @@ describe('FilterableGrid', () => {
         filterGroups={filterGroups}
         matchFilter={matchFilter}
         renderItem={renderItem}
-      />,
+      />
     );
     const scope = within(container);
 
@@ -105,17 +107,12 @@ describe('FilterableGrid', () => {
 
     await user.click(scope.getByRole('tab', { name: 'Category B' }));
     expect(allTab).toHaveAttribute('aria-selected', 'false');
-    expect(scope.getByRole('tab', { name: 'Category B' })).toHaveAttribute(
-      'aria-selected',
-      'true',
-    );
+    expect(scope.getByRole('tab', { name: 'Category B' })).toHaveAttribute('aria-selected', 'true');
   });
 
   it('supports toggle mode for filter groups', async () => {
     const user = userEvent.setup();
-    const toggleGroups = [
-      { items: ['Tag A', 'Tag B'], ariaLabel: 'Tags', toggle: true },
-    ];
+    const toggleGroups = [{ items: ['Tag A', 'Tag B'], ariaLabel: 'Tags', toggle: true }];
 
     const { container } = render(
       <FilterableGrid
@@ -127,7 +124,7 @@ describe('FilterableGrid', () => {
           return item.category === 'B';
         }}
         renderItem={renderItem}
-      />,
+      />
     );
     const scope = within(container);
 
@@ -153,7 +150,7 @@ describe('FilterableGrid', () => {
         matchFilter={matchFilter}
         renderItem={renderItem}
         ariaLabel="Portfolio grid"
-      />,
+      />
     );
     const scope = within(container);
 

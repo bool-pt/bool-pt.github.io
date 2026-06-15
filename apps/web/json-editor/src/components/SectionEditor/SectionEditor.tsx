@@ -25,7 +25,7 @@ export default function SectionEditor() {
 
   const currentSection = useMemo(
     () => sections.find((s) => s.name === renderedSection),
-    [sections, renderedSection],
+    [sections, renderedSection]
   );
 
   // Search mode: show flat results grouped by section
@@ -54,14 +54,14 @@ export default function SectionEditor() {
         <div className={styles.card}>
           <div className={styles.cardHeader}>
             <span className={styles.sectionTitle}>{l('editor.searchResults')}</span>
-            <span className={styles.keyCount}>{searchResults.length} {l('editor.matches')}</span>
+            <span className={styles.keyCount}>
+              {searchResults.length} {l('editor.matches')}
+            </span>
           </div>
           <div className={styles.cardBody}>
             {[...grouped.entries()].map(([sectionName, results]) => (
               <div key={sectionName}>
-                <div className={styles.searchResultSection}>
-                  {results[0]?.sectionLabel}
-                </div>
+                <div className={styles.searchResultSection}>{results[0]?.sectionLabel}</div>
                 {results.map((r) => (
                   <FieldEditor key={r.field.key} field={r.field} />
                 ))}
@@ -95,7 +95,9 @@ export default function SectionEditor() {
     <div className={styles.wrapper}>
       <div className={styles.cardHeader}>
         <span className={styles.sectionTitle}>{currentSection.label}</span>
-        <span className={styles.keyCount}>{currentSection.keyCount} {l('editor.keys')}</span>
+        <span className={styles.keyCount}>
+          {currentSection.keyCount} {l('editor.keys')}
+        </span>
       </div>
 
       {isSharedReadOnly && (
@@ -105,7 +107,12 @@ export default function SectionEditor() {
           <button
             type="button"
             className={styles.sharedBannerLink}
-            onClick={() => dispatch({ type: 'SET_ACTIVE_SECTION', payload: { name: currentSection.name, context: 'shared' } })}
+            onClick={() =>
+              dispatch({
+                type: 'SET_ACTIVE_SECTION',
+                payload: { name: currentSection.name, context: 'shared' },
+              })
+            }
           >
             {l('shared.editLink')}
           </button>
@@ -122,19 +129,19 @@ export default function SectionEditor() {
               ))}
             </>
           )}
-          {!isSharedReadOnly && currentSection.repeatingGroups.map((group) => (
-            <RepeatingGroup key={group.prefix} group={group} />
-          ))}
-          {isSharedReadOnly && currentSection.repeatingGroups.map((group) => (
-            <div key={group.prefix}>
-              <div className={styles.fieldsHeading}>{group.label}</div>
-              {group.items.map((item) =>
-                item.fields.map((field) => (
-                  <FieldEditor key={field.key} field={field} disabled />
-                )),
-              )}
-            </div>
-          ))}
+          {!isSharedReadOnly &&
+            currentSection.repeatingGroups.map((group) => (
+              <RepeatingGroup key={group.prefix} group={group} />
+            ))}
+          {isSharedReadOnly &&
+            currentSection.repeatingGroups.map((group) => (
+              <div key={group.prefix}>
+                <div className={styles.fieldsHeading}>{group.label}</div>
+                {group.items.map((item) =>
+                  item.fields.map((field) => <FieldEditor key={field.key} field={field} disabled />)
+                )}
+              </div>
+            ))}
         </div>
       </div>
     </div>

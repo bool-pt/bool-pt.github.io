@@ -6,7 +6,7 @@ import type { Section } from './types';
  */
 export function serialize(
   sections: Section[],
-  metaKeys?: Record<string, string>,
+  metaKeys?: Record<string, string>
 ): Record<string, string> {
   const result: Record<string, string> = {};
 
@@ -46,9 +46,6 @@ export function serialize(
 /**
  * Serialize to a formatted JSON string with 2-space indentation.
  */
-export function serializeToString(
-  sections: Section[],
-  metaKeys?: Record<string, string>,
-): string {
+export function serializeToString(sections: Section[], metaKeys?: Record<string, string>): string {
   return JSON.stringify(serialize(sections, metaKeys), null, 2) + '\n';
 }

@@ -13,7 +13,7 @@ describe('resolveImage', () => {
 
   it('throws a descriptive error when the path is not found', () => {
     expect(() => resolveImage('does-not-exist/missing.jpg')).toThrowError(
-      /\[@bool\/content\] Image not found: "does-not-exist\/missing\.jpg"/,
+      /\[@bool\/content\] Image not found: "does-not-exist\/missing\.jpg"/
     );
   });
 
@@ -33,7 +33,7 @@ describe('resolveSvgUrl', () => {
 
   it('throws when the SVG path is not found', () => {
     expect(() => resolveSvgUrl('decorative/missing.svg')).toThrowError(
-      /\[@bool\/content\] SVG not found/,
+      /\[@bool\/content\] SVG not found/
     );
   });
 });

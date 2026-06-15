@@ -62,7 +62,11 @@ describe('consent', () => {
   });
 
   it('detects expired consent', () => {
-    const expired = { analytics: true, marketing: true, timestamp: Date.now() - 400 * 24 * 60 * 60 * 1000 };
+    const expired = {
+      analytics: true,
+      marketing: true,
+      timestamp: Date.now() - 400 * 24 * 60 * 60 * 1000,
+    };
     expect(isConsentExpired(expired)).toBe(true);
   });
 

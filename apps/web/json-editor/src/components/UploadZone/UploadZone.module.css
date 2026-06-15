@@ -21,7 +21,10 @@
   background: var(--color-primary, #e7453a);
   text-align: center;
   cursor: pointer;
-  transition: background-color 150ms, box-shadow 150ms, transform 150ms;
+  transition:
+    background-color 150ms,
+    box-shadow 150ms,
+    transform 150ms;
 }
 
 .card:hover {
@@ -31,7 +34,9 @@
 
 .cardDragOver {
   background: rgba(231, 69, 58, 1);
-  box-shadow: 0 24px 64px rgba(231, 69, 58, 0.4), inset 0 0 0 3px rgba(255, 255, 255, 0.4);
+  box-shadow:
+    0 24px 64px rgba(231, 69, 58, 0.4),
+    inset 0 0 0 3px rgba(255, 255, 255, 0.4);
   transform: scale(1.02);
 }
 
@@ -88,7 +93,9 @@
   font-weight: 600;
   font-size: var(--font-size-body, 1rem);
   cursor: pointer;
-  transition: background-color 150ms, box-shadow 150ms;
+  transition:
+    background-color 150ms,
+    box-shadow 150ms;
 }
 
 .button:hover {
@@ -125,7 +132,9 @@
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 150ms, color 150ms;
+  transition:
+    background-color 150ms,
+    color 150ms;
   min-block-size: 44px;
 }
 

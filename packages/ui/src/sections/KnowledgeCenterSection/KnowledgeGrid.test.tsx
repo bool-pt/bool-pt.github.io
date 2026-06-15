@@ -52,18 +52,14 @@ const labels = {
 
 describe('KnowledgeGrid', () => {
   it('renders article titles', () => {
-    render(
-      <KnowledgeGrid articles={articles} filters={filters} labels={labels} />
-    );
+    render(<KnowledgeGrid articles={articles} filters={filters} labels={labels} />);
 
     expect(screen.getAllByText('Scaling Microservices').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('Design Systems 101').length).toBeGreaterThanOrEqual(1);
   });
 
   it('renders filter tabs', () => {
-    render(
-      <KnowledgeGrid articles={articles} filters={filters} labels={labels} />
-    );
+    render(<KnowledgeGrid articles={articles} filters={filters} labels={labels} />);
 
     expect(screen.getByRole('tablist')).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: 'All' })).toBeInTheDocument();

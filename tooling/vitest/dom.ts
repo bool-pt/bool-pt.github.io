@@ -11,5 +11,5 @@ export default mergeConfig(
       environment: 'jsdom',
       setupFiles: [setupDom],
     },
-  }),
+  })
 );

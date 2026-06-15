@@ -11,13 +11,14 @@ import type { ImageMetadata } from 'astro';
 
 const imageMap = import.meta.glob<{ default: ImageMetadata }>(
   '../../media/images/**/*.{jpg,jpeg,png,webp,avif,svg}',
-  { eager: true },
+  { eager: true }
 );
 
-const svgMap = import.meta.glob<string>(
-  '../../media/images/**/*.svg',
-  { eager: true, query: '?url', import: 'default' },
-);
+const svgMap = import.meta.glob<string>('../../media/images/**/*.svg', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+});
 
 function findEntry<T>(map: Record<string, T>, relativePath: string): T | undefined {
   const suffix = `/media/images/${relativePath}`;
@@ -31,7 +32,7 @@ export function resolveImage(relativePath: string): ImageMetadata {
   const entry = findEntry(imageMap, relativePath);
   if (!entry) {
     throw new Error(
-      `[@bool/content] Image not found: "${relativePath}". Expected a file at packages/media/images/${relativePath}`,
+      `[@bool/content] Image not found: "${relativePath}". Expected a file at packages/media/images/${relativePath}`
     );
   }
   return entry.default;
@@ -41,7 +42,7 @@ export function resolveSvgUrl(relativePath: string): string {
   const entry = findEntry(svgMap, relativePath);
   if (!entry) {
     throw new Error(
-      `[@bool/content] SVG not found: "${relativePath}". Expected a file at packages/media/images/${relativePath}`,
+      `[@bool/content] SVG not found: "${relativePath}". Expected a file at packages/media/images/${relativePath}`
     );
   }
   return entry;
@@ -52,7 +53,7 @@ export function resolveSvgUrl(relativePath: string): string {
  * Useful when a JSON field may contain either (e.g. logos can be SVG or PNG).
  */
 export function resolveMedia(
-  relativePath: string,
+  relativePath: string
 ): { kind: 'image'; value: ImageMetadata } | { kind: 'svg'; value: string } {
   if (relativePath.toLowerCase().endsWith('.svg')) {
     return { kind: 'svg', value: resolveSvgUrl(relativePath) };

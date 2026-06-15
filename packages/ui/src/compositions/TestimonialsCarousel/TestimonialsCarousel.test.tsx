@@ -38,7 +38,7 @@ describe('TestimonialsCarousel', () => {
         testimonials={testimonials}
         prevLabel="Previous testimonial"
         nextLabel="Next testimonial"
-      />,
+      />
     );
 
     expect(screen.getByText('Outstanding work on our platform.')).toBeInTheDocument();
@@ -55,7 +55,7 @@ describe('TestimonialsCarousel', () => {
         testimonials={testimonials}
         prevLabel="Previous testimonial"
         nextLabel="Next testimonial"
-      />,
+      />
     );
 
     expect(screen.getByRole('button', { name: 'Previous testimonial' })).toBeInTheDocument();
@@ -69,7 +69,7 @@ describe('TestimonialsCarousel', () => {
         testimonials={testimonials}
         prevLabel="Previous testimonial"
         nextLabel="Next testimonial"
-      />,
+      />
     );
 
     const track = container.querySelector('[class*="track"]') as HTMLElement;
