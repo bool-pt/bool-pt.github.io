@@ -35,8 +35,6 @@ const fullArticle: ArticleModalData = {
     { value: '3x', label: 'Faster Deploys' },
   ],
   techStack: ['React', 'Node.js', 'AWS'],
-  readTime: '8 min',
-  views: '1.2k',
 };
 
 describe('ArticleModal', () => {
