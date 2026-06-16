@@ -75,6 +75,17 @@ describe('CookieBanner', () => {
     expect(mockAccept).toHaveBeenCalledOnce();
   });
 
+  it('calls reject when reject button is clicked', async () => {
+    const user = userEvent.setup();
+    setupMock();
+
+    render(<CookieBanner />);
+
+    await user.click(screen.getByText('cookie.reject'));
+
+    expect(mockReject).toHaveBeenCalledOnce();
+  });
+
   it('shows manage preferences view when manage button is clicked', async () => {
     const user = userEvent.setup();
     setupMock();
@@ -87,9 +98,12 @@ describe('CookieBanner', () => {
     expect(screen.getByText('cookie.back')).toBeInTheDocument();
     expect(screen.getByText('consent.essential.label')).toBeInTheDocument();
     expect(screen.getByText('consent.analytics.label')).toBeInTheDocument();
-    expect(screen.getByText('consent.marketing.label')).toBeInTheDocument();
+    // Marketing is hidden until the site actually uses marketing cookies.
+    expect(screen.queryByText('consent.marketing.label')).not.toBeInTheDocument();
 
-    const essentialToggle = screen.getAllByRole('checkbox')[0];
+    const checkboxes = screen.getAllByRole('checkbox');
+    expect(checkboxes).toHaveLength(2); // essential (locked) + analytics
+    const essentialToggle = checkboxes[0];
     expect(essentialToggle).toBeChecked();
     expect(essentialToggle).toBeDisabled();
   });

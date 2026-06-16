@@ -1,6 +1,6 @@
 ---
 import GoogleAnalytics from '@bool/analytics/GoogleAnalytics.astro';
-import { CookieBanner } from '@bool/compliance';
+import { CookieBanner, CONSENT_ENABLED } from '@bool/compliance';
 import { enKeys, t, tOptional } from '@bool/i18n';
 import { organizationJsonLd, websiteJsonLd } from '@bool/seo';
 import SecurityHeaders from '@bool/seo/SecurityHeaders.astro';
@@ -187,7 +187,7 @@ const modals = modalKeys.map((key) => ({
       <slot />
     </main>
     <Footer labels={footerLabels} />
-    <CookieBanner client:load />
+    {CONSENT_ENABLED && <CookieBanner client:load />}
     {modals.length > 0 && <ModalHost client:idle modals={modals} closeLabel={t('common.close')} />}
   </body>
 </html>

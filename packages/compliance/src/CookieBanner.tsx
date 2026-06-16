@@ -9,11 +9,11 @@ import { useConsent } from './hooks';
 const allCategoryKeys = Object.keys(CONSENT_CATEGORIES) as (keyof typeof CONSENT_CATEGORIES)[];
 const requiredKeys = allCategoryKeys.filter((k) => CONSENT_CATEGORIES[k].required);
 const optionalKeys = allCategoryKeys.filter(
-  (k) => !CONSENT_CATEGORIES[k].required
+  (k) => !CONSENT_CATEGORIES[k].required && CONSENT_CATEGORIES[k].available
 ) as ConsentCategory[];
 
 export function CookieBanner() {
-  const { consent, hasDecided, accept, savePreferences } = useConsent();
+  const { consent, hasDecided, accept, reject, savePreferences } = useConsent();
   const [view, setView] = useState<'initial' | 'preferences'>('initial');
   const [forcedOpen, setForcedOpen] = useState(false);
   const [preferences, setPreferences] = useState<Record<ConsentCategory, boolean>>({
@@ -49,7 +49,11 @@ export function CookieBanner() {
   }
 
   function handleSave() {
-    savePreferences(preferences);
+    // Never record consent for a category the user wasn't shown.
+    savePreferences({
+      analytics: CONSENT_CATEGORIES.analytics.available ? preferences.analytics : false,
+      marketing: CONSENT_CATEGORIES.marketing.available ? preferences.marketing : false,
+    });
     setForcedOpen(false);
   }
 
@@ -70,10 +74,13 @@ export function CookieBanner() {
             <button onClick={accept} className={styles.acceptButton}>
               {t('cookie.accept')}
             </button>
-            <button onClick={() => setView('preferences')} className={styles.rejectButton}>
-              {t('cookie.manage')}
+            <button onClick={reject} className={styles.rejectButton}>
+              {t('cookie.reject')}
             </button>
           </div>
+          <button onClick={() => setView('preferences')} className={styles.manageLink}>
+            {t('cookie.manage')}
+          </button>
         </>
       ) : (
         <>

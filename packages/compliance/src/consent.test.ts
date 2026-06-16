@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { CONSENT_STORAGE_KEY } from './config';
+import { CONSENT_STORAGE_KEY, CONSENT_VERSION } from './config';
 import { getConsent, setConsent, clearConsent, isConsentExpired } from './consent';
 
 describe('consent', () => {
@@ -40,6 +40,47 @@ describe('consent', () => {
     expect(getConsent()).toBeNull();
   });
 
+  it('stamps the current policy version on setConsent', () => {
+    setConsent({ analytics: true, marketing: false });
+    expect(getConsent()?.version).toBe(CONSENT_VERSION);
+  });
+
+  it('returns null when the stored consent version does not match', () => {
+    localStorage.setItem(
+      CONSENT_STORAGE_KEY,
+      JSON.stringify({
+        analytics: true,
+        marketing: true,
+        timestamp: Date.now(),
+        version: CONSENT_VERSION + 1,
+      })
+    );
+    expect(getConsent()).toBeNull();
+  });
+
+  it('dispatches consent-revoked when a granted category is later denied', () => {
+    setConsent({ analytics: true, marketing: false });
+
+    let revokedDetail: unknown = null;
+    window.addEventListener('bool:consent-revoked', ((e: CustomEvent) => {
+      revokedDetail = e.detail;
+    }) as EventListener);
+
+    setConsent({ analytics: false, marketing: false });
+    expect(revokedDetail).toMatchObject({ analytics: true, marketing: false });
+  });
+
+  it('does not dispatch consent-revoked when no category is downgraded', () => {
+    let revokedFired = false;
+    window.addEventListener('bool:consent-revoked', () => {
+      revokedFired = true;
+    });
+
+    setConsent({ analytics: false, marketing: false });
+    setConsent({ analytics: true, marketing: true });
+    expect(revokedFired).toBe(false);
+  });
+
   it('dispatches consent-updated event on setConsent', () => {
     let eventDetail: unknown = null;
     window.addEventListener('bool:consent-updated', ((e: CustomEvent) => {
@@ -62,17 +103,32 @@ describe('consent', () => {
   });
 
   it('detects expired consent', () => {
-    const expired = { analytics: true, marketing: true, timestamp: Date.now() - 400 * 24 * 60 * 60 * 1000 };
+    const expired = {
+      analytics: true,
+      marketing: true,
+      timestamp: Date.now() - 400 * 24 * 60 * 60 * 1000,
+      version: CONSENT_VERSION,
+    };
     expect(isConsentExpired(expired)).toBe(true);
   });
 
   it('detects valid consent', () => {
-    const fresh = { analytics: true, marketing: true, timestamp: Date.now() };
+    const fresh = {
+      analytics: true,
+      marketing: true,
+      timestamp: Date.now(),
+      version: CONSENT_VERSION,
+    };
     expect(isConsentExpired(fresh)).toBe(false);
   });
 
   it('accepts custom max age', () => {
-    const recent = { analytics: true, marketing: true, timestamp: Date.now() - 5000 };
+    const recent = {
+      analytics: true,
+      marketing: true,
+      timestamp: Date.now() - 5000,
+      version: CONSENT_VERSION,
+    };
     expect(isConsentExpired(recent, 1000)).toBe(true);
     expect(isConsentExpired(recent, 10000)).toBe(false);
   });

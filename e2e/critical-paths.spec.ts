@@ -76,9 +76,10 @@ test.describe('Cookie Consent', () => {
   });
 
   test('"Manage" opens the preferences view (does not auto-dismiss)', async ({ page }) => {
-    // The CookieBanner has two buttons in initial view: Accept (closes) and
-    // Manage (opens the preferences panel). There is no "reject all" CTA;
-    // instead the user enters preferences and saves with categories off.
+    // Initial view has "Accept all" and "Reject all" buttons plus a "Manage
+    // preferences" link (the last button) that opens the preferences panel.
+    // The banner is gated behind the CONSENT_ENABLED flag; when it's disabled
+    // the banner is absent and this test no-ops via the visibility guard below.
     await page.goto(ROUTES.home);
     await page.evaluate(() => localStorage.clear());
     await page.reload();

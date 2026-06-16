@@ -5,3 +5,7 @@ pnpm-lock.yaml
 .turbo/
 coverage/
 .playwright-cli/
+
+# prettier-plugin-astro cannot parse the GA4 `define:vars` inline <script>
+# (valid Astro, builds fine). Formatting is maintained manually.
+packages/analytics/src/GoogleAnalytics.astro
