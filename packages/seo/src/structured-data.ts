@@ -1,4 +1,19 @@
-import { SITE_URL, SITE_NAME, COMPANY, SOCIAL } from '@bool/shared';
+import { t } from '@bool/i18n';
+import { SITE_URL, SITE_NAME, COMPANY } from '@bool/shared';
+
+/** Social profile URLs are content-managed in `en.json` (`footer.social.*.href`). */
+const SOCIAL_URL_KEYS = [
+  'footer.social.linkedin.href',
+  'footer.social.github.href',
+  'footer.social.twitter.href',
+  'footer.social.instagram.href',
+  'footer.social.facebook.href',
+  'footer.social.youtube.href',
+];
+
+function socialUrls(): string[] {
+  return SOCIAL_URL_KEYS.map((key) => t(key)).filter((url) => url.startsWith('http'));
+}
 
 export function organizationJsonLd() {
   return {
@@ -6,7 +21,7 @@ export function organizationJsonLd() {
     '@type': 'Organization',
     name: COMPANY.name,
     url: SITE_URL,
-    sameAs: Object.values(SOCIAL),
+    sameAs: socialUrls(),
     contactPoint: {
       '@type': 'ContactPoint',
       email: COMPANY.email,

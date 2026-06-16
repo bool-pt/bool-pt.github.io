@@ -1,9 +1,10 @@
 ---
-import { t } from '@bool/i18n';
-import { ROUTES } from '@bool/shared';
+import { t, tCollection } from '@bool/i18n';
 import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
 import LegalPageSection from '@bool/ui/sections/LegalPageSection.astro';
 import { getHeaderLabels, getFooterLabels } from '../labels';
+
+const sections = tCollection('privacy.section', ['heading', 'body']);
 ---
 
 <BaseLayout
@@ -18,143 +19,13 @@ import { getHeaderLabels, getFooterLabels } from '../labels';
     heading={t('privacy.heading')}
     subtitle={t('privacy.lastUpdated')}
   >
-    <h2>1. Data Controller</h2>
-    <p>
-      Bool, Lda. ("Bool", "we", "us") is the data controller responsible for processing your
-      personal data. You can contact us at <a href="mailto:info@bool.pt">info@bool.pt</a> or +351 219
-      345 678.
-    </p>
-
-    <h2>2. Data We Collect</h2>
-    <p>We collect the following categories of personal data:</p>
-    <ul>
-      <li>
-        <strong>Contact form submissions</strong> — name, email address, phone number (optional), and
-        message content.
-      </li>
-      <li><strong>Newsletter subscriptions</strong> — email address.</li>
-      <li>
-        <strong>Analytics data</strong> — anonymised IP address, pages visited, time on site, and browser/device
-        information (only with your consent).
-      </li>
-      <li>
-        <strong>Error monitoring data</strong> — technical error logs including browser type and page
-        URL (only with your consent).
-      </li>
-    </ul>
-
-    <h2>3. Legal Basis for Processing</h2>
-    <ul>
-      <li>
-        <strong>Consent</strong> (Art. 6(1)(a) GDPR) — for analytics cookies, marketing communications,
-        and error monitoring.
-      </li>
-      <li>
-        <strong>Legitimate interest</strong> (Art. 6(1)(f) GDPR) — for responding to contact form inquiries
-        and ensuring website security.
-      </li>
-    </ul>
-
-    <h2>4. How We Use Your Data</h2>
-    <ul>
-      <li>To respond to your inquiries submitted via the contact form.</li>
-      <li>To send marketing communications you have subscribed to.</li>
-      <li>To understand how visitors use our website and improve it (analytics).</li>
-      <li>To detect and fix technical errors (error monitoring).</li>
-    </ul>
-
-    <h2>5. Third-Party Processors</h2>
-    <p>
-      We share personal data with the following processors, all of which have appropriate data
-      processing agreements in place:
-    </p>
-    <ul>
-      <li>
-        <strong>Google Analytics (Google LLC)</strong> — website analytics. IP addresses are anonymised.
-        Data may be transferred to the US under Google's EU-US Data Privacy Framework certification.
-      </li>
-      <li>
-        <strong>Sentry (Functional Software, Inc.)</strong> — error monitoring. Processes technical error
-        data only with your consent. When an error occurs, Sentry may capture a session replay; all text,
-        form inputs, and media are masked so no personal data is recorded.
-      </li>
-      <li>
-        <strong>Amazon Web Services (AWS)</strong> — hosts our contact form and newsletter processing
-        endpoints. Data is processed within the EU (eu-west-3 region, Paris).
-      </li>
-      <li>
-        <strong>Cloudflare Turnstile (Cloudflare, Inc.)</strong> — bot prevention on forms. Processes
-        interaction data to verify you are human.
-      </li>
-    </ul>
-
-    <h2>6. Data Retention</h2>
-    <ul>
-      <li>
-        <strong>Contact form data</strong> — retained for 12 months after the inquiry is resolved, then
-        deleted.
-      </li>
-      <li><strong>Newsletter subscriptions</strong> — retained until you unsubscribe.</li>
-      <li><strong>Analytics data</strong> — retained for 14 months (Google Analytics default).</li>
-      <li><strong>Error monitoring data</strong> — retained for 90 days.</li>
-      <li>
-        <strong>Consent records</strong> — your consent choices are stored locally on your own device
-        (in your browser's local storage), not on our servers. They remain until they expire after 365
-        days, until you withdraw consent, or until you clear your browser storage.
-      </li>
-    </ul>
-
-    <h2>7. Your Rights</h2>
-    <p>Under GDPR, you have the right to:</p>
-    <ul>
-      <li><strong>Access</strong> — request a copy of the personal data we hold about you.</li>
-      <li><strong>Rectification</strong> — request correction of inaccurate data.</li>
-      <li>
-        <strong>Erasure</strong> — request deletion of your personal data ("right to be forgotten").
-      </li>
-      <li><strong>Restriction</strong> — request that we limit processing of your data.</li>
-      <li>
-        <strong>Portability</strong> — receive your data in a structured, machine-readable format.
-      </li>
-      <li><strong>Objection</strong> — object to processing based on legitimate interest.</li>
-      <li>
-        <strong>Withdraw consent</strong> — withdraw previously given consent at any time via the "Cookie
-        preferences" link in the footer.
-      </li>
-    </ul>
-    <p>
-      To exercise any of these rights, contact us at <a href="mailto:info@bool.pt">info@bool.pt</a>.
-      We will respond within 30 days.
-    </p>
-
-    <h2>8. Cookies</h2>
-    <p>
-      For detailed information about the cookies we use, please see our <a href={ROUTES.cookies}
-        >Cookie Policy</a
-      >.
-    </p>
-
-    <h2>9. International Transfers</h2>
-    <p>
-      Some of our processors are based in the United States. Transfers are protected by EU Standard
-      Contractual Clauses or the EU-US Data Privacy Framework, as applicable.
-    </p>
-
-    <h2>10. Supervisory Authority</h2>
-    <p>
-      You have the right to lodge a complaint with the Portuguese Data Protection Authority
-      (Comissão Nacional de Proteção de Dados — CNPD) at <a
-        href="https://www.cnpd.pt"
-        target="_blank"
-        rel="noopener noreferrer">www.cnpd.pt</a
-      >.
-    </p>
-
-    <h2>11. Changes to This Policy</h2>
-    <p>
-      We may update this policy from time to time. The "Last updated" date at the top of this page
-      reflects the most recent revision. Material changes will be communicated via a banner on the
-      website.
-    </p>
+    {
+      sections.map((section) => (
+        <Fragment>
+          <h2>{section.heading}</h2>
+          <Fragment set:html={section.body} />
+        </Fragment>
+      ))
+    }
   </LegalPageSection>
 </BaseLayout>

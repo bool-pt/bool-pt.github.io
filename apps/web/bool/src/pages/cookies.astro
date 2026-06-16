@@ -1,8 +1,10 @@
 ---
-import { t } from '@bool/i18n';
+import { t, tCollection } from '@bool/i18n';
 import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
 import LegalPageSection from '@bool/ui/sections/LegalPageSection.astro';
 import { getHeaderLabels, getFooterLabels } from '../labels';
+
+const sections = tCollection('cookies.section', ['heading', 'body']);
 ---
 
 <BaseLayout
@@ -13,131 +15,17 @@ import { getHeaderLabels, getFooterLabels } from '../labels';
 >
   <LegalPageSection
     headingId="cookies-heading"
-    ariaLabel={t('cookiesPage.heading')}
-    heading={t('cookiesPage.heading')}
-    subtitle={t('cookiesPage.lastUpdated')}
+    ariaLabel={t('cookies.heading')}
+    heading={t('cookies.heading')}
+    subtitle={t('cookies.lastUpdated')}
   >
-    <h2>1. What Are Cookies?</h2>
-    <p>
-      Cookies are small text files stored on your device when you visit a website. They help the
-      site remember your preferences and understand how you interact with it.
-    </p>
-
-    <h2>2. How We Use Cookies</h2>
-    <p>We use cookies and similar technologies for the following purposes:</p>
-
-    <h3>Essential Storage (No Consent Required)</h3>
-    <p>These are strictly necessary for the website to function and cannot be disabled.</p>
-    <table>
-      <thead>
-        <tr><th>Name</th><th>Purpose</th><th>Duration</th><th>Type</th></tr>
-      </thead>
-      <tbody>
-        <tr
-          ><td>theme</td><td>Stores your light/dark mode preference</td><td>Persistent</td><td
-            >localStorage</td
-          ></tr
-        >
-        <tr
-          ><td>locale</td><td>Stores your language preference</td><td>Persistent</td><td
-            >localStorage</td
-          ></tr
-        >
-        <tr
-          ><td>bool-consent</td><td>Stores your cookie consent preferences</td><td>365 days</td><td
-            >localStorage</td
-          ></tr
-        >
-      </tbody>
-    </table>
-    <p>
-      Cloudflare Turnstile may also set cookies when you interact with a form captcha. These are
-      strictly necessary for bot prevention and cannot be disabled.
-    </p>
-
-    <h3>Analytics Cookies (Consent Required)</h3>
-    <p>
-      These help us understand how visitors use our website so we can improve it. They are only
-      activated when you consent to the "Analytics" category.
-    </p>
-    <table>
-      <thead>
-        <tr><th>Name</th><th>Purpose</th><th>Duration</th><th>Provider</th></tr>
-      </thead>
-      <tbody>
-        <tr
-          ><td>_ga</td><td>Distinguishes unique users</td><td>2 years</td><td>Google Analytics</td
-          ></tr
-        >
-        <tr
-          ><td>_ga_*</td><td>Maintains session state</td><td>2 years</td><td>Google Analytics</td
-          ></tr
-        >
-      </tbody>
-    </table>
-    <p>
-      Google Analytics is configured with IP anonymisation enabled. Analytics scripts run off the
-      main thread via Partytown and are only loaded after you grant consent.
-    </p>
-
-    <h3>Error Monitoring (Consent Required)</h3>
-    <p>
-      We use Sentry for error monitoring, which may store technical diagnostic data and, when an
-      error occurs, a masked session replay (all text, form inputs, and media are hidden so no
-      personal data is captured). This is only activated when you consent to the "Analytics"
-      category, and it is disabled again if you withdraw that consent.
-    </p>
-
-    <h3>Marketing (Consent Required)</h3>
-    <p>
-      We do not currently use marketing cookies, so no marketing option is shown in the consent
-      banner. If we introduce them in the future, we will add a Marketing option to the banner,
-      update this policy, and request your consent before any marketing cookies are set.
-    </p>
-
-    <h2>3. Third-Party Cookies</h2>
-    <p>Some cookies are placed by third-party services we use:</p>
-    <ul>
-      <li><strong>Google Analytics</strong> — analytics cookies as described above.</li>
-      <li>
-        <strong>Cloudflare Turnstile</strong> — may set cookies when you interact with a form captcha.
-        These are necessary for bot prevention and do not track you across sites.
-      </li>
-    </ul>
-
-    <h2>4. Managing Your Preferences</h2>
-    <p>
-      You can manage your cookie preferences at any time by clicking the <strong
-        >"Cookie preferences"</strong
-      > link in the footer of any page. This will reopen the consent banner where you can change your
-      choices.
-    </p>
-    <p>
-      You can also control cookies through your browser settings. Note that blocking all cookies may
-      affect website functionality.
-    </p>
-
-    <h2>5. Consent Duration</h2>
-    <p>
-      Your consent preferences are stored locally on your device for 365 days. After this period,
-      you will be asked to consent again. We will also ask you to consent again if we materially
-      change the cookies or third-party services we use. You can change or withdraw your consent at
-      any time, and withdrawing analytics consent removes the related analytics cookies on your next
-      page load.
-    </p>
-
-    <h2>6. Changes to This Policy</h2>
-    <p>
-      We may update this Cookie Policy to reflect changes in our practices or for legal,
-      operational, or regulatory reasons. The "Last updated" date at the top indicates the most
-      recent revision.
-    </p>
-
-    <h2>7. Contact</h2>
-    <p>
-      If you have questions about our use of cookies, contact us at <a href="mailto:info@bool.pt"
-        >info@bool.pt</a
-      >.
-    </p>
+    {
+      sections.map((section) => (
+        <Fragment>
+          <h2>{section.heading}</h2>
+          <Fragment set:html={section.body} />
+        </Fragment>
+      ))
+    }
   </LegalPageSection>
 </BaseLayout>

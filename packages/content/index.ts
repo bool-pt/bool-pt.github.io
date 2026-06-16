@@ -16,8 +16,8 @@ export { getTeamGrid } from './src/team-grid.ts';
 export type { TeamGridPayload, TeamMemberCard } from './src/team-grid.ts';
 export { resolveImage, resolveSvgUrl, resolveMedia } from './src/media.ts';
 export { collectArray, collectNestedList } from './src/sections.ts';
-export { validateLocale, KNOWN_GRADIENT_ICONS } from './src/validation.ts';
-export type { ValidationReport, MediaError, IconError } from './src/validation.ts';
+export { validateLocale, validateMeta, KNOWN_GRADIENT_ICONS } from './src/validation.ts';
+export type { ValidationReport, MediaError, IconError, MetaError } from './src/validation.ts';
 
 // Layout & shared label getters
 export {

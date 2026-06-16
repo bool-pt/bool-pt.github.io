@@ -427,7 +427,7 @@ export function upsertModalField(
     key: fullKey,
     value,
     isDirty: true,
-    kind: classifyField(fullKey),
+    kind: classifyField(fullKey, value),
     options: getFieldOptions(fullKey),
   });
 

@@ -1,33 +1,19 @@
-import { t, tList, LOCALE_META, locales, defaultLocale } from '@bool/i18n';
+import { t, tList, tCollection, LOCALE_META, locales, defaultLocale } from '@bool/i18n';
 import type { Locale } from '@bool/i18n';
+import { resolveImage } from './media.ts';
 
 export function getHeaderLabels(locale: Locale = 'en') {
   return {
+    skipToContent: t('nav.skipToContent', locale),
     navAria: t('nav.main.aria', locale),
     logoAria: t('header.logoAria', locale),
+    logo: resolveImage(t('header.logo', locale)),
     ctaLabel: t('header.cta', locale),
-    linkLabels: {
-      'nav.home': t('nav.home', locale),
-      'nav.about': t('nav.about', locale),
-      'nav.services': t('nav.services', locale),
-      'nav.people': t('nav.people', locale),
-      'nav.portfolio': t('nav.portfolio', locale),
-      'nav.insights': t('nav.insights', locale),
-      'nav.contacts': t('nav.contacts', locale),
-    },
+    navLinks: tCollection('nav.items', ['label', 'href'], locale),
     mobileNavLabels: {
       open: t('mobileNav.open', locale),
       title: t('mobileNav.title', locale),
       navAria: t('nav.mobile.aria', locale),
-      linkLabels: {
-        'nav.home': t('nav.home', locale),
-        'nav.about': t('nav.about', locale),
-        'nav.services': t('nav.services', locale),
-        'nav.people': t('nav.people', locale),
-        'nav.portfolio': t('nav.portfolio', locale),
-        'nav.insights': t('nav.insights', locale),
-        'nav.contacts': t('nav.contacts', locale),
-      },
     },
     languageSelectLabels: {
       ariaLabel: t('languageSelect.aria', locale),
@@ -47,31 +33,29 @@ export function getFooterLabels(locale: Locale = 'en') {
     tagline: t('footer.tagline', locale),
     socialAria: t('footer.social.aria', locale),
     socialLabels: {
-      facebook: t('footer.social.facebook', locale),
-      instagram: t('footer.social.instagram', locale),
-      linkedin: t('footer.social.linkedin', locale),
-      twitter: t('footer.social.twitter', locale),
-      youtube: t('footer.social.youtube', locale),
+      facebook: t('footer.social.facebook.label', locale),
+      instagram: t('footer.social.instagram.label', locale),
+      linkedin: t('footer.social.linkedin.label', locale),
+      twitter: t('footer.social.twitter.label', locale),
+      youtube: t('footer.social.youtube.label', locale),
     },
-    quickLinksHeading: t('footer.quickLinks', locale),
-    legalLinksHeading: t('footer.legalLinks', locale),
+    socialUrls: {
+      facebook: t('footer.social.facebook.href', locale),
+      instagram: t('footer.social.instagram.href', locale),
+      linkedin: t('footer.social.linkedin.href', locale),
+      twitter: t('footer.social.twitter.href', locale),
+      youtube: t('footer.social.youtube.href', locale),
+    },
+    quickLinksHeading: t('footer.quickLinks.heading', locale),
+    legalLinksHeading: t('footer.legalLinks.heading', locale),
     findUsHeading: t('footer.findUs', locale),
     address: t('footer.address', locale),
     copyright: t('footer.copyright', locale),
     companyName: t('company.name', locale),
     companyEmail: t('company.email', locale),
     companyPhone: t('company.phone', locale),
-    linkLabels: {
-      'footer.link.services': t('footer.link.services', locale),
-      'footer.link.about': t('footer.link.about', locale),
-      'footer.link.careers': t('footer.link.careers', locale),
-      'footer.link.contact': t('footer.link.contact', locale),
-      'footer.link.insights': t('footer.link.insights', locale),
-      'footer.link.useCases': t('footer.link.useCases', locale),
-      'footer.link.privacy': t('footer.link.privacy', locale),
-      'footer.link.terms': t('footer.link.terms', locale),
-      'footer.link.cookies': t('footer.link.cookies', locale),
-    },
+    quickLinks: tCollection('footer.quickLinks.items', ['label', 'href'], locale),
+    legalLinks: tCollection('footer.legalLinks.items', ['label', 'href'], locale),
     cookiePreferencesLabel: t('cookie.preferences', locale),
   };
 }

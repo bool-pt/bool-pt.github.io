@@ -1,0 +1,121 @@
+---
+import ArrowLink from '../../compositions/ArrowLink/ArrowLink.astro';
+import IntroGridSection from '../../compositions/IntroGridSection/IntroGridSection.astro';
+import GradientIcon from '../../primitives/GradientIcon/GradientIcon.astro';
+
+interface ServiceHighlight {
+  iconName: string;
+  title: string;
+  label: string;
+  href: string;
+}
+
+interface Props {
+  heading: string;
+  subtitle: string;
+  highlights: ServiceHighlight[];
+  backgroundImage?: ImageMetadata;
+}
+
+const { heading, subtitle, highlights, backgroundImage } = Astro.props;
+---
+
+<div class="service-highlights-wrap">
+  <IntroGridSection
+    headingId="service-highlights-heading"
+    background="var(--color-background)"
+    backgroundImage={backgroundImage?.src}
+    introAlign="center"
+    headingSize="var(--font-size-display)"
+    descriptionMaxWidth="50rem"
+    introMarginBlockEnd="3.5rem"
+    gridColumns={4}
+  >
+    <Fragment slot="heading">{heading}</Fragment>
+    <Fragment slot="description">{subtitle}</Fragment>
+
+    {
+      highlights.map((highlight) => (
+        <article class="highlight-card">
+          <div class="highlight-icon-wrap">
+            <GradientIcon name={highlight.iconName} size={48} />
+          </div>
+          <h3 class="highlight-title">{highlight.title}</h3>
+          <ArrowLink href={highlight.href} label={highlight.label} colorScheme="light" />
+        </article>
+      ))
+    }
+  </IntroGridSection>
+</div>
+
+<style>
+  .service-highlights-wrap {
+    --color-surface-dark: var(--color-surface-black);
+    --color-muted-foreground: var(--color-surface-black);
+  }
+
+  .service-highlights-wrap :global(.responsive-grid) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 768px) {
+    .service-highlights-wrap :global(.responsive-grid) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .service-highlights-wrap :global(.section-intro--light .section-intro-body) {
+    font-weight: 500;
+  }
+
+  .highlight-card {
+    --highlight-card-bg: var(--color-background);
+    --highlight-card-radius: 0.75rem;
+    --highlight-card-padding: clamp(0.75rem, 2vw, 1.5rem);
+    --highlight-card-shadow: var(--shadow-card);
+    --highlight-card-shadow-hover: var(--shadow-overlay);
+
+    position: relative;
+    background-color: var(--highlight-card-bg);
+    border-radius: var(--highlight-card-radius);
+    padding: var(--highlight-card-padding);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    inline-size: 100%;
+    aspect-ratio: 1;
+    transition: box-shadow 200ms;
+    box-shadow: var(--highlight-card-shadow);
+    cursor: pointer;
+  }
+
+  .highlight-card :global(.arrow-link::after) {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .highlight-card:hover {
+    box-shadow: var(--highlight-card-shadow-hover);
+  }
+
+  .highlight-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    block-size: clamp(48px, 8vw, 56px);
+    inline-size: clamp(48px, 8vw, 56px);
+  }
+
+  .highlight-title {
+    font-family: var(--font-display);
+    font-size: clamp(0.875rem, 2.5vw, var(--font-size-lead));
+    font-weight: 700;
+    color: var(--color-foreground);
+    margin: 0;
+    margin-block-end: auto;
+    text-align: center;
+  }
+</style>

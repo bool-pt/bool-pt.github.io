@@ -13,16 +13,18 @@ import { resolveImage, resolveSvgUrl } from './media.ts';
  * Used by tests in CI to catch broken paths and renamed icons before they ship.
  */
 
-const MEDIA_SUFFIXES = new Set([
-  'image',
-  'coverImage',
-  'backgroundImage',
-  'heroImage',
-  'photo',
-  'avatar',
-  'logo',
-  'thumbnail',
-]);
+/**
+ * Media fields are detected by the *ending* of the last segment
+ * (case-insensitive), so `expertImage`, `authorAvatar`, `coverImage`, etc. are
+ * all caught — not just the bare names. Keep in sync with the matching logic in
+ * `@bool/json-editor-core`'s `field-kinds.ts` (which picks the MediaPicker).
+ */
+const MEDIA_SUFFIX_ENDINGS = ['image', 'photo', 'avatar', 'logo', 'thumbnail', 'portrait'];
+
+function isMediaSegment(lastSegment: string): boolean {
+  const s = lastSegment.toLowerCase();
+  return MEDIA_SUFFIX_ENDINGS.some((ending) => s.endsWith(ending));
+}
 
 const ICON_SUFFIXES = new Set(['iconName', 'icon']);
 
@@ -85,7 +87,7 @@ export function validateLocale(locale: Locale = defaultLocale): ValidationReport
 
     const suffix = lastSegment(key);
 
-    if (MEDIA_SUFFIXES.has(suffix)) {
+    if (isMediaSegment(suffix)) {
       try {
         if (isSvgPath(trimmed)) {
           resolveSvgUrl(trimmed);
@@ -107,4 +109,62 @@ export function validateLocale(locale: Locale = defaultLocale): ValidationReport
   }
 
   return { mediaErrors, iconErrors };
+}
+
+export interface MetaError {
+  key: string;
+  reason: string;
+}
+
+/**
+ * Validate `_meta` ↔ content consistency for the json-editor wiring:
+ *
+ * - Every page in `_meta.pages.*` must have a `_meta.pageLabels.*` entry,
+ *   otherwise it never appears in the editor's page list.
+ * - Every section namespace a page lists must have a `_meta.labels.*` entry
+ *   (so it shows a friendly name) and at least one content key (so it isn't a
+ *   stale entry pointing at deleted content).
+ *
+ * This cannot catch a section that renders in a page but is missing from
+ * `_meta.pages` (that needs the page source, not the locale) — but it stops
+ * the inverse drift: dangling editor wiring after content is added or removed.
+ */
+export function validateMeta(locale: Locale = defaultLocale): MetaError[] {
+  const data = translations[locale] ?? {};
+  const errors: MetaError[] = [];
+
+  const contentNamespaces = new Set<string>();
+  for (const key of Object.keys(data)) {
+    if (key.startsWith('_meta.')) continue;
+    const dot = key.indexOf('.');
+    if (dot > 0) contentNamespaces.add(key.slice(0, dot));
+  }
+
+  for (const key of Object.keys(data)) {
+    if (!key.startsWith('_meta.pages.')) continue;
+    const page = key.slice('_meta.pages.'.length);
+
+    if (!data[`_meta.pageLabels.${page}`]) {
+      errors.push({ key, reason: `page "${page}" has no _meta.pageLabels.${page}` });
+    }
+
+    const sections = (data[key] ?? '')
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    for (const ns of sections) {
+      if (!data[`_meta.labels.${ns}`]) {
+        errors.push({ key, reason: `section "${ns}" on page "${page}" has no _meta.labels.${ns}` });
+      }
+      if (!contentNamespaces.has(ns)) {
+        errors.push({
+          key,
+          reason: `section "${ns}" on page "${page}" has no content keys in "${locale}"`,
+        });
+      }
+    }
+  }
+
+  return errors;
 }

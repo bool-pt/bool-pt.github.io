@@ -32,8 +32,10 @@ describe('getHeaderLabels', () => {
     const labels = getHeaderLabels();
     expect(labels.navAria).toBeTruthy();
     expect(labels.logoAria).toBeTruthy();
+    expect(labels.logo).toBeTruthy();
     expect(labels.ctaLabel).toBeTruthy();
-    expect(Object.keys(labels.linkLabels).length).toBeGreaterThan(0);
+    expect(labels.navLinks.length).toBeGreaterThan(0);
+    expect(labels.navLinks.every((l) => l.label && l.href)).toBe(true);
     expect(labels.mobileNavLabels.open).toBeTruthy();
     expect(labels.mobileNavLabels.title).toBeTruthy();
     expect(labels.languageSelectLabels.ariaLabel).toBeTruthy();
@@ -56,7 +58,9 @@ describe('getFooterLabels', () => {
     // companyPhone is optional content — may be empty when the company lists no phone.
     expect(typeof labels.companyPhone).toBe('string');
     expect(labels.cookiePreferencesLabel).toBeTruthy();
-    expect(Object.keys(labels.linkLabels).length).toBeGreaterThan(0);
+    expect(labels.quickLinks.length).toBeGreaterThan(0);
+    expect(labels.legalLinks.length).toBeGreaterThan(0);
+    expect(labels.quickLinks.every((l) => l.label && l.href)).toBe(true);
     expect(Object.keys(labels.socialLabels).length).toBeGreaterThan(0);
   });
 

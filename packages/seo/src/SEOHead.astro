@@ -1,5 +1,8 @@
 ---
-import { SITE_NAME, SITE_URL, SOCIAL } from '@bool/shared';
+import { SITE_NAME, SITE_URL } from '@bool/shared';
+import { t } from '@bool/i18n';
+
+const twitterHandle = t('footer.social.twitter.href').split('/').pop();
 
 interface Props {
   title: string;
@@ -38,7 +41,7 @@ const fullTitle = `${title} | ${SITE_NAME}`;
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content={`@${SOCIAL.twitter.split('/').pop()}`} />
+<meta name="twitter:site" content={`@${twitterHandle}`} />
 <meta name="twitter:title" content={fullTitle} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImage} />

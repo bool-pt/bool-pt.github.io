@@ -15,11 +15,6 @@ const defaultProps = {
     open: 'Open menu',
     title: 'Navigation',
     navAria: 'Main navigation',
-    linkLabels: {
-      Home: 'Go to Home',
-      About: 'Go to About',
-      Services: 'Go to Services',
-    },
   },
 };
 
@@ -49,8 +44,8 @@ describe('MobileNav', () => {
     const button = screen.getByRole('button', { name: 'Open menu' });
     await user.click(button);
 
-    expect(screen.getByText('Go to Home')).toBeInTheDocument();
-    expect(screen.getByText('Go to About')).toBeInTheDocument();
-    expect(screen.getByText('Go to Services')).toBeInTheDocument();
+    expect(screen.getByText('Home')).toBeInTheDocument();
+    expect(screen.getByText('About')).toBeInTheDocument();
+    expect(screen.getByText('Services')).toBeInTheDocument();
   });
 });

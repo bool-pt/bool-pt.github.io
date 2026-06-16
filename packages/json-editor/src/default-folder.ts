@@ -19,6 +19,7 @@ interface SectionRule {
 }
 
 const SECTION_RULES: ReadonlyArray<SectionRule> = [
+  { test: (k) => k === 'header.logo', folder: 'logos/brand' },
   {
     test: (k) => k.startsWith('caseStudies.items.') && k.endsWith('.coverImage'),
     folder: 'case-study',
@@ -58,6 +59,8 @@ const FIELD_RULES: ReadonlyArray<FieldRule> = [
   { suffix: 'heroImage', folder: 'backgrounds' },
   { suffix: 'logo', folder: 'logos/platforms' },
   { suffix: 'avatar', folder: 'portraits' },
+  { suffix: 'authorAvatar', folder: 'portraits' },
+  { suffix: 'expertImage', folder: 'portraits' },
   { suffix: 'portrait', folder: 'portraits' },
   { suffix: 'photo', folder: 'portraits' },
   { suffix: 'thumbnail', folder: 'covers' },

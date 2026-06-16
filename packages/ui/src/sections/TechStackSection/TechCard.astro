@@ -1,5 +1,6 @@
 ---
-import { COMPANY, ROUTES, SOCIAL } from '@bool/shared';
+import { COMPANY, ROUTES } from '@bool/shared';
+import { t } from '@bool/i18n';
 import ExpertPortrait from '../../compositions/ExpertPortrait/ExpertPortrait.astro';
 import ActionRow from '../../primitives/ActionRow/ActionRow.astro';
 import ButtonLink from '../../primitives/ButtonLink/ButtonLink.astro';
@@ -34,7 +35,7 @@ const {
   contactExpert,
   contactExpertHref = ROUTES.contacts,
   email = COMPANY.email,
-  linkedin = SOCIAL.linkedin,
+  linkedin = t('footer.social.linkedin.href'),
   image,
   reversed = false,
   id,
