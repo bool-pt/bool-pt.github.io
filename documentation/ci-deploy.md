@@ -40,7 +40,7 @@ All configuration lives in GitHub — no `.env.local` files needed. Configure at
 
 ### Secrets (`secrets.*`) — encrypted, masked in logs
 
-| Secret                       | Used by    | Description                                                           |
-| ---------------------------- | ---------- | --------------------------------------------------------------------- |
-| `GOOGLE_SERVICE_ACCOUNT_KEY` | Sync Drive | Full JSON content of the Google Cloud service account key             |
-| `GOOGLE_DRIVE_FOLDER_ID`     | Sync Drive | Google Drive root folder ID (contains media/ and locales/ subfolders) |
+| Secret                       | Used by                           | Description                                                           |
+| ---------------------------- | --------------------------------- | --------------------------------------------------------------------- |
+| `GOOGLE_SERVICE_ACCOUNT_KEY` | Sync Drive, Test Drive Connection | Full JSON content of the Google Cloud service account key             |
+| `GOOGLE_DRIVE_FOLDER_ID`     | Sync Drive, Test Drive Connection | Google Drive root folder ID (contains media/ and locales/ subfolders) |

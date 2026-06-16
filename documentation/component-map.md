@@ -91,7 +91,7 @@ Full dependency tree: **Pages → Sections → Compositions → Primitives**
 | #   | Section                | Compositions                                                   | Primitives                                       | React Islands                   |
 | --- | ---------------------- | -------------------------------------------------------------- | ------------------------------------------------ | ------------------------------- |
 | 1   | InsightsHeroSection    | SectionTag, DarkPageHero, SectionIntro                         | SectionContainer, ButtonLink, ActionRow          | —                               |
-| 2   | LatestFromBoolSection  | SectionTag, IntroGridSection, ArrowLink, ImageOverlayCard      | CardLabel, CardTitle, MetaText                   | —                               |
+| 2   | NewsletterBarSection   | NewsletterForm                                                 | Section, SectionContainer, TextBlock             | NewsletterForm `client:visible` |
 | 3   | KnowledgeCenterSection | SectionTag, SectionIntro                                       | Section, SectionContainer                        | KnowledgeGrid `client:visible`  |
 | 4   | NewsUpdatesSection     | SectionTag, SectionIntro                                       | Section, SectionContainer                        | NewsGrid `client:visible`       |
 | 5   | PressReleasesSection   | ArrowLink, SectionTag, SectionIntro, ListRow                   | Section, SectionContainer, TextBlock, DashedCard | —                               |
@@ -146,7 +146,7 @@ Content-driven page — no named sections. Renders MDX content via Astro's `Cont
 
 ### 404 (`404.astro`)
 
-Inline markup only — no named sections. Uses `BoolLettersOverlay` composition directly.
+Renders `NotFoundSection`, which composes the `BoolLettersOverlay` composition.
 
 ---
 
