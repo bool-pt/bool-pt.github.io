@@ -31,6 +31,8 @@ export interface ConsentState {
   analytics: boolean;
   marketing: boolean;
   timestamp: number;
+  /** Policy version this consent was recorded against. A bump re-prompts the user. */
+  version: number;
 }
 
 export interface EventItem {

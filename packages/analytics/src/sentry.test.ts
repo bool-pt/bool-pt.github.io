@@ -3,11 +3,13 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 const mockInit = vi.fn();
 const mockCaptureException = vi.fn();
 const mockSetUser = vi.fn();
+const mockReplayIntegration = vi.fn(() => ({ name: 'Replay' }));
 
 vi.mock('@sentry/react', () => ({
   init: mockInit,
   captureException: mockCaptureException,
   setUser: mockSetUser,
+  replayIntegration: mockReplayIntegration,
 }));
 
 // Reset module state between tests (the `initialized` flag)
@@ -29,6 +31,13 @@ describe('initSentry', () => {
     await initSentry('https://key@sentry.io/123');
     expect(mockInit).toHaveBeenCalledWith(
       expect.objectContaining({ dsn: 'https://key@sentry.io/123' })
+    );
+  });
+
+  it('configures session replay with PII masking enabled', async () => {
+    await initSentry('https://key@sentry.io/123');
+    expect(mockReplayIntegration).toHaveBeenCalledWith(
+      expect.objectContaining({ maskAllText: true, maskAllInputs: true, blockAllMedia: true })
     );
   });
 

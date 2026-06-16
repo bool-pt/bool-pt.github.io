@@ -14,6 +14,15 @@ export async function initSentry(dsn: string, options?: Partial<BrowserOptions>)
     tracesSampleRate: 0.1,
     replaysSessionSampleRate: 0,
     replaysOnErrorSampleRate: 1.0,
+    // Error replays must not capture personal data. Mask all text and inputs
+    // (form fields, names, emails) and block media so replays stay PII-free.
+    integrations: [
+      Sentry.replayIntegration({
+        maskAllText: true,
+        maskAllInputs: true,
+        blockAllMedia: true,
+      }),
+    ],
     ...options,
   });
 

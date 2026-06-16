@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { CONSENT_STORAGE_KEY } from './config';
+import { CONSENT_STORAGE_KEY, CONSENT_VERSION } from './config';
 import { useConsent } from './hooks';
 
 beforeEach(() => {
@@ -20,7 +20,12 @@ describe('useConsent', () => {
   });
 
   it('loads stored consent on mount', () => {
-    const stored = { analytics: true, marketing: false, timestamp: Date.now() };
+    const stored = {
+      analytics: true,
+      marketing: false,
+      timestamp: Date.now(),
+      version: CONSENT_VERSION,
+    };
     localStorage.setItem(CONSENT_STORAGE_KEY, JSON.stringify(stored));
 
     const { result } = renderHook(() => useConsent());
@@ -28,7 +33,7 @@ describe('useConsent', () => {
     expect(result.current.hasDecided).toBe(true);
   });
 
-  it('acceptAll sets analytics and marketing to true', () => {
+  it('acceptAll grants only available categories (marketing is hidden)', () => {
     const { result } = renderHook(() => useConsent());
 
     act(() => {
@@ -36,7 +41,7 @@ describe('useConsent', () => {
     });
 
     expect(result.current.consent?.analytics).toBe(true);
-    expect(result.current.consent?.marketing).toBe(true);
+    expect(result.current.consent?.marketing).toBe(false);
     expect(result.current.hasDecided).toBe(true);
 
     const raw = localStorage.getItem(CONSENT_STORAGE_KEY);
@@ -47,7 +52,7 @@ describe('useConsent', () => {
       timestamp: number;
     };
     expect(stored.analytics).toBe(true);
-    expect(stored.marketing).toBe(true);
+    expect(stored.marketing).toBe(false);
     expect(typeof stored.timestamp).toBe('number');
   });
 
@@ -92,7 +97,7 @@ describe('useConsent', () => {
   });
 
   it('clears expired consent on mount', () => {
-    const expired = { analytics: true, marketing: true, timestamp: 1 };
+    const expired = { analytics: true, marketing: true, timestamp: 1, version: CONSENT_VERSION };
     localStorage.setItem(CONSENT_STORAGE_KEY, JSON.stringify(expired));
 
     const { result } = renderHook(() => useConsent());
@@ -105,7 +110,12 @@ describe('useConsent', () => {
     const { result } = renderHook(() => useConsent());
     expect(result.current.consent).toBeNull();
 
-    const updated = { analytics: true, marketing: false, timestamp: Date.now() };
+    const updated = {
+      analytics: true,
+      marketing: false,
+      timestamp: Date.now(),
+      version: CONSENT_VERSION,
+    };
     localStorage.setItem(CONSENT_STORAGE_KEY, JSON.stringify(updated));
 
     act(() => {

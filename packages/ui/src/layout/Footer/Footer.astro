@@ -1,5 +1,5 @@
 ---
-import { CookiePreferencesButton } from '@bool/compliance';
+import { CookiePreferencesButton, CONSENT_ENABLED } from '@bool/compliance';
 import { SOCIAL, FOOTER_QUICK_LINKS, FOOTER_LEGAL_LINKS } from '@bool/shared';
 import Icon from '../../primitives/Icon/Icon.astro';
 import ObfuscatedLink from '../../primitives/ObfuscatedLink/ObfuscatedLink.astro';
@@ -86,9 +86,13 @@ const socialLinks = [
             </li>
           ))
         }
-        <li>
-          <CookiePreferencesButton label={labels.cookiePreferencesLabel} client:load />
-        </li>
+        {
+          CONSENT_ENABLED && (
+            <li>
+              <CookiePreferencesButton label={labels.cookiePreferencesLabel} client:load />
+            </li>
+          )
+        }
       </ul>
     </div>
 
