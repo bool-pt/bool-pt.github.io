@@ -19,6 +19,7 @@ describe('defaultFolderForField — section-specific rules (precedence)', () => 
     ['blog.eventsCalendar.eventCards.2.image', 'events'],
     ['home.events.items.1.image', 'events'],
     ['portfolio.clientLogos.items.1.logo', 'client-logos'],
+    ['header.logo', 'logos/brand'],
   ])('"%s" → "%s"', (key, expected) => {
     expect(defaultFolderForField(key)).toBe(expected);
   });

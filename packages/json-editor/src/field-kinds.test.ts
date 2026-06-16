@@ -14,6 +14,7 @@ describe('classifyField', () => {
       ['someSection.items.1.thumbnail'],
       ['aiReadiness.expertImage'],
       ['knowledgeCenter.article.1.authorAvatar'],
+      ['header.logo'],
     ])('classifies %s as media', (key) => {
       expect(classifyField(key)).toBe('media');
     });

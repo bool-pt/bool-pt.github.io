@@ -4,7 +4,7 @@ import { t } from './t.ts';
 // Translation VALUES are marketing copy synced from Google Drive (the source of
 // truth) and change without notice. Tests here assert `t()`'s behaviour against
 // a stable, structural key — never the copy itself — so a Drive edit can't break CI.
-const KNOWN_KEY = 'nav.about';
+const KNOWN_KEY = 'company.name';
 
 describe('t', () => {
   it('resolves a known key to a non-empty value', () => {
