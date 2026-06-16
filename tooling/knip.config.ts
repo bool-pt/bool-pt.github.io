@@ -85,7 +85,7 @@ export default {
     'packages/seo': {
       ignoreDependencies: ['astro'],
     },
-    'packages/json-editor-core': {},
+    'packages/json-editor': {},
 
     // ── Tooling ──────────────────────────────────────────────────────────
     'tooling/eslint': {

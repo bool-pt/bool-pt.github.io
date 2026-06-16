@@ -67,7 +67,7 @@ Sections listed per page, in render order.
 ## Blog / Insights (`blog/index.astro`)
 
 1. InsightsHeroSection
-2. LatestFromBoolSection
+2. NewsletterBarSection
 3. KnowledgeCenterSection
 4. NewsUpdatesSection
 5. PressReleasesSection
@@ -93,3 +93,7 @@ Sections listed per page, in render order.
 ## Legal Pages (`cookies.astro`, `privacy.astro`, `terms.astro`)
 
 1. LegalPageSection
+
+## Not Found (`404.astro`)
+
+1. NotFoundSection

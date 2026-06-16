@@ -1,75 +1,55 @@
 # Bool — CLAUDE.md
 
-Bool is a corporate website for a software consultancy. **Astro 6** static site with **React 19** islands, **Shadcn UI**, **Tailwind CSS 4**, **pnpm monorepo** with **Turborepo**, hosted on **GitHub Pages**. Zero backend — contact form hits an external AWS Lambda.
+Bool is a corporate website for a software consultancy. Astro static site (v6) with React 19 islands, Shadcn UI, Tailwind CSS 4, in a pnpm + Turborepo monorepo, hosted on GitHub Pages. Zero backend — forms POST to external AWS Lambdas (contact / subscribe / event). Exact dependency versions are pinned in the pnpm catalog (`pnpm-workspace.yaml`).
 
 ## Documentation
 
-| Doc                              | What's in it                                                                            |
-| -------------------------------- | --------------------------------------------------------------------------------------- |
-| `documentation/design-system.md` | Full design token reference (colors, typography, spacing, shadows, components, recipes) |
-| `documentation/styling.md`       | CSS strategy per layer, CSS Modules rules, Figma workflow                               |
-| `documentation/content.md`       | Content sources, drift guards, Google Drive media sync                                  |
-| `documentation/i18n.md`          | i18n system architecture, `t()` / `tCollection()` / `tList()` API                       |
-| `documentation/ci-deploy.md`     | All 5 workflows, GitHub variables & secrets, SST secrets                                |
-| `documentation/conventions.md`   | Commits, branches, PR workflow, naming, imports                                         |
-| `documentation/component-map.md` | Full page -> section -> composition -> primitive dependency tree                        |
-| `documentation/section-map.md`   | Sections per page in render order                                                       |
+| Doc                              | What's in it                                                              |
+| -------------------------------- | ------------------------------------------------------------------------- |
+| `documentation/architecture.md`  | System overview, packages, forms→API→email flow, build orchestration      |
+| `documentation/design-system.md` | Design token reference (colors, typography, spacing, shadows, components) |
+| `documentation/styling.md`       | CSS strategy per layer, CSS Modules rules, Figma workflow                 |
+| `documentation/content.md`       | Content sources, drift guards, Google Drive media sync                    |
+| `documentation/i18n.md`          | i18n architecture, `t()` / `tCollection()` / `tList()` API                |
+| `documentation/testing.md`       | Unit (Vitest), e2e (Playwright), drift guards, test commands              |
+| `documentation/security.md`      | CSP/headers, Turnstile, secret model, input validation, dep gates         |
+| `documentation/ci-deploy.md`     | The 5 workflows, GitHub variables & secrets                               |
+| `documentation/conventions.md`   | Commits, branches, PR workflow, naming, imports                           |
+| `documentation/component-map.md` | Page → section → composition → primitive dependency tree                  |
+| `documentation/section-map.md`   | Sections per page in render order                                         |
 
 ---
 
 ## Architecture
 
-### Layer Hierarchy (one-way imports only)
+### Layer hierarchy (one-way imports only)
 
 ```
 apps/web pages  →  sections  →  compositions  →  primitives
 ```
 
-**Never skip layers** — a page must not import a primitive directly. Sections compose compositions + primitives. Compositions compose primitives. `eslint-plugin-boundaries` enforces this automatically in `@bool/ui` — a lint error is a real violation.
+Never skip layers — a page must not import a primitive directly. `eslint-plugin-boundaries` enforces this in `@bool/ui`; a lint error there is a real violation.
 
-### Package Boundaries
+### Package boundaries
 
-- **React components**: import from barrel exports (`@bool/ui`, `@bool/shared`)
-- **Astro components**: import via subpath (`@bool/ui/sections/HeroSection.astro`)
-- Packages never reach into each other's `src/` internals
-- 11 packages: `@bool/ui`, `@bool/content`, `@bool/i18n`, `@bool/seo`, `@bool/analytics`, `@bool/compliance`, `@bool/api`, `@bool/media`, `@bool/shared`, `@bool/json-editor-core`, `@bool/test-utils`
+- React components import from barrel exports (`@bool/ui`, `@bool/shared`); Astro components import via subpath (`@bool/ui/sections/HeroSection.astro`).
+- Packages never reach into each other's `src/` internals.
+- 11 packages: `@bool/ui`, `@bool/content`, `@bool/i18n`, `@bool/seo`, `@bool/analytics`, `@bool/compliance`, `@bool/api`, `@bool/media`, `@bool/shared`, `@bool/json-editor-core`, `@bool/test-utils`.
 
-### Apps Are Thin Shells
+### Where code lives
 
-`apps/web/` contains **only** Astro page files that compose layouts and sections. No business logic, no components, no utilities live in apps.
-
-### Root Is Minimal
-
-Root contains only what tools require there or what belongs to the repo itself:
-
-| File / dir             | Why it's at root                                                |
-| ---------------------- | --------------------------------------------------------------- |
-| `pnpm-workspace.yaml`  | pnpm workspace definition — must be at root                     |
-| `pnpm-lock.yaml`       | pnpm lockfile — auto-generated, must be at root                 |
-| `turbo.json`           | Turborepo pipeline — must be at root                            |
-| `package.json`         | Root scripts and devDeps                                        |
-| `eslint.config.mjs`    | ESLint v9 flat config — auto-discovered from root, must be here |
-| `prettier.config.mjs`  | Prettier config — resolved from root                            |
-| `tsconfig.json`        | Root TypeScript project references                              |
-| `vitest.workspace.ts`  | Vitest workspace config — resolved from root                    |
-| `.gitignore`           | Git ignore rules                                                |
-| `.mcp.json`            | MCP server config for Claude Code                               |
-| `LICENSE`, `README.md` | Standard repo files                                             |
-
-**Never** add stray config, scripts, or assets to root. All other configuration lives in `tooling/`.
+- `apps/web/` holds **only** Astro page files composing layouts and sections — no business logic, components, or utilities.
+- Root holds only tool-required files (`pnpm-workspace.yaml`, `pnpm-lock.yaml`, `turbo.json`, `package.json`, `eslint.config.mjs`, `prettier.config.mjs`, `tsconfig.json`, `vitest.workspace.ts`, `.mcp.json`) plus standard repo files. All other config lives in `tooling/`. Never add stray files to root.
 
 ---
 
-## Component Rules
+## Component rules
 
-- **Astro components** for all static content (default)
-- **React islands** only for interactive components (carousels, forms, modals, navigation)
-- Hydration: `client:load` for immediate (nav, cookie banner), `client:visible` for below-fold (carousels, forms), none for static
-- **Never use** `client:idle` or `client:only` without explicit justification in a code comment
+- Astro components for static content (default); React islands only for interactive UI (carousels, forms, modals, nav).
+- Hydration: `client:load` for immediate (nav, cookie banner), `client:visible` for below-fold (carousels, forms), none for static.
+- Never use `client:idle` or `client:only` without a justifying code comment.
 
----
-
-## Styling Quick Reference
+## Styling
 
 | Layer                 | Approach                                                               |
 | --------------------- | ---------------------------------------------------------------------- |
@@ -78,68 +58,57 @@ Root contains only what tools require there or what belongs to the repo itself:
 | React islands         | CSS Modules (`.module.css`)                                            |
 | `globals.css`         | Tailwind import, `@font-face`, CSS custom properties, base resets only |
 
-Use Tailwind theme classes for colors/spacing. **Never** hardcode hex/rgb/hsl. Use logical properties (`margin-inline-start`). Specify transition properties (`transition: opacity 200ms`, not `all`). Full rules: `documentation/styling.md`.
+Use Tailwind theme classes for colors/spacing — never hardcode hex/rgb/hsl. Use logical properties (`margin-inline-start`). Specify exact transition properties (`transition: opacity 200ms`, not `all`).
 
----
+## Content
 
-## Content Quick Reference
-
-- **Section strings/images**: `en.json` via `t(key)` from `@bool/i18n` — image paths relative to `packages/media/images/`
-- **Long-form content**: MDX/JSON in `packages/content/data/` (blog, events) — validated by Zod at build time
-- **Google Drive sync**: media + locales synced via GitHub Actions -> `git pull` locally. Full setup: `documentation/content.md`
-- **Drift guards**: `validateLocale()` + loader unit tests catch missing media/icons in CI
-
----
+- Section strings/images: `en.json` via `t(key)` from `@bool/i18n` — image paths relative to `packages/media/images/`.
+- Long-form content: MDX/JSON in `packages/content/data/` (blog, events), validated by Zod at build time.
+- Media + locales sync from Google Drive via GitHub Actions; `validateLocale()` + loader unit tests catch missing media/icons in CI.
 
 ## Performance
 
-- Astro `<Image />` with lazy loading and explicit `width`/`height` — **never** raw `<img>`
-- `font-display: swap` with preloaded critical fonts (WOFF2, self-hosted)
-- Partytown for GA4 (off main thread)
-- Tailwind purges unused CSS at build time
-- Zero JS by default — only islands ship JavaScript
+- Astro `<Image />` with lazy loading and explicit `width`/`height` — never raw `<img>`.
+- Self-hosted WOFF2 fonts with `font-display: swap` and preloaded criticals; Partytown runs GA4 off the main thread.
+- Zero JS by default — only islands ship JavaScript.
 
 ---
 
-## Forbidden Patterns
+## Forbidden patterns
 
-| Pattern                                     | Instead                                                                                                     |
-| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `forwardRef`                                | `ref` as a regular prop (React 19)                                                                          |
-| `any` in exports                            | Proper generics or `unknown`                                                                                |
-| `useFormState`                              | `useActionState` (React 19)                                                                                 |
-| `Math.random()` for keys/IDs                | `useId()`                                                                                                   |
-| `JSON.parse(JSON.stringify(obj))`           | `structuredClone(obj)`                                                                                      |
-| Raw `<img>` in Astro                        | Astro `<Image />`. Exception: React islands use `<img>` with explicit `width`/`height`/`loading`/`decoding` |
-| Hardcoded colors (`#fff`, `rgb(...)`)       | Tailwind theme classes                                                                                      |
-| Physical CSS (`margin-left`)                | Logical properties (`margin-inline-start`)                                                                  |
-| `transition: all`                           | Specify exact properties                                                                                    |
-| Upper-layer imports                         | Sections import compositions, not the reverse                                                               |
-| Missing hydration directive on React island | Add `client:load` or `client:visible`                                                                       |
-| Missing ARIA/keyboard support               | Use Shadcn primitives or add manually                                                                       |
-| Evil regex (catastrophic backtracking)      | Simple patterns or libraries                                                                                |
-| Importing package internals                 | Import from barrel export (`@bool/ui`)                                                                      |
+| Pattern                               | Instead                                                                                    |
+| ------------------------------------- | ------------------------------------------------------------------------------------------ |
+| `forwardRef`                          | `ref` as a regular prop (React 19)                                                         |
+| `any` in exports                      | Proper generics or `unknown`                                                               |
+| `useFormState`                        | `useActionState` (React 19)                                                                |
+| `Math.random()` for keys/IDs          | `useId()`                                                                                  |
+| `JSON.parse(JSON.stringify(obj))`     | `structuredClone(obj)`                                                                     |
+| Raw `<img>` in Astro                  | Astro `<Image />` (React islands may use `<img>` with explicit `width`/`height`/`loading`) |
+| Hardcoded colors (`#fff`, `rgb(...)`) | Tailwind theme classes                                                                     |
+| Physical CSS (`margin-left`)          | Logical properties (`margin-inline-start`)                                                 |
+| `transition: all`                     | Specify exact properties                                                                   |
+| Importing package internals           | Import from barrel export (`@bool/ui`)                                                     |
+| Missing hydration directive           | Add `client:load` or `client:visible`                                                      |
+| Missing ARIA/keyboard support         | Use Shadcn primitives or add manually                                                      |
 
 ---
 
-## Hard Rules
+## Hard rules
 
-| Rule                         | Detail                                                                                                                                              |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Verify before suggesting     | Read `package.json`, `tsconfig.json`, `astro.config.ts` before recommending a dependency or config change                                           |
-| If unsure, ASK               | Never guess about architecture decisions, styling approach, or package boundaries                                                                   |
-| Scope boundaries             | Never touch files outside the package you're working in. Cross-package changes require explicit instruction                                         |
-| Prefer editing over creating | Edit existing files. Only create new files when the task genuinely requires it                                                                      |
-| No silent fallbacks          | If something fails, throw or surface the error. Never swallow errors with empty catch blocks                                                        |
-| No duct-tape code            | No `// TODO: fix later`, no `@ts-ignore` without an adjacent explanation, no commented-out code                                                     |
-| Clean codebase               | Delete deprecated code, unused imports, dead files. No `_old` suffixes or compatibility shims                                                       |
-| Ask before large changes     | If a task touches more than 5 files, outline the plan first and get confirmation                                                                    |
-| Be concise                   | No trailing summaries. No restating what was just done. The diff speaks for itself                                                                  |
-| No planning language in code | Remove "will implement", "placeholder for", "TODO: add" from operational files                                                                      |
-| Encapsulate assets           | Assets go in `@bool/media`, config in `tooling/`. Never add stray files to project root                                                             |
-| Visual QA mandatory          | When implementing from a design: run `/design-qa`, iterate until zero discrepancies                                                                 |
-| Dependency freshness gate    | **Never** add a dependency published less than 7 days ago. Run `pnpm freshness <pkg>[@version]` before installing. Flag for manual review if urgent |
-| Use `catalog:` for versions  | All deps in `package.json` files must use `catalog:`. Pin the version once in `pnpm-workspace.yaml` only                                            |
-| Dead code gate               | Run `pnpm knip` before shipping. Config: `tooling/knip.config.ts`                                                                                   |
-| All config in GitHub         | No `.env.local` files. Variables and secrets live in GitHub repo settings. Full reference: `documentation/ci-deploy.md`                             |
-| `main` is protected          | Never push directly. All changes go through PRs. Conventional Commits enforced. Full workflow: `documentation/conventions.md`                       |
+| Rule                         | Detail                                                                                                     |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Verify before suggesting     | Read `package.json`, `tsconfig.json`, `astro.config.ts` before recommending a dependency or config change  |
+| If unsure, ASK               | Never guess about architecture, styling, or package boundaries                                             |
+| Scope boundaries             | Don't touch files outside the package you're working in; cross-package changes need explicit instruction   |
+| Prefer editing over creating | Edit existing files; create new ones only when genuinely required                                          |
+| No silent fallbacks          | Throw or surface errors — never swallow them with empty catch blocks                                       |
+| No duct-tape code            | No `// TODO: fix later`, no `@ts-ignore` without an adjacent explanation, no commented-out code            |
+| Clean codebase               | Delete dead code, unused imports, dead files; no `_old` suffixes or compatibility shims                    |
+| Ask before large changes     | If a task touches more than 5 files, outline the plan first                                                |
+| Be concise                   | No trailing summaries or restating what was done — the diff speaks for itself                              |
+| Visual QA mandatory          | When implementing from a design, run `/design-qa` until zero discrepancies                                 |
+| Dependency freshness gate    | Never add a dependency published < 7 days ago. Run `pnpm freshness <pkg>[@version]` before installing      |
+| Use `catalog:` for versions  | All deps in `package.json` files use `catalog:`; pin the version once in `pnpm-workspace.yaml`             |
+| Dead code gate               | Run `pnpm knip` before shipping (config: `tooling/knip.config.ts`)                                         |
+| All config in GitHub         | No `.env.local` files — variables and secrets live in GitHub repo settings (`documentation/ci-deploy.md`)  |
+| `main` is protected          | Never push directly; all changes go through PRs with Conventional Commits (`documentation/conventions.md`) |
