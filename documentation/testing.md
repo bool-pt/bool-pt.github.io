@@ -76,7 +76,7 @@ Shared helpers in `e2e/helpers.ts`: `waitForImages`, `dismissCookieBanner`, `get
 
 Loader/validation tests in `@bool/content` keep `en.json` honest against the rest of the repo:
 
-- `validation.test.ts` — every media-typed key resolves to a real file under `packages/media/images/`; every `iconName` is a registered `GradientIcon`.
+- `validation.test.ts` — `validateLocale()`: every media-typed key resolves to a real file under `packages/media/images/`; every `iconName` is a registered `GradientIcon`. Also `validateMeta()`: the json-editor `_meta` wiring (every `_meta.pages.*` page has a label, and each listed section has a `_meta.labels.*` + real content keys).
 - `case-studies.test.ts` / `team-grid.test.ts` — the `getCaseStudies()` / `getTeamGrid()` loaders return well-formed data from real `en.json` (resolved images, valid sector/tech, non-empty labels).
 
 These run in CI and, via the root `lint-staged` hook, on pre-commit whenever locale JSON or media files change:

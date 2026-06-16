@@ -12,6 +12,8 @@ describe('classifyField', () => {
       ['testimonials.items.1.avatar'],
       ['featuredTech.items.1.logo'],
       ['someSection.items.1.thumbnail'],
+      ['aiReadiness.expertImage'],
+      ['knowledgeCenter.article.1.authorAvatar'],
     ])('classifies %s as media', (key) => {
       expect(classifyField(key)).toBe('media');
     });
@@ -48,8 +50,29 @@ describe('classifyField', () => {
       ['ourPromise.items.2.href'],
       ['hero.slides.1.cta.primary.href'],
       ['featuredTech.items.1.href'],
-    ])('classifies %s as link', (key) => {
+      ['eventsPreview.meetHref'], // *Href variant, no value needed
+    ])('classifies %s as link by suffix', (key) => {
       expect(classifyField(key)).toBe('link');
+    });
+
+    it.each([
+      ['teamGrid.items.1.linkedin', 'https://linkedin.com/in/andre'],
+      ['techStack.platforms.1.linkedin', 'https://linkedin.com/company/bool-pt'],
+      ['aiReadiness.expertLinkedin', 'https://www.linkedin.com/company/bool-pt'],
+      ['some.field', '/services'],
+      ['some.field', '#section'],
+      ['some.field', 'mailto:info@bool.pt'],
+    ])('classifies %s as link by URL-like value', (key, value) => {
+      expect(classifyField(key, value)).toBe('link');
+    });
+
+    it.each([
+      ['footer.social.linkedin', 'Bool on LinkedIn'], // label, not a URL
+      ['contactForm.email', 'Email'], // form field label
+      ['teamGrid.items.1.email', 'andre@bool.pt'], // bare email stays a text field
+      ['knowledgeCenter.modal.copyLink', 'Copy link'], // label ending in "link"
+    ])('keeps %s as text when the value is not a destination', (key, value) => {
+      expect(classifyField(key, value)).toBe('text');
     });
   });
 

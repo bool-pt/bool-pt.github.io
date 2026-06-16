@@ -21,6 +21,7 @@ Per-section payload loaders live in `@bool/content` (`getCaseStudies()`, `getTea
 Run automatically in CI and on pre-commit when relevant files change:
 
 - `validateLocale()` walks every key in `en.json`; media-typed keys must resolve to a real file under `packages/media/images/`, icon-typed keys must be a registered `GradientIcon`.
+- `validateMeta()` checks the json-editor `_meta` wiring: every page in `_meta.pages.*` has a `_meta.pageLabels.*`, and every section it lists has a `_meta.labels.*` plus real content keys — catching dangling editor entries after content is added or removed.
 - `getCaseStudies()` / `getTeamGrid()` are unit-tested against real `en.json` — schema drift, missing media, or invalid sector/tech break the test immediately.
 - `gradientIconPaths` in `@bool/ui` is tested against a hardcoded canonical list mirrored in `KNOWN_GRADIENT_ICONS` in `@bool/content` — adding/renaming an icon must be done in lockstep.
 

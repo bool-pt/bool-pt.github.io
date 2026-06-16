@@ -11,7 +11,6 @@ interface MobileNavLabels {
   open: string;
   title: string;
   navAria: string;
-  linkLabels: Record<string, string>;
 }
 
 interface MobileNavProps {
@@ -51,7 +50,7 @@ export default function MobileNav({ links, logoSrc, homeHref, labels }: MobileNa
                     onClick={() => setOpen(false)}
                     className="hover:bg-surface-charcoal focus-visible:ring-ring text-on-dark flex items-center rounded-md px-3 py-2 text-sm font-medium focus-visible:ring-2 focus-visible:outline-none"
                   >
-                    {labels.linkLabels[label] ?? label}
+                    {label}
                   </a>
                 </li>
               ))}

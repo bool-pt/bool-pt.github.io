@@ -1,6 +1,5 @@
 ---
 import { CookiePreferencesButton, CONSENT_ENABLED } from '@bool/compliance';
-import { SOCIAL, FOOTER_QUICK_LINKS, FOOTER_LEGAL_LINKS } from '@bool/shared';
 import Icon from '../../primitives/Icon/Icon.astro';
 import ObfuscatedLink from '../../primitives/ObfuscatedLink/ObfuscatedLink.astro';
 
@@ -8,6 +7,7 @@ interface FooterLabels {
   tagline: string;
   socialAria: string;
   socialLabels: Record<string, string>;
+  socialUrls: Record<string, string>;
   quickLinksHeading: string;
   legalLinksHeading: string;
   findUsHeading: string;
@@ -16,7 +16,8 @@ interface FooterLabels {
   companyName: string;
   companyEmail: string;
   companyPhone: string;
-  linkLabels: Record<string, string>;
+  quickLinks: { label: string; href: string }[];
+  legalLinks: { label: string; href: string }[];
   cookiePreferencesLabel: string;
 }
 
@@ -27,11 +28,11 @@ interface Props {
 const { labels } = Astro.props;
 
 const socialLinks = [
-  { key: 'facebook', href: SOCIAL.facebook },
-  { key: 'instagram', href: SOCIAL.instagram },
-  { key: 'linkedin', href: SOCIAL.linkedin },
-  { key: 'twitter', href: SOCIAL.twitter, size: 26 },
-  { key: 'youtube', href: SOCIAL.youtube },
+  { key: 'facebook', href: labels.socialUrls.facebook },
+  { key: 'instagram', href: labels.socialUrls.instagram },
+  { key: 'linkedin', href: labels.socialUrls.linkedin },
+  { key: 'twitter', href: labels.socialUrls.twitter, size: 26 },
+  { key: 'youtube', href: labels.socialUrls.youtube },
 ].filter((s) => s.href);
 ---
 
@@ -62,10 +63,10 @@ const socialLinks = [
       <h3 class="footer-heading">{labels.quickLinksHeading}</h3>
       <ul role="list" class="footer-link-list">
         {
-          FOOTER_QUICK_LINKS.map(({ label, href }) => (
+          labels.quickLinks.map(({ label, href }) => (
             <li>
               <a href={href} class="footer-link">
-                {labels.linkLabels[label] ?? label}
+                {label}
               </a>
             </li>
           ))
@@ -78,10 +79,10 @@ const socialLinks = [
       <h3 class="footer-heading">{labels.legalLinksHeading}</h3>
       <ul role="list" class="footer-link-list">
         {
-          FOOTER_LEGAL_LINKS.map(({ label, href }) => (
+          labels.legalLinks.map(({ label, href }) => (
             <li>
               <a href={href} class="footer-link">
-                {labels.linkLabels[label] ?? label}
+                {label}
               </a>
             </li>
           ))

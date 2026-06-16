@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { validateLocale } from './validation.ts';
+import { validateLocale, validateMeta } from './validation.ts';
 
 describe('validateLocale (default locale = en)', () => {
   const report = validateLocale();
@@ -16,5 +16,12 @@ describe('validateLocale (default locale = en)', () => {
       report.iconErrors,
       report.iconErrors.map((e) => `  ${e.key} = "${e.value}": ${e.reason}`).join('\n')
     ).toEqual([]);
+  });
+});
+
+describe('validateMeta (default locale = en)', () => {
+  it('every json-editor page/section in _meta is labelled and backed by content', () => {
+    const errors = validateMeta();
+    expect(errors, errors.map((e) => `  ${e.key}: ${e.reason}`).join('\n')).toEqual([]);
   });
 });

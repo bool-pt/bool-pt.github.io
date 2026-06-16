@@ -8,6 +8,7 @@ import HowWeWorkSection from '@bool/ui/sections/HowWeWorkSection.astro';
 import LetsBuildCTASection from '@bool/ui/sections/LetsBuildCTASection.astro';
 import NewsletterCTASection from '@bool/ui/sections/NewsletterCTASection.astro';
 import PowerAISection from '@bool/ui/sections/PowerAISection.astro';
+import ServiceHighlightsSection from '@bool/ui/sections/ServiceHighlightsSection.astro';
 import ServicesHeroSection from '@bool/ui/sections/ServicesHeroSection.astro';
 import SolutionsROISection from '@bool/ui/sections/SolutionsROISection.astro';
 import StatsBannerSection from '@bool/ui/sections/StatsBannerSection.astro';
@@ -46,6 +47,14 @@ const platforms = tCollection('techStack.platforms', [
   features: tList(`techStack.platforms.${i + 1}.features`),
 }));
 
+const serviceHighlights = tCollection('serviceHighlights.items', [
+  'iconName',
+  'title',
+  'label',
+  'href',
+]);
+
+const bgServiceHighlights = tOptional('serviceHighlights.backgroundImage');
 const bgPowerAi = tOptional('powerAi.backgroundImage');
 const bgSolutionsRoi = tOptional('solutionsRoi.backgroundImage');
 const bgAiUseCases = tOptional('aiUseCases.backgroundImage');
@@ -83,6 +92,14 @@ const howWeWorkCards = tCollection('howWeWork.cards', [
       body1={t('servicesHero.body1')}
       body2={t('servicesHero.body2')}
       backgroundImage={resolveImage(t('servicesHero.backgroundImage'))}
+    />
+  </div>
+  <div id="serviceHighlights" class="section-anchor">
+    <ServiceHighlightsSection
+      heading={t('serviceHighlights.heading')}
+      subtitle={t('serviceHighlights.subtitle')}
+      highlights={serviceHighlights}
+      backgroundImage={bgServiceHighlights ? resolveImage(bgServiceHighlights) : undefined}
     />
   </div>
   <div id="aiPitch" class="section-anchor">

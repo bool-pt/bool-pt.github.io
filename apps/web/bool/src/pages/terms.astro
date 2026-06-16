@@ -1,9 +1,10 @@
 ---
-import { t } from '@bool/i18n';
-import { ROUTES } from '@bool/shared';
+import { t, tCollection } from '@bool/i18n';
 import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
 import LegalPageSection from '@bool/ui/sections/LegalPageSection.astro';
 import { getHeaderLabels, getFooterLabels } from '../labels';
+
+const sections = tCollection('terms.section', ['heading', 'body']);
 ---
 
 <BaseLayout
@@ -18,77 +19,13 @@ import { getHeaderLabels, getFooterLabels } from '../labels';
     heading={t('terms.heading')}
     subtitle={t('terms.lastUpdated')}
   >
-    <h2>1. Introduction</h2>
-    <p>
-      These Terms of Service ("Terms") govern your use of the Bool website at bool.pt ("Website"),
-      operated by Bool, Lda. ("Bool", "we", "us"). By accessing the Website, you agree to these
-      Terms.
-    </p>
-
-    <h2>2. Use of the Website</h2>
-    <p>
-      The Website is provided for informational purposes about Bool's software consultancy services.
-      You agree to use the Website lawfully and not to:
-    </p>
-    <ul>
-      <li>Attempt to gain unauthorised access to any part of the Website or its infrastructure.</li>
-      <li>Use the Website to transmit malicious software or conduct attacks.</li>
-      <li>
-        Scrape, crawl, or harvest data from the Website in an automated manner without permission.
-      </li>
-      <li>Submit false or misleading information through our forms.</li>
-    </ul>
-
-    <h2>3. Intellectual Property</h2>
-    <p>
-      All content on the Website — including text, images, logos, designs, and code — is the
-      property of Bool, Lda. or its licensors and is protected by copyright and intellectual
-      property laws. You may not reproduce, distribute, or create derivative works without our prior
-      written consent.
-    </p>
-
-    <h2>4. Contact Form and Newsletter</h2>
-    <p>
-      When you submit information through our contact form or subscribe to our newsletter, you
-      represent that the information you provide is accurate. We process this data in accordance
-      with our <a href={ROUTES.privacy}>Privacy Policy</a>.
-    </p>
-
-    <h2>5. Third-Party Links</h2>
-    <p>
-      The Website may contain links to third-party websites. We are not responsible for the content,
-      privacy practices, or availability of these sites. Accessing them is at your own risk.
-    </p>
-
-    <h2>6. Disclaimer of Warranties</h2>
-    <p>
-      The Website is provided "as is" without warranties of any kind, express or implied. Bool does
-      not warrant that the Website will be uninterrupted, error-free, or free of harmful components.
-    </p>
-
-    <h2>7. Limitation of Liability</h2>
-    <p>
-      To the maximum extent permitted by Portuguese law, Bool shall not be liable for any indirect,
-      incidental, or consequential damages arising from your use of the Website.
-    </p>
-
-    <h2>8. Governing Law</h2>
-    <p>
-      These Terms are governed by and construed in accordance with the laws of Portugal. Any
-      disputes shall be subject to the exclusive jurisdiction of the courts of Lisbon, Portugal.
-    </p>
-
-    <h2>9. Changes to These Terms</h2>
-    <p>
-      We may revise these Terms from time to time. The "Last updated" date at the top indicates the
-      most recent revision. Continued use of the Website after changes constitutes acceptance of the
-      updated Terms.
-    </p>
-
-    <h2>10. Contact</h2>
-    <p>
-      For questions about these Terms, contact us at <a href="mailto:info@bool.pt">info@bool.pt</a> or
-      +351 219 345 678.
-    </p>
+    {
+      sections.map((section) => (
+        <Fragment>
+          <h2>{section.heading}</h2>
+          <Fragment set:html={section.body} />
+        </Fragment>
+      ))
+    }
   </LegalPageSection>
 </BaseLayout>

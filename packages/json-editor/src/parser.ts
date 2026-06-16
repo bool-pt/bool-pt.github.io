@@ -132,7 +132,7 @@ export function parseFlatJson(json: Record<string, string>): ParsedTree {
         key: k,
         value: json[k] ?? '',
         isDirty: false,
-        kind: classifyField(k),
+        kind: classifyField(k, json[k] ?? ''),
         options: getFieldOptions(k),
       }));
 
@@ -199,7 +199,7 @@ function buildRepeatingGroups(
         key,
         value: json[key] ?? '',
         isDirty: false,
-        kind: classifyField(key),
+        kind: classifyField(key, json[key] ?? ''),
         options: getFieldOptions(key),
       });
     }
@@ -270,7 +270,7 @@ function buildNestedGroups(
         key,
         value: json[key] ?? '',
         isDirty: false,
-        kind: classifyField(key),
+        kind: classifyField(key, json[key] ?? ''),
         options: getFieldOptions(key),
       });
     }

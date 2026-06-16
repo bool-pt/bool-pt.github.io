@@ -1,5 +1,6 @@
 ---
-import { COMPANY, ROUTES, SOCIAL, slugify } from '@bool/shared';
+import { COMPANY, ROUTES, slugify } from '@bool/shared';
+import { t } from '@bool/i18n';
 import ExpertPortrait from '../../compositions/ExpertPortrait/ExpertPortrait.astro';
 import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
 import ButtonLink from '../../primitives/ButtonLink/ButtonLink.astro';
@@ -46,7 +47,7 @@ const {
   readinessExpertRole,
   readinessExpertPhoto,
   readinessExpertEmail = COMPANY.email,
-  readinessExpertLinkedin = SOCIAL.linkedin,
+  readinessExpertLinkedin = t('footer.social.linkedin.href'),
   readinessHeading,
   readinessBody,
   readinessChecks,

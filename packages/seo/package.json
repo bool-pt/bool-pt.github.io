@@ -14,7 +14,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@bool/shared": "workspace:*"
+    "@bool/shared": "workspace:*",
+    "@bool/i18n": "workspace:*"
   },
   "devDependencies": {
     "@bool/eslint-config": "workspace:*",

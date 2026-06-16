@@ -1,14 +1,17 @@
 ---
 import { Image } from 'astro:assets';
-import logo from '@bool/media/images/logos/brand/bool-logo-mark.png';
-import { NAV_LINKS, ROUTES } from '@bool/shared';
+import { ROUTES } from '@bool/shared';
 import MobileNav from '../MobileNav/MobileNav';
+
+interface NavLink {
+  label: string;
+  href: string;
+}
 
 interface MobileNavLabels {
   open: string;
   title: string;
   navAria: string;
-  linkLabels: Record<string, string>;
 }
 
 interface LocaleOption {
@@ -27,13 +30,14 @@ interface LanguageSelectLabels {
 interface Props {
   navAria: string;
   logoAria: string;
+  logo: ImageMetadata;
   ctaLabel: string;
-  linkLabels: Record<string, string>;
+  navLinks: NavLink[];
   mobileNavLabels: MobileNavLabels;
   languageSelectLabels: LanguageSelectLabels;
 }
 
-const { navAria, logoAria, ctaLabel, linkLabels, mobileNavLabels, _languageSelectLabels } =
+const { navAria, logoAria, logo, ctaLabel, navLinks, mobileNavLabels, _languageSelectLabels } =
   Astro.props;
 const currentPath = Astro.url.pathname;
 ---
@@ -46,14 +50,14 @@ const currentPath = Astro.url.pathname;
 
     <ul class="nav-links" role="list">
       {
-        NAV_LINKS.map(({ label, href }) => (
+        navLinks.map(({ label, href }) => (
           <li>
             <a
               href={href}
               aria-current={currentPath === href ? 'page' : undefined}
               class:list={['nav-link', { 'nav-link--active': currentPath === href }]}
             >
-              {linkLabels[label] ?? label}
+              {label}
             </a>
           </li>
         ))
@@ -72,7 +76,7 @@ const currentPath = Astro.url.pathname;
       /> -->
       <MobileNav
         client:load
-        links={NAV_LINKS}
+        links={navLinks}
         logoSrc={logo.src}
         homeHref={ROUTES.home}
         labels={mobileNavLabels}
