@@ -13,7 +13,9 @@
   min-block-size: calc(100dvh - 56px);
   background: var(--editor-bg);
   border-start-start-radius: 0;
-  transition: margin-inline-start 200ms, margin-inline-end 300ms;
+  transition:
+    margin-inline-start 200ms,
+    margin-inline-end 300ms;
 }
 
 .contentWithPreview {
@@ -32,7 +34,9 @@
   background: none;
   color: var(--color-on-dark-muted, rgba(255, 255, 255, 0.7));
   cursor: pointer;
-  transition: background-color 150ms, color 150ms;
+  transition:
+    background-color 150ms,
+    color 150ms;
 }
 
 .mobileMenuButton:hover {

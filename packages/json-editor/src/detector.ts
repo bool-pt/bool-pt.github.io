@@ -13,7 +13,7 @@ const NUMERIC_RE = /^\d+$/;
  */
 export function detectRepeatingGroups(
   keys: string[],
-  sectionPrefix: string,
+  sectionPrefix: string
 ): RepeatingGroupTemplate[] {
   const numericGroups = detectNumericGroups(keys, sectionPrefix);
   const namedGroups = detectNamedGroups(keys, sectionPrefix, numericGroups);
@@ -29,7 +29,7 @@ export function detectRepeatingGroups(
  */
 function withNestedTemplates(
   template: RepeatingGroupTemplate,
-  allKeys: string[],
+  allKeys: string[]
 ): RepeatingGroupTemplate {
   const innerMap = new Map<string, Map<string, Set<string>>>();
   const dot = `${template.prefix}.`;
@@ -125,10 +125,7 @@ function withNestedTemplates(
   };
 }
 
-function detectNumericGroups(
-  keys: string[],
-  sectionPrefix: string,
-): RepeatingGroupTemplate[] {
+function detectNumericGroups(keys: string[], sectionPrefix: string): RepeatingGroupTemplate[] {
   // Map: prefix-before-numeric → Map<numericIndex, Set<suffix-after-numeric>>
   const groupMap = new Map<string, Map<string, Set<string>>>();
 
@@ -184,7 +181,7 @@ function detectNumericGroups(
 function detectNamedGroups(
   keys: string[],
   sectionPrefix: string,
-  existingGroups: RepeatingGroupTemplate[],
+  existingGroups: RepeatingGroupTemplate[]
 ): RepeatingGroupTemplate[] {
   const existingPrefixes = new Set(existingGroups.map((g) => g.prefix));
 

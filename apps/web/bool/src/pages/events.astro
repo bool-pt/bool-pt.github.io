@@ -3,11 +3,7 @@ import { getUpcomingEvents, transformEvent } from '@bool/content';
 import { t } from '@bool/i18n';
 import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
 import EventsCalendarSection from '@bool/ui/sections/EventsCalendarSection.astro';
-import {
-  getHeaderLabels,
-  getFooterLabels,
-  getCalendarLabels,
-} from '../labels';
+import { getHeaderLabels, getFooterLabels, getCalendarLabels } from '../labels';
 
 const events = await getUpcomingEvents();
 const eventItems = events.map(transformEvent);

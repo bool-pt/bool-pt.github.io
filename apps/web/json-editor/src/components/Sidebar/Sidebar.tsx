@@ -26,16 +26,15 @@ export default function Sidebar() {
   const resizeRef = useRef<{ startX: number; startWidth: number } | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const hasManuallyResized = useRef(false);
-  const [expandedPages, setExpandedPages] = useState<Set<string>>(() => new Set(pages.map((p) => p.name)));
-
-  const sectionMap = useMemo(
-    () => new Map(sections.map((s) => [s.name, s])),
-    [sections],
+  const [expandedPages, setExpandedPages] = useState<Set<string>>(
+    () => new Set(pages.map((p) => p.name))
   );
+
+  const sectionMap = useMemo(() => new Map(sections.map((s) => [s.name, s])), [sections]);
 
   const dirtySet = useMemo(
     () => new Set(sections.filter(isSectionDirty).map((s) => s.name)),
-    [sections],
+    [sections]
   );
 
   // Auto-size sidebar to fit the longest label
@@ -112,7 +111,7 @@ export default function Sidebar() {
       document.addEventListener('mousemove', handleMove);
       document.addEventListener('mouseup', handleUp);
     },
-    [sidebarWidth, dispatch],
+    [sidebarWidth, dispatch]
   );
 
   // Determine which sections are assigned to pages vs unassigned
@@ -127,7 +126,7 @@ export default function Sidebar() {
 
   const unassignedSections = useMemo(
     () => sections.filter((s) => !assignedSections.has(s.name) && s.name !== '_meta'),
-    [sections, assignedSections],
+    [sections, assignedSections]
   );
 
   const hasPages = pages.length > 0;
@@ -146,9 +145,11 @@ export default function Sidebar() {
         className={cn(
           styles.item,
           activeSection === sectionName && styles.itemActive,
-          isSharedUnderPage && styles.itemShared,
+          isSharedUnderPage && styles.itemShared
         )}
-        onClick={() => dispatch({ type: 'SET_ACTIVE_SECTION', payload: { name: sectionName, context } })}
+        onClick={() =>
+          dispatch({ type: 'SET_ACTIVE_SECTION', payload: { name: sectionName, context } })
+        }
       >
         <span className={styles.label}>
           {section.label}
@@ -165,11 +166,7 @@ export default function Sidebar() {
 
     return (
       <div key={page.name} className={styles.pageGroup}>
-        <button
-          type="button"
-          className={styles.pageHeader}
-          onClick={() => togglePage(page.name)}
-        >
+        <button type="button" className={styles.pageHeader} onClick={() => togglePage(page.name)}>
           <ChevronDown
             size={14}
             className={cn(styles.pageChevron, isExpanded && styles.pageChevronOpen)}
@@ -189,10 +186,14 @@ export default function Sidebar() {
   return (
     <aside
       className={cn(styles.sidebar, sidebarCollapsed && styles.collapsed)}
-      style={{ '--sidebar-width': `${sidebarCollapsed ? 40 : sidebarWidth}px` } as React.CSSProperties}
+      style={
+        { '--sidebar-width': `${sidebarCollapsed ? 40 : sidebarWidth}px` } as React.CSSProperties
+      }
     >
       <div className={styles.header}>
-        <span className={styles.heading}>{hasPages ? l('sidebar.pages') : l('sidebar.sections')}</span>
+        <span className={styles.heading}>
+          {hasPages ? l('sidebar.pages') : l('sidebar.sections')}
+        </span>
       </div>
 
       <div ref={listRef} className={styles.list}>
@@ -211,7 +212,7 @@ export default function Sidebar() {
                     size={14}
                     className={cn(
                       styles.pageChevron,
-                      expandedPages.has('_shared') && styles.pageChevronOpen,
+                      expandedPages.has('_shared') && styles.pageChevronOpen
                     )}
                   />
                   <span className={styles.pageLabel}>{l('sidebar.shared')}</span>
@@ -235,7 +236,7 @@ export default function Sidebar() {
                     size={14}
                     className={cn(
                       styles.pageChevron,
-                      expandedPages.has('_other') && styles.pageChevronOpen,
+                      expandedPages.has('_other') && styles.pageChevronOpen
                     )}
                   />
                   <span className={styles.pageLabel}>{l('sidebar.other')}</span>

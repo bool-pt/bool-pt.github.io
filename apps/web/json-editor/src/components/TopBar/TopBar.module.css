@@ -124,7 +124,9 @@
   background: none;
   color: var(--color-on-dark-muted, rgba(255, 255, 255, 0.7));
   cursor: pointer;
-  transition: background-color 150ms, color 150ms;
+  transition:
+    background-color 150ms,
+    color 150ms;
 }
 
 .iconButton:hover {
@@ -150,7 +152,9 @@
   font-weight: 600;
   font-size: 0.875rem;
   cursor: pointer;
-  transition: background-color 150ms, box-shadow 150ms;
+  transition:
+    background-color 150ms,
+    box-shadow 150ms;
 }
 
 .downloadButton:hover {

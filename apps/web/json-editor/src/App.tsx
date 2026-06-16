@@ -39,7 +39,11 @@ function EditorApp() {
         <Sidebar />
         <main
           className={cn(styles.content, state.showPreview && styles.contentWithPreview)}
-          style={{ '--sidebar-width': `${sidebarCollapsed ? 40 : sidebarWidth}px` } as React.CSSProperties}
+          style={
+            {
+              '--sidebar-width': `${sidebarCollapsed ? 40 : sidebarWidth}px`,
+            } as React.CSSProperties
+          }
         >
           <SectionEditor />
         </main>

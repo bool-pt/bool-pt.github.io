@@ -8,12 +8,7 @@ interface Props {
   class?: string;
 }
 
-const {
-  href,
-  label,
-  colorScheme = 'light',
-  class: className,
-} = Astro.props;
+const { href, label, colorScheme = 'light', class: className } = Astro.props;
 ---
 
 <a href={href} class:list={['arrow-link', `arrow-link--${colorScheme}`, className]}>

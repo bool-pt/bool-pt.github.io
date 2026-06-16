@@ -8,10 +8,7 @@ afterEach(cleanup);
 describe('FlipCard', () => {
   it('renders front and back content', () => {
     render(
-      <FlipCard
-        frontContent={<span>Front side</span>}
-        backContent={<span>Back side</span>}
-      />
+      <FlipCard frontContent={<span>Front side</span>} backContent={<span>Back side</span>} />
     );
 
     expect(screen.getByText('Front side')).toBeInTheDocument();
@@ -22,10 +19,7 @@ describe('FlipCard', () => {
     const user = userEvent.setup();
 
     render(
-      <FlipCard
-        frontContent={<span>Front side</span>}
-        backContent={<span>Back side</span>}
-      />
+      <FlipCard frontContent={<span>Front side</span>} backContent={<span>Back side</span>} />
     );
 
     const card = screen.getByText('Front side').closest('div[class]');

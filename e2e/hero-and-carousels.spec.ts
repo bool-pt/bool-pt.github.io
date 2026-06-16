@@ -10,8 +10,8 @@ import { dismissCookieBanner } from './helpers';
 const en = JSON.parse(
   readFileSync(
     fileURLToPath(new URL('../packages/i18n/src/locales/en.json', import.meta.url)),
-    'utf8',
-  ),
+    'utf8'
+  )
 ) as Record<string, string>;
 
 test.describe('Hero', () => {

@@ -20,7 +20,15 @@ const {
 } = Astro.props;
 ---
 
-<div class:list={['itb-grid', { 'itb-grid--grayscale': grayscale }, className]} style={[`--itb-height: ${height}`, contentPadding ? `--itb-content-padding: ${contentPadding}` : null].filter(Boolean).join('; ')}>
+<div
+  class:list={['itb-grid', { 'itb-grid--grayscale': grayscale }, className]}
+  style={[
+    `--itb-height: ${height}`,
+    contentPadding ? `--itb-content-padding: ${contentPadding}` : null,
+  ]
+    .filter(Boolean)
+    .join('; ')}
+>
   <div class="itb-image-wrap">
     <Image src={image} alt={imageAlt} class="itb-img" loading="lazy" />
   </div>

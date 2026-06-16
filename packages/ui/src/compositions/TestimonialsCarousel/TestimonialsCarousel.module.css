@@ -92,7 +92,13 @@
   .viewport {
     order: unset;
     flex: unset;
-    mask-image: linear-gradient(to right, transparent, black 2rem, black calc(100% - 2rem), transparent);
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 2rem,
+      black calc(100% - 2rem),
+      transparent
+    );
   }
 }
 

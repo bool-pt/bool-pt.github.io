@@ -56,7 +56,7 @@ describe('collectNestedList', () => {
       'tags.1': 'one',
       'tags.2': '',
       'tags.3': 'three',
-      'other': 'x',
+      other: 'x',
     };
     expect(collectNestedList(item, 'tags')).toEqual(['one', 'three']);
   });
@@ -67,10 +67,7 @@ describe('collectNestedList', () => {
 
   it('trims whitespace and drops whitespace-only entries', () => {
     expect(
-      collectNestedList(
-        { 'list.1': '  alpha  ', 'list.2': '   ', 'list.3': 'beta' },
-        'list',
-      ),
+      collectNestedList({ 'list.1': '  alpha  ', 'list.2': '   ', 'list.3': 'beta' }, 'list')
     ).toEqual(['alpha', 'beta']);
   });
 });

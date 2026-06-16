@@ -13,7 +13,7 @@ describe('apiFetch', () => {
       vi.fn().mockResolvedValue({
         ok: true,
         json: () => Promise.resolve({ data: 'test' }),
-      }),
+      })
     );
 
     const result = await apiFetch<{ data: string }>('https://api.example.com/data', {
@@ -47,18 +47,18 @@ describe('apiFetch', () => {
         ok: false,
         status: 400,
         json: () => Promise.resolve({ error: 'Bad request' }),
-      }),
+      })
     );
 
-    await expect(
-      apiFetch('https://api.example.com/data', { retries: 0 }),
-    ).rejects.toSatisfy((err: unknown) => {
-      expect(err).toBeInstanceOf(ApiError);
-      const apiErr = err as ApiError;
-      expect(apiErr.status).toBe(400);
-      expect(apiErr.body).toEqual({ error: 'Bad request' });
-      return true;
-    });
+    await expect(apiFetch('https://api.example.com/data', { retries: 0 })).rejects.toSatisfy(
+      (err: unknown) => {
+        expect(err).toBeInstanceOf(ApiError);
+        const apiErr = err as ApiError;
+        expect(apiErr.status).toBe(400);
+        expect(apiErr.body).toEqual({ error: 'Bad request' });
+        return true;
+      }
+    );
   });
 
   it('retries on 500 errors', async () => {
@@ -116,7 +116,7 @@ describe('apiFetch', () => {
     vi.stubGlobal('fetch', mockFetch);
 
     await expect(
-      apiFetch('https://api.example.com/data', { retries: 2, retryDelayMs: 1 }),
+      apiFetch('https://api.example.com/data', { retries: 2, retryDelayMs: 1 })
     ).rejects.toSatisfy((err: unknown) => {
       expect(err).toBeInstanceOf(ApiError);
       expect((err as ApiError).status).toBe(400);
@@ -135,15 +135,15 @@ describe('apiFetch', () => {
             init.signal?.addEventListener('abort', () => {
               reject(new DOMException('Aborted', 'AbortError'));
             });
-          }),
-      ),
+          })
+      )
     );
 
     await expect(
       apiFetch('https://api.example.com/slow', {
         timeoutMs: 50,
         retries: 0,
-      }),
+      })
     ).rejects.toSatisfy((err: unknown) => {
       expect(err).toBeInstanceOf(ApiError);
       const apiErr = err as ApiError;
@@ -160,17 +160,17 @@ describe('apiFetch', () => {
         ok: false,
         status: 500,
         json: () => Promise.reject(new Error('Invalid JSON')),
-      }),
+      })
     );
 
-    await expect(
-      apiFetch('https://api.example.com/test', { retries: 0 }),
-    ).rejects.toSatisfy((err: unknown) => {
-      expect(err).toBeInstanceOf(ApiError);
-      const apiErr = err as ApiError;
-      expect(apiErr.status).toBe(500);
-      expect(apiErr.body).toBeNull();
-      return true;
-    });
+    await expect(apiFetch('https://api.example.com/test', { retries: 0 })).rejects.toSatisfy(
+      (err: unknown) => {
+        expect(err).toBeInstanceOf(ApiError);
+        const apiErr = err as ApiError;
+        expect(apiErr.status).toBe(500);
+        expect(apiErr.body).toBeNull();
+        return true;
+      }
+    );
   });
 });

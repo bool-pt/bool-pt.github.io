@@ -47,7 +47,9 @@ jobs:
           PUBLIC_GA_MEASUREMENT_ID: ${{ vars.PUBLIC_GA_MEASUREMENT_ID }}
           PUBLIC_SENTRY_DSN: ${{ vars.PUBLIC_SENTRY_DSN }}
       - name: Merge json-editor into main site output
-        run: cp -r apps/web/json-editor/dist apps/web/bool/dist/json-editor
+        run: |
+          test -d apps/web/json-editor/dist || { echo "::error::json-editor build output missing — aborting merge"; exit 1; }
+          cp -r apps/web/json-editor/dist apps/web/bool/dist/json-editor
       - uses: actions/upload-pages-artifact@v4
         with:
           path: apps/web/bool/dist

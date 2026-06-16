@@ -68,7 +68,7 @@ export async function apiFetch<T>(url: string, options: FetchOptions = {}): Prom
       lastError = new ApiError(
         0,
         null,
-        isTimeout ? `Request timed out after ${timeoutMs}ms` : 'Network error',
+        isTimeout ? `Request timed out after ${timeoutMs}ms` : 'Network error'
       );
 
       if (attempt < retries) {

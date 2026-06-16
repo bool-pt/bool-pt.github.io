@@ -17,7 +17,13 @@ const { sectors, sectorMore } = Astro.props;
       </Tag>
     ))
   }
-  {sectorMore && <Tag variant="outline" colorScheme="on-dark">{sectorMore}</Tag>}
+  {
+    sectorMore && (
+      <Tag variant="outline" colorScheme="on-dark">
+        {sectorMore}
+      </Tag>
+    )
+  }
 </div>
 
 <style>

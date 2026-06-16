@@ -39,9 +39,7 @@ const ariaLabels = { prev: 'Previous', next: 'Next' };
 describe('PortfolioTestimonialsCarousel', () => {
   it('renders all testimonials with quotes and company names', () => {
     vi.useFakeTimers();
-    render(
-      <PortfolioTestimonialsCarousel testimonials={testimonials} ariaLabels={ariaLabels} />,
-    );
+    render(<PortfolioTestimonialsCarousel testimonials={testimonials} ariaLabels={ariaLabels} />);
 
     expect(screen.getByText('Exceptional delivery quality.')).toBeInTheDocument();
     expect(screen.getByText('Acme Corp')).toBeInTheDocument();
@@ -53,9 +51,7 @@ describe('PortfolioTestimonialsCarousel', () => {
 
   it('shows avatar fallback when no avatar provided', () => {
     vi.useFakeTimers();
-    render(
-      <PortfolioTestimonialsCarousel testimonials={testimonials} ariaLabels={ariaLabels} />,
-    );
+    render(<PortfolioTestimonialsCarousel testimonials={testimonials} ariaLabels={ariaLabels} />);
 
     // Acme Corp has no avatar, should show "A" fallback
     expect(screen.getByText('A')).toBeInTheDocument();
@@ -65,9 +61,7 @@ describe('PortfolioTestimonialsCarousel', () => {
 
   it('shows avatar image when provided', () => {
     vi.useFakeTimers();
-    render(
-      <PortfolioTestimonialsCarousel testimonials={testimonials} ariaLabels={ariaLabels} />,
-    );
+    render(<PortfolioTestimonialsCarousel testimonials={testimonials} ariaLabels={ariaLabels} />);
 
     const avatarImg = screen.getByAltText('Beta Ltd');
     expect(avatarImg).toBeInTheDocument();
@@ -76,9 +70,7 @@ describe('PortfolioTestimonialsCarousel', () => {
 
   it('previous/next navigation buttons present', () => {
     vi.useFakeTimers();
-    render(
-      <PortfolioTestimonialsCarousel testimonials={testimonials} ariaLabels={ariaLabels} />,
-    );
+    render(<PortfolioTestimonialsCarousel testimonials={testimonials} ariaLabels={ariaLabels} />);
 
     expect(screen.getByRole('button', { name: 'Previous' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument();

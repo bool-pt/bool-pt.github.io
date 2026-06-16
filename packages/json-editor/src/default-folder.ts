@@ -19,14 +19,32 @@ interface SectionRule {
 }
 
 const SECTION_RULES: ReadonlyArray<SectionRule> = [
-  { test: (k) => k.startsWith('caseStudies.items.') && k.endsWith('.coverImage'), folder: 'case-study' },
+  {
+    test: (k) => k.startsWith('caseStudies.items.') && k.endsWith('.coverImage'),
+    folder: 'case-study',
+  },
   { test: (k) => k.startsWith('teamGrid.items.') && k.endsWith('.image'), folder: 'team' },
-  { test: (k) => /^[a-zA-Z]+\.testimonials(\.items)?\.[^.]+\.avatar$/.test(k) || /^testimonials\.items\.[^.]+\.avatar$/.test(k), folder: 'testimonials' },
+  {
+    test: (k) =>
+      /^[a-zA-Z]+\.testimonials(\.items)?\.[^.]+\.avatar$/.test(k) ||
+      /^testimonials\.items\.[^.]+\.avatar$/.test(k),
+    folder: 'testimonials',
+  },
   { test: (k) => k.startsWith('blog.newsUpdates.') && k.endsWith('.image'), folder: 'news' },
   { test: (k) => k.startsWith('blog.latestPosts.') && k.endsWith('.image'), folder: 'blog-posts' },
-  { test: (k) => k.startsWith('blog.knowledgeCenter.') && k.endsWith('.image'), folder: 'knowledge-center' },
-  { test: (k) => /\.events?\.items?\.[^.]+\.image$/.test(k) || /\.eventCards\.[^.]+\.image$/.test(k), folder: 'events' },
-  { test: (k) => k.startsWith('portfolio.clientLogos.') && k.endsWith('.logo'), folder: 'client-logos' },
+  {
+    test: (k) => k.startsWith('blog.knowledgeCenter.') && k.endsWith('.image'),
+    folder: 'knowledge-center',
+  },
+  {
+    test: (k) =>
+      /\.events?\.items?\.[^.]+\.image$/.test(k) || /\.eventCards\.[^.]+\.image$/.test(k),
+    folder: 'events',
+  },
+  {
+    test: (k) => k.startsWith('portfolio.clientLogos.') && k.endsWith('.logo'),
+    folder: 'client-logos',
+  },
 ];
 
 interface FieldRule {

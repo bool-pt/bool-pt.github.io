@@ -22,7 +22,13 @@ export function Skeleton({ className, variant = 'light', style }: SkeletonProps)
 /*  Presets                                                     */
 /* ─────────────────────────────────────────────────────────── */
 
-export function SkeletonText({ short, variant = 'light' }: { short?: boolean; variant?: 'dark' | 'light' }) {
+export function SkeletonText({
+  short,
+  variant = 'light',
+}: {
+  short?: boolean;
+  variant?: 'dark' | 'light';
+}) {
   return <Skeleton className={cn(styles.text, short && styles.textShort)} variant={variant} />;
 }
 
@@ -34,7 +40,13 @@ export function SkeletonBadge({ variant = 'light' }: { variant?: 'dark' | 'light
   return <Skeleton className={styles.badge} variant={variant} />;
 }
 
-export function SkeletonButton({ variant = 'light', style }: { variant?: 'dark' | 'light'; style?: React.CSSProperties }) {
+export function SkeletonButton({
+  variant = 'light',
+  style,
+}: {
+  variant?: 'dark' | 'light';
+  style?: React.CSSProperties;
+}) {
   return <Skeleton className={styles.button} variant={variant} style={style} />;
 }
 
@@ -84,7 +96,14 @@ export function SkeletonGroupItem({ fieldCount = 3 }: { fieldCount?: number }) {
       <div className={styles.groupCardHeader}>
         <Skeleton style={{ inlineSize: 16, blockSize: 16 }} />
         <Skeleton className={styles.text} style={{ inlineSize: '40%' }} />
-        <Skeleton style={{ inlineSize: 28, blockSize: 28, marginInlineStart: 'auto', borderRadius: 'var(--radius-md)' }} />
+        <Skeleton
+          style={{
+            inlineSize: 28,
+            blockSize: 28,
+            marginInlineStart: 'auto',
+            borderRadius: 'var(--radius-md)',
+          }}
+        />
       </div>
       <div className={styles.groupCardBody}>
         {Array.from({ length: fieldCount }, (_, i) => (
@@ -96,7 +115,13 @@ export function SkeletonGroupItem({ fieldCount = 3 }: { fieldCount?: number }) {
 }
 
 /** Skeleton for a full RepeatingGroup (header + items) */
-export function SkeletonRepeatingGroup({ items = 2, fieldsPerItem = 3 }: { items?: number; fieldsPerItem?: number }) {
+export function SkeletonRepeatingGroup({
+  items = 2,
+  fieldsPerItem = 3,
+}: {
+  items?: number;
+  fieldsPerItem?: number;
+}) {
   return (
     <div style={{ marginBlockStart: '1.5rem' }} aria-hidden="true">
       <div className={styles.groupHeader}>
@@ -114,7 +139,13 @@ export function SkeletonRepeatingGroup({ items = 2, fieldsPerItem = 3 }: { items
 }
 
 /** Skeleton for a full section card (header + fields + group) */
-export function SkeletonSection({ fieldCount = 5, groupCount = 1 }: { fieldCount?: number; groupCount?: number }) {
+export function SkeletonSection({
+  fieldCount = 5,
+  groupCount = 1,
+}: {
+  fieldCount?: number;
+  groupCount?: number;
+}) {
   return (
     <div
       style={{
@@ -177,26 +208,53 @@ export function SkeletonTopBar() {
       aria-hidden="true"
     >
       {/* Brand */}
-      <Skeleton variant="dark" style={{ inlineSize: 60, blockSize: 20, borderRadius: 'var(--radius-xs)' }} />
-      <Skeleton variant="dark" style={{ inlineSize: 80, blockSize: 14, borderRadius: 'var(--radius-xs)' }} />
-      <Skeleton variant="dark" style={{ inlineSize: 90, blockSize: 22, borderRadius: 'var(--radius-sm)' }} />
+      <Skeleton
+        variant="dark"
+        style={{ inlineSize: 60, blockSize: 20, borderRadius: 'var(--radius-xs)' }}
+      />
+      <Skeleton
+        variant="dark"
+        style={{ inlineSize: 80, blockSize: 14, borderRadius: 'var(--radius-xs)' }}
+      />
+      <Skeleton
+        variant="dark"
+        style={{ inlineSize: 90, blockSize: 22, borderRadius: 'var(--radius-sm)' }}
+      />
 
       <div style={{ flex: 1 }} />
 
       {/* Search */}
-      <Skeleton variant="dark" style={{ inlineSize: 300, blockSize: 36, borderRadius: 'var(--radius-lg)' }} />
+      <Skeleton
+        variant="dark"
+        style={{ inlineSize: 300, blockSize: 36, borderRadius: 'var(--radius-lg)' }}
+      />
 
       {/* Stats */}
       <div className={styles.topBarGroup}>
-        <Skeleton variant="dark" style={{ inlineSize: 60, blockSize: 14, borderRadius: 'var(--radius-xs)' }} />
+        <Skeleton
+          variant="dark"
+          style={{ inlineSize: 60, blockSize: 14, borderRadius: 'var(--radius-xs)' }}
+        />
       </div>
 
       {/* Actions */}
       <div className={styles.topBarGroup}>
-        <Skeleton variant="dark" style={{ inlineSize: 36, blockSize: 36, borderRadius: 'var(--radius-md)' }} />
-        <Skeleton variant="dark" style={{ inlineSize: 36, blockSize: 36, borderRadius: 'var(--radius-md)' }} />
-        <Skeleton variant="dark" style={{ inlineSize: 36, blockSize: 36, borderRadius: 'var(--radius-md)' }} />
-        <Skeleton variant="dark" style={{ inlineSize: 140, blockSize: 36, borderRadius: 'var(--radius-4xl)' }} />
+        <Skeleton
+          variant="dark"
+          style={{ inlineSize: 36, blockSize: 36, borderRadius: 'var(--radius-md)' }}
+        />
+        <Skeleton
+          variant="dark"
+          style={{ inlineSize: 36, blockSize: 36, borderRadius: 'var(--radius-md)' }}
+        />
+        <Skeleton
+          variant="dark"
+          style={{ inlineSize: 36, blockSize: 36, borderRadius: 'var(--radius-md)' }}
+        />
+        <Skeleton
+          variant="dark"
+          style={{ inlineSize: 140, blockSize: 36, borderRadius: 'var(--radius-4xl)' }}
+        />
       </div>
     </div>
   );
@@ -227,7 +285,10 @@ export function SkeletonEditor() {
               paddingBlockEnd: '0.75rem',
             }}
           >
-            <Skeleton variant="dark" style={{ inlineSize: 70, blockSize: 10, borderRadius: 'var(--radius-xs)' }} />
+            <Skeleton
+              variant="dark"
+              style={{ inlineSize: 70, blockSize: 10, borderRadius: 'var(--radius-xs)' }}
+            />
           </div>
           <SkeletonSidebar />
         </div>

@@ -42,7 +42,7 @@ export default function UploadZone() {
 
           // Prevent prototype pollution
           const dangerousKeys = Object.keys(json).some(
-            (k) => k === '__proto__' || k === 'constructor' || k === 'prototype',
+            (k) => k === '__proto__' || k === 'constructor' || k === 'prototype'
           );
           if (dangerousKeys) {
             setError(l('upload.error.dangerous'));
@@ -66,7 +66,7 @@ export default function UploadZone() {
       };
       reader.readAsText(file);
     },
-    [dispatch],
+    [dispatch]
   );
 
   const handleDrop = useCallback(
@@ -75,7 +75,9 @@ export default function UploadZone() {
       e.stopPropagation();
       setIsDragOver(false);
       justDroppedRef.current = true;
-      setTimeout(() => { justDroppedRef.current = false; }, 300);
+      setTimeout(() => {
+        justDroppedRef.current = false;
+      }, 300);
       const file = e.dataTransfer.files[0];
       if (file) {
         processFile(file);
@@ -83,7 +85,7 @@ export default function UploadZone() {
         setError(l('upload.error.notJson'));
       }
     },
-    [processFile],
+    [processFile]
   );
 
   const handleDragEnter = useCallback((e: DragEvent) => {
@@ -109,7 +111,7 @@ export default function UploadZone() {
       const file = e.target.files?.[0];
       if (file) processFile(file);
     },
-    [processFile],
+    [processFile]
   );
 
   return (
@@ -131,10 +133,10 @@ export default function UploadZone() {
         }}
       >
         <Upload size={48} className={styles.icon} />
-        <h1 className={styles.title}>{isDragOver ? l('upload.titleDragOver') : l('upload.title')}</h1>
-        <p className={styles.subtitle}>
-          {l('upload.subtitle')}
-        </p>
+        <h1 className={styles.title}>
+          {isDragOver ? l('upload.titleDragOver') : l('upload.title')}
+        </h1>
+        <p className={styles.subtitle}>{l('upload.subtitle')}</p>
         <button type="button" className={styles.button}>
           <Upload size={18} />
           {l('upload.chooseFile')}

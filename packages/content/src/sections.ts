@@ -23,7 +23,10 @@ const NUMERIC_RE = /^\d+$/;
  * Items are sorted by numeric index. Missing suffixes default to empty string,
  * letting consumer schemas validate / coerce.
  */
-export function collectArray(prefix: string, locale: Locale = defaultLocale): Record<string, string>[] {
+export function collectArray(
+  prefix: string,
+  locale: Locale = defaultLocale
+): Record<string, string>[] {
   const source = translations[locale] ?? translations[defaultLocale] ?? {};
   const fallback = translations[defaultLocale] ?? {};
 
@@ -49,9 +52,7 @@ export function collectArray(prefix: string, locale: Locale = defaultLocale): Re
     item[suffix] = value;
   }
 
-  return [...itemMap.entries()]
-    .sort((a, b) => a[0] - b[0])
-    .map(([, item]) => item);
+  return [...itemMap.entries()].sort((a, b) => a[0] - b[0]).map(([, item]) => item);
 }
 
 /**

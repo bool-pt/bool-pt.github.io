@@ -22,14 +22,14 @@ export default function PreviewPanel() {
       </div>
       <div className={styles.body}>
         <div className={styles.instructions}>
-          <h2 className={styles.instructionsTitle}>
-            {l('preview.heading')}
-          </h2>
+          <h2 className={styles.instructionsTitle}>{l('preview.heading')}</h2>
 
           <div className={styles.step}>
             <span className={styles.stepNumber}>1</span>
             <p className={styles.stepText}>
-              {l('preview.step1.before')}<strong>{l('preview.step1.bold')}</strong>{l('preview.step1.after')}
+              {l('preview.step1.before')}
+              <strong>{l('preview.step1.bold')}</strong>
+              {l('preview.step1.after')}
             </p>
           </div>
 

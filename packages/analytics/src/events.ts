@@ -21,14 +21,14 @@ export function trackEvent(name: string, params?: Record<string, unknown>): void
 
 export function trackConversion(
   action: 'contact_form_submit' | 'newsletter_signup' | 'cta_click',
-  params?: Record<string, unknown>,
+  params?: Record<string, unknown>
 ): void {
   trackEvent(action, { ...params, event_category: 'conversion' });
 }
 
 export function trackEngagement(
   action: 'page_scroll' | 'time_on_page' | 'outbound_click',
-  params?: Record<string, unknown>,
+  params?: Record<string, unknown>
 ): void {
   trackEvent(action, { ...params, event_category: 'engagement' });
 }

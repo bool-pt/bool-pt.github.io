@@ -110,9 +110,7 @@ describe('detectRepeatingGroups', () => {
       expect(parent?.prefix).toBe('caseStudies.items');
       // tags.1, tags.2, tags.3 should be promoted to nested template, not flat fields
       expect(parent?.fieldSuffixes).toEqual(['client']);
-      expect(parent?.nestedTemplates).toEqual([
-        { innerPrefix: 'tags', fieldSuffixes: [''] },
-      ]);
+      expect(parent?.nestedTemplates).toEqual([{ innerPrefix: 'tags', fieldSuffixes: [''] }]);
     });
 
     it('detects nested object-shaped inner items (inner.M.suffix)', () => {
@@ -133,11 +131,7 @@ describe('detectRepeatingGroups', () => {
     });
 
     it('returns no nestedTemplates when there are no inner numeric groups', () => {
-      const keys = [
-        'section.items.1.title',
-        'section.items.1.body',
-        'section.items.2.title',
-      ];
+      const keys = ['section.items.1.title', 'section.items.1.body', 'section.items.2.title'];
 
       const [parent] = detectRepeatingGroups(keys, 'section');
       expect(parent?.nestedTemplates).toBeUndefined();

@@ -5,5 +5,5 @@ export default mergeConfig(
   domConfig,
   defineConfig({
     test: {},
-  }),
+  })
 );

@@ -9,7 +9,6 @@
 import { writeFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-
 import {
   colorSemantics,
   colorPrimitives,
@@ -36,16 +35,18 @@ function cssVar(name: string, value: string): string {
 function fontStack(families: readonly string[]): string {
   return families
     .map((f) => {
-      if (f.startsWith('ui-') || f === 'system-ui' || f === 'sans-serif' || f === 'monospace' || f === 'serif') {
+      if (
+        f.startsWith('ui-') ||
+        f === 'system-ui' ||
+        f === 'sans-serif' ||
+        f === 'monospace' ||
+        f === 'serif'
+      ) {
         return f;
       }
       return `'${f}'`;
     })
     .join(', ');
-}
-
-function camelToKebab(str: string): string {
-  return str.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
 }
 
 function generateTheme(): string {
@@ -69,7 +70,9 @@ function generateTheme(): string {
   lines.push(cssVar('--color-destructive-foreground', colorSemantics.destructiveForeground));
   lines.push(cssVar('--color-surface-dark', colorSemantics.surfaceDark));
   lines.push(cssVar('--color-surface-charcoal', colorSemantics.surfaceCharcoal));
-  lines.push(cssVar('--color-surface-warm-dark', colorPrimitives.neutral[850].replace('#1a1a1a', '#2b2926')));
+  lines.push(
+    cssVar('--color-surface-warm-dark', colorPrimitives.neutral[850].replace('#1a1a1a', '#2b2926'))
+  );
 
   // surface-warm-dark is a special value not directly in primitives
   // Override with the correct value
@@ -139,7 +142,20 @@ function generateTheme(): string {
   }
 
   // Shadows (only named design tokens, not Tailwind size aliases)
-  const shadowTokens = ['card', 'subtle', 'soft', 'dark-card', 'hover', 'elevated', 'heavy', 'overlay', 'testimonial', 'primary-button', 'primary-button-subtle', 'primary-button-hover'];
+  const shadowTokens = [
+    'card',
+    'subtle',
+    'soft',
+    'dark-card',
+    'hover',
+    'elevated',
+    'heavy',
+    'overlay',
+    'testimonial',
+    'primary-button',
+    'primary-button-subtle',
+    'primary-button-hover',
+  ];
   for (const key of shadowTokens) {
     lines.push(cssVar(`--shadow-${key}`, shadows[key as keyof typeof shadows]));
   }

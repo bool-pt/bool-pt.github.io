@@ -36,6 +36,8 @@ export function captureError(error: unknown, context?: Record<string, unknown>):
     .then((Sentry) => {
       Sentry.captureException(error, { extra: context });
     })
+    // Error monitoring is non-critical; if the Sentry chunk fails to load,
+    // silently continue rather than throwing inside an error handler.
     .catch(() => {});
 }
 
@@ -46,5 +48,6 @@ export function setUser(id: string, email?: string): void {
     .then((Sentry) => {
       Sentry.setUser({ id, email });
     })
+    // Non-critical; ignore a failed Sentry chunk load.
     .catch(() => {});
 }

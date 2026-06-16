@@ -14,11 +14,7 @@ interface Props {
 const { ariaLabel, imageAlt, quote, tagline, backgroundImage = bannerImgFallback } = Astro.props;
 ---
 
-<Section
-  background="var(--color-primary)"
-  aria-label={ariaLabel}
-  paddingBlock="0"
->
+<Section background="var(--color-primary)" aria-label={ariaLabel} paddingBlock="0">
   <ImageTextBanner
     image={backgroundImage}
     imageAlt={imageAlt}
