@@ -10,6 +10,12 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  # Run JS actions (incl. ones bundled transitively, e.g. inside
+  # upload-pages-artifact) on Node 24 — silences the Node 20 deprecation
+  # warning. Remove once all actions default to Node 24.
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
 jobs:
   # Lint, typecheck and test share one install and run in parallel via Turbo
   # (was three separate jobs, each paying a full `pnpm install`).
