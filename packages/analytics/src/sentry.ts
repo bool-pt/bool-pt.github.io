@@ -13,7 +13,9 @@ export async function initSentry(dsn: string, options?: Partial<BrowserOptions>)
     enabled: import.meta.env.PROD,
     tracesSampleRate: 0.1,
     replaysSessionSampleRate: 0,
-    replaysOnErrorSampleRate: 1.0,
+    // Sample a fraction of errored sessions for replay rather than all of them —
+    // enough to diagnose issues without recording every consenting user's session.
+    replaysOnErrorSampleRate: 0.2,
     // Error replays must not capture personal data. Mask all text and inputs
     // (form fields, names, emails) and block media so replays stay PII-free.
     integrations: [

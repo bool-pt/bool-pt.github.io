@@ -12,6 +12,30 @@ const optionalKeys = allCategoryKeys.filter(
   (k) => !CONSENT_CATEGORIES[k].required && CONSENT_CATEGORIES[k].available
 ) as ConsentCategory[];
 
+/**
+ * Analytics description, naming only the tools that are actually configured.
+ * GA/Sentry are listed only when their PUBLIC_* env var is set, so the banner
+ * never claims to use a service that isn't running (e.g. no "Sentry" mention
+ * when PUBLIC_SENTRY_DSN is empty).
+ */
+function describeCategory(key: keyof typeof CONSENT_CATEGORIES): string {
+  const base = t(CONSENT_CATEGORIES[key].descriptionKey);
+  if (key !== 'analytics') return base;
+
+  const tools: string[] = [];
+  if (import.meta.env.PUBLIC_GA_MEASUREMENT_ID) {
+    tools.push(t('consent.analytics.tools.googleAnalytics'));
+  }
+  if (import.meta.env.PUBLIC_SENTRY_DSN) {
+    tools.push(t('consent.analytics.tools.sentry'));
+  }
+  if (tools.length === 0) return base;
+
+  const list =
+    tools.length > 1 ? `${tools.slice(0, -1).join(', ')} and ${tools[tools.length - 1]}` : tools[0];
+  return `${base} ${t('consent.analytics.tools.prefix')} ${list}.`;
+}
+
 export function CookieBanner() {
   const { consent, hasDecided, accept, reject, savePreferences } = useConsent();
   const [view, setView] = useState<'initial' | 'preferences'>('initial');
@@ -92,7 +116,7 @@ export function CookieBanner() {
                 <label key={key} className={styles.category}>
                   <div className={styles.categoryInfo}>
                     <span className={styles.categoryLabel}>{t(category.labelKey)}</span>
-                    <span className={styles.categoryDescription}>{t(category.descriptionKey)}</span>
+                    <span className={styles.categoryDescription}>{describeCategory(key)}</span>
                   </div>
                   <input
                     type="checkbox"
@@ -110,7 +134,7 @@ export function CookieBanner() {
                 <label key={key} className={styles.category}>
                   <div className={styles.categoryInfo}>
                     <span className={styles.categoryLabel}>{t(category.labelKey)}</span>
-                    <span className={styles.categoryDescription}>{t(category.descriptionKey)}</span>
+                    <span className={styles.categoryDescription}>{describeCategory(key)}</span>
                   </div>
                   <input
                     type="checkbox"
