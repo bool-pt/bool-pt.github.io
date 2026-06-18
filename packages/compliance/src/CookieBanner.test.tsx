@@ -45,6 +45,7 @@ function setupMock(overrides: Partial<ReturnType<typeof useConsent>> = {}) {
 afterEach(() => {
   cleanup();
   vi.clearAllMocks();
+  vi.unstubAllEnvs();
 });
 
 describe('CookieBanner', () => {
@@ -138,6 +139,33 @@ describe('CookieBanner', () => {
       analytics: true,
       marketing: false,
     });
+  });
+
+  it('omits unconfigured analytics tools from the description (no Sentry when DSN empty)', async () => {
+    const user = userEvent.setup();
+    setupMock();
+
+    const { container } = render(<CookieBanner />);
+    await user.click(screen.getByText('cookie.manage'));
+
+    // With no PUBLIC_* analytics env vars set (the test default), the analytics
+    // description must not name any tool.
+    expect(container.textContent).not.toContain('consent.analytics.tools.sentry');
+    expect(container.textContent).not.toContain('consent.analytics.tools.googleAnalytics');
+  });
+
+  it('names a tool only when its env var is configured', async () => {
+    vi.stubEnv('PUBLIC_SENTRY_DSN', 'https://key@sentry.io/1');
+    const user = userEvent.setup();
+    setupMock();
+
+    const { container } = render(<CookieBanner />);
+    await user.click(screen.getByText('cookie.manage'));
+
+    expect(container.textContent).toContain('consent.analytics.tools.sentry');
+    expect(container.textContent).toContain('consent.analytics.tools.prefix');
+    // GA is still unconfigured, so it must not appear.
+    expect(container.textContent).not.toContain('consent.analytics.tools.googleAnalytics');
   });
 
   it('opens preferences view when bool:open-preferences fires even if hasDecided is true', () => {

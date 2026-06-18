@@ -41,6 +41,14 @@ describe('initSentry', () => {
     );
   });
 
+  it('samples error-session replays at a reduced rate, never 100% (BOOL-09)', async () => {
+    await initSentry('https://key@sentry.io/123');
+    const opts = mockInit.mock.calls[0]?.[0];
+    expect(opts.replaysSessionSampleRate).toBe(0);
+    expect(opts.replaysOnErrorSampleRate).toBe(0.2);
+    expect(opts.replaysOnErrorSampleRate).toBeLessThan(1);
+  });
+
   it('does not initialize twice', async () => {
     await initSentry('https://key@sentry.io/123');
     await initSentry('https://key@sentry.io/123');

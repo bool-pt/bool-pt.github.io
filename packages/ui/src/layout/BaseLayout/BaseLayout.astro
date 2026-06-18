@@ -148,11 +148,13 @@ const modals = modalKeys.map((key) => ({
     <GoogleAnalytics />
     <script>
       import { initSentry } from '@bool/analytics';
-      import { CONSENT_STORAGE_KEY } from '@bool/compliance';
+      import { CONSENT_STORAGE_KEY, CONSENT_ENABLED } from '@bool/compliance';
 
       const dsn = import.meta.env.PUBLIC_SENTRY_DSN;
 
-      if (dsn) {
+      // Gate on CONSENT_ENABLED so Sentry can never load without the consent UI
+      // that lets users grant/withdraw it (GDPR Art. 7(3)).
+      if (CONSENT_ENABLED && dsn) {
         function hasAnalyticsConsent(): boolean {
           try {
             const stored = localStorage.getItem(CONSENT_STORAGE_KEY);

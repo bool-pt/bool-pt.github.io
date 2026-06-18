@@ -6,8 +6,8 @@ export const COMPANY = {
   name: 'Bool',
   email: 'info@bool.pt',
   phone: '+351 219 345 678',
-  address: 'Edifício Gonçalves Zarco, R. da Cintura do Porto de Lisboa, 1350-352 Lisboa',
-  vatNumber: '',
+  address: 'Kube Coworking, R. do Centro Cultural 27A, 1700-106 Lisboa',
+  vatNumber: 'PT510768105',
 } as const;
 
 const route = (path: string) => `${BASE_PATH}${path}` as const;

@@ -1,16 +1,19 @@
 /**
  * Master switch for the cookie consent UI (banner + footer "Cookie preferences").
  *
- * Set to `false` to hide the consent UI entirely. This is appropriate while the
- * site runs no consent-requiring technologies — i.e. no Google Analytics or
- * Sentry configured (their PUBLIC_* env vars unset) — so no banner is legally
- * required. Flip back to `true` to re-enable it.
+ * When `true`, the consent banner is shown and the footer "Cookie preferences"
+ * link is rendered, giving users a way to grant and withdraw consent at any time
+ * (GDPR Art. 7(3)). The published Privacy Policy and Cookie Policy reference this
+ * footer link, so it must remain `true` in production.
  *
- * This only controls the UI. Analytics/Sentry are independently gated by their
- * env vars; keep those unset while this is `false` so nothing requiring consent
- * can run without a way for the user to grant or withdraw it.
+ * Hard rule: analytics technologies must never run without this UI. Google
+ * Analytics (`GoogleAnalytics.astro`) and Sentry (`BaseLayout.astro`) both guard
+ * their injection on `CONSENT_ENABLED` in addition to their PUBLIC_* env vars, so
+ * setting an analytics env var while this is `false` cannot silently start
+ * tracking. Keep this `true` whenever PUBLIC_GA_MEASUREMENT_ID or
+ * PUBLIC_SENTRY_DSN is configured.
  */
-export const CONSENT_ENABLED = false;
+export const CONSENT_ENABLED = true;
 
 export const CONSENT_STORAGE_KEY = 'bool-consent';
 

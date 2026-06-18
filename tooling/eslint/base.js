@@ -32,6 +32,12 @@ export default tseslint.config(
             'tooling/knip.config.ts',
             // Standalone tooling scripts (not under a src/ tsconfig include).
             'tooling/scripts/*.ts',
+            // App-level config files (e.g. apps/web/bool/astro.config.ts). These
+            // only match the root-level '*.config.ts' pattern when eslint runs with
+            // the app as cwd (turbo lint); lint-staged runs from the repo root, so
+            // they need an explicit repo-root-relative entry. Scoped to apps/*/*/ so
+            // it can never match a src/*.config.ts already in a tsconfig include.
+            'apps/*/*/*.config.ts',
           ],
         },
       },
