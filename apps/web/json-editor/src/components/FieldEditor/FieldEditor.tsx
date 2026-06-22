@@ -91,6 +91,9 @@ export default function FieldEditor({ field, disabled = false }: FieldEditorProp
 
   const useTextarea = isLongValue(field.value) || isLongValue(localValue);
   const kind = field.kind ?? 'text';
+  // Boolean fields are visible unless the stored value is exactly "false",
+  // mirroring `isVisible()` in @bool/i18n.
+  const boolChecked = (disabled ? field.value : localValue) !== 'false';
 
   return (
     <div
@@ -147,6 +150,25 @@ export default function FieldEditor({ field, disabled = false }: FieldEditorProp
               </option>
             ))}
           </select>
+        ) : kind === 'boolean' ? (
+          <label className={cn(styles.toggle, disabled && styles.inputDisabled)}>
+            <input
+              type="checkbox"
+              role="switch"
+              className={styles.toggleInput}
+              checked={boolChecked}
+              disabled={disabled}
+              onChange={
+                disabled
+                  ? undefined
+                  : (e) => handleSpecializedChange(e.target.checked ? 'true' : 'false')
+              }
+            />
+            <span className={styles.toggleTrack} aria-hidden="true">
+              <span className={styles.toggleThumb} />
+            </span>
+            <span className={styles.toggleValue}>{boolChecked ? 'true' : 'false'}</span>
+          </label>
         ) : useTextarea ? (
           <textarea
             className={cn(styles.input, styles.textarea, disabled && styles.inputDisabled)}

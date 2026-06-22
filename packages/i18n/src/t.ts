@@ -19,3 +19,14 @@ export function tOptional(key: string, locale: Locale = defaultLocale): string |
   const value = translations[locale]?.[key] ?? translations['en']?.[key];
   return value || undefined;
 }
+
+/**
+ * Reads a section-visibility flag (stored as a "true"/"false" string to fit the
+ * flat-string locale schema). Sections are visible by default: only an explicit
+ * "false" hides them, so a missing, empty, or malformed value never blanks a
+ * section. Used in page frontmatter to gate whole sections whose content is not
+ * ready yet — mirrors the `<sectionId>.backgroundImage` optional-key convention.
+ */
+export function isVisible(key: string, locale: Locale = defaultLocale): boolean {
+  return (translations[locale]?.[key] ?? translations['en']?.[key]) !== 'false';
+}

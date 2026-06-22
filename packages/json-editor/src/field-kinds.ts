@@ -26,6 +26,14 @@ const ICON_SUFFIXES = new Set(['iconName', 'icon']);
 const LINK_SUFFIXES = new Set(['href', 'url', 'link']);
 
 /**
+ * Boolean fields render as a toggle that still serializes to the strings
+ * "true"/"false". Detected by the last segment — `visible` covers the
+ * section-visibility flags (`<section>.visible`) and the per-channel share
+ * toggles (`knowledgeCenter.share.*.visible`).
+ */
+const BOOLEAN_SUFFIXES = new Set(['visible']);
+
+/**
  * A field is a link when its key says so (`href`/`url`/`link`, or any
  * `*Href`/`*Url` variant like `meetHref`) OR its value looks like a
  * destination — an absolute URL, a site-relative path, an in-page anchor, or a
@@ -62,6 +70,7 @@ const SELECT_OPTIONS: Record<string, SelectOption[]> = {
 
 export function classifyField(key: string, value?: string): FieldKind {
   const lastSegment = key.slice(key.lastIndexOf('.') + 1);
+  if (BOOLEAN_SUFFIXES.has(lastSegment)) return 'boolean';
   if (ICON_SUFFIXES.has(lastSegment)) return 'icon';
   if (isMediaSegment(lastSegment)) return 'media';
   if (isLinkSuffix(lastSegment) || looksLikeUrl(value)) return 'link';

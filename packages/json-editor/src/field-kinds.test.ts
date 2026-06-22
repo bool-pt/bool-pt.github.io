@@ -31,6 +31,26 @@ describe('classifyField', () => {
     });
   });
 
+  describe('boolean kind', () => {
+    it.each([
+      ['hero.visible'],
+      ['contactSection.visible'],
+      ['knowledgeCenter.share.email.visible'],
+      ['knowledgeCenter.share.copyLink.visible'],
+    ])('classifies %s as boolean', (key) => {
+      expect(classifyField(key, 'true')).toBe('boolean');
+    });
+
+    it('matches the visible suffix regardless of value', () => {
+      expect(classifyField('hero.visible', 'false')).toBe('boolean');
+      expect(classifyField('hero.visible', '')).toBe('boolean');
+    });
+
+    it('does not treat "visible" as a substring of another segment', () => {
+      expect(classifyField('section.visibleLabel')).toBe('text');
+    });
+  });
+
   describe('text kind (default)', () => {
     it.each([
       ['caseStudies.items.1.title'],

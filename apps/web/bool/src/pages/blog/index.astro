@@ -1,6 +1,6 @@
 ---
 import { getEvents, resolveImage, transformEvent } from '@bool/content';
-import { t, tCollection, tList, tOptional } from '@bool/i18n';
+import { t, tCollection, tList, tOptional, isVisible } from '@bool/i18n';
 import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
 import ContactSection from '@bool/ui/sections/ContactSection.astro';
 import EventsCalendarSection from '@bool/ui/sections/EventsCalendarSection.astro';
@@ -31,6 +31,16 @@ const bgEventsCalendar = tOptional('eventsCalendar.backgroundImage');
 const bgInsightsCta = tOptional('insightsCta.backgroundImage');
 const bgNewsletterCta = tOptional('newsletterCta.backgroundImage');
 const bgContactSection = tOptional('contactSection.backgroundImage');
+
+const showInsightsHero = isVisible('insightsHero.visible');
+const showNewsletterBar = isVisible('newsletterBar.visible');
+const showKnowledgeCenter = isVisible('knowledgeCenter.visible');
+const showNewsUpdates = isVisible('newsUpdates.visible');
+const showPressReleases = isVisible('pressReleases.visible');
+const showEventsCalendar = isVisible('eventsCalendar.visible');
+const showInsightsCta = isVisible('insightsCta.visible');
+const showContactSection = isVisible('contactSection.visible');
+const showNewsletterCta = isVisible('newsletterCta.visible');
 
 const knowledgeFilters = tList('knowledgeCenter.filters');
 
@@ -143,118 +153,154 @@ const eventCards = tCollection('eventsCalendar.item', [
   headerLabels={getHeaderLabels()}
   footerLabels={getFooterLabels()}
 >
-  <div id="insightsHero" class="section-anchor">
-    <InsightsHeroSection
-      tag={t('insightsHero.tag')}
-      heading={t('insightsHero.heading')}
-      body={t('insightsHero.body')}
-      ctaExplore={t('insightsHero.cta.explore')}
-      ctaExploreHref={t('insightsHero.cta.explore.href')}
-      ctaSubscribe={t('insightsHero.cta.subscribe')}
-      ctaSubscribeHref={t('insightsHero.cta.subscribe.href')}
-      backgroundImage={resolveImage(t('insightsHero.backgroundImage'))}
-    />
-  </div>
-  <div id="newsletterBar" class="section-anchor">
-    <NewsletterBarSection
-      ariaLabel={t('newsletter.subscription.aria')}
-      heading={t('newsletterBar.heading')}
-      sub={t('newsletterBar.sub')}
-      newsletterLabels={getNewsletterLabels()}
-      backgroundImage={bgNewsletterBar ? resolveImage(bgNewsletterBar) : undefined}
-    />
-  </div>
-  <div id="knowledgeCenter" class="section-anchor">
-    <KnowledgeCenterSection
-      tag={t('knowledgeCenter.tag')}
-      heading={t('knowledgeCenter.heading')}
-      body={t('knowledgeCenter.body')}
-      filters={knowledgeFilters}
-      articles={knowledgeArticles}
-      labels={{
-        close: t('common.close'),
-        readArticle: t('knowledgeCenter.readArticleCta'),
-        readTime: t('knowledgeCenter.readTimeLabel'),
-        views: t('knowledgeCenter.viewsLabel'),
-        emptyMessage: t('knowledgeCenter.emptyState'),
-        filterAriaLabel: t('knowledgeCenter.filter.aria'),
-        aboutThisArticle: t('knowledgeCenter.modal.aboutThisArticle'),
-        published: t('knowledgeCenter.modal.published'),
-        relatedTopics: t('knowledgeCenter.modal.relatedTopics'),
-        backToArticles: t('knowledgeCenter.modal.backToArticles'),
-        copyLink: t('knowledgeCenter.modal.copyLink'),
-        copied: t('knowledgeCenter.modal.copied'),
-        shareChannels: [
-          { key: 'email', visible: t('knowledgeCenter.share.email.visible') === 'true' },
-          { key: 'linkedin', visible: t('knowledgeCenter.share.linkedin.visible') === 'true' },
-          { key: 'x', visible: t('knowledgeCenter.share.x.visible') === 'true' },
-          { key: 'copyLink', visible: t('knowledgeCenter.share.copyLink.visible') === 'true' },
-        ],
-      }}
-      backgroundImage={bgKnowledgeCenter ? resolveImage(bgKnowledgeCenter) : undefined}
-    />
-  </div>
-  <div id="newsUpdates" class="section-anchor">
-    <NewsUpdatesSection
-      tag={t('newsUpdates.tag')}
-      heading={t('newsUpdates.heading')}
-      body={t('newsUpdates.body')}
-      filters={newsFilters}
-      newsItems={newsItems}
-      labels={{
-        readMore: t('common.readMore'),
-        emptyMessage: t('newsUpdates.emptyState'),
-        filterAriaLabel: t('newsUpdates.filter.aria'),
-      }}
-      backgroundImage={bgNewsUpdates ? resolveImage(bgNewsUpdates) : undefined}
-    />
-  </div>
-  <div id="pressReleases" class="section-anchor">
-    <PressReleasesSection
-      tag={t('pressReleases.tag')}
-      heading={t('pressReleases.heading')}
-      body={t('pressReleases.body')}
-      viewMoreLabel={t('pressReleases.cta.viewMore')}
-      pressReleases={pressReleases}
-      backgroundImage={bgPressReleases ? resolveImage(bgPressReleases) : undefined}
-    />
-  </div>
-  <div id="eventsCalendar" class="section-anchor">
-    <EventsCalendarSection
-      tag={t('eventsCalendar.tag')}
-      heading={t('eventsCalendar.heading')}
-      body={t('eventsCalendar.body')}
-      eventCards={eventCards}
-      calendarLabels={getCalendarLabels()}
-      events={eventItems}
-      scheduleLabels={getEventScheduleLabels()}
-      backgroundImage={bgEventsCalendar ? resolveImage(bgEventsCalendar) : undefined}
-    />
-  </div>
-  <div id="insightsCta" class="section-anchor">
-    <InsightsCTASection
-      tag={t('insightsCta.tag')}
-      headingLine1={t('insightsCta.heading.line1')}
-      headingLine2={t('insightsCta.heading.line2')}
-      body={t('insightsCta.body')}
-      button={t('common.talkToExpert')}
-      buttonHref={t('insightsCta.cta.href')}
-      backgroundImage={bgInsightsCta ? resolveImage(bgInsightsCta) : undefined}
-    />
-  </div>
-  <div id="contactSection" class="section-anchor">
-    <ContactSection
-      {...getContactSectionProps()}
-      background="var(--color-surface-black)"
-      backgroundImage={bgContactSection ? resolveImage(bgContactSection) : undefined}
-    />
-  </div>
-  <div id="newsletterCta" class="section-anchor">
-    <NewsletterCTASection
-      heading={t('newsletterCta.heading')}
-      body={t('newsletterCta.body')}
-      newsletterLabels={getNewsletterLabels()}
-      backgroundImage={bgNewsletterCta ? resolveImage(bgNewsletterCta) : undefined}
-    />
-  </div>
+  {
+    showInsightsHero && (
+      <div id="insightsHero" class="section-anchor">
+        <InsightsHeroSection
+          tag={t('insightsHero.tag')}
+          heading={t('insightsHero.heading')}
+          body={t('insightsHero.body')}
+          ctaExplore={t('insightsHero.cta.explore')}
+          ctaExploreHref={t('insightsHero.cta.explore.href')}
+          ctaSubscribe={t('insightsHero.cta.subscribe')}
+          ctaSubscribeHref={t('insightsHero.cta.subscribe.href')}
+          backgroundImage={resolveImage(t('insightsHero.backgroundImage'))}
+        />
+      </div>
+    )
+  }
+  {
+    showNewsletterBar && (
+      <div id="newsletterBar" class="section-anchor">
+        <NewsletterBarSection
+          ariaLabel={t('newsletter.subscription.aria')}
+          heading={t('newsletterBar.heading')}
+          sub={t('newsletterBar.sub')}
+          newsletterLabels={getNewsletterLabels()}
+          backgroundImage={bgNewsletterBar ? resolveImage(bgNewsletterBar) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showKnowledgeCenter && (
+      <div id="knowledgeCenter" class="section-anchor">
+        <KnowledgeCenterSection
+          tag={t('knowledgeCenter.tag')}
+          heading={t('knowledgeCenter.heading')}
+          body={t('knowledgeCenter.body')}
+          filters={knowledgeFilters}
+          articles={knowledgeArticles}
+          labels={{
+            close: t('common.close'),
+            readArticle: t('knowledgeCenter.readArticleCta'),
+            readTime: t('knowledgeCenter.readTimeLabel'),
+            views: t('knowledgeCenter.viewsLabel'),
+            emptyMessage: t('knowledgeCenter.emptyState'),
+            filterAriaLabel: t('knowledgeCenter.filter.aria'),
+            aboutThisArticle: t('knowledgeCenter.modal.aboutThisArticle'),
+            published: t('knowledgeCenter.modal.published'),
+            relatedTopics: t('knowledgeCenter.modal.relatedTopics'),
+            backToArticles: t('knowledgeCenter.modal.backToArticles'),
+            copyLink: t('knowledgeCenter.modal.copyLink'),
+            copied: t('knowledgeCenter.modal.copied'),
+            shareChannels: [
+              { key: 'email', visible: t('knowledgeCenter.share.email.visible') === 'true' },
+              { key: 'linkedin', visible: t('knowledgeCenter.share.linkedin.visible') === 'true' },
+              { key: 'x', visible: t('knowledgeCenter.share.x.visible') === 'true' },
+              { key: 'copyLink', visible: t('knowledgeCenter.share.copyLink.visible') === 'true' },
+            ],
+          }}
+          backgroundImage={bgKnowledgeCenter ? resolveImage(bgKnowledgeCenter) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showNewsUpdates && (
+      <div id="newsUpdates" class="section-anchor">
+        <NewsUpdatesSection
+          tag={t('newsUpdates.tag')}
+          heading={t('newsUpdates.heading')}
+          body={t('newsUpdates.body')}
+          filters={newsFilters}
+          newsItems={newsItems}
+          labels={{
+            readMore: t('common.readMore'),
+            emptyMessage: t('newsUpdates.emptyState'),
+            filterAriaLabel: t('newsUpdates.filter.aria'),
+          }}
+          backgroundImage={bgNewsUpdates ? resolveImage(bgNewsUpdates) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showPressReleases && (
+      <div id="pressReleases" class="section-anchor">
+        <PressReleasesSection
+          tag={t('pressReleases.tag')}
+          heading={t('pressReleases.heading')}
+          body={t('pressReleases.body')}
+          viewMoreLabel={t('pressReleases.cta.viewMore')}
+          pressReleases={pressReleases}
+          backgroundImage={bgPressReleases ? resolveImage(bgPressReleases) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showEventsCalendar && (
+      <div id="eventsCalendar" class="section-anchor">
+        <EventsCalendarSection
+          tag={t('eventsCalendar.tag')}
+          heading={t('eventsCalendar.heading')}
+          body={t('eventsCalendar.body')}
+          eventCards={eventCards}
+          calendarLabels={getCalendarLabels()}
+          events={eventItems}
+          scheduleLabels={getEventScheduleLabels()}
+          backgroundImage={bgEventsCalendar ? resolveImage(bgEventsCalendar) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showInsightsCta && (
+      <div id="insightsCta" class="section-anchor">
+        <InsightsCTASection
+          tag={t('insightsCta.tag')}
+          headingLine1={t('insightsCta.heading.line1')}
+          headingLine2={t('insightsCta.heading.line2')}
+          body={t('insightsCta.body')}
+          button={t('common.talkToExpert')}
+          buttonHref={t('insightsCta.cta.href')}
+          backgroundImage={bgInsightsCta ? resolveImage(bgInsightsCta) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showContactSection && (
+      <div id="contactSection" class="section-anchor">
+        <ContactSection
+          {...getContactSectionProps()}
+          background="var(--color-surface-black)"
+          backgroundImage={bgContactSection ? resolveImage(bgContactSection) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showNewsletterCta && (
+      <div id="newsletterCta" class="section-anchor">
+        <NewsletterCTASection
+          heading={t('newsletterCta.heading')}
+          body={t('newsletterCta.body')}
+          newsletterLabels={getNewsletterLabels()}
+          backgroundImage={bgNewsletterCta ? resolveImage(bgNewsletterCta) : undefined}
+        />
+      </div>
+    )
+  }
 </BaseLayout>
