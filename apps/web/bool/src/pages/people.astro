@@ -1,6 +1,6 @@
 ---
 import { resolveImage } from '@bool/content';
-import { t, tOptional, tCollection } from '@bool/i18n';
+import { t, tOptional, tCollection, isVisible } from '@bool/i18n';
 import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
 import BeyondSprintSection from '@bool/ui/sections/BeyondSprintSection.astro';
 import CareersCtaSection from '@bool/ui/sections/CareersCtaSection.astro';
@@ -44,6 +44,15 @@ const bgTeamTestimonials = tOptional('teamTestimonials.backgroundImage');
 const bgCareersCta = tOptional('careersCta.backgroundImage');
 const bgNewsletterCta = tOptional('newsletterCta.backgroundImage');
 const bgContactSection = tOptional('contactSection.backgroundImage');
+
+const showPeopleHero = isVisible('peopleHero.visible');
+const showCoreValues = isVisible('coreValues.visible');
+const showBeyondWork = isVisible('beyondWork.visible');
+const showPhotoGallery = isVisible('photoGallery.visible');
+const showTeamTestimonials = isVisible('teamTestimonials.visible');
+const showCareersCta = isVisible('careersCta.visible');
+const showContactSection = isVisible('contactSection.visible');
+const showNewsletterCta = isVisible('newsletterCta.visible');
 ---
 
 <BaseLayout
@@ -52,81 +61,113 @@ const bgContactSection = tOptional('contactSection.backgroundImage');
   headerLabels={getHeaderLabels()}
   footerLabels={getFooterLabels()}
 >
-  <div id="peopleHero" class="section-anchor">
-    <PeopleHeroSection
-      tag={t('peopleHero.tag')}
-      heading={t('peopleHero.heading')}
-      body={t('peopleHero.body')}
-      ctaMeet={t('peopleHero.cta.meet')}
-      ctaMeetHref={t('peopleHero.cta.meet.href')}
-      ctaJoin={t('peopleHero.cta.join')}
-      ctaJoinHref={t('peopleHero.cta.join.href')}
-      stats={heroStats}
-      backgroundImage={resolveImage(t('peopleHero.backgroundImage'))}
-    />
-  </div>
-  <div id="coreValues" class="section-anchor">
-    <ValuesSection
-      tag={t('coreValues.tag')}
-      heading={t('coreValues.heading')}
-      subtitle={t('coreValues.subtitle')}
-      values={coreValues}
-      backgroundImage={coreValuesBg ? resolveImage(coreValuesBg) : undefined}
-    />
-  </div>
-  <div id="beyondWork" class="section-anchor">
-    <BeyondSprintSection
-      tag={t('beyondWork.tag')}
-      heading={t('beyondWork.heading')}
-      body={t('beyondWork.body')}
-      cards={beyondCards}
-      backgroundImage={beyondWorkBg ? resolveImage(beyondWorkBg) : undefined}
-    />
-  </div>
-  <div id="photoGallery" class="section-anchor">
-    <PhotoGallerySection
-      tag={t('photoGallery.tag')}
-      heading={t('photoGallery.heading')}
-      body={t('photoGallery.body')}
-      galleryAria={t('photoGallery.gallery.aria')}
-      galleryAlts={tCollection('photoGallery.gallery', ['alt']).map((g) => g.alt)}
-      images={tCollection('photoGallery.gallery', ['image']).map((g) => resolveImage(g.image))}
-      backgroundImage={bgPhotoGallery ? resolveImage(bgPhotoGallery) : undefined}
-    />
-  </div>
-  <div id="teamTestimonials" class="section-anchor">
-    <TestimonialsCarouselSection
-      tag={t('teamTestimonials.tag')}
-      heading={t('teamTestimonials.heading')}
-      body={t('teamTestimonials.body')}
-      testimonials={peopleTestimonials}
-      carouselAriaLabels={{ prev: t('carousel.previous'), next: t('carousel.next') }}
-      backgroundImage={bgTeamTestimonials ? resolveImage(bgTeamTestimonials) : undefined}
-    />
-  </div>
-  <div id="careersCta" class="section-anchor">
-    <CareersCtaSection
-      tag={t('careersCta.tag')}
-      heading={t('careersCta.heading')}
-      body={t('careersCta.body')}
-      cta={t('careersCta.cta')}
-      ctaHref={t('careersCta.cta.href')}
-      backgroundImage={bgCareersCta ? resolveImage(bgCareersCta) : undefined}
-    />
-  </div>
-  <div id="contactSection" class="section-anchor">
-    <ContactSection
-      {...getContactSectionProps()}
-      background="var(--color-surface-black)"
-      backgroundImage={bgContactSection ? resolveImage(bgContactSection) : undefined}
-    />
-  </div>
-  <div id="newsletterCta" class="section-anchor">
-    <NewsletterCTASection
-      heading={t('newsletterCta.heading')}
-      body={t('newsletterCta.body')}
-      newsletterLabels={getNewsletterLabels()}
-      backgroundImage={bgNewsletterCta ? resolveImage(bgNewsletterCta) : undefined}
-    />
-  </div>
+  {
+    showPeopleHero && (
+      <div id="peopleHero" class="section-anchor">
+        <PeopleHeroSection
+          tag={t('peopleHero.tag')}
+          heading={t('peopleHero.heading')}
+          body={t('peopleHero.body')}
+          ctaMeet={t('peopleHero.cta.meet')}
+          ctaMeetHref={t('peopleHero.cta.meet.href')}
+          ctaJoin={t('peopleHero.cta.join')}
+          ctaJoinHref={t('peopleHero.cta.join.href')}
+          stats={heroStats}
+          backgroundImage={resolveImage(t('peopleHero.backgroundImage'))}
+        />
+      </div>
+    )
+  }
+  {
+    showCoreValues && (
+      <div id="coreValues" class="section-anchor">
+        <ValuesSection
+          tag={t('coreValues.tag')}
+          heading={t('coreValues.heading')}
+          subtitle={t('coreValues.subtitle')}
+          values={coreValues}
+          backgroundImage={coreValuesBg ? resolveImage(coreValuesBg) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showBeyondWork && (
+      <div id="beyondWork" class="section-anchor">
+        <BeyondSprintSection
+          tag={t('beyondWork.tag')}
+          heading={t('beyondWork.heading')}
+          body={t('beyondWork.body')}
+          cards={beyondCards}
+          backgroundImage={beyondWorkBg ? resolveImage(beyondWorkBg) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showPhotoGallery && (
+      <div id="photoGallery" class="section-anchor">
+        <PhotoGallerySection
+          tag={t('photoGallery.tag')}
+          heading={t('photoGallery.heading')}
+          body={t('photoGallery.body')}
+          galleryAria={t('photoGallery.gallery.aria')}
+          galleryAlts={tCollection('photoGallery.gallery', ['alt']).map((g) => g.alt)}
+          images={tCollection('photoGallery.gallery', ['image']).map((g) => resolveImage(g.image))}
+          backgroundImage={bgPhotoGallery ? resolveImage(bgPhotoGallery) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showTeamTestimonials && (
+      <div id="teamTestimonials" class="section-anchor">
+        <TestimonialsCarouselSection
+          tag={t('teamTestimonials.tag')}
+          heading={t('teamTestimonials.heading')}
+          body={t('teamTestimonials.body')}
+          testimonials={peopleTestimonials}
+          carouselAriaLabels={{ prev: t('carousel.previous'), next: t('carousel.next') }}
+          backgroundImage={bgTeamTestimonials ? resolveImage(bgTeamTestimonials) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showCareersCta && (
+      <div id="careersCta" class="section-anchor">
+        <CareersCtaSection
+          tag={t('careersCta.tag')}
+          heading={t('careersCta.heading')}
+          body={t('careersCta.body')}
+          cta={t('careersCta.cta')}
+          ctaHref={t('careersCta.cta.href')}
+          backgroundImage={bgCareersCta ? resolveImage(bgCareersCta) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showContactSection && (
+      <div id="contactSection" class="section-anchor">
+        <ContactSection
+          {...getContactSectionProps()}
+          background="var(--color-surface-black)"
+          backgroundImage={bgContactSection ? resolveImage(bgContactSection) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showNewsletterCta && (
+      <div id="newsletterCta" class="section-anchor">
+        <NewsletterCTASection
+          heading={t('newsletterCta.heading')}
+          body={t('newsletterCta.body')}
+          newsletterLabels={getNewsletterLabels()}
+          backgroundImage={bgNewsletterCta ? resolveImage(bgNewsletterCta) : undefined}
+        />
+      </div>
+    )
+  }
 </BaseLayout>
