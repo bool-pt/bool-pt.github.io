@@ -208,6 +208,8 @@ const showNewsletterCta = isVisible('newsletterCta.visible', locale);
           heading={t('testimonials.heading', locale)}
           description={t('testimonials.description', locale)}
           testimonials={testimonialItems}
+          prevLabel={t('carousel.previous', locale)}
+          nextLabel={t('carousel.next', locale)}
           backgroundImage={bgTestimonials ? resolveImage(bgTestimonials) : undefined}
         />
       </div>
