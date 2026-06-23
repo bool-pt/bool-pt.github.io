@@ -60,6 +60,13 @@ test.describe('Hero', () => {
 
 test.describe('Testimonials carousel (homepage)', () => {
   test.beforeEach(async ({ page }) => {
+    // The homepage testimonials section is gated by the `testimonials.visible`
+    // content toggle. When editors hide it, there is no carousel to assert on,
+    // so skip rather than fail. The test runs again once it is re-enabled.
+    test.skip(
+      en['testimonials.visible'] === 'false',
+      'Homepage testimonials section hidden via the testimonials.visible content toggle'
+    );
     await page.goto(ROUTES.home);
     await dismissCookieBanner(page);
   });

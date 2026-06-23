@@ -20,6 +20,9 @@ interface Props {
   /** Default avatar shown when an item has no `avatar` of its own. */
   defaultAvatar?: ImageMetadata;
   backgroundImage?: ImageMetadata;
+  /** Accessible labels for the carousel's previous/next nav buttons. */
+  prevLabel: string;
+  nextLabel: string;
 }
 
 const {
@@ -28,6 +31,8 @@ const {
   testimonials = [],
   defaultAvatar = avatarFallback,
   backgroundImage,
+  prevLabel,
+  nextLabel,
 } = Astro.props;
 const fallbackSrc = defaultAvatar.src;
 const enrichedTestimonials = testimonials.map((t) => ({ ...t, avatar: t.avatar ?? fallbackSrc }));
@@ -56,6 +61,8 @@ const enrichedTestimonials = testimonials.map((t) => ({ ...t, avatar: t.avatar ?
           testimonials={enrichedTestimonials}
           variant="light"
           avatarSrc={fallbackSrc}
+          prevLabel={prevLabel}
+          nextLabel={nextLabel}
           client:visible
         />
       </div>
