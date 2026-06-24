@@ -1,0 +1,58 @@
+name: Sync from Google Drive
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: sync-drive
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    name: Sync Drive → media + locales
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Sync from Google Drive
+        id: sync
+        run: pnpm --filter @bool/media sync:drive
+        env:
+          GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+          GOOGLE_DRIVE_FOLDER_ID: ${{ vars.GOOGLE_DRIVE_FOLDER_ID || secrets.GOOGLE_DRIVE_FOLDER_ID }}
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          commit-message: 'chore(media): sync media and locales from Google Drive'
+          title: 'chore(media): sync media and locales from Google Drive'
+          body: |
+            Automated sync from the shared Google Drive folder.
+
+            - Media images updated in `packages/media/images/`
+            - Locale files updated in `packages/i18n/src/locales/`
+            - Blog frontmatter image paths rewritten if media was reorganized
+
+            ${{ steps.sync.outputs.warnings }}
+
+            Triggered by @${{ github.actor }} via the **Sync from Google Drive** workflow.
+          branch: chore/sync-drive
+          delete-branch: true
+          add-paths: |
+            packages/media/images/
+            packages/media/.drive-manifest.json
+            packages/i18n/src/locales/
+            packages/content/data/blog/

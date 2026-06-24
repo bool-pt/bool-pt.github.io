@@ -2,12 +2,9 @@ import { describe, it, expect } from 'vitest';
 import { resolveLink, withBasePath } from './link.ts';
 
 describe('withBasePath', () => {
-  it('prefixes root-relative internal paths once', () => {
-    expect(withBasePath('/about')).toBe('/bool/about');
-  });
-
-  it('does not double-prefix already-based paths', () => {
-    expect(withBasePath('/bool/about')).toBe('/bool/about');
+  it('returns root-relative internal paths unchanged (site serves from root)', () => {
+    expect(withBasePath('/about')).toBe('/about');
+    expect(withBasePath('/')).toBe('/');
   });
 
   it('leaves anchors, absolute URLs, and mailto untouched', () => {
@@ -18,11 +15,11 @@ describe('withBasePath', () => {
 });
 
 describe('resolveLink', () => {
-  it('internal (default) applies the base path and renders an anchor', () => {
-    expect(resolveLink('/contacts')).toEqual({ isModal: false, href: '/bool/contacts' });
+  it('internal (default) renders an anchor with the resolved href', () => {
+    expect(resolveLink('/contacts')).toEqual({ isModal: false, href: '/contacts' });
     expect(resolveLink('/contacts', 'internal')).toEqual({
       isModal: false,
-      href: '/bool/contacts',
+      href: '/contacts',
     });
   });
 

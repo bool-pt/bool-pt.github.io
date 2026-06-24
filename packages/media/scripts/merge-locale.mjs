@@ -23,6 +23,20 @@ export function indexedGroup(key) {
 }
 
 /**
+ * Transitional migration shim: the site moved from a GitHub project page
+ * (served at `/bool/`) to the root org domain (`bool.pt`). Content authored
+ * before the move stored internal hrefs as "/bool/…"; a stale Drive copy would
+ * otherwise reintroduce them on every sync and 404 the whole nav. Strip the
+ * dead "/bool" prefix from any string value (it only ever appears as that base,
+ * verified across en.json). Remove once Drive content uses root-relative hrefs.
+ */
+export function stripLegacyBase(value) {
+  if (typeof value !== 'string') return value;
+  if (value === '/bool') return '/';
+  return value.split('/bool/').join('/');
+}
+
+/**
  * Merge a Drive locale JSON over the local copy.
  *
  *   - Key present in both        → Drive value wins (content edits propagate).
@@ -95,6 +109,10 @@ export function mergeLocale(localContent, driveContent) {
     }
     merged[key] = localValue;
     localOnlyKeys.push(key);
+  }
+
+  for (const key of Object.keys(merged)) {
+    merged[key] = stripLegacyBase(merged[key]);
   }
 
   return {

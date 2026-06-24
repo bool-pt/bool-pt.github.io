@@ -1,0 +1,13 @@
+# Default owners for the entire repository
+* @bool-pt/engineering
+
+# Package-specific ownership
+packages/ui/ @bool-pt/engineering
+packages/content/ @bool-pt/engineering
+packages/api/ @bool-pt/engineering
+apps/web/bool/ @bool-pt/engineering
+apps/web/json-editor/ @bool-pt/engineering
+
+# CI/CD and tooling
+.github/ @bool-pt/engineering
+tooling/ @bool-pt/engineering

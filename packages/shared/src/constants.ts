@@ -1,4 +1,4 @@
-export const SITE_URL = 'https://bool-pt.github.io';
+export const SITE_URL = 'https://bool.pt';
 export const BASE_PATH = '';
 export const SITE_NAME = 'Bool';
 

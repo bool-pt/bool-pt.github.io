@@ -1,0 +1,49 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", "group:monorepos", "group:recommended"],
+  "labels": ["dependencies"],
+  "rangeStrategy": "bump",
+  "packageRules": [
+    {
+      "description": "Group Astro packages",
+      "groupName": "astro",
+      "matchPackagePatterns": ["^astro", "^@astrojs/"]
+    },
+    {
+      "description": "Group React packages",
+      "groupName": "react",
+      "matchPackagePatterns": ["^react", "^@types/react"]
+    },
+    {
+      "description": "Group Radix UI packages",
+      "groupName": "radix-ui",
+      "matchPackagePatterns": ["^@radix-ui/"]
+    },
+    {
+      "description": "Group testing packages",
+      "groupName": "testing",
+      "matchPackagePatterns": ["vitest", "@vitest/", "@testing-library/", "playwright", "jsdom"]
+    },
+    {
+      "description": "Group ESLint packages",
+      "groupName": "eslint",
+      "matchPackagePatterns": ["eslint", "typescript-eslint"]
+    },
+    {
+      "description": "Group Tailwind packages",
+      "groupName": "tailwind",
+      "matchPackagePatterns": [
+        "tailwindcss",
+        "@tailwindcss/",
+        "tailwind-merge",
+        "prettier-plugin-tailwindcss"
+      ]
+    },
+    {
+      "description": "Automerge patch updates for dev dependencies",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["patch"],
+      "automerge": true
+    }
+  ]
+}

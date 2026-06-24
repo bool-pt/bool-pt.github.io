@@ -38,6 +38,8 @@ export default tseslint.config(
             // they need an explicit repo-root-relative entry. Scoped to apps/*/*/ so
             // it can never match a src/*.config.ts already in a tsconfig include.
             'apps/*/*/*.config.ts',
+            // The e2e package's Playwright config (no src/ tsconfig to include it).
+            'e2e/*.config.ts',
           ],
         },
       },
@@ -97,6 +99,13 @@ export default tseslint.config(
     },
   },
   {
-    ignores: ['dist/**', '.astro/**', 'node_modules/**', '**/scripts/**/*.mjs', '**/env.d.ts'],
+    ignores: [
+      'dist/**',
+      '.astro/**',
+      'node_modules/**',
+      '.claude/**',
+      '**/scripts/**/*.mjs',
+      '**/env.d.ts',
+    ],
   }
 );

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 // The sync script is import-unsafe (runs at load), so the merge logic lives in
 // its own module. Tested here.
-import { mergeLocale, indexedGroup } from '../scripts/merge-locale.mjs';
+import { mergeLocale, indexedGroup, stripLegacyBase } from '../scripts/merge-locale.mjs';
 
 const j = (o: Record<string, unknown>) => JSON.stringify(o);
 
@@ -86,5 +86,28 @@ describe('mergeLocale', () => {
     const drive = j({ tagline: '' });
     const { clearedKeys } = mergeLocale(local, drive);
     expect(clearedKeys).toEqual([{ key: 'tagline', was: 'Hello' }]);
+  });
+
+  it('strips the legacy /bool base from Drive hrefs so a stale sync cannot reintroduce it', () => {
+    const local = j({ 'nav.items.1.href': '/about' });
+    const drive = j({ 'nav.items.1.href': '/bool/about', 'nav.items.2.href': '/bool/' });
+    const { merged } = mergeLocale(local, drive);
+    expect(merged['nav.items.1.href']).toBe('/about');
+    expect(merged['nav.items.2.href']).toBe('/');
+  });
+});
+
+describe('stripLegacyBase', () => {
+  it('rewrites /bool/* paths to root-relative', () => {
+    expect(stripLegacyBase('/bool/about')).toBe('/about');
+    expect(stripLegacyBase('/bool/services#techStack')).toBe('/services#techStack');
+    expect(stripLegacyBase('/bool/')).toBe('/');
+    expect(stripLegacyBase('/bool')).toBe('/');
+  });
+
+  it('leaves already-root and non-string values untouched', () => {
+    expect(stripLegacyBase('/about')).toBe('/about');
+    expect(stripLegacyBase('https://github.com/bool-pt')).toBe('https://github.com/bool-pt');
+    expect(stripLegacyBase(42)).toBe(42);
   });
 });

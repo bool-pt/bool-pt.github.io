@@ -1,0 +1,74 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+.astro/
+.turbo/
+*.tsbuildinfo
+
+# Environment — never commit secrets
+.env
+.env.*
+!.env.example
+
+# Local overrides (Vite/Astro convention)
+*.local
+
+# Private keys / credentials — all real config lives in GitHub repo settings
+*.pem
+*.key
+*.pfx
+*.p12
+.sentryclirc
+
+# Editor
+.vscode/
+.idea/
+*.suo
+*.user
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+*.stackdump
+
+# Testing
+coverage/
+playwright-report/
+test-results/
+.playwright-cli/
+.last-run.json
+playwright/.cache/
+
+# Bundle analysis
+stats.html
+
+# Linting
+.eslintcache
+
+# Logs
+*.log
+pnpm-debug.log*
+
+# Husky internals (auto-generated on install)
+.husky/_/
+
+# Claude Code — local/machine-specific, never commit
+.claude/settings.local.json
+.claude/.logs/
+.claude/plans/
+.claude/implementation-plans/
+# Anthropic-managed skill assets (binary fonts, templates) — installed per-machine by Claude Code
+.claude/skills/anthropic/
+
+# Google Drive synced media — populated by sync-drive.yml, never commit.
+# (client-logos is intentionally NOT ignored: those brand assets are committed
+#  so they're version-controlled and present at build without a Drive sync.)
+packages/media/images/blog-posts/
+packages/media/images/events/
+packages/media/images/knowledge-center/
+packages/media/images/news/
+packages/media/images/testimonials/
