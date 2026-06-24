@@ -1790,9 +1790,5 @@
   "cookies.section.6.body": "<p>We may update this Cookie Policy to reflect changes in our practices or for legal, operational, or regulatory reasons. The \"Last updated\" date at the top indicates the most recent revision.</p>",
   "cookies.section.6.heading": "6. Changes to This Policy",
   "cookies.section.7.body": "<p>If you have questions about our use of cookies, contact us at <a href=\"mailto:info@bool.pt\">info@bool.pt</a>.</p>",
-  "cookies.section.7.heading": "7. Contact",
-  "serviceHighlights.items.5.href": "modal:ai-governance",
-  "serviceHighlights.items.5.iconName": "shield",
-  "serviceHighlights.items.5.label": "Learn more",
-  "serviceHighlights.items.5.title": "AI Governance"
+  "cookies.section.7.heading": "7. Contact"
 }
