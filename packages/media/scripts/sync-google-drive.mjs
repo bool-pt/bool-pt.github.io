@@ -26,7 +26,9 @@
  * - **Locale sync**: JSON files in the `locales/` Drive folder are merged into
  *   `packages/i18n/src/locales/` — Drive wins on shared keys, local-only keys are kept,
  *   Drive-only keys are added. Adding a new file (e.g. `pt.json`) creates a new locale.
- *   Deletions from Drive are NOT propagated (see syncLocales for full rules).
+ *   Stray items in a numbered collection Drive manages (e.g. a 5th card when Drive
+ *   has 4) are pruned so deletions in the editor/Drive propagate; whole local-only
+ *   collections and flat local-only keys are still preserved (see mergeLocale).
  * - **Hardcoded import warnings**: Astro components with hardcoded `@bool/media` imports
  *   can't be auto-rewritten — the script warns so a developer can update them manually.
  * - **Per-image size budget (MAX_IMAGE_BYTES)**: sources should arrive already compressed.
@@ -75,6 +77,7 @@ import {
 import { join, dirname, extname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
+import { mergeLocale } from './merge-locale.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const MEDIA_PKG = join(__dirname, '..');
@@ -611,70 +614,6 @@ async function syncMedia(mediaFolderId, token) {
 // Sync: locales
 // ---------------------------------------------------------------------------
 
-/**
- * Merges a Drive locale JSON over the local copy:
- *   - Keys present in both → Drive value wins (content edits propagate)
- *   - Keys present only in Drive → added (new translations land)
- *   - Keys present only locally → kept (code-side additions survive an out-of-date Drive)
- *
- * Drive's key order is preserved; local-only keys are appended at the end
- * (they'll naturally move into Drive's order on the next sync after Drive
- * is updated to include them).
- *
- * Deletions from Drive are NOT propagated — a key removed from Drive will
- * persist locally. validateLocale() + the labels tests catch genuinely dead
- * references; intentional pruning can be done in a follow-up PR if needed.
- */
-function mergeLocale(localContent, driveContent) {
-  const local = JSON.parse(localContent);
-  const drive = JSON.parse(driveContent);
-  if (local === null || typeof local !== 'object' || Array.isArray(local)) {
-    throw new Error('Local locale file is not a JSON object');
-  }
-  if (drive === null || typeof drive !== 'object' || Array.isArray(drive)) {
-    throw new Error('Drive locale file is not a JSON object');
-  }
-
-  const merged = {};
-  const driveKeys = new Set();
-  const updatedKeys = [];
-  // Destructive changes: a key that had a non-empty value locally but comes
-  // down empty/blank from Drive (the silent-clobber risk). Surfaced in the
-  // sync log + PR body so a reviewer can reject before merging.
-  const clearedKeys = [];
-
-  for (const [key, driveValue] of Object.entries(drive)) {
-    merged[key] = driveValue;
-    driveKeys.add(key);
-    if (Object.prototype.hasOwnProperty.call(local, key) && local[key] !== driveValue) {
-      updatedKeys.push(key);
-      const localFilled =
-        typeof local[key] === 'string' ? local[key].trim() !== '' : local[key] != null;
-      const driveBlank =
-        typeof driveValue === 'string' ? driveValue.trim() === '' : driveValue == null;
-      if (localFilled && driveBlank) {
-        clearedKeys.push({ key, was: local[key] });
-      }
-    }
-  }
-
-  const localOnlyKeys = [];
-  for (const [key, localValue] of Object.entries(local)) {
-    if (!driveKeys.has(key)) {
-      merged[key] = localValue;
-      localOnlyKeys.push(key);
-    }
-  }
-
-  return {
-    merged,
-    localOnlyKeys,
-    updatedKeys,
-    clearedKeys,
-    addedKeys: [...driveKeys].filter((k) => !(k in local)),
-  };
-}
-
 function serializeLocale(obj) {
   return JSON.stringify(obj, null, 2) + '\n';
 }
@@ -727,9 +666,9 @@ async function syncLocales(localesFolderId, token) {
     }
 
     const localContent = readFileSync(destPath, 'utf-8');
-    let merged, localOnlyKeys, updatedKeys, addedKeys, clearedKeys;
+    let merged, localOnlyKeys, updatedKeys, addedKeys, clearedKeys, prunedKeys;
     try {
-      ({ merged, localOnlyKeys, updatedKeys, addedKeys, clearedKeys } = mergeLocale(
+      ({ merged, localOnlyKeys, updatedKeys, addedKeys, clearedKeys, prunedKeys } = mergeLocale(
         localContent,
         driveContent
       ));
@@ -751,11 +690,23 @@ async function syncLocales(localesFolderId, token) {
     if (addedKeys.length) parts.push(`+${addedKeys.length} from Drive`);
     if (updatedKeys.length) parts.push(`~${updatedKeys.length} updated`);
     if (localOnlyKeys.length) parts.push(`${localOnlyKeys.length} kept local-only`);
+    if (prunedKeys.length) parts.push(`-${prunedKeys.length} pruned`);
     console.log(`done [merged: ${parts.join(', ') || 'whitespace/format only'}]`);
     if (localOnlyKeys.length) {
       const sample = localOnlyKeys.slice(0, 5).join(', ');
       const ellipsis = localOnlyKeys.length > 5 ? `, … (+${localOnlyKeys.length - 5} more)` : '';
       console.log(`    local-only keys preserved: ${sample}${ellipsis}`);
+    }
+    if (prunedKeys.length) {
+      // Stray collection items removed because Drive no longer defines them.
+      // Surfaced in the PR body so a reviewer can confirm the deletion was intended.
+      console.warn(
+        `    ⚠️  ${prunedKeys.length} stray collection key(s) PRUNED (removed from Drive):`
+      );
+      for (const key of prunedKeys) {
+        console.warn(`        ${key}`);
+        warnings.push({ file: file.name, key, pruned: true });
+      }
     }
     if (clearedKeys.length) {
       console.warn(
@@ -871,7 +822,8 @@ if (unsafeNames.length > 0) {
 }
 
 // Locales: a key that was set locally came down blank from Drive (silent clobber).
-const clearWarnings = localesSummary.warnings ?? [];
+const localeWarnings = localesSummary.warnings ?? [];
+const clearWarnings = localeWarnings.filter((w) => !w.pruned);
 if (clearWarnings.length > 0) {
   warningBlocks.push(
     [
@@ -879,6 +831,21 @@ if (clearWarnings.length > 0) {
       `> **${clearWarnings.length} value(s) were cleared by this sync** — a key that was set locally came down blank from Drive. Review before merging; if unintended, fix the value in Drive and re-sync (or do not merge).`,
       '>',
       ...clearWarnings.map((w) => `> - \`${w.key}\` (${w.file}): \`"${w.was}"\` → \`""\``),
+    ].join('\n')
+  );
+}
+
+// Locales: stray collection items pruned because Drive no longer defines them
+// (e.g. a list card removed in the editor). This is intended — it realigns the
+// repo with Drive — but surfaced so a reviewer can confirm the deletion.
+const prunedWarnings = localeWarnings.filter((w) => w.pruned);
+if (prunedWarnings.length > 0) {
+  warningBlocks.push(
+    [
+      '> [!NOTE]',
+      `> **${prunedWarnings.length} stray collection key(s) were pruned** — they belong to a numbered list Drive manages but sit beyond the items Drive now provides (e.g. a card removed in the editor). This realigns the repo with Drive; confirm the removal was intended.`,
+      '>',
+      ...prunedWarnings.map((w) => `> - \`${w.key}\` (${w.file})`),
     ].join('\n')
   );
 }
