@@ -4,9 +4,9 @@
   inset-inline-start: 50%;
   transform: translateX(-50%);
   z-index: 9999;
-  width: 90%;
-  min-width: 560px;
-  max-width: 640px;
+  /* Cap at 640px on desktop but never exceed the viewport (minus a 1rem gutter
+     each side), so it stays on-screen on phones instead of overflowing. */
+  width: min(640px, calc(100vw - 2rem));
   background-color: var(--color-surface-charcoal);
   color: var(--color-on-dark);
   border-radius: 12px;
@@ -24,11 +24,14 @@
 
 .actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.75rem;
 }
 
 .acceptButton {
-  flex: 1;
+  /* grow to fill, but with an 8rem basis so the two buttons stack instead of
+     squashing when the banner is narrow (small phones). */
+  flex: 1 1 8rem;
   padding: 0.625rem 1rem;
   border-radius: 9999px;
   border: none;
@@ -41,7 +44,7 @@
 }
 
 .rejectButton {
-  flex: 1;
+  flex: 1 1 8rem;
   padding: 0.625rem 1rem;
   border-radius: 9999px;
   border: 1.5px solid var(--color-on-dark-subtle);
