@@ -1,0 +1,63 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+env:
+  # Run JS actions (incl. ones bundled transitively, e.g. inside
+  # upload-pages-artifact) on Node 24 — silences the Node 20 deprecation
+  # warning. Remove once all actions default to Node 24.
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
+jobs:
+  build-and-deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Cache Turbo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ github.sha }}
+          restore-keys: turbo-${{ runner.os }}-
+      - name: Cache Astro image optimization
+        uses: actions/cache@v4
+        with:
+          path: apps/web/bool/node_modules/.astro
+          key: astro-cache-${{ runner.os }}-${{ github.sha }}
+          restore-keys: astro-cache-${{ runner.os }}-
+      - name: Build
+        run: pnpm build
+        env:
+          PUBLIC_API_BASE_URL: ${{ vars.PUBLIC_API_BASE_URL }}
+          PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
+          PUBLIC_GA_MEASUREMENT_ID: ${{ vars.PUBLIC_GA_MEASUREMENT_ID }}
+          PUBLIC_SENTRY_DSN: ${{ vars.PUBLIC_SENTRY_DSN }}
+      - name: Merge json-editor into main site output
+        run: |
+          test -d apps/web/json-editor/dist || { echo "::error::json-editor build output missing — aborting merge"; exit 1; }
+          cp -r apps/web/json-editor/dist apps/web/bool/dist/json-editor
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: apps/web/bool/dist
+      - id: deployment
+        uses: actions/deploy-pages@v5
