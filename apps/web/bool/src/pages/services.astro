@@ -1,0 +1,259 @@
+---
+import { resolveImage } from '@bool/content';
+import { t, tCollection, tList, tOptional, isVisible } from '@bool/i18n';
+import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
+import AiUseCasesSection from '@bool/ui/sections/AiUseCasesSection.astro';
+import ContactSection from '@bool/ui/sections/ContactSection.astro';
+import HowWeWorkSection from '@bool/ui/sections/HowWeWorkSection.astro';
+import LetsBuildCTASection from '@bool/ui/sections/LetsBuildCTASection.astro';
+import NewsletterCTASection from '@bool/ui/sections/NewsletterCTASection.astro';
+import PowerAISection from '@bool/ui/sections/PowerAISection.astro';
+import ServiceHighlightsSection from '@bool/ui/sections/ServiceHighlightsSection.astro';
+import ServicesHeroSection from '@bool/ui/sections/ServicesHeroSection.astro';
+import SolutionsROISection from '@bool/ui/sections/SolutionsROISection.astro';
+import StatsBannerSection from '@bool/ui/sections/StatsBannerSection.astro';
+import TechStackSection from '@bool/ui/sections/TechStackSection.astro';
+import {
+  getHeaderLabels,
+  getFooterLabels,
+  getContactSectionProps,
+  getNewsletterLabels,
+} from '../labels';
+
+const solutions = tCollection('solutionsRoi', ['name', 'result']);
+
+const aiUseCases = tCollection('aiUseCases.items', ['category', 'title', 'image', 'href']).map(
+  (item) => ({
+    category: item.category,
+    title: item.title,
+    href: item.href,
+    image: resolveImage(item.image).src,
+  })
+);
+
+const platformKeys = ['outsystems', 'powerplatform', 'mendix', 'opensource'] as const;
+const platforms = tCollection('techStack.platforms', [
+  'name',
+  'expert',
+  'role',
+  'body',
+  'image',
+  'email',
+  'linkedin',
+]).map((p, i) => ({
+  key: platformKeys[i] ?? '',
+  ...p,
+  image: resolveImage(p.image),
+  features: tList(`techStack.platforms.${i + 1}.features`),
+}));
+
+const serviceHighlights = tCollection('serviceHighlights.items', [
+  'iconName',
+  'title',
+  'label',
+  'href',
+]);
+
+const bgServiceHighlights = tOptional('serviceHighlights.backgroundImage');
+const bgPowerAi = tOptional('powerAi.backgroundImage');
+const bgSolutionsRoi = tOptional('solutionsRoi.backgroundImage');
+const bgAiUseCases = tOptional('aiUseCases.backgroundImage');
+const bgTechStack = tOptional('techStack.backgroundImage');
+const bgHowWeWork = tOptional('howWeWork.backgroundImage');
+const bgNewsletterCta = tOptional('newsletterCta.backgroundImage');
+const bgContactSection = tOptional('contactSection.backgroundImage');
+
+const showServicesHero = isVisible('servicesHero.visible');
+const showServiceHighlights = isVisible('serviceHighlights.visible');
+const showAiPitch = isVisible('aiPitch.visible');
+const showSolutionsRoi = isVisible('solutionsRoi.visible');
+const showAiUseCases = isVisible('aiUseCases.visible');
+const showStatsBanner = isVisible('statsBanner.visible');
+const showTechStack = isVisible('techStack.visible');
+const showHowWeWork = isVisible('howWeWork.visible');
+const showCtaBanner = isVisible('ctaBanner.visible');
+const showContactSection = isVisible('contactSection.visible');
+const showNewsletterCta = isVisible('newsletterCta.visible');
+
+const iconNames = ['shield', 'chart', 'rocket', 'trophy'] as const;
+const howWeWorkCards = tCollection('howWeWork.cards', [
+  'subtitle',
+  'title',
+  'description',
+  'bullet1',
+  'bullet2',
+  'bullet3',
+]).map((card, i) => ({
+  subtitle: card.subtitle,
+  title: card.title,
+  description: card.description,
+  bullets: [card.bullet1, card.bullet2, card.bullet3],
+  iconName: iconNames[i] ?? ('shield' as const),
+}));
+---
+
+<BaseLayout
+  title={t('pageMeta.services.title')}
+  description={t('pageMeta.services.description')}
+  headerLabels={getHeaderLabels()}
+  footerLabels={getFooterLabels()}
+>
+  {
+    showServicesHero && (
+      <div id="servicesHero" class="section-anchor">
+        <ServicesHeroSection
+          heading={t('servicesHero.heading')}
+          body1={t('servicesHero.body1')}
+          body2={t('servicesHero.body2')}
+          backgroundImage={resolveImage(t('servicesHero.backgroundImage'))}
+        />
+      </div>
+    )
+  }
+  {
+    showServiceHighlights && (
+      <div id="serviceHighlights" class="section-anchor">
+        <ServiceHighlightsSection
+          heading={t('serviceHighlights.heading')}
+          subtitle={t('serviceHighlights.subtitle')}
+          highlights={serviceHighlights}
+          backgroundImage={bgServiceHighlights ? resolveImage(bgServiceHighlights) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showAiPitch && (
+      <div id="aiPitch" class="section-anchor">
+        <PowerAISection
+          showCta={false}
+          minBlockSize="401px"
+          imageWidth={486}
+          imageHeight={241}
+          heading={t('aiPitch.heading')}
+          body1={t('aiPitch.body1')}
+          body2={t('aiPitch.body2')}
+          cta={t('powerAi.cta')}
+          imageAlt={t('powerAi.image.alt')}
+          image={resolveImage(t('powerAi.image'))}
+          backgroundImage={bgPowerAi ? resolveImage(bgPowerAi) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showSolutionsRoi && (
+      <div id="solutionsRoi" class="section-anchor">
+        <SolutionsROISection
+          heading={t('solutionsRoi.heading')}
+          colSolutions={t('solutionsRoi.colSolutions')}
+          colResults={t('solutionsRoi.colResults')}
+          ariaLabel={t('solutionsRoi.aria')}
+          solutions={solutions}
+          backgroundImage={bgSolutionsRoi ? resolveImage(bgSolutionsRoi) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showAiUseCases && (
+      <div id="aiUseCases" class="section-anchor">
+        <AiUseCasesSection
+          eyebrow={t('aiUseCases.eyebrow')}
+          heading={t('aiUseCases.heading')}
+          description={t('aiUseCases.description')}
+          ctaLabel={t('aiUseCases.ctaLabel')}
+          prevLabel={t('carousel.previous')}
+          nextLabel={t('carousel.next')}
+          items={aiUseCases}
+          backgroundImage={bgAiUseCases ? resolveImage(bgAiUseCases) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showStatsBanner && (
+      <div id="statsBanner" class="section-anchor">
+        <StatsBannerSection
+          ariaLabel={t('statsBanner.aiAdoption.aria')}
+          imageAlt={t('statsBanner.image.alt')}
+          quote={t('statsBanner.quote')}
+          tagline={t('statsBanner.tagline')}
+          backgroundImage={resolveImage(t('statsBanner.backgroundImage'))}
+        />
+      </div>
+    )
+  }
+  {
+    showTechStack && (
+      <div id="techStack" class="section-anchor">
+        <TechStackSection
+          readinessExpertName={t('aiReadiness.expertName')}
+          readinessExpertRole={t('aiReadiness.expertRole')}
+          readinessExpertPhoto={resolveImage(t('aiReadiness.expertImage'))}
+          readinessExpertEmail={t('aiReadiness.expertEmail')}
+          readinessExpertLinkedin={t('aiReadiness.expertLinkedin')}
+          readinessHeading={t('aiReadiness.heading')}
+          readinessBody={t('aiReadiness.body')}
+          readinessChecks={tList('aiReadiness.checks')}
+          readinessCta={t('aiReadiness.cta')}
+          readinessCtaHref={t('aiReadiness.cta.href')}
+          techHeading={t('techStack.heading')}
+          techBody={t('techStack.body')}
+          availableConsultation={t('techStack.availableConsultation')}
+          contactExpert={t('techStack.contactExpert')}
+          contactExpertHref={t('techStack.contactExpert.href')}
+          platforms={platforms}
+          backgroundImage={bgTechStack ? resolveImage(bgTechStack) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showHowWeWork && (
+      <div id="howWeWork" class="section-anchor">
+        <HowWeWorkSection
+          heading={t('howWeWork.heading')}
+          cards={howWeWorkCards}
+          backgroundImage={bgHowWeWork ? resolveImage(bgHowWeWork) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showCtaBanner && (
+      <div id="ctaBanner" class="section-anchor">
+        <LetsBuildCTASection
+          heading={t('ctaBanner.heading')}
+          body={t('ctaBanner.body')}
+          button={t('common.talkToExpert')}
+          buttonHref={t('ctaBanner.cta.href')}
+          backgroundImage={resolveImage(t('ctaBanner.backgroundImage'))}
+        />
+      </div>
+    )
+  }
+  {
+    showContactSection && (
+      <div id="contactSection" class="section-anchor">
+        <ContactSection
+          {...getContactSectionProps()}
+          background="var(--color-surface-black)"
+          backgroundImage={bgContactSection ? resolveImage(bgContactSection) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showNewsletterCta && (
+      <div id="newsletterCta" class="section-anchor">
+        <NewsletterCTASection
+          heading={t('newsletterCta.heading')}
+          body={t('newsletterCta.body')}
+          newsletterLabels={getNewsletterLabels()}
+          backgroundImage={bgNewsletterCta ? resolveImage(bgNewsletterCta) : undefined}
+        />
+      </div>
+    )
+  }
+</BaseLayout>

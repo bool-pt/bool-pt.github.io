@@ -1,0 +1,25 @@
+{
+  "name": "@bool/media",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./images/*": "./images/*",
+    "./fonts/*": "./fonts/*"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "test": "vitest run",
+    "sync:drive": "node scripts/sync-google-drive.mjs",
+    "test:drive": "node scripts/test-drive-connection.mjs"
+  },
+  "devDependencies": {
+    "@bool/tsconfig": "workspace:*",
+    "@bool/vitest-config": "workspace:*",
+    "eslint": "catalog:",
+    "sharp": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

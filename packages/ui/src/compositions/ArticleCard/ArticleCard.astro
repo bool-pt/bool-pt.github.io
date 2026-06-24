@@ -1,0 +1,76 @@
+---
+import CardLabel from '../../primitives/CardLabel/CardLabel.astro';
+import CardTitle from '../../primitives/CardTitle/CardTitle.astro';
+import MetaText from '../../primitives/MetaText/MetaText.astro';
+import ImageOverlayCard from '../ImageOverlayCard/ImageOverlayCard.astro';
+
+interface Props {
+  category: string;
+  title: string;
+  author: string;
+  readTime: string;
+  href: string;
+  variant?: 'default' | 'featured-main' | 'featured-side';
+  class?: string;
+}
+
+const {
+  category,
+  title,
+  author,
+  readTime,
+  href,
+  variant = 'default',
+  class: className,
+} = Astro.props;
+
+const titleSize =
+  variant === 'featured-main' ? 'var(--font-size-body-lg)' : 'var(--font-size-body)';
+---
+
+<ImageOverlayCard minHeight="297px" class:list={['articleCard', className]}>
+  <div slot="image" class:list={['articleImage', `articleImage--${variant}`]} aria-hidden="true">
+  </div>
+  <CardLabel style="margin-block-end: 0.5rem">{category}</CardLabel>
+  <CardTitle size={titleSize} colorScheme="dark" class="articleTitle">
+    <a href={href} class="cardLink">{title}</a>
+  </CardTitle>
+  <MetaText colorScheme="dark">{author} · {readTime}</MetaText>
+</ImageOverlayCard>
+
+<style>
+  .articleCard {
+    transition:
+      transform 200ms,
+      box-shadow 200ms;
+  }
+
+  .articleCard:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-heavy);
+  }
+
+  .articleImage {
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-surface-dark);
+  }
+
+  .articleImage--default,
+  .articleImage--featured-side {
+    background-image: linear-gradient(135deg, var(--white-6) 0%, var(--white-1) 100%);
+  }
+
+  .articleImage--featured-main {
+    background-image: linear-gradient(135deg, var(--white-8) 0%, var(--white-2) 100%);
+  }
+
+  .articleTitle {
+    margin-block-end: 0.5rem;
+  }
+
+  .cardLink {
+    color: inherit;
+    text-decoration: none;
+  }
+</style>

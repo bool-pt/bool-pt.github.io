@@ -1,0 +1,70 @@
+---
+interface Props {
+  count: number;
+  activeIndex?: number;
+  slideIndicatorsAria: string;
+  slideNAria: string;
+  class?: string;
+}
+
+const { count, activeIndex = 0, slideIndicatorsAria, slideNAria, class: className } = Astro.props;
+const dots = Array.from({ length: count }, (_, i) => i);
+---
+
+<div class:list={['controls', className]}>
+  <span class="line" aria-hidden="true"></span>
+  <div class="dots" role="tablist" aria-label={slideIndicatorsAria}>
+    {
+      dots.map((i) => (
+        <span
+          class:list={['dot', { active: i === activeIndex }]}
+          role="tab"
+          aria-selected={String(i === activeIndex)}
+          aria-label={`${slideNAria} ${i + 1}`}
+          data-index={i}
+        />
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1.5rem;
+    inline-size: 100%;
+  }
+
+  .line {
+    display: block;
+    flex: 1;
+    max-inline-size: 20rem;
+    block-size: 1px;
+    background: var(--color-on-dark-muted);
+  }
+
+  .dots {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .dot {
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    border-radius: var(--radius-full);
+    background: var(--color-on-dark-muted);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .dot.active {
+    background: var(--color-on-dark);
+    box-shadow:
+      0 0 0 8px var(--color-surface-dark),
+      0 0 0 9px var(--color-on-dark);
+  }
+</style>

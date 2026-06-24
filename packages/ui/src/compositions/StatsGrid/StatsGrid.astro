@@ -1,0 +1,75 @@
+---
+import StatItem from '../../primitives/StatItem/StatItem.astro';
+
+interface StatEntry {
+  value: string;
+  label: string;
+}
+
+interface Props {
+  stats: StatEntry[];
+  ariaLabel: string;
+  colorScheme?: 'light' | 'dark';
+  separator?: boolean;
+  align?: 'start' | 'center';
+  collapseAt?: 'sm' | 'md';
+  class?: string;
+}
+
+const {
+  stats,
+  ariaLabel,
+  colorScheme = 'dark',
+  separator = false,
+  align = 'start',
+  collapseAt = 'md',
+  class: className,
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    'stats-grid',
+    { 'stats-grid--separator': separator },
+    { 'stats-grid--center': align === 'center' },
+    { 'stats-grid--collapse-sm': collapseAt === 'sm' },
+    className,
+  ]}
+  role="list"
+  aria-label={ariaLabel}
+>
+  {
+    stats.map((stat) => (
+      <StatItem value={stat.value} label={stat.label} colorScheme={colorScheme} />
+    ))
+  }
+</div>
+
+<style>
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  @media (min-width: 768px) {
+    .stats-grid:not(.stats-grid--collapse-sm) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  @media (min-width: 640px) {
+    .stats-grid--collapse-sm {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .stats-grid--center {
+    text-align: center;
+  }
+
+  .stats-grid--separator {
+    border-block-start: 1px solid var(--color-border-on-dark);
+    padding-block-start: 2.5rem;
+  }
+</style>

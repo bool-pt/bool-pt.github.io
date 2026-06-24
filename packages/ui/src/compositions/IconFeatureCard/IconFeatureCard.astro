@@ -1,0 +1,152 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  colorScheme?: 'light' | 'dark';
+  align?: 'start' | 'center';
+  iconShape?: 'circle' | 'square';
+  class?: string;
+}
+
+const {
+  title,
+  description,
+  colorScheme = 'light',
+  align = 'center',
+  iconShape = 'circle',
+  class: className,
+} = Astro.props;
+
+const hasFooter = Astro.slots.has('footer');
+---
+
+<article class:list={['icon-card', `icon-card--${align}`, `icon-card--${colorScheme}`, className]}>
+  <div class="icon-card-content">
+    <div class:list={['icon-card-icon', `icon-card-icon--${iconShape}`]}>
+      <slot name="icon" />
+    </div>
+    <h3 class="icon-card-title">{title}</h3>
+    {description && <p class="icon-card-desc">{description}</p>}
+  </div>
+  {
+    hasFooter && (
+      <div class="icon-card-footer">
+        <slot name="footer" />
+      </div>
+    )
+  }
+</article>
+
+<style>
+  .icon-card {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: var(--shadow-card);
+    position: relative;
+  }
+
+  .icon-card:has(.icon-card-footer a) {
+    cursor: pointer;
+  }
+
+  .icon-card-footer :global(a::after) {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  @media (min-width: 640px) {
+    .icon-card {
+      aspect-ratio: 1 / 1;
+    }
+  }
+
+  .icon-card--light {
+    background-color: var(--color-background);
+  }
+
+  .icon-card--dark {
+    background-color: var(--white-3);
+  }
+
+  .icon-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  .icon-card--center {
+    text-align: center;
+  }
+
+  .icon-card--center .icon-card-content {
+    align-items: center;
+  }
+
+  .icon-card--center .icon-card-footer {
+    align-self: center;
+  }
+
+  .icon-card--start {
+    align-items: flex-start;
+    text-align: start;
+  }
+
+  .icon-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 3.375rem;
+    block-size: 3.375rem;
+    background-color: var(--primary-30);
+    color: var(--color-primary);
+    margin-block-end: 1.25rem;
+  }
+
+  .icon-card-icon--circle {
+    border-radius: var(--radius-full);
+  }
+
+  .icon-card-icon--square {
+    border-radius: var(--radius-lg);
+  }
+
+  .icon-card-footer {
+    margin-block-start: auto;
+    padding-block-start: 1.5rem;
+  }
+
+  .icon-card-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .icon-card--light .icon-card-title {
+    color: var(--color-foreground);
+  }
+
+  .icon-card--dark .icon-card-title {
+    color: var(--color-on-dark);
+  }
+
+  .icon-card-desc {
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.375;
+    margin: 0;
+  }
+
+  .icon-card--light .icon-card-desc {
+    color: var(--color-foreground);
+  }
+
+  .icon-card--dark .icon-card-desc {
+    color: var(--color-on-dark-muted);
+  }
+</style>

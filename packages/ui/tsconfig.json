@@ -1,0 +1,5 @@
+{
+  "extends": "@bool/tsconfig/react.json",
+  "include": ["src", "index.ts"],
+  "exclude": ["dist", "node_modules"]
+}

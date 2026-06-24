@@ -1,0 +1,114 @@
+---
+import heroBgFallback from '@bool/media/images/backgrounds/home-hero-01.png';
+import BoolLettersOverlay from '../../compositions/BoolLettersOverlay/BoolLettersOverlay.astro';
+import DarkPageHero from '../../compositions/DarkPageHero/DarkPageHero.astro';
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
+import ActionRow from '../../primitives/ActionRow/ActionRow.astro';
+import ButtonLink from '../../primitives/ButtonLink/ButtonLink.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+
+interface Props {
+  tag: string;
+  heading: string;
+  body: string;
+  ctaExplore: string;
+  ctaExploreHref?: string;
+  ctaSubscribe: string;
+  ctaSubscribeHref?: string;
+  backgroundImage?: ImageMetadata;
+}
+
+const {
+  tag,
+  heading,
+  body,
+  ctaExplore,
+  ctaExploreHref = '#knowledgeCenter',
+  ctaSubscribe,
+  ctaSubscribeHref = '#newsletter',
+  backgroundImage = heroBgFallback,
+} = Astro.props;
+---
+
+<DarkPageHero
+  backgroundImage={backgroundImage.src}
+  gradientOverlay="var(--overlay-image-heavy), var(--overlay-image-light)"
+  paddingBlock="clamp(12rem, 30vw, 18rem) clamp(3rem, 6vw, 5rem)"
+  minBlockSize="959px"
+  aria-labelledby="insights-hero-heading"
+  class="insights-hero"
+>
+  <div class="insights-letters-scaler">
+    <div class="insights-letters-wrap">
+      <BoolLettersOverlay opacity={0.25} />
+    </div>
+  </div>
+  <SectionContainer>
+    <SectionIntro
+      headingId="insights-hero-heading"
+      headingSize="clamp(2rem, 6vw, 58px)"
+      headingWeight="300"
+      bodySize="clamp(1rem, 2.5vw, 22px)"
+      bodyWeight="400"
+      bodyLineHeight="1.6"
+      colorScheme="dark"
+      headingLevel="h1"
+      align="start"
+      class="insights-hero-intro"
+    >
+      <SectionTag slot="tag" tagColor="primary">{tag}</SectionTag>
+      <Fragment slot="heading" set:html={heading.replace('\n', '<br />')} />
+      <Fragment slot="description">{body}</Fragment>
+    </SectionIntro>
+    <ActionRow class="insights-hero-actions">
+      <ButtonLink href={ctaExploreHref} variant="primary">{ctaExplore}</ButtonLink>
+      <ButtonLink href={ctaSubscribeHref} variant="outline" class="hero-btn--subscribe"
+        >{ctaSubscribe}</ButtonLink
+      >
+    </ActionRow>
+  </SectionContainer>
+</DarkPageHero>
+
+<style>
+  :global(.insights-hero .insights-letters-scaler) {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+    block-size: 0;
+    z-index: 0;
+    pointer-events: none;
+    color: var(--color-on-dark);
+    filter: blur(1.5px);
+    container-type: inline-size;
+  }
+
+  :global(.insights-hero .insights-letters-wrap) {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-end: 0;
+    inline-size: 100cqi;
+    aspect-ratio: 1440 / 518;
+    overflow: visible;
+  }
+
+  :global(.insights-hero .insights-hero-intro) {
+    max-inline-size: 48rem;
+    margin-block-end: 2.5rem;
+  }
+
+  :global(.insights-hero .insights-hero-intro .section-intro-body) {
+    max-inline-size: min(592px, 100%);
+  }
+
+  .hero-btn--subscribe {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .hero-btn--subscribe:hover {
+    border-color: var(--color-primary-hover);
+    background-color: var(--color-primary);
+    color: var(--color-on-dark);
+  }
+</style>

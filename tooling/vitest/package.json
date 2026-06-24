@@ -1,0 +1,17 @@
+{
+  "name": "@bool/vitest-config",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./base": "./base.ts",
+    "./dom": "./dom.ts",
+    "./react": "./react.ts"
+  },
+  "dependencies": {
+    "vitest": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "@testing-library/jest-dom": "catalog:",
+    "jsdom": "catalog:"
+  }
+}

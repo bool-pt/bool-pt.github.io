@@ -1,0 +1,158 @@
+/* Mobile-first: stacked layout */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding-block: 0.625rem;
+  padding-inline: 0.75rem;
+  border-inline-start: 4px solid transparent;
+  border-radius: var(--radius-sm, 0.125rem);
+  transition:
+    background-color 150ms,
+    border-color 150ms;
+}
+
+.field:hover {
+  background: var(--editor-field-hover);
+}
+
+.fieldDirty {
+  border-inline-start-color: var(--color-primary);
+}
+
+.fieldEmpty {
+  border-inline-start-color: var(--color-destructive, #ef4444);
+}
+
+.keyLabel {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8125rem;
+  color: var(--editor-text-muted);
+  word-break: break-all;
+  user-select: all;
+}
+
+.input {
+  inline-size: 100%;
+  padding: 0.625rem 0.75rem;
+  border: 1px solid var(--editor-input-border);
+  border-radius: var(--radius-md, 0.375rem);
+  background: var(--editor-input-bg);
+  color: var(--editor-text);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.5;
+  outline: none;
+  transition:
+    border-color 150ms,
+    box-shadow 150ms;
+  resize: vertical;
+}
+
+.input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(231, 69, 58, 0.15);
+}
+
+.textarea {
+  min-block-size: 80px;
+}
+
+.emptyWarning {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-block-start: 0.25rem;
+  font-size: var(--font-size-caption, 0.75rem);
+  color: var(--color-destructive, #ef4444);
+}
+
+.fieldDisabled {
+  opacity: 0.6;
+}
+
+/* ── Boolean toggle (renders "true"/"false" string fields as a switch) ── */
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  cursor: pointer;
+  user-select: none;
+  padding-block: 0.375rem;
+}
+
+.toggleInput {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.toggleTrack {
+  position: relative;
+  flex-shrink: 0;
+  inline-size: 2.5rem;
+  block-size: 1.375rem;
+  background: var(--editor-input-border);
+  border-radius: 999px;
+  transition: background-color 150ms;
+}
+
+.toggleThumb {
+  position: absolute;
+  inset-block-start: 2px;
+  inset-inline-start: 2px;
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  transition: transform 150ms;
+}
+
+.toggleInput:checked + .toggleTrack {
+  background: var(--color-primary);
+}
+
+.toggleInput:checked + .toggleTrack .toggleThumb {
+  transform: translateX(1.125rem);
+}
+
+.toggleInput:focus-visible + .toggleTrack {
+  box-shadow: 0 0 0 2px rgba(231, 69, 58, 0.3);
+}
+
+.toggleValue {
+  font-family: var(--font-mono, monospace);
+  font-size: var(--font-size-body-sm, 0.875rem);
+  color: var(--editor-text);
+  min-inline-size: 3ch;
+}
+
+.inputDisabled {
+  cursor: not-allowed;
+  background: var(--editor-muted-bg) !important;
+  color: var(--editor-text-muted) !important;
+}
+
+/* ── Tablet+ (768px): side-by-side grid ── */
+@media (min-width: 768px) {
+  .field {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 1rem;
+    align-items: start;
+    padding-block: 0.5rem;
+  }
+
+  .keyLabel {
+    font-size: var(--font-size-caption, 0.75rem);
+    padding-block-start: 0.5rem;
+  }
+
+  .input {
+    font-size: var(--font-size-body-sm, 0.875rem);
+    padding: 0.5rem 0.75rem;
+  }
+}

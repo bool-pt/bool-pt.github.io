@@ -1,0 +1,31 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.iconBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  border-radius: var(--radius-full);
+  border: none;
+  background: var(--color-on-dark);
+  color: var(--color-surface-dark);
+  cursor: pointer;
+  transition: background-color 150ms;
+  text-decoration: none;
+  padding: 0;
+  font-family: inherit;
+}
+
+.iconBtn:hover {
+  opacity: 0.85;
+}
+
+.iconBtnCopied {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}

@@ -1,0 +1,20 @@
+---
+// CSP is delivered via meta tags because GitHub Pages does not support custom HTTP headers.
+// Note: frame-ancestors and X-Frame-Options cannot be enforced via meta tags — browsers
+// require those as HTTP response headers. Framing protection requires a CDN (e.g. Cloudflare)
+// in front of GitHub Pages if it becomes a requirement.
+// The form API (API Gateway + Lambda) is reached over https://*.amazonaws.com (connect-src).
+// Cloudflare Turnstile loads its script and challenge iframe from challenges.cloudflare.com.
+// The policy itself (incl. conditional GA domains) is built by buildContentSecurityPolicy.
+import { buildContentSecurityPolicy } from './csp';
+
+const csp = buildContentSecurityPolicy(Boolean(import.meta.env.PUBLIC_GA_MEASUREMENT_ID));
+---
+
+<meta http-equiv="Content-Security-Policy" content={csp} />
+<meta http-equiv="X-Content-Type-Options" content="nosniff" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
+<meta
+  http-equiv="Permissions-Policy"
+  content="camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+/>

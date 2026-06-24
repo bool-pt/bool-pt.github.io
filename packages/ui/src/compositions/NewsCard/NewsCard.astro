@@ -1,0 +1,68 @@
+---
+import CardLabel from '../../primitives/CardLabel/CardLabel.astro';
+import CardTitle from '../../primitives/CardTitle/CardTitle.astro';
+import DashedCard from '../../primitives/DashedCard/DashedCard.astro';
+import ArrowLink from '../ArrowLink/ArrowLink.astro';
+import ContentCard from '../ContentCard/ContentCard.astro';
+
+interface Props {
+  category: string;
+  date: string;
+  title: string;
+  summary: string;
+  href: string;
+  readMoreLabel: string;
+  summaryLines?: number;
+  imageAspectRatio?: string;
+  class?: string;
+}
+
+const {
+  category,
+  date,
+  title,
+  summary,
+  href,
+  readMoreLabel,
+  summaryLines = 3,
+  imageAspectRatio = '384 / 200',
+  class: className,
+} = Astro.props;
+---
+
+<ContentCard imageAspectRatio={imageAspectRatio} class={className}>
+  <DashedCard slot="image" colorScheme="light" class="news-card-image" />
+  <CardLabel style="margin-block-end: 0.375rem">{category}</CardLabel>
+  <span class="news-card-date">{date}</span>
+  <CardTitle class="news-card-title">{title}</CardTitle>
+  <p class="news-card-summary" style={`-webkit-line-clamp: ${summaryLines}`}>{summary}</p>
+  <ArrowLink href={href} label={readMoreLabel} />
+</ContentCard>
+
+<style>
+  .news-card-image {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .news-card-date {
+    font-size: var(--font-size-body-sm);
+    color: var(--color-muted-foreground);
+    margin-block-end: 0.75rem;
+  }
+
+  .news-card-title {
+    margin-block-end: 0.75rem;
+  }
+
+  .news-card-summary {
+    font-size: var(--font-size-body-sm);
+    color: var(--color-muted-foreground);
+    line-height: 1.6;
+    margin: 0 0 1.25rem;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

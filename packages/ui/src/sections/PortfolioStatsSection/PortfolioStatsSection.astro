@@ -1,0 +1,168 @@
+---
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
+import TrapezoidStatsRow from '../../compositions/TrapezoidStatsRow/TrapezoidStatsRow.astro';
+import GradientIcon from '../../primitives/GradientIcon/GradientIcon.astro';
+import type { GradientIconName } from '../../primitives/Icon/icon-data';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+
+interface Props {
+  tag: string;
+  heading: string;
+  body: string;
+  stats: Array<{ value: string; label: string }>;
+  recognitions: Array<{ title: string; description: string; iconName: GradientIconName }>;
+  backgroundImage?: ImageMetadata;
+}
+
+const { tag, heading, body, stats, recognitions, backgroundImage } = Astro.props;
+---
+
+<Section
+  aria-labelledby="portfolio-stats-heading"
+  background="var(--color-background)"
+  paddingBlock="5rem"
+  backgroundImage={backgroundImage?.src}
+>
+  <SectionContainer>
+    <SectionIntro
+      headingId="portfolio-stats-heading"
+      colorScheme="light"
+      align="start"
+      bodySize="clamp(1rem, 2.5vw, 22px)"
+      descriptionMaxWidth="60rem"
+      marginBlockEnd="2rem"
+      class="stats-intro"
+    >
+      <SectionTag slot="tag" tagColor="primary">{tag}</SectionTag>
+      <Fragment slot="heading">{heading}</Fragment>
+      <Fragment slot="description">{body}</Fragment>
+    </SectionIntro>
+
+    <div class="stats-row">
+      <TrapezoidStatsRow stats={stats} />
+    </div>
+
+    <div class="bottom-card">
+      <div class="recognitions-card">
+        <div class="recognitions-grid">
+          {
+            recognitions.map((item) => (
+              <div class="recognition-item">
+                <div class="recognition-icon">
+                  <GradientIcon name={item.iconName} />
+                </div>
+                <div class="recognition-text">
+                  <p class="recognition-title">{item.title}</p>
+                  <p class="recognition-desc">{item.description}</p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </SectionContainer>
+</Section>
+
+<style>
+  .stats-row {
+    margin-block-end: 1.5rem;
+  }
+
+  .stats-row :global(.responsive-grid) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 768px) {
+    .stats-row :global(.responsive-grid) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .bottom-card {
+    margin-inline: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .bottom-card {
+      margin-inline: 1.9rem;
+    }
+  }
+
+  /* Mobile-first: plain (unskewed) card that grows with its content. The skew
+     is a desktop-only flourish — on narrow screens it causes horizontal
+     overflow, and a fixed height clips the multi-line recognition items. */
+  .recognitions-card {
+    background-color: var(--color-background);
+    border-radius: 0.75rem;
+    box-shadow: var(--shadow-card);
+    padding: 1.5rem;
+    max-inline-size: 1216px;
+    margin-inline: auto;
+    display: flex;
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .recognitions-card {
+      transform: skewX(-12deg);
+      padding: 2.5rem 4rem;
+      /* min, not fixed — lets tall items expand the card instead of overflowing */
+      min-block-size: 250px;
+    }
+  }
+
+  .recognitions-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    inline-size: 100%;
+  }
+
+  @media (min-width: 768px) {
+    .recognitions-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem 4rem;
+      transform: skewX(12deg);
+    }
+  }
+
+  .recognition-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .recognition-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 40px;
+    block-size: 40px;
+    border-radius: 8px;
+    background-color: var(--primary-8);
+  }
+
+  .recognition-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .recognition-title {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 2.5vw, 24px);
+    font-weight: 700;
+    color: var(--color-foreground);
+    margin: 0;
+  }
+
+  .recognition-desc {
+    font-size: clamp(0.875rem, 2vw, 20px);
+    color: var(--color-foreground);
+    margin: 0;
+  }
+</style>

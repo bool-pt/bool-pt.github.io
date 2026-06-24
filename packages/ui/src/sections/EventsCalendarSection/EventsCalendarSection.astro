@@ -1,0 +1,132 @@
+---
+import type { EventItem } from '@bool/shared';
+import CalendarEventLayout from '../../compositions/CalendarEventLayout/CalendarEventLayout.astro';
+import EventDetailCard from '../../compositions/EventDetailCard/EventDetailCard.astro';
+import EventScheduleModal from '../../compositions/EventScheduleModal/EventScheduleModal';
+import type { EventScheduleLabels } from '../../compositions/EventScheduleModal/EventScheduleModal';
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+
+interface CalendarLabels {
+  prevMonth: string;
+  nextMonth: string;
+  dayNames: string[];
+  monthNames: string[];
+  eventPrefix: string;
+}
+
+interface Props {
+  tag: string;
+  heading: string;
+  body: string;
+  eventCards: Array<{
+    category: string;
+    title: string;
+    description: string;
+    dateInfo: string;
+    cta: string;
+    ctaType?: string;
+    href: string;
+    target?: string;
+    rel?: string;
+  }>;
+  calendarLabels: CalendarLabels;
+  events?: EventItem[];
+  scheduleLabels?: EventScheduleLabels;
+  backgroundImage?: ImageMetadata;
+}
+
+const {
+  tag,
+  heading,
+  body,
+  eventCards,
+  calendarLabels,
+  events = [],
+  scheduleLabels,
+  backgroundImage,
+} = Astro.props;
+
+const calendarEvents = events.map((e) => ({
+  date: e.rawDate ?? e.date,
+  tag: e.tag,
+  tagColor: e.tagColor,
+  title: e.title,
+  description: e.description,
+}));
+---
+
+<Section
+  background="var(--color-muted)"
+  aria-labelledby="blog-events-heading"
+  backgroundImage={backgroundImage?.src}
+>
+  <SectionContainer>
+    <SectionIntro headingId="blog-events-heading" align="start" descriptionMaxWidth="42rem">
+      <SectionTag slot="tag">{tag}</SectionTag>
+      <Fragment slot="heading">{heading}</Fragment>
+      <Fragment slot="description">{body}</Fragment>
+    </SectionIntro>
+
+    <CalendarEventLayout events={calendarEvents} calendarLabels={calendarLabels}>
+      <ul class="events-cards" role="list">
+        {
+          eventCards.map((event) => (
+            <li data-event-title={event.title}>
+              <EventDetailCard
+                category={event.category}
+                title={event.title}
+                description={event.description}
+                dateInfo={event.dateInfo}
+                ctaLabel={event.cta}
+                ctaType={event.ctaType}
+                href={event.href}
+                target={event.target}
+                rel={event.rel}
+              />
+            </li>
+          ))
+        }
+      </ul>
+    </CalendarEventLayout>
+  </SectionContainer>
+</Section>
+
+{
+  scheduleLabels && (
+    <div class="events-calendar-schedule-modal">
+      <EventScheduleModal
+        client:load
+        labels={scheduleLabels}
+        captchaSiteKey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? ''}
+      />
+    </div>
+  )
+}
+
+<style>
+  .events-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+</style>
+
+<script>
+  const hasModal = !!document.querySelector('.events-calendar-schedule-modal');
+  if (hasModal) {
+    document.querySelectorAll<HTMLAnchorElement>('.event-schedule-trigger').forEach((trigger) => {
+      trigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        const li = trigger.closest<HTMLElement>('[data-event-title]');
+        const title = li?.dataset.eventTitle ?? '';
+        window.dispatchEvent(new CustomEvent('bool:open-event-schedule', { detail: { title } }));
+      });
+    });
+  }
+</script>

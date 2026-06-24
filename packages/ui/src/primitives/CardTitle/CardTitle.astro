@@ -1,0 +1,35 @@
+---
+interface Props {
+  headingLevel?: 'h3' | 'h4';
+  size?: string;
+  colorScheme?: 'light' | 'dark';
+  class?: string;
+}
+
+const { headingLevel = 'h3', size, colorScheme = 'light', class: className } = Astro.props;
+
+const HeadingTag = headingLevel;
+const style = size ? `--ct-size: ${size}` : undefined;
+---
+
+<HeadingTag class:list={['card-title', `card-title--${colorScheme}`, className]} style={style}>
+  <slot />
+</HeadingTag>
+
+<style>
+  .card-title {
+    font-family: var(--font-display);
+    font-size: var(--ct-size, var(--font-size-body-lg));
+    font-weight: 700;
+    line-height: 1.3;
+    margin: 0;
+  }
+
+  .card-title--light {
+    color: var(--color-foreground);
+  }
+
+  .card-title--dark {
+    color: var(--color-on-dark);
+  }
+</style>

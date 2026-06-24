@@ -1,0 +1,19 @@
+---
+import SplitLayout from '../SplitLayout/SplitLayout.astro';
+
+interface Props {
+  gap?: string;
+  class?: string;
+}
+
+const { gap = '4rem', class: className } = Astro.props;
+---
+
+<SplitLayout ratio="1fr 1fr" collapseAt="md" gap={gap} alignItems="start" class={className}>
+  <div slot="start">
+    <slot name="info" />
+  </div>
+  <div slot="end">
+    <slot name="form" />
+  </div>
+</SplitLayout>

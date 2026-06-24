@@ -1,0 +1,24 @@
+---
+interface Props {
+  number: number | string;
+  class?: string;
+}
+
+const { number, class: className } = Astro.props;
+
+const display =
+  typeof number === 'number' && number < 10 ? String(number).padStart(2, '0') : String(number);
+---
+
+<span class:list={['numbered-label', className]}>{display}</span>
+
+<style>
+  .numbered-label {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--color-primary);
+    line-height: 1;
+  }
+</style>

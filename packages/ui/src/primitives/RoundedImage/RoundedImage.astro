@@ -1,0 +1,56 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  src: ImageMetadata;
+  alt: string;
+  aspectRatio?: string;
+  radius?: string;
+  loading?: 'eager' | 'lazy';
+  width?: number;
+  height?: number;
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  aspectRatio,
+  radius = 'var(--radius-lg)',
+  loading = 'lazy',
+  width,
+  height,
+  class: className,
+} = Astro.props;
+
+const wrapperStyle = [
+  `border-radius: ${radius}`,
+  aspectRatio ? `aspect-ratio: ${aspectRatio}` : null,
+]
+  .filter(Boolean)
+  .join('; ');
+---
+
+<div class:list={['rounded-image', className]} style={wrapperStyle}>
+  <Image
+    src={src}
+    alt={alt}
+    class="rounded-image-img"
+    loading={loading}
+    width={width}
+    height={height}
+  />
+</div>
+
+<style>
+  .rounded-image {
+    overflow: hidden;
+  }
+
+  .rounded-image-img {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+</style>

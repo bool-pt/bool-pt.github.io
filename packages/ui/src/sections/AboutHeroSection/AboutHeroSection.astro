@@ -1,0 +1,214 @@
+---
+import { Image } from 'astro:assets';
+import heroBgFallback from '@bool/media/images/backgrounds/hero-background.jpg';
+import BoolLettersOverlay from '../../compositions/BoolLettersOverlay/BoolLettersOverlay.astro';
+import DarkPageHero from '../../compositions/DarkPageHero/DarkPageHero.astro';
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+import ResponsiveGrid from '../../primitives/ResponsiveGrid/ResponsiveGrid.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+import TextBlock from '../../primitives/TextBlock/TextBlock.astro';
+
+interface Props {
+  heading: string;
+  body1: string;
+  body2: string;
+  missionTitle: string;
+  missionBody: string;
+  visionTitle: string;
+  visionBody: string;
+  backgroundImage?: ImageMetadata;
+}
+
+const {
+  heading,
+  body1,
+  body2,
+  missionTitle,
+  missionBody,
+  visionTitle,
+  visionBody,
+  backgroundImage = heroBgFallback,
+} = Astro.props;
+---
+
+<DarkPageHero minBlockSize="960px" paddingBlock="10rem 6rem" aria-labelledby="about-hero-heading">
+  <div class="about-hero-bg">
+    <Image
+      src={backgroundImage}
+      alt=""
+      aria-hidden="true"
+      class="about-hero-bg-img"
+      loading="eager"
+    />
+    <div class="about-hero-overlay" aria-hidden="true"></div>
+  </div>
+
+  <div class="about-hero-letters-scaler">
+    <div class="about-hero-letters-wrap">
+      <BoolLettersOverlay />
+    </div>
+  </div>
+
+  <SectionContainer>
+    <div class="about-hero-content-wrap">
+      <SectionIntro
+        headingId="about-hero-heading"
+        headingSize="var(--font-size-hero)"
+        headingWeight="400"
+        colorScheme="dark"
+        headingLevel="h1"
+        align="start"
+        class="about-hero-text"
+      >
+        <Fragment slot="heading" set:html={heading} />
+      </SectionIntro>
+      <div class="about-hero-body">
+        <p>{body1}</p>
+        <p>{body2}</p>
+      </div>
+
+      <ResponsiveGrid columns={2} collapseAt="md" gap="2rem" class="mission-vision">
+        <div class="mv-card">
+          <TextBlock
+            headingLevel="h2"
+            headingSize="var(--font-size-lead)"
+            bodySize="var(--font-size-sub)"
+            bodyLineHeight="1.3"
+            colorScheme="dark"
+            spacing="1rem"
+          >
+            <Fragment slot="heading">{missionTitle}</Fragment>
+            <p>{missionBody}</p>
+          </TextBlock>
+        </div>
+        <div class="mv-card">
+          <TextBlock
+            headingLevel="h2"
+            headingSize="var(--font-size-lead)"
+            bodySize="var(--font-size-sub)"
+            bodyLineHeight="1.3"
+            colorScheme="dark"
+            spacing="1rem"
+          >
+            <Fragment slot="heading">{visionTitle}</Fragment>
+            <p>{visionBody}</p>
+          </TextBlock>
+        </div>
+      </ResponsiveGrid>
+    </div>
+  </SectionContainer>
+</DarkPageHero>
+
+<style>
+  .about-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .about-hero-bg-img {
+    --hero-bg-opacity: 0.7;
+    --hero-bg-blur: 1.5px;
+
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    filter: grayscale(1) blur(var(--hero-bg-blur));
+    opacity: var(--hero-bg-opacity);
+  }
+
+  .about-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: var(--overlay-dark);
+  }
+
+  .about-hero-letters-scaler {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+    block-size: 0;
+    z-index: 0;
+    pointer-events: none;
+    color: var(--color-on-dark);
+    opacity: 0.4;
+    filter: blur(1.5px);
+    container-type: inline-size;
+  }
+
+  .about-hero-letters-wrap {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-end: 0;
+    inline-size: 100cqi;
+    aspect-ratio: 1440 / 518;
+    overflow: visible;
+  }
+
+  .about-hero-content-wrap {
+    position: relative;
+    z-index: 2;
+  }
+
+  .about-hero-content-wrap :global(.about-hero-text) {
+    position: relative;
+    z-index: 1;
+    margin-block-end: 0;
+  }
+
+  .about-hero-content-wrap :global(.about-hero-text .section-intro-heading) {
+    margin-block-end: 2rem;
+  }
+
+  .about-hero-body {
+    max-inline-size: 1008px;
+    margin-block-end: 7rem;
+  }
+
+  .about-hero-body p {
+    font-size: var(--font-size-sub);
+    font-weight: 400;
+    line-height: 1.3;
+    color: var(--color-on-dark);
+    margin: 0 0 1.5rem;
+  }
+
+  .about-hero-body p:last-child {
+    margin-block-end: 0;
+  }
+
+  .mission-vision {
+    position: relative;
+    z-index: 1;
+    margin-block-end: 4.5rem;
+  }
+
+  .mv-card {
+    --mv-card-border-color: var(--white-20);
+    --mv-card-bg: var(--white-6);
+    --mv-card-blur: 5px;
+    --mv-card-radius: 1rem;
+    --mv-card-padding: 2.5rem 1.5rem;
+    --mv-card-max-width: 592px;
+    --mv-card-min-height: 233px;
+    --mv-card-text-color: var(--color-on-dark);
+
+    border: 1px solid var(--mv-card-border-color);
+    border-radius: var(--mv-card-radius);
+    padding: var(--mv-card-padding);
+    background-color: var(--mv-card-bg);
+    backdrop-filter: blur(var(--mv-card-blur));
+    -webkit-backdrop-filter: blur(var(--mv-card-blur));
+    text-align: center;
+    max-inline-size: var(--mv-card-max-width);
+    min-block-size: var(--mv-card-min-height);
+    display: flex;
+    align-items: center;
+    --color-on-dark-muted: var(--mv-card-text-color);
+  }
+
+  .mv-card :global(.text-block-body p) {
+    font-weight: 400;
+  }
+</style>

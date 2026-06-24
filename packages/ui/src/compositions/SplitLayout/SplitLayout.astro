@@ -1,0 +1,80 @@
+---
+interface Props {
+  ratio?: string;
+  collapseAt?: 'sm' | 'md' | 'lg';
+  gap?: string;
+  alignItems?: 'start' | 'center' | 'stretch';
+  reverseOnMobile?: boolean;
+  class?: string;
+}
+
+const {
+  ratio = '1fr 1fr',
+  collapseAt = 'md',
+  gap = '0',
+  alignItems = 'stretch',
+  reverseOnMobile = false,
+  class: className,
+} = Astro.props;
+
+const style = [
+  `--split-ratio: ${ratio}`,
+  `--split-gap: ${gap}`,
+  `--split-align: ${alignItems}`,
+].join('; ');
+---
+
+<div
+  class:list={[
+    'split-layout',
+    `split-layout--collapse-${collapseAt}`,
+    { 'split-layout--reverse-mobile': reverseOnMobile },
+    className,
+  ]}
+  style={style}
+>
+  <div class="split-layout-start">
+    <slot name="start" />
+  </div>
+  <div class="split-layout-end">
+    <slot name="end" />
+  </div>
+</div>
+
+<style>
+  .split-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--split-gap, 0);
+    align-items: var(--split-align, stretch);
+  }
+
+  .split-layout--reverse-mobile {
+    @media (max-width: 639px) {
+      & > .split-layout-start {
+        order: 2;
+      }
+      & > .split-layout-end {
+        order: 1;
+      }
+    }
+  }
+
+  .split-layout--collapse-sm {
+    @media (min-width: 640px) {
+      grid-template-columns: var(--split-ratio, 1fr 1fr);
+    }
+  }
+
+  .split-layout--collapse-md {
+    @media (min-width: 768px) {
+      grid-template-columns: var(--split-ratio, 1fr 1fr);
+    }
+  }
+
+  .split-layout--collapse-lg {
+    @media (min-width: 1024px) {
+      grid-template-columns: var(--split-ratio, 1fr 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,89 @@
+---
+interface Props {
+  columns?: 2 | 3 | 4;
+  gap?: string;
+  collapseAt?: 'sm' | 'md';
+  class?: string;
+  role?: string;
+  'aria-label'?: string;
+}
+
+const {
+  columns = 3,
+  gap = '1.5rem',
+  collapseAt = 'sm',
+  class: className,
+  role,
+  'aria-label': ariaLabel,
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    'responsive-grid',
+    `responsive-grid--cols-${columns}`,
+    `responsive-grid--collapse-${collapseAt}`,
+    className,
+  ]}
+  style={`--grid-gap: ${gap}`}
+  role={role}
+  aria-label={ariaLabel}
+>
+  <slot />
+</div>
+
+<style>
+  .responsive-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--grid-gap, 1.5rem);
+  }
+
+  /* 2-column grids */
+  .responsive-grid--cols-2.responsive-grid--collapse-sm {
+    @media (min-width: 640px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .responsive-grid--cols-2.responsive-grid--collapse-md {
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* 3-column grids: 2 at breakpoint, 3 at next */
+  .responsive-grid--cols-3.responsive-grid--collapse-sm {
+    @media (min-width: 640px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media (min-width: 1024px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .responsive-grid--cols-3.responsive-grid--collapse-md {
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /* 4-column grids: 2 at breakpoint, 4 at next */
+  .responsive-grid--cols-4.responsive-grid--collapse-sm {
+    @media (min-width: 640px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media (min-width: 1024px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .responsive-grid--cols-4.responsive-grid--collapse-md {
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media (min-width: 1024px) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>

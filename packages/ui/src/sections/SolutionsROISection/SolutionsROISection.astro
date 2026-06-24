@@ -1,0 +1,140 @@
+---
+import GradientIcon from '../../primitives/GradientIcon/GradientIcon.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+
+interface Props {
+  heading: string;
+  colSolutions: string;
+  colResults: string;
+  ariaLabel: string;
+  solutions: Array<{ name: string; result: string }>;
+  backgroundImage?: ImageMetadata;
+}
+
+const { heading, colSolutions, colResults, ariaLabel, solutions, backgroundImage } = Astro.props;
+---
+
+<Section
+  background="var(--color-surface-muted)"
+  aria-labelledby="solutions-heading"
+  paddingBlock="5rem"
+  backgroundImage={backgroundImage?.src}
+>
+  <SectionContainer>
+    <h2 id="solutions-heading" class="solutionsHeading">
+      {heading}
+    </h2>
+
+    <div class="solutionsHeader">
+      <span class="solutionsColLabel">{colSolutions}</span>
+      <span class="solutionsColLabel">{colResults}</span>
+    </div>
+
+    <div class="solutionsGrid" role="list" aria-label={ariaLabel}>
+      {
+        solutions.map((solution) => (
+          <div class="solutionRow" role="listitem">
+            <div class="solutionCard solutionName">
+              <span class="solutionIcon">
+                <GradientIcon name="shield" />
+              </span>
+              <span>{solution.name}</span>
+            </div>
+            <div class="solutionCard solutionResult">
+              <span class="solutionIcon">
+                <GradientIcon name="chart" />
+              </span>
+              <span>{solution.result}</span>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </SectionContainer>
+</Section>
+
+<style>
+  .solutionsHeading {
+    font-family: var(--font-display);
+    font-size: var(--font-size-display);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--color-foreground);
+    text-align: center;
+    margin: 0 0 2.5rem;
+  }
+
+  .solutionsHeader {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .solutionsHeader {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-block-end: 1rem;
+      padding-inline: 1.5rem;
+    }
+  }
+
+  .solutionsColLabel {
+    font-family: var(--font-display);
+    font-size: var(--font-size-h4);
+    font-weight: 700;
+    color: var(--color-foreground);
+    text-align: center;
+  }
+
+  .solutionsGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .solutionRow {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  @media (min-width: 768px) {
+    .solutionRow {
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: center;
+    }
+  }
+
+  .solutionCard {
+    background-color: var(--color-background);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.5rem;
+    box-shadow: var(--shadow-card);
+  }
+
+  .solutionName,
+  .solutionResult {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-display);
+    font-size: var(--font-size-sub);
+    font-weight: 500;
+    color: var(--color-foreground);
+    line-height: 1;
+  }
+
+  .solutionIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    border-radius: 0.5rem;
+    background-color: var(--primary-20);
+    flex-shrink: 0;
+  }
+</style>

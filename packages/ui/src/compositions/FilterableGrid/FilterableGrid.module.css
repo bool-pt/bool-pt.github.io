@@ -1,0 +1,74 @@
+/* Filter group */
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-block-end: 1.5rem;
+}
+
+.filterRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filterPill {
+  display: inline-block;
+  padding-inline: 1rem;
+  padding-block: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: transparent;
+  color: var(--color-muted-foreground);
+  font-size: var(--font-size-caption);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background-color 150ms,
+    color 150ms,
+    border-color 150ms;
+}
+
+.filterPill:hover {
+  border-color: var(--color-foreground);
+  color: var(--color-foreground);
+}
+
+.filterPillActive {
+  background-color: var(--color-primary);
+  color: var(--color-on-dark);
+  border-color: var(--color-primary);
+}
+
+/* Grid */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  background-color: var(--white-50);
+  margin-inline: -1.5rem;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    margin-inline: -7rem;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Empty state */
+.emptyState {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding-block: 4rem;
+  color: var(--color-muted-foreground);
+  font-size: var(--font-size-body);
+}

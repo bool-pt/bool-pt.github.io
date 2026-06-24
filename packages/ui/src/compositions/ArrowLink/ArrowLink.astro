@@ -1,0 +1,51 @@
+---
+import Icon from '../../primitives/Icon/Icon.astro';
+
+interface Props {
+  href: string;
+  label: string;
+  colorScheme?: 'light' | 'dark';
+  class?: string;
+}
+
+const { href, label, colorScheme = 'light', class: className } = Astro.props;
+---
+
+<a href={href} class:list={['arrow-link', `arrow-link--${colorScheme}`, className]}>
+  <span class="arrow-link-label">{label}</span>
+  <Icon name="arrow-right" size={18} strokeWidth={2.5} />
+</a>
+
+<style>
+  .arrow-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--font-size-body-lg);
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    transition: color 150ms;
+  }
+
+  .arrow-link :global(svg) {
+    flex-shrink: 0;
+  }
+
+  .arrow-link--light {
+    color: var(--color-surface-dark);
+  }
+
+  .arrow-link--light:hover {
+    color: var(--color-primary);
+  }
+
+  .arrow-link--dark {
+    color: var(--color-primary);
+    transition: opacity 150ms;
+  }
+
+  .arrow-link--dark:hover {
+    opacity: 0.8;
+  }
+</style>

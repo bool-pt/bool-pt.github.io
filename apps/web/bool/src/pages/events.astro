@@ -1,0 +1,26 @@
+---
+import { getUpcomingEvents, transformEvent } from '@bool/content';
+import { t } from '@bool/i18n';
+import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
+import EventsCalendarSection from '@bool/ui/sections/EventsCalendarSection.astro';
+import { getHeaderLabels, getFooterLabels, getCalendarLabels } from '../labels';
+
+const events = await getUpcomingEvents();
+const eventItems = events.map(transformEvent);
+---
+
+<BaseLayout
+  title={t('pageMeta.events.title')}
+  description={t('pageMeta.events.description')}
+  headerLabels={getHeaderLabels()}
+  footerLabels={getFooterLabels()}
+>
+  <EventsCalendarSection
+    tag={t('events.heading')}
+    heading={t('events.heading')}
+    body={t('events.description')}
+    eventCards={[]}
+    calendarLabels={getCalendarLabels()}
+    events={eventItems}
+  />
+</BaseLayout>

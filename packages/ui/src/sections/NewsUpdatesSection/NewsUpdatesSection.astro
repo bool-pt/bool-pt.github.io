@@ -1,0 +1,54 @@
+---
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+import NewsGrid from './NewsGrid';
+
+interface NewsItem {
+  category: string;
+  date: string;
+  title: string;
+  summary: string;
+  href: string;
+  tags: string[];
+  image: string;
+}
+
+interface Props {
+  tag: string;
+  heading: string;
+  body: string;
+  filters: string[];
+  newsItems: NewsItem[];
+  labels: { readMore: string; emptyMessage: string; filterAriaLabel: string };
+  backgroundImage?: ImageMetadata;
+}
+
+const { tag, heading, body, filters, newsItems, labels, backgroundImage } = Astro.props;
+---
+
+<Section
+  background="var(--color-muted)"
+  aria-labelledby="news-heading"
+  class="news-section"
+  backgroundImage={backgroundImage?.src}
+>
+  <SectionContainer>
+    <SectionIntro
+      headingId="news-heading"
+      align="start"
+      descriptionMaxWidth="42rem"
+      marginBlockEnd="1.5rem"
+      class="news-intro"
+    >
+      <SectionTag slot="tag">{tag}</SectionTag>
+      <Fragment slot="heading">{heading}</Fragment>
+      <Fragment slot="description">{body}</Fragment>
+    </SectionIntro>
+
+    <NewsGrid client:visible items={newsItems} filters={filters} labels={labels} />
+  </SectionContainer>
+</Section>
+
+<style></style>

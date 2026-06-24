@@ -1,0 +1,65 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  inline-size: 100%;
+  block-size: 3.5rem;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.wrapperVariant {
+  background: var(--white-60);
+  border: 2px solid var(--white-65);
+  backdrop-filter: blur(8px);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  padding: 0 1.25rem;
+  background: transparent;
+  border: none;
+  color: var(--color-on-dark);
+  font-size: var(--font-size-body);
+  font-weight: 500;
+}
+
+.input::placeholder {
+  color: var(--color-on-dark-muted);
+}
+
+.input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.button {
+  block-size: 48px;
+  padding-inline: 2rem;
+  border: none;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  font-size: var(--font-size-body-lg);
+  cursor: pointer;
+  white-space: nowrap;
+  margin: 0.25rem;
+  transition: opacity 150ms;
+}
+
+.buttonVariant {
+  background: var(--color-primary);
+  color: var(--color-on-dark);
+}
+
+.buttonDisabled {
+  opacity: 0.7;
+}

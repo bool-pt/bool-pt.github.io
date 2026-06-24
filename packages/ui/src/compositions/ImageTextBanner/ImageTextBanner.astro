@@ -1,0 +1,91 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  image: ImageMetadata;
+  imageAlt: string;
+  height?: string;
+  grayscale?: boolean;
+  contentPadding?: string;
+  class?: string;
+}
+
+const {
+  image,
+  imageAlt,
+  height = '396px',
+  grayscale = false,
+  contentPadding,
+  class: className,
+} = Astro.props;
+---
+
+<div
+  class:list={['itb-grid', { 'itb-grid--grayscale': grayscale }, className]}
+  style={[
+    `--itb-height: ${height}`,
+    contentPadding ? `--itb-content-padding: ${contentPadding}` : null,
+  ]
+    .filter(Boolean)
+    .join('; ')}
+>
+  <div class="itb-image-wrap">
+    <Image src={image} alt={imageAlt} class="itb-img" loading="lazy" />
+  </div>
+  <div class="itb-content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .itb-grid {
+    --itb-image-radius: calc(var(--itb-height) / 2);
+
+    display: grid;
+    grid-template-columns: 1fr;
+    max-inline-size: 1440px;
+    margin-inline: auto;
+    block-size: auto;
+  }
+
+  @media (min-width: 768px) {
+    .itb-grid {
+      grid-template-columns: 1fr 1fr;
+      block-size: var(--itb-height);
+    }
+  }
+
+  .itb-image-wrap {
+    overflow: hidden;
+    block-size: var(--itb-height);
+  }
+
+  @media (min-width: 768px) {
+    .itb-image-wrap {
+      border-radius: 0 var(--itb-image-radius) var(--itb-image-radius) 0;
+    }
+  }
+
+  .itb-img {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  .itb-grid--grayscale .itb-img {
+    filter: grayscale(1);
+  }
+
+  .itb-content {
+    display: flex;
+    align-items: center;
+    padding: 3rem 2rem;
+  }
+
+  @media (min-width: 768px) {
+    .itb-content {
+      padding: var(--itb-content-padding, 0 4rem 0 5rem);
+    }
+  }
+</style>

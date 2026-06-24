@@ -1,0 +1,92 @@
+---
+import EventCalendar from '../EventCalendar/EventCalendar';
+
+interface CalendarEvent {
+  date: string;
+  tag?: string;
+  tagColor?: string;
+  title: string;
+  description: string;
+}
+
+interface CalendarLabels {
+  prevMonth: string;
+  nextMonth: string;
+  dayNames: string[];
+  monthNames: string[];
+  eventPrefix: string;
+}
+
+interface Props {
+  events: CalendarEvent[];
+  calendarLabels: CalendarLabels;
+  calendarHydration?: 'load' | 'visible';
+  class?: string;
+}
+
+const { events, calendarLabels, calendarHydration = 'visible', class: className } = Astro.props;
+---
+
+<div class:list={['calendar-event-layout', className]}>
+  <div class="calendar-event-layout-calendar">
+    {
+      calendarHydration === 'load' ? (
+        <EventCalendar
+          events={events}
+          ariaLabels={{
+            prevMonth: calendarLabels.prevMonth,
+            nextMonth: calendarLabels.nextMonth,
+          }}
+          dayNames={calendarLabels.dayNames}
+          monthNames={calendarLabels.monthNames}
+          eventPrefix={calendarLabels.eventPrefix}
+          client:load
+        />
+      ) : (
+        <EventCalendar
+          events={events}
+          ariaLabels={{
+            prevMonth: calendarLabels.prevMonth,
+            nextMonth: calendarLabels.nextMonth,
+          }}
+          dayNames={calendarLabels.dayNames}
+          monthNames={calendarLabels.monthNames}
+          eventPrefix={calendarLabels.eventPrefix}
+          client:visible
+        />
+      )
+    }
+  </div>
+  <div class="calendar-event-layout-content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .calendar-event-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  @media (min-width: 900px) {
+    .calendar-event-layout {
+      grid-template-columns: 384px 1fr;
+    }
+  }
+
+  .calendar-event-layout-calendar {
+    align-self: start;
+  }
+</style>
+
+<script>
+  window.addEventListener('bool:calendar-select', (e) => {
+    const title = (e as CustomEvent<{ title: string | null }>).detail?.title;
+    document.querySelectorAll<HTMLElement>('[data-event-title]').forEach((li) => {
+      const card = li.querySelector<HTMLElement>('.event-detail-card') ?? li;
+      card.classList.toggle('is-selected', li.dataset.eventTitle === title);
+    });
+  });
+</script>

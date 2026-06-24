@@ -1,0 +1,111 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.card {
+  background: var(--editor-card-bg);
+  border: 1px solid var(--editor-card-border);
+  border-radius: var(--radius-2xl, 1rem);
+  box-shadow: var(--editor-card-shadow);
+  overflow: hidden;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  padding: 0 0.25rem 0.75rem;
+}
+
+.sectionTitle {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-h4, 1.25rem);
+  font-weight: 600;
+  color: var(--editor-text);
+}
+
+.keyCount {
+  font-size: var(--font-size-caption, 0.75rem);
+  color: var(--editor-text-muted);
+}
+
+.dirtyBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-full, 9999px);
+  background: var(--color-primary, #e7453a);
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+
+.sharedBanner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  background: rgba(231, 69, 58, 0.08);
+  border: 1px solid rgba(231, 69, 58, 0.2);
+  border-radius: var(--radius-lg, 0.5rem);
+  font-size: 0.8125rem;
+  color: var(--editor-text-muted);
+  margin-block-end: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sharedBannerLink {
+  border: none;
+  background: none;
+  color: var(--color-primary, #e7453a);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.sharedBannerLink:hover {
+  opacity: 0.8;
+}
+
+.cardBody {
+  padding: 0.75rem 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .cardBody {
+    padding: 0.75rem 1.5rem;
+  }
+}
+
+.fieldsHeading {
+  padding-inline: 0.75rem;
+  padding-block: 0.5rem;
+  font-size: var(--font-size-caption, 0.75rem);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--editor-heading-label);
+}
+
+.empty {
+  padding: 2rem;
+  text-align: center;
+  color: var(--editor-text-muted);
+  font-size: var(--font-size-body-sm, 0.875rem);
+}
+
+.searchResultSection {
+  font-family: var(--font-accent, var(--font-sans));
+  font-size: var(--font-size-caption, 0.75rem);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  padding-inline: 0.75rem;
+  padding-block: 0.75rem 0.25rem;
+}

@@ -1,0 +1,73 @@
+---
+import office1Fallback from '@bool/media/images/gallery/about-02.jpg';
+import office2Fallback from '@bool/media/images/gallery/about-03.jpg';
+import OfficeCarousel from '../../compositions/OfficeCarousel/OfficeCarousel';
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+
+interface Props {
+  heading: string;
+  description: string;
+  offices: Array<{ city: string; building: string; address: string; image?: string }>;
+  carouselAriaLabels: { prev: string; next: string; imageAlt: string };
+  backgroundImage?: ImageMetadata;
+}
+
+const {
+  heading,
+  description,
+  offices: officeData,
+  carouselAriaLabels,
+  backgroundImage,
+} = Astro.props;
+
+const fallbackImages = [
+  office1Fallback.src,
+  office2Fallback.src,
+  office1Fallback.src,
+  office2Fallback.src,
+];
+
+const offices = officeData.map((office, i) => ({
+  ...office,
+  image: office.image ?? (fallbackImages[i % fallbackImages.length] as string),
+}));
+---
+
+<Section
+  aria-labelledby="portugal-heading"
+  paddingBlock="5rem"
+  background="var(--color-surface-light)"
+  backgroundImage={backgroundImage?.src}
+  contentVisibility={false}
+>
+  <SectionContainer>
+    <div class="portugal-header">
+      <SectionIntro
+        headingId="portugal-heading"
+        colorScheme="light"
+        align="center"
+        descriptionMaxWidth="50rem"
+        marginBlockEnd="3rem"
+        bodySize="1.375rem"
+      >
+        <Fragment slot="heading">{heading}</Fragment>
+        <Fragment slot="description">{description}</Fragment>
+      </SectionIntro>
+    </div>
+
+    <OfficeCarousel
+      offices={offices}
+      navPosition="top-right"
+      client:visible
+      ariaLabels={carouselAriaLabels}
+    />
+  </SectionContainer>
+</Section>
+
+<style>
+  .portugal-header {
+    position: relative;
+  }
+</style>

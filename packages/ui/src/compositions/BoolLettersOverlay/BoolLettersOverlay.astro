@@ -1,0 +1,145 @@
+---
+import BrandLetter from '../../primitives/BrandLetter/BrandLetter.astro';
+import DecorativeOverlay from '../../primitives/DecorativeOverlay/DecorativeOverlay.astro';
+
+interface Props {
+  class?: string;
+  opacity?: number;
+  variant?: 'default' | 'compact';
+}
+
+const { class: className, opacity = 0.4, variant = 'default' } = Astro.props;
+
+const letterHeight = variant === 'compact' ? 175 : 900;
+---
+
+<DecorativeOverlay overflow="visible" class={className}>
+  <div class:list={['letters-wrap', `letters-wrap--${variant}`]} style={`opacity: ${opacity}`}>
+    <div class="letter letter-b">
+      <BrandLetter letter="b" height={letterHeight} />
+    </div>
+    <div class="letter letter-o1">
+      <BrandLetter letter="o" height={letterHeight} />
+    </div>
+    <div class="letter letter-o2">
+      <BrandLetter letter="o" height={letterHeight} />
+    </div>
+    <div class="letter letter-l">
+      <BrandLetter letter="l" height={letterHeight} />
+    </div>
+  </div>
+</DecorativeOverlay>
+
+<style>
+  .letters-wrap {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    block-size: 54%;
+    container-type: inline-size;
+  }
+
+  .letter {
+    position: absolute;
+  }
+
+  .letter :global(svg) {
+    display: block;
+    inline-size: auto;
+  }
+
+  /* ===== Default variant ===== */
+
+  .letters-wrap--default {
+    block-size: 100%;
+  }
+
+  .letters-wrap--default .letter-b {
+    inset-inline-start: -4.03cqi;
+    inset-block-start: 2.85cqi;
+    rotate: 1deg;
+  }
+
+  .letters-wrap--default .letter-b :global(svg) {
+    block-size: 45.14cqi;
+  }
+
+  .letters-wrap--default .letter-o1 {
+    inset-inline-start: 27.99cqi;
+    inset-block-start: 15.49cqi;
+    rotate: -5deg;
+  }
+
+  .letters-wrap--default .letter-o1 :global(svg) {
+    block-size: 32.29cqi;
+  }
+
+  .letters-wrap--default .letter-o2 {
+    inset-inline-start: 57.01cqi;
+    inset-block-start: 21.6cqi;
+    rotate: 20deg;
+  }
+
+  .letters-wrap--default .letter-o2 :global(svg) {
+    block-size: 32.29cqi;
+  }
+
+  .letters-wrap--default .letter-l {
+    inset-inline-start: 80.97cqi;
+    inset-block-start: 8.26cqi;
+    rotate: -5deg;
+  }
+
+  .letters-wrap--default .letter-l :global(svg) {
+    block-size: 41.32cqi;
+  }
+
+  /* ===== Compact variant ===== */
+
+  .letters-wrap--compact {
+    inset-block-start: 0;
+    inset-block-end: 0;
+    block-size: 100%;
+    color: var(--color-on-dark);
+  }
+
+  .letters-wrap--compact .letter-b {
+    inset-inline-start: 16.9cqi;
+    inset-block-start: 19.21cqi;
+    rotate: -2deg;
+  }
+
+  .letters-wrap--compact .letter-b :global(svg) {
+    block-size: 43.4cqi;
+  }
+
+  .letters-wrap--compact .letter-o1 {
+    inset-inline-start: 45.14cqi;
+    inset-block-start: 31.13cqi;
+    rotate: -8deg;
+  }
+
+  .letters-wrap--compact .letter-o1 :global(svg) {
+    block-size: 27.2cqi;
+  }
+
+  .letters-wrap--compact .letter-o2 {
+    inset-inline-start: 68.52cqi;
+    inset-block-start: 32.64cqi;
+    rotate: 12deg;
+  }
+
+  .letters-wrap--compact .letter-o2 :global(svg) {
+    block-size: 27.2cqi;
+  }
+
+  .letters-wrap--compact .letter-l {
+    inset-inline-start: 85.99cqi;
+    inset-block-start: 18.29cqi;
+    rotate: -10deg;
+  }
+
+  .letters-wrap--compact .letter-l :global(svg) {
+    block-size: 35.3cqi;
+  }
+</style>

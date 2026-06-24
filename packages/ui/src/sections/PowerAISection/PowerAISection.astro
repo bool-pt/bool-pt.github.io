@@ -1,0 +1,124 @@
+---
+import aiKeyboardFallback from '@bool/media/images/backgrounds/ai-section.jpg';
+import { ROUTES } from '@bool/shared';
+import SplitLayout from '../../compositions/SplitLayout/SplitLayout.astro';
+import TextBlockWithActions from '../../compositions/TextBlockWithActions/TextBlockWithActions.astro';
+import ButtonLink from '../../primitives/ButtonLink/ButtonLink.astro';
+import RoundedImage from '../../primitives/RoundedImage/RoundedImage.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+
+interface Props {
+  heading: string;
+  body1: string;
+  body2?: string;
+  cta: string;
+  ctaHref?: string;
+  imageAlt: string;
+  variant?: 'default' | 'image-left';
+  showCta?: boolean;
+  minBlockSize?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  image?: ImageMetadata;
+  backgroundImage?: ImageMetadata;
+}
+
+const {
+  heading,
+  body1,
+  body2,
+  cta,
+  ctaHref = ROUTES.services,
+  imageAlt,
+  variant = 'default',
+  showCta = true,
+  minBlockSize = '504px',
+  imageWidth = 488,
+  imageHeight = 340,
+  image = aiKeyboardFallback,
+  backgroundImage,
+} = Astro.props;
+
+const isImageLeft = variant === 'image-left';
+const ratio = isImageLeft ? '488px 1fr' : '7fr 5fr';
+const background = isImageLeft ? 'var(--black-5)' : 'var(--color-background)';
+const headingWeight = isImageLeft ? '700' : '400';
+const imageSlot = isImageLeft ? 'start' : 'end';
+const textSlot = isImageLeft ? 'end' : 'start';
+---
+
+<Section
+  background={background}
+  aria-labelledby="ai-heading"
+  contentVisibility={false}
+  style={`min-block-size: ${minBlockSize};${isImageLeft ? ' box-shadow: var(--shadow-hover);' : ''}`}
+  backgroundImage={backgroundImage?.src}
+>
+  <SectionContainer>
+    <div class:list={['power-ai', { 'power-ai--image-left': isImageLeft }]}>
+      <SplitLayout ratio={ratio} collapseAt="lg" gap="2rem" alignItems="center">
+        <TextBlockWithActions
+          slot={textSlot}
+          headingId="ai-heading"
+          headingSize="var(--font-size-display)"
+          headingWeight={headingWeight}
+          bodySize="var(--font-size-sub)"
+          bodyLineHeight="1.27"
+          bodyMaxWidth="43rem"
+          spacing="2rem"
+          actionsSpacing="2rem"
+        >
+          <Fragment slot="heading" set:html={heading} />
+          <p>{body1}</p>
+          {body2 && <p>{body2}</p>}
+          {
+            showCta && (
+              <ButtonLink slot="actions" href={ctaHref} variant="primary">
+                {cta}
+              </ButtonLink>
+            )
+          }
+        </TextBlockWithActions>
+        <RoundedImage
+          slot={imageSlot}
+          src={image}
+          alt={imageAlt}
+          aspectRatio={`${imageWidth} / ${imageHeight}`}
+          radius="0.75rem"
+          width={imageWidth}
+          height={imageHeight}
+          class="power-ai-image"
+        />
+      </SplitLayout>
+    </div>
+  </SectionContainer>
+</Section>
+
+<style>
+  .power-ai {
+    --power-ai-body-color: var(--color-surface-black);
+    --color-muted-foreground: var(--color-surface-black);
+    --color-surface-dark: var(--color-surface-black);
+    --power-ai-shadow: none;
+  }
+
+  .power-ai :global(.rounded-image-img) {
+    filter: grayscale(1);
+  }
+
+  .power-ai :global(.text-block-heading) {
+    color: var(--power-ai-body-color);
+    line-height: 1.125;
+  }
+
+  .power-ai :global(.text-block-body p) {
+    color: var(--power-ai-body-color);
+    font-weight: 500;
+    margin-block-end: 0.75rem;
+  }
+
+  .power-ai :global(.text-block-body p:last-child) {
+    margin-block-end: 0;
+  }
+</style>

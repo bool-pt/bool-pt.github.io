@@ -1,0 +1,20 @@
+{
+  "name": "@bool/vite-config",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./base": "./src/base.ts",
+    "./react-app": "./src/react-app.ts",
+    "./analyze": "./src/analyze.ts"
+  },
+  "devDependencies": {
+    "@bool/tsconfig": "workspace:*"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "rollup-plugin-visualizer": "catalog:",
+    "vite": "catalog:"
+  }
+}

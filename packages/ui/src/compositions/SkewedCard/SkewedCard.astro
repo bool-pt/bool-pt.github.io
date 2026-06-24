@@ -1,0 +1,84 @@
+---
+interface Props {
+  position?: 'lean-left' | 'lean-right';
+  skewAngle?: string;
+  skewAngleDesktop?: string;
+  class?: string;
+}
+
+const { position = 'lean-left', skewAngle, skewAngleDesktop, class: className } = Astro.props;
+
+/**
+ * lean-left:  \  / shape — left edge tilts left (skewX negative)
+ * lean-right: /  \ shape — left edge tilts right (skewX positive)
+ *
+ * Raw angle props override position defaults when provided.
+ */
+const defaults = {
+  'lean-left': { mobile: '-6deg', desktop: '-12deg' },
+  'lean-right': { mobile: '6deg', desktop: '12deg' },
+};
+
+const mobile = skewAngle ?? defaults[position].mobile;
+const desktop = skewAngleDesktop ?? defaults[position].desktop;
+
+const style = [`--skew-angle: ${mobile}`, `--skew-angle-desktop: ${desktop}`].join('; ');
+---
+
+<div class:list={['skewed-card', className]} style={style}>
+  <div class="skewed-card-start">
+    <slot name="start" />
+  </div>
+  <div class="skewed-card-end">
+    <slot name="end" />
+  </div>
+</div>
+
+<style>
+  .skewed-card {
+    display: grid;
+    grid-template-columns: 1fr;
+    background-color: var(--color-background);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    transform: skewX(var(--skew-angle));
+    margin-inline: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .skewed-card {
+      grid-template-columns: 1fr 1fr;
+      transform: skewX(var(--skew-angle-desktop));
+      margin-inline: 1.9rem;
+    }
+  }
+
+  .skewed-card-start {
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    transform: skewX(calc(var(--skew-angle) * -1));
+  }
+
+  @media (min-width: 768px) {
+    .skewed-card-start {
+      padding: 2.5rem 4rem;
+      transform: skewX(calc(var(--skew-angle-desktop) * -1));
+    }
+  }
+
+  .skewed-card-end {
+    position: relative;
+    min-block-size: 200px;
+    padding: 1rem 0;
+  }
+
+  @media (min-width: 768px) {
+    .skewed-card-end {
+      padding: 0;
+      padding-inline-end: 1.5rem;
+      min-block-size: unset;
+    }
+  }
+</style>

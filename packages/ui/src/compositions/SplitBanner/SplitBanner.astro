@@ -1,0 +1,85 @@
+---
+interface Props {
+  leftBg?: string;
+  rightBg?: string;
+  ratio?: string;
+  minHeight?: string;
+  class?: string;
+}
+
+const {
+  leftBg = 'var(--color-surface-dark)',
+  rightBg = 'var(--color-primary)',
+  ratio = '1.15fr 0.85fr',
+  minHeight = '20.625rem',
+  class: className,
+} = Astro.props;
+
+const style = [
+  `--banner-ratio: ${ratio}`,
+  `--banner-min-height: ${minHeight}`,
+  `--banner-left-bg: ${leftBg}`,
+  `--banner-right-bg: ${rightBg}`,
+].join('; ');
+---
+
+<section class:list={['split-banner', className]} style={style}>
+  <div class="split-banner-left">
+    <div class="split-banner-content">
+      <slot name="left" />
+    </div>
+  </div>
+  <div class="split-banner-right">
+    <div class="split-banner-content">
+      <slot name="right" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .split-banner {
+    display: grid;
+    grid-template-columns: 1fr;
+    min-block-size: var(--banner-min-height);
+  }
+
+  @media (min-width: 768px) {
+    .split-banner {
+      grid-template-columns: var(--banner-ratio);
+    }
+  }
+
+  .split-banner-left {
+    background-color: var(--banner-left-bg);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-block: 4rem;
+    padding-inline: 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .split-banner-left {
+      padding-inline: 4rem 5rem;
+    }
+  }
+
+  .split-banner-right {
+    background-color: var(--banner-right-bg);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-block: 4rem;
+    padding-inline: 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .split-banner-right {
+      padding-inline: 5rem 4rem;
+    }
+  }
+
+  .split-banner-content {
+    max-inline-size: 32rem;
+  }
+</style>

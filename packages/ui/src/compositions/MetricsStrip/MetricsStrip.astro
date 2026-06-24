@@ -1,0 +1,65 @@
+---
+interface Metric {
+  value: string;
+  label: string;
+}
+
+interface Props {
+  metrics: Metric[];
+  colorScheme?: 'light' | 'dark';
+  class?: string;
+}
+
+const { metrics, colorScheme = 'light', class: className } = Astro.props;
+---
+
+<div class:list={['metrics-strip', `metrics-strip--${colorScheme}`, className]}>
+  {
+    metrics.map((metric) => (
+      <div class="metric">
+        <span class="metric-value">{metric.value}</span>
+        <span class="metric-label">{metric.label}</span>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .metrics-strip {
+    display: flex;
+    gap: 1.5rem;
+    padding-block: 0.75rem;
+    border-block-start: 1px solid var(--color-border);
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  .metrics-strip--dark {
+    border-block-start-color: var(--color-border-on-dark);
+    border-block-end-color: var(--color-border-on-dark);
+  }
+
+  .metric {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .metric-value {
+    font-family: var(--font-display);
+    font-size: var(--font-size-sub);
+    font-weight: 700;
+    color: var(--color-primary);
+    line-height: 1.2;
+  }
+
+  .metric-label {
+    font-size: var(--font-size-caption);
+    color: var(--color-muted-foreground);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .metrics-strip--dark .metric-label {
+    color: var(--color-on-dark-muted);
+  }
+</style>

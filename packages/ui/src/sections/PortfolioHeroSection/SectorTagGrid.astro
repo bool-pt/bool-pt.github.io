@@ -1,0 +1,36 @@
+---
+import Tag from '../../primitives/Tag/Tag.astro';
+
+interface Props {
+  sectors: string[];
+  sectorMore?: string;
+}
+
+const { sectors, sectorMore } = Astro.props;
+---
+
+<div class="portfolio-hero-sectors">
+  {
+    sectors.map((sector) => (
+      <Tag variant="outline" colorScheme="on-dark">
+        {sector}
+      </Tag>
+    ))
+  }
+  {
+    sectorMore && (
+      <Tag variant="outline" colorScheme="on-dark">
+        {sectorMore}
+      </Tag>
+    )
+  }
+</div>
+
+<style>
+  .portfolio-hero-sectors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+  }
+</style>

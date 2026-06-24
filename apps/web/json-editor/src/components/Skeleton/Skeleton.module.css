@@ -1,0 +1,144 @@
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-muted, #f5f5f5) 25%,
+    var(--color-border, #e5e5e5) 50%,
+    var(--color-muted, #f5f5f5) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--radius-md, 0.375rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.dark {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.06) 25%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0.06) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* ── Preset shapes ── */
+
+.text {
+  block-size: 0.875rem;
+  inline-size: 100%;
+  border-radius: var(--radius-xs, 0.25rem);
+}
+
+.textShort {
+  inline-size: 60%;
+}
+
+.textTiny {
+  block-size: 0.625rem;
+  inline-size: 40%;
+}
+
+.heading {
+  block-size: 1.25rem;
+  inline-size: 45%;
+  border-radius: var(--radius-xs, 0.25rem);
+}
+
+.circle {
+  border-radius: var(--radius-full, 9999px);
+}
+
+.badge {
+  block-size: 20px;
+  inline-size: 36px;
+  border-radius: var(--radius-full, 9999px);
+}
+
+.button {
+  block-size: 36px;
+  inline-size: 120px;
+  border-radius: var(--radius-4xl, 1.75rem);
+}
+
+.input {
+  block-size: 38px;
+  inline-size: 100%;
+  border-radius: var(--radius-md, 0.375rem);
+}
+
+/* ── Composed skeletons ── */
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 1rem;
+  align-items: center;
+  padding-block: 0.5rem;
+  padding-inline: 0.75rem;
+}
+
+.sidebarItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-block: 0.625rem;
+  padding-inline: 1.25rem;
+}
+
+.sidebarLabel {
+  flex: 1;
+  block-size: 0.75rem;
+  border-radius: var(--radius-xs, 0.25rem);
+}
+
+.topBarGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.groupHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-block-end: 0.75rem;
+  border-block-end: 1px solid var(--color-border, #e5e5e5);
+  margin-block-end: 0.75rem;
+}
+
+.groupCard {
+  border: 1px solid var(--color-border, #e5e5e5);
+  border-radius: var(--radius-lg, 0.5rem);
+  overflow: hidden;
+}
+
+.groupCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 0.75rem;
+  background: var(--color-muted, #f5f5f5);
+  border-block-end: 1px solid var(--color-border, #e5e5e5);
+}
+
+.groupCardBody {
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}

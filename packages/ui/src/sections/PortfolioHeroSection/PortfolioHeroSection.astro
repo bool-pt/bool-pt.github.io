@@ -1,0 +1,193 @@
+---
+import { Image } from 'astro:assets';
+import heroBgFallback from '@bool/media/images/backgrounds/home-hero-01.png';
+import { ROUTES } from '@bool/shared';
+import BoolLettersOverlay from '../../compositions/BoolLettersOverlay/BoolLettersOverlay.astro';
+import DarkPageHero from '../../compositions/DarkPageHero/DarkPageHero.astro';
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
+import StatsCardGrid from '../../compositions/StatsCardGrid/StatsCardGrid.astro';
+import ButtonLink from '../../primitives/ButtonLink/ButtonLink.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+import SectorTagGrid from './SectorTagGrid.astro';
+
+interface Props {
+  tag: string;
+  heading: string;
+  body: string;
+  sectors: string[];
+  ctaStories: string;
+  ctaStoriesHref?: string;
+  ctaServices: string;
+  ctaServicesHref?: string;
+  statsHighlight?: { value: string; label: string };
+  stats: Array<{ value: string; label: string }>;
+  backgroundImage?: ImageMetadata;
+}
+
+const {
+  tag,
+  heading,
+  body,
+  sectors,
+  ctaStories,
+  ctaStoriesHref = '#caseStudies',
+  ctaServices,
+  ctaServicesHref = ROUTES.services,
+  statsHighlight,
+  stats,
+  backgroundImage = heroBgFallback,
+} = Astro.props;
+---
+
+<DarkPageHero
+  paddingBlock="clamp(6rem, 15vw, 12rem) clamp(3rem, 6vw, 5rem)"
+  minBlockSize="clamp(auto, 80vh, 960px)"
+  aria-labelledby="portfolio-hero-heading"
+>
+  <div class="portfolio-hero-bg">
+    <Image
+      src={backgroundImage}
+      alt=""
+      aria-hidden="true"
+      class="portfolio-hero-bg-img"
+      loading="eager"
+    />
+  </div>
+
+  <div class="portfolio-hero-letters-scaler">
+    <div class="portfolio-hero-letters-wrap">
+      <BoolLettersOverlay opacity={0.2} />
+    </div>
+  </div>
+
+  <div class="portfolio-hero-content-wrap">
+    <SectionContainer>
+      <div class="portfolio-hero-layout">
+        <div class="portfolio-hero-content">
+          <SectionIntro
+            headingId="portfolio-hero-heading"
+            headingSize="clamp(2rem, 6vw, 58px)"
+            headingWeight="400"
+            bodySize="clamp(1rem, 2.5vw, 22px)"
+            descriptionMaxWidth="34rem"
+            colorScheme="dark"
+            headingLevel="h1"
+            align="start"
+            class="portfolio-hero-intro"
+          >
+            <SectionTag slot="tag" tagColor="primary">{tag}</SectionTag>
+            <Fragment slot="heading"
+              ><span set:html={heading.replace('\n', '<br /><strong>') + '</strong>'} /></Fragment
+            >
+            <Fragment slot="description">{body}</Fragment>
+          </SectionIntro>
+          <div class="portfolio-sector-tags">
+            <SectorTagGrid sectors={sectors} />
+          </div>
+          <div class="portfolio-hero-actions">
+            <ButtonLink href={ctaStoriesHref} variant="primary">{ctaStories}</ButtonLink>
+            <ButtonLink href={ctaServicesHref} variant="outline">{ctaServices}</ButtonLink>
+          </div>
+        </div>
+        <StatsCardGrid highlight={statsHighlight} stats={stats} />
+      </div>
+    </SectionContainer>
+  </div>
+</DarkPageHero>
+
+<style>
+  .portfolio-hero-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    align-items: start;
+    max-inline-size: 100%;
+    overflow: hidden;
+  }
+
+  @media (min-width: 900px) {
+    .portfolio-hero-layout {
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 4rem;
+    }
+  }
+
+  :global(.portfolio-hero-intro) {
+    max-inline-size: 38rem;
+  }
+
+  .portfolio-sector-tags {
+    margin-block: 1.5rem;
+    max-inline-size: 34rem;
+  }
+
+  @media (min-width: 900px) {
+    .portfolio-sector-tags {
+      margin-block: 2.5rem;
+    }
+  }
+
+  .portfolio-sector-tags :global(.tag) {
+    border-radius: 8px;
+    border-color: var(--white-40);
+    padding-inline: 1rem;
+    padding-block: 0.5rem;
+  }
+
+  .portfolio-hero-actions {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.75rem;
+  }
+
+  .portfolio-hero-actions :global(.btn-link) {
+    font-size: clamp(0.8125rem, 2vw, var(--font-size-body));
+    padding-inline: clamp(1rem, 3vw, 2rem);
+    white-space: nowrap;
+  }
+
+  .portfolio-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .portfolio-hero-bg-img {
+    --hero-bg-opacity: 0.7;
+    --hero-bg-blur: 2px;
+
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    filter: grayscale(1) blur(var(--hero-bg-blur));
+    opacity: var(--hero-bg-opacity);
+  }
+
+  .portfolio-hero-content-wrap {
+    position: relative;
+    z-index: 2;
+  }
+
+  .portfolio-hero-letters-scaler {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+    block-size: 0;
+    z-index: 1;
+    pointer-events: none;
+    color: var(--color-on-dark);
+    filter: blur(1.5px);
+    container-type: inline-size;
+  }
+
+  .portfolio-hero-letters-wrap {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-end: 0;
+    inline-size: 100cqi;
+    aspect-ratio: 1440 / 518;
+    overflow: visible;
+  }
+</style>

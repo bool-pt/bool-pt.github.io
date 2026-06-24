@@ -1,0 +1,162 @@
+---
+import { Image } from 'astro:assets';
+import gallery01Fallback from '@bool/media/images/gallery/gallery-02.png';
+import gallery02Fallback from '@bool/media/images/gallery/gallery-03.jpg';
+import gallery03Fallback from '@bool/media/images/gallery/gallery-04.jpg';
+import gallery04Fallback from '@bool/media/images/gallery/gallery-05.jpg';
+import gallery05Fallback from '@bool/media/images/gallery/gallery-06.jpg';
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+
+interface Props {
+  tag: string;
+  heading: string;
+  body: string;
+  galleryAria: string;
+  galleryAlts: string[];
+  /** Five image slots (large + four small). Falls back to gallery placeholders if omitted. */
+  images?: ImageMetadata[];
+  backgroundImage?: ImageMetadata;
+}
+
+const { tag, heading, body, galleryAria, galleryAlts, images, backgroundImage } = Astro.props;
+const fallbackImages: ImageMetadata[] = [
+  gallery01Fallback,
+  gallery02Fallback,
+  gallery03Fallback,
+  gallery04Fallback,
+  gallery05Fallback,
+];
+const resolvedImages: ImageMetadata[] = [0, 1, 2, 3, 4].map(
+  (i) => images?.[i] ?? (fallbackImages[i] as ImageMetadata)
+);
+---
+
+<Section
+  aria-labelledby="photo-gallery-heading"
+  paddingBlock="3rem 0"
+  backgroundImage={backgroundImage?.src}
+>
+  <SectionContainer>
+    <SectionIntro
+      headingId="photo-gallery-heading"
+      colorScheme="light"
+      align="start"
+      headingSize="var(--font-size-display)"
+      marginBlockEnd="1.5rem"
+      headingWeight="400"
+      class="gallery-intro"
+    >
+      <SectionTag slot="tag" tagColor="primary">{tag}</SectionTag>
+      <Fragment slot="heading" set:html={heading} />
+      <Fragment slot="description">{body}</Fragment>
+    </SectionIntro>
+  </SectionContainer>
+  <div class="gallery-grid" role="group" aria-label={galleryAria}>
+    <div class="gallery-item gallery-item--large">
+      <Image
+        src={resolvedImages[0] as ImageMetadata}
+        alt={galleryAlts[0]}
+        class="gallery-img"
+        width={720}
+        height={520}
+        loading="lazy"
+      />
+    </div>
+    <div class="gallery-item gallery-item--small">
+      <Image
+        src={resolvedImages[1] as ImageMetadata}
+        alt={galleryAlts[1]}
+        class="gallery-img"
+        width={360}
+        height={256}
+        loading="lazy"
+      />
+    </div>
+    <div class="gallery-item gallery-item--small">
+      <Image
+        src={resolvedImages[2] as ImageMetadata}
+        alt={galleryAlts[2]}
+        class="gallery-img"
+        width={360}
+        height={256}
+        loading="lazy"
+      />
+    </div>
+    <div class="gallery-item gallery-item--small">
+      <Image
+        src={resolvedImages[3] as ImageMetadata}
+        alt={galleryAlts[3]}
+        class="gallery-img"
+        width={360}
+        height={256}
+        loading="lazy"
+      />
+    </div>
+    <div class="gallery-item gallery-item--small">
+      <Image
+        src={resolvedImages[4] as ImageMetadata}
+        alt={galleryAlts[4]}
+        class="gallery-img"
+        width={360}
+        height={256}
+        loading="lazy"
+      />
+    </div>
+  </div>
+</Section>
+
+<style>
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    block-size: auto;
+  }
+
+  @media (min-width: 768px) {
+    .gallery-grid {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      grid-template-rows: 260px 260px;
+      block-size: 520px;
+    }
+
+    .gallery-item--large {
+      grid-column: 1 / 3;
+      grid-row: 1 / 3;
+    }
+
+    .gallery-item--small:nth-child(2) {
+      grid-column: 3;
+      grid-row: 1;
+    }
+
+    .gallery-item--small:nth-child(3) {
+      grid-column: 4;
+      grid-row: 1;
+    }
+
+    .gallery-item--small:nth-child(4) {
+      grid-column: 3;
+      grid-row: 2;
+    }
+
+    .gallery-item--small:nth-child(5) {
+      grid-column: 4;
+      grid-row: 2;
+    }
+  }
+
+  .gallery-item {
+    overflow: hidden;
+  }
+
+  .gallery-img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    display: block;
+  }
+</style>

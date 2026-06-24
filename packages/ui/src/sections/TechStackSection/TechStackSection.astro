@@ -1,0 +1,231 @@
+---
+import { t } from '@bool/i18n';
+import { COMPANY, ROUTES, slugify } from '@bool/shared';
+import ExpertPortrait from '../../compositions/ExpertPortrait/ExpertPortrait.astro';
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+import ButtonLink from '../../primitives/ButtonLink/ButtonLink.astro';
+import CheckListItem from '../../primitives/CheckListItem/CheckListItem.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+import TextBlock from '../../primitives/TextBlock/TextBlock.astro';
+import TechCard from './TechCard.astro';
+
+interface TechPlatform {
+  key: string;
+  expert: string;
+  role: string;
+  name: string;
+  body: string;
+  image: ImageMetadata;
+  features: string[];
+  email?: string;
+  linkedin?: string;
+}
+
+interface Props {
+  readinessExpertName: string;
+  readinessExpertRole: string;
+  readinessExpertPhoto: ImageMetadata;
+  readinessExpertEmail?: string;
+  readinessExpertLinkedin?: string;
+  readinessHeading: string;
+  readinessBody: string;
+  readinessChecks: string[];
+  readinessCta: string;
+  readinessCtaHref?: string;
+  techHeading: string;
+  techBody: string;
+  availableConsultation: string;
+  contactExpert: string;
+  contactExpertHref?: string;
+  platforms: TechPlatform[];
+  backgroundImage?: ImageMetadata;
+}
+
+const {
+  readinessExpertName,
+  readinessExpertRole,
+  readinessExpertPhoto,
+  readinessExpertEmail = COMPANY.email,
+  readinessExpertLinkedin = t('footer.social.linkedin.href'),
+  readinessHeading,
+  readinessBody,
+  readinessChecks,
+  readinessCta,
+  readinessCtaHref = ROUTES.contacts,
+  techHeading,
+  techBody,
+  availableConsultation,
+  contactExpert,
+  contactExpertHref = ROUTES.contacts,
+  platforms,
+  backgroundImage,
+} = Astro.props;
+---
+
+<Section
+  background="var(--color-muted)"
+  aria-labelledby="tech-heading"
+  contentVisibility={false}
+  paddingBlock="3rem"
+  backgroundImage={backgroundImage?.src}
+>
+  <SectionContainer
+    class="tech-section-container"
+    style="padding-inline: 1.5rem; max-inline-size: calc(1280px + 3rem);"
+  >
+    <article
+      class="readinessCard"
+      aria-labelledby="readiness-heading"
+      style="--color-on-dark-muted: var(--color-on-dark);"
+    >
+      <ExpertPortrait
+        name={readinessExpertName}
+        role={readinessExpertRole}
+        photo={readinessExpertPhoto}
+        email={readinessExpertEmail}
+        linkedin={readinessExpertLinkedin}
+        colorScheme="dark"
+        class="readinessExpert"
+      />
+      <div class="readinessContent">
+        <TextBlock
+          headingLevel="h2"
+          headingId="readiness-heading"
+          headingSize="clamp(1.75rem, 4vw, 2.5rem)"
+          bodySize="clamp(1rem, 2.5vw, 1.25rem)"
+          colorScheme="dark"
+          bodyMaxWidth="100%"
+          bodyLineHeight="1.27"
+          spacing="1.5rem"
+        >
+          <Fragment slot="heading">{readinessHeading}</Fragment>
+          <p>{readinessBody}</p>
+        </TextBlock>
+        <ul
+          class="readinessChecklist"
+          role="list"
+          style="--color-success: white; --color-on-dark: var(--color-surface-warm-dark); color: white; --check-border: 2.5px solid var(--white-30);"
+        >
+          {
+            readinessChecks.map((item) => (
+              <CheckListItem class="readinessCheckItem">{item}</CheckListItem>
+            ))
+          }
+        </ul>
+        <ButtonLink href={readinessCtaHref} variant="primary">{readinessCta}</ButtonLink>
+      </div>
+    </article>
+
+    <SectionIntro headingId="tech-heading" align="center" descriptionMaxWidth="42rem">
+      <Fragment slot="heading">{techHeading}</Fragment>
+      <Fragment slot="description">{techBody}</Fragment>
+    </SectionIntro>
+
+    <div class="tech-cards">
+      {
+        platforms.map((platform, index) => (
+          <TechCard
+            id={`techStack-${slugify(platform.name)}`}
+            expert={platform.expert}
+            role={platform.role}
+            name={platform.name}
+            body={platform.body}
+            features={platform.features}
+            availableConsultation={availableConsultation}
+            contactExpert={contactExpert}
+            contactExpertHref={contactExpertHref}
+            email={platform.email}
+            linkedin={platform.linkedin}
+            image={platform.image}
+            reversed={index % 2 === 1}
+          />
+        ))
+      }
+    </div>
+  </SectionContainer>
+</Section>
+
+<style>
+  .readinessCard {
+    background-color: var(--color-surface-warm-dark);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    max-inline-size: 100%;
+    margin-inline: auto;
+    margin-block-end: 4rem;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .readinessCard {
+      grid-template-columns: auto 1fr;
+      padding: 2.5rem;
+      gap: 2.5rem;
+      min-block-size: 488px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .readinessCard {
+      padding: 3rem 3.5rem;
+      gap: 3rem;
+    }
+  }
+
+  .readinessExpert {
+    justify-content: center;
+  }
+
+  .readinessCard :global(.ep-photo-wrap) {
+    inline-size: clamp(12rem, 50vw, 19.875rem);
+    block-size: clamp(12rem, 50vw, 19.875rem);
+  }
+
+  .readinessContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .readinessContent :global(.text-block-heading) {
+    max-inline-size: 30rem;
+  }
+
+  .readinessContent :global(.text-block-body) {
+    max-inline-size: 100%;
+  }
+
+  .readinessContent :global(.text-block-body p) {
+    font-weight: 500;
+  }
+
+  .readinessChecklist {
+    list-style: none;
+    padding: 0;
+    margin: 2.5rem 0 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .readinessCheckItem {
+    font-size: var(--font-size-sub);
+    line-height: 1.4;
+    align-items: center;
+  }
+
+  .readinessContent :global(.btn-link) {
+    align-self: flex-start;
+    margin-block-start: 0.5rem;
+  }
+
+  .tech-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+</style>

@@ -1,0 +1,74 @@
+---
+import Icon from '../Icon/Icon.astro';
+
+interface Props {
+  author: string;
+  date?: string;
+  avatarIcon?: 'user';
+  colorScheme?: 'light' | 'dark';
+  class?: string;
+}
+
+const { author, date, avatarIcon = 'user', colorScheme = 'dark', class: className } = Astro.props;
+---
+
+<div class:list={['author-meta', `author-meta--${colorScheme}`, className]}>
+  <div class="author-meta-avatar" aria-hidden="true">
+    <Icon name={avatarIcon} size={14} strokeWidth={2} />
+  </div>
+  <span class="author-meta-name">{author}</span>
+  {date && <span class="author-meta-date">{date}</span>}
+</div>
+
+<style>
+  .author-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .author-meta-avatar {
+    inline-size: 2rem;
+    block-size: 2rem;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Dark scheme */
+  .author-meta--dark .author-meta-avatar {
+    background-color: var(--white-25);
+    color: var(--color-on-dark);
+  }
+
+  .author-meta--dark .author-meta-name {
+    font-size: var(--font-size-body-sm);
+    font-weight: 500;
+    color: var(--color-on-dark);
+  }
+
+  .author-meta--dark .author-meta-date {
+    font-size: var(--font-size-body-sm);
+    color: var(--color-on-dark-muted);
+    margin-inline-start: auto;
+  }
+
+  /* Light scheme */
+  .author-meta--light .author-meta-avatar {
+    background-color: var(--color-surface-muted);
+    color: var(--color-muted-foreground);
+  }
+
+  .author-meta--light .author-meta-name {
+    font-size: var(--font-size-body-sm);
+    font-weight: 500;
+    color: var(--color-foreground);
+  }
+
+  .author-meta--light .author-meta-date {
+    font-size: var(--font-size-body-sm);
+    color: var(--color-muted-foreground);
+    margin-inline-start: auto;
+  }
+</style>

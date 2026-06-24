@@ -1,0 +1,14 @@
+{
+  "name": "@bool/scripts",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate:theme": "tsx ../../tooling/scripts/generate-theme-css.ts"
+  },
+  "dependencies": {
+    "@bool/shared": "workspace:*",
+    "playwright": "catalog:",
+    "tsx": "catalog:"
+  }
+}

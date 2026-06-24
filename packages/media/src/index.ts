@@ -1,0 +1,11 @@
+export const MEDIA_BASE = '/media';
+
+export const FONT_FACES = `
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/inter-variable.woff2') format('woff2');
+}
+`.trim();

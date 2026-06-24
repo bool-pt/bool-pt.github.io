@@ -1,0 +1,60 @@
+---
+import peopleTeamFallback from '@bool/media/images/backgrounds/people-team.png';
+import { ROUTES } from '@bool/shared';
+import ImageTextBanner from '../../compositions/ImageTextBanner/ImageTextBanner.astro';
+import TextBlockWithActions from '../../compositions/TextBlockWithActions/TextBlockWithActions.astro';
+import ActionRow from '../../primitives/ActionRow/ActionRow.astro';
+import ButtonLink from '../../primitives/ButtonLink/ButtonLink.astro';
+import Section from '../../primitives/Section/Section.astro';
+
+interface Props {
+  imageAlt: string;
+  heading: string;
+  body: string;
+  ctaJoin: string;
+  ctaJoinHref?: string;
+  ctaMeet: string;
+  ctaMeetHref?: string;
+  image?: ImageMetadata;
+  backgroundImage?: ImageMetadata;
+}
+
+const {
+  imageAlt,
+  heading,
+  body,
+  ctaJoin,
+  ctaJoinHref = ROUTES.careers,
+  ctaMeet,
+  ctaMeetHref = ROUTES.people,
+  image = peopleTeamFallback,
+  backgroundImage,
+} = Astro.props;
+---
+
+<Section
+  background="var(--color-surface-warm-dark)"
+  aria-labelledby="people-heading"
+  paddingBlock="0"
+  backgroundImage={backgroundImage?.src}
+>
+  <ImageTextBanner image={image} imageAlt={imageAlt} height="396px" contentPadding="0 4rem 0 8rem">
+    <TextBlockWithActions
+      headingId="people-heading"
+      headingSize="var(--font-size-display)"
+      headingWeight="400"
+      bodySize="var(--font-size-lead)"
+      colorScheme="dark"
+      bodyMaxWidth="29rem"
+      spacing="1.25rem"
+      actionsSpacing="2rem"
+    >
+      <Fragment slot="heading" set:html={heading} />
+      <p>{body}</p>
+      <ActionRow slot="actions">
+        <ButtonLink href={ctaJoinHref} variant="primary">{ctaJoin}</ButtonLink>
+        <ButtonLink href={ctaMeetHref} variant="outline">{ctaMeet}</ButtonLink>
+      </ActionRow>
+    </TextBlockWithActions>
+  </ImageTextBanner>
+</Section>

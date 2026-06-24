@@ -1,0 +1,54 @@
+---
+import HoverCard from '../../primitives/HoverCard/HoverCard.astro';
+
+interface Props {
+  imageAspectRatio?: string;
+  hoverEffect?: 'lift' | 'glow' | 'none';
+  colorScheme?: 'light' | 'dark';
+  tag?: 'article' | 'div';
+  class?: string;
+}
+
+const {
+  imageAspectRatio,
+  hoverEffect = 'lift',
+  colorScheme = 'light',
+  tag = 'article',
+  class: className,
+} = Astro.props;
+
+const hasImage = Astro.slots.has('image');
+const imageStyle = imageAspectRatio ? `aspect-ratio: ${imageAspectRatio}` : undefined;
+---
+
+<HoverCard
+  hoverEffect={hoverEffect}
+  colorScheme={colorScheme}
+  tag={tag}
+  class:list={['content-card', className]}
+>
+  {
+    hasImage && (
+      <div class="content-card-image" style={imageStyle}>
+        <slot name="image" />
+      </div>
+    )
+  }
+  <div class="content-card-body">
+    <slot />
+  </div>
+</HoverCard>
+
+<style>
+  .content-card-image {
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .content-card-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+</style>

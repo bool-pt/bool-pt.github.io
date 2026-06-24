@@ -1,0 +1,54 @@
+---
+import { resolveImage } from '@bool/content';
+import { t, tList, tOptional, isVisible } from '@bool/i18n';
+import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
+import ContactsHeroSection from '@bool/ui/sections/ContactsHeroSection.astro';
+import NewsletterCTASection from '@bool/ui/sections/NewsletterCTASection.astro';
+import {
+  getHeaderLabels,
+  getFooterLabels,
+  getContactFormLabels,
+  getNewsletterLabels,
+} from '../labels';
+
+const bgContactsHero = tOptional('contactsHero.backgroundImage');
+const bgNewsletterCta = tOptional('newsletterCta.backgroundImage');
+
+const showContactsHero = isVisible('contactsHero.visible');
+const showNewsletterCta = isVisible('newsletterCta.visible');
+---
+
+<BaseLayout
+  title={t('pageMeta.contacts.title')}
+  description={t('pageMeta.contacts.description')}
+  headerLabels={getHeaderLabels()}
+  footerLabels={getFooterLabels()}
+>
+  {
+    showContactsHero && (
+      <div id="contactsHero" class="section-anchor">
+        <ContactsHeroSection
+          heading={t('contactsHero.heading')}
+          body={t('contactForm.body')}
+          addressLabel={t('contactForm.addressLabel')}
+          addressLines={tList('contactForm.addressLines')}
+          contactEmail={t('company.email')}
+          formLabels={getContactFormLabels()}
+          backgroundImage={bgContactsHero ? resolveImage(bgContactsHero) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showNewsletterCta && (
+      <div id="newsletterCta" class="section-anchor">
+        <NewsletterCTASection
+          heading={t('newsletterCta.heading')}
+          body={t('newsletterCta.body')}
+          newsletterLabels={getNewsletterLabels()}
+          backgroundImage={bgNewsletterCta ? resolveImage(bgNewsletterCta) : undefined}
+        />
+      </div>
+    )
+  }
+</BaseLayout>

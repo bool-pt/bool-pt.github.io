@@ -1,0 +1,142 @@
+---
+import { Image } from 'astro:assets';
+import newsletterBg from '@bool/media/images/backgrounds/newsletter-bg.png';
+import BoolLettersOverlay from '../../compositions/BoolLettersOverlay/BoolLettersOverlay.astro';
+import NewsletterForm from '../../compositions/NewsletterForm/NewsletterForm';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+import TextBlock from '../../primitives/TextBlock/TextBlock.astro';
+
+interface NewsletterLabels {
+  subscribed: string;
+  loading: string;
+  ctaBar: string;
+  ctaCta: string;
+  label: string;
+  placeholder: string;
+  nameLabel: string;
+  namePlaceholder: string;
+  nameRequired: string;
+  captchaRequired: string;
+  error: string;
+  consentBefore: string;
+  consentLinkText: string;
+  consentAfter: string;
+  consentRequired: string;
+}
+
+interface Props {
+  heading: string;
+  body: string;
+  newsletterLabels: NewsletterLabels;
+  backgroundImage?: ImageMetadata;
+}
+
+const { heading, body, newsletterLabels, backgroundImage } = Astro.props;
+---
+
+<Section
+  aria-labelledby="newsletter-cta-heading"
+  paddingBlock="4rem"
+  background="var(--color-surface-charcoal)"
+  style={`min-block-size: 427px`}
+>
+  <div class="newsletter-bg">
+    <Image
+      src={backgroundImage ?? newsletterBg}
+      alt=""
+      aria-hidden="true"
+      class="newsletter-bg-img"
+      loading="lazy"
+    />
+  </div>
+  <div class="newsletter-letters-scaler">
+    <div class="newsletter-letters">
+      <BoolLettersOverlay opacity={1} variant="compact" />
+    </div>
+  </div>
+  <SectionContainer>
+    <div class="newsletter-cta-content">
+      <TextBlock
+        headingId="newsletter-cta-heading"
+        headingSize="var(--font-size-display)"
+        headingWeight="400"
+        bodySize="24px"
+        bodyLineHeight="1.2"
+        colorScheme="dark"
+        spacing="1.5rem"
+      >
+        <Fragment slot="heading" set:html={heading} />
+        <p>{body}</p>
+      </TextBlock>
+      <div class="newsletter-cta-form">
+        <NewsletterForm
+          client:visible
+          variant="cta"
+          captchaSiteKey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? ''}
+          labels={newsletterLabels}
+        />
+      </div>
+    </div>
+  </SectionContainer>
+</Section>
+
+<style>
+  .newsletter-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .newsletter-bg-img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    filter: grayscale(1);
+  }
+
+  .newsletter-letters-scaler {
+    display: none;
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-start: 40%;
+    inset-inline-end: 0;
+    block-size: 0;
+    z-index: 1;
+    pointer-events: none;
+    color: var(--color-on-dark);
+    container-type: inline-size;
+  }
+
+  @media (min-width: 768px) {
+    .newsletter-letters-scaler {
+      display: block;
+    }
+  }
+
+  .newsletter-letters {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-end: 0;
+    inline-size: 100cqi;
+    aspect-ratio: 864 / 427;
+    overflow: hidden;
+  }
+
+  .newsletter-cta-content {
+    position: relative;
+    z-index: 2;
+    max-inline-size: 32rem;
+  }
+
+  .newsletter-cta-form {
+    margin-block-start: 2.5rem;
+    max-inline-size: 30rem;
+  }
+
+  .newsletter-cta-content :global(.text-block--dark .text-block-body p) {
+    color: var(--color-on-dark);
+    font-weight: 300;
+  }
+</style>

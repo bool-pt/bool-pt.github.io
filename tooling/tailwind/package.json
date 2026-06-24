@@ -1,0 +1,13 @@
+{
+  "name": "@bool/tailwind-preset",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./preset.ts"
+  },
+  "dependencies": {
+    "@bool/shared": "workspace:*",
+    "tailwindcss": "catalog:"
+  }
+}

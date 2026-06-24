@@ -1,0 +1,201 @@
+---
+import GoogleAnalytics from '@bool/analytics/GoogleAnalytics.astro';
+import { CookieBanner, CONSENT_ENABLED } from '@bool/compliance';
+import { enKeys, t, tOptional } from '@bool/i18n';
+import { organizationJsonLd, websiteJsonLd } from '@bool/seo';
+import SecurityHeaders from '@bool/seo/SecurityHeaders.astro';
+import SEOHead from '@bool/seo/SEOHead.astro';
+import ModalHost from '../../compositions/ModalHost/ModalHost';
+import Footer from '../Footer/Footer.astro';
+import Header from '../Header/Header.astro';
+import '@bool/ui/styles';
+
+interface MobileNavLabels {
+  open: string;
+  title: string;
+  navAria: string;
+}
+
+interface LocaleOption {
+  code: string;
+  flag: string;
+  name: string;
+}
+
+interface LanguageSelectLabels {
+  ariaLabel: string;
+  currentLocale: string;
+  defaultLocale: string;
+  locales: LocaleOption[];
+}
+
+interface HeaderLabels {
+  skipToContent: string;
+  navAria: string;
+  logoAria: string;
+  logo: ImageMetadata;
+  ctaLabel: string;
+  navLinks: { label: string; href: string }[];
+  mobileNavLabels: MobileNavLabels;
+  languageSelectLabels: LanguageSelectLabels;
+}
+
+interface FooterLabels {
+  tagline: string;
+  socialAria: string;
+  socialLabels: Record<string, string>;
+  socialUrls: Record<string, string>;
+  quickLinksHeading: string;
+  legalLinksHeading: string;
+  findUsHeading: string;
+  address: string;
+  copyright: string;
+  companyName: string;
+  companyEmail: string;
+  companyPhone: string;
+  quickLinks: { label: string; href: string }[];
+  legalLinks: { label: string; href: string }[];
+  cookiePreferencesLabel: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalUrl?: string;
+  ogImage?: string;
+  noindex?: boolean;
+  locale?: string;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  headerLabels: HeaderLabels;
+  footerLabels: FooterLabels;
+}
+
+const {
+  title,
+  description,
+  canonicalUrl,
+  ogImage,
+  noindex,
+  locale = 'en',
+  jsonLd,
+  headerLabels,
+  footerLabels,
+} = Astro.props;
+
+const globalJsonLd = [organizationJsonLd(), websiteJsonLd()];
+const pageJsonLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+const allJsonLd = [...globalJsonLd, ...pageJsonLd];
+
+// Content modals (opened from any button via `modal:<key>`). Authored in
+// en.json under `modals.<key>.*`. Resolved here once so a single ModalHost
+// island can render whichever modal a button targets.
+const modalImageModules = import.meta.glob<string>(
+  '../../../../media/images/**/*.{jpg,jpeg,png,webp,avif,svg}',
+  { eager: true, query: '?url', import: 'default' }
+);
+function resolveModalImage(path: string | undefined): string | undefined {
+  if (!path) return undefined;
+  const suffix = `/media/images/${path}`;
+  for (const [key, url] of Object.entries(modalImageModules)) {
+    if (key.endsWith(suffix)) return url;
+  }
+  return undefined;
+}
+const modalKeys = [
+  ...new Set(
+    enKeys
+      .filter((key) => /^modals\.[^.]+\.title$/.test(key))
+      .map((key) => key.split('.')[1] as string)
+  ),
+];
+const modals = modalKeys.map((key) => ({
+  key,
+  title: t(`modals.${key}.title`),
+  body: t(`modals.${key}.body`),
+  image: resolveModalImage(tOptional(`modals.${key}.image`)),
+  ctaLabel: tOptional(`modals.${key}.cta.label`),
+  ctaHref: tOptional(`modals.${key}.cta.href`),
+}));
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <script is:inline>
+      (function () {
+        var theme = localStorage.getItem('theme');
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+    <link rel="icon" type="image/png" href={`${import.meta.env.BASE_URL}favicon.png`} />
+    <link rel="apple-touch-icon" href={`${import.meta.env.BASE_URL}apple-touch-icon.png`} />
+    <link rel="preconnect" href="https://challenges.cloudflare.com" crossorigin />
+    <meta name="generator" content={Astro.generator} />
+    <SecurityHeaders />
+    <SEOHead
+      title={title}
+      description={description}
+      canonicalUrl={canonicalUrl}
+      ogImage={ogImage}
+      noindex={noindex}
+    />
+    {allJsonLd.map((ld) => <script type="application/ld+json" set:html={JSON.stringify(ld)} />)}
+    <GoogleAnalytics />
+    <script>
+      import { initSentry } from '@bool/analytics';
+      import { CONSENT_STORAGE_KEY, CONSENT_ENABLED } from '@bool/compliance';
+
+      const dsn = import.meta.env.PUBLIC_SENTRY_DSN;
+
+      // Gate on CONSENT_ENABLED so Sentry can never load without the consent UI
+      // that lets users grant/withdraw it (GDPR Art. 7(3)).
+      if (CONSENT_ENABLED && dsn) {
+        function hasAnalyticsConsent(): boolean {
+          try {
+            const stored = localStorage.getItem(CONSENT_STORAGE_KEY);
+            if (!stored) return false;
+            const consent = JSON.parse(stored);
+            return consent?.analytics === true;
+          } catch {
+            return false;
+          }
+        }
+
+        if (hasAnalyticsConsent()) {
+          void initSentry(dsn);
+        } else {
+          window.addEventListener('bool:consent-granted', function handler(e: Event) {
+            const detail = (e as CustomEvent).detail;
+            if (detail?.analytics === true) {
+              void initSentry(dsn);
+              window.removeEventListener('bool:consent-granted', handler);
+            }
+          });
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-nav">{headerLabels.skipToContent}</a>
+    <Header
+      navAria={headerLabels.navAria}
+      logoAria={headerLabels.logoAria}
+      logo={headerLabels.logo}
+      ctaLabel={headerLabels.ctaLabel}
+      navLinks={headerLabels.navLinks}
+      mobileNavLabels={headerLabels.mobileNavLabels}
+      languageSelectLabels={headerLabels.languageSelectLabels}
+    />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer labels={footerLabels} />
+    {CONSENT_ENABLED && <CookieBanner client:load />}
+    {modals.length > 0 && <ModalHost client:idle modals={modals} closeLabel={t('common.close')} />}
+  </body>
+</html>

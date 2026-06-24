@@ -1,0 +1,77 @@
+---
+interface Props {
+  minHeight?: string;
+  aspectRatio?: string;
+  gradient?: string;
+  hoverEffect?: 'lift' | 'none';
+  class?: string;
+}
+
+const {
+  minHeight,
+  aspectRatio,
+  gradient = 'linear-gradient(to top, var(--black-85) 0%, var(--black-30) 50%, transparent 100%)',
+  hoverEffect = 'none',
+  class: className,
+} = Astro.props;
+
+const wrapperStyle =
+  [
+    minHeight ? `min-block-size: ${minHeight}` : null,
+    aspectRatio ? `aspect-ratio: ${aspectRatio}` : null,
+  ]
+    .filter(Boolean)
+    .join('; ') || undefined;
+---
+
+<article
+  class:list={['overlay-card', { 'overlay-card--lift': hoverEffect === 'lift' }, className]}
+  style={wrapperStyle}
+>
+  <slot name="image" />
+  <div class="overlay-card-content" style={`background-image: ${gradient}`}>
+    <slot />
+  </div>
+</article>
+
+<style>
+  .overlay-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-xl);
+  }
+
+  .overlay-card-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.5rem;
+    min-block-size: 100%;
+  }
+
+  .overlay-card-content::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    block-size: 55%;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    mask-image: linear-gradient(to top, black 40%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to top, black 40%, transparent 100%);
+    z-index: -1;
+  }
+
+  .overlay-card--lift {
+    transition:
+      transform 200ms,
+      box-shadow 200ms;
+  }
+
+  .overlay-card--lift:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-overlay);
+  }
+</style>

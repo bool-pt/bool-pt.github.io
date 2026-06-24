@@ -1,0 +1,47 @@
+---
+import CheckListItem from '../../primitives/CheckListItem/CheckListItem.astro';
+import PersonCard from '../PersonCard/PersonCard.astro';
+
+interface Props {
+  name: string;
+  role: string;
+  photo: ImageMetadata;
+  checkItems: string[];
+  class?: string;
+}
+
+const { name, role, photo, checkItems, class: className } = Astro.props;
+---
+
+<PersonCard
+  name={name}
+  role={role}
+  photo={photo}
+  photoWidth={319}
+  photoHeight={318}
+  colorScheme="dark"
+  class={className}
+>
+  <ul class="readiness-checklist" role="list">
+    {checkItems.map((item) => <CheckListItem class="readiness-check-item">{item}</CheckListItem>)}
+  </ul>
+</PersonCard>
+
+<style>
+  .readiness-checklist {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    text-align: start;
+  }
+
+  .readiness-check-item {
+    font-size: var(--font-size-body);
+    color: var(--color-on-dark);
+    line-height: 1.4;
+    align-items: center;
+  }
+</style>

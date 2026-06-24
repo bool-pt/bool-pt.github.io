@@ -1,0 +1,102 @@
+---
+import { CONSENT_STORAGE_KEY, CONSENT_ENABLED } from '@bool/compliance';
+import { GA_MEASUREMENT_ID } from './config';
+
+// GA4 via Partytown — runs off main thread.
+// Gated on CONSENT_ENABLED so analytics can never load without the consent UI
+// that lets users grant/withdraw it (GDPR Art. 7(3)).
+// Scripts are injected only after the user grants analytics consent.
+// On page load, checks localStorage for existing consent.
+// If none, listens for the 'bool:consent-granted' event from @bool/compliance.
+// On 'bool:consent-revoked' (analytics withdrawn) it deletes GA cookies and reloads,
+// which tears down the running gtag worker and Sentry for the rest of the session.
+---
+
+{CONSENT_ENABLED && GA_MEASUREMENT_ID && (
+  <Fragment>
+  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+  <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
+  <script
+    define:vars={{ GA_MEASUREMENT_ID, CONSENT_STORAGE_KEY }}
+  >
+    (function () {
+      function hasAnalyticsConsent() {
+        try {
+          var stored = localStorage.getItem(CONSENT_STORAGE_KEY);
+          if (!stored) return false;
+          var consent = JSON.parse(stored);
+          return consent && consent.analytics === true;
+        } catch {
+          return false;
+        }
+      }
+
+      function injectGA() {
+        if (document.querySelector('script[data-ga-injected]')) return;
+
+        var gtagScript = document.createElement('script');
+        gtagScript.async = true;
+        gtagScript.type = 'text/partytown';
+        gtagScript.src =
+          'https://www.googletagmanager.com/gtag/js?id=' + GA_MEASUREMENT_ID;
+        gtagScript.setAttribute('data-ga-injected', 'true');
+        document.head.appendChild(gtagScript);
+
+        var inlineScript = document.createElement('script');
+        inlineScript.type = 'text/partytown';
+        inlineScript.textContent =
+          'window.dataLayer=window.dataLayer||[];' +
+          'function gtag(){dataLayer.push(arguments);}' +
+          "gtag('js',new Date());" +
+          "gtag('config','" +
+          GA_MEASUREMENT_ID +
+          // anonymize_ip keeps analytics within the analytics purpose; the
+          // signals flags prevent GA from enabling advertising/marketing-grade
+          // processing under analytics-only consent.
+          "',{anonymize_ip:true,allow_google_signals:false,allow_ad_personalization_signals:false});";
+        document.head.appendChild(inlineScript);
+      }
+
+      function deleteGACookies() {
+        // GA4 (cookie_domain:'auto') sets _ga/_ga_* on the registrable domain,
+        // e.g. ".bool.pt" even when served from "www.bool.pt". To reliably clear
+        // them we try the host-only form plus every parent-domain suffix (down to
+        // eTLD+1), each with and without a leading dot.
+        var parts = location.hostname.split('.');
+        var domains = [''];
+        for (var i = 0; i < parts.length - 1; i++) {
+          var suffix = parts.slice(i).join('.');
+          domains.push(suffix, '.' + suffix);
+        }
+        document.cookie.split(';').forEach(function (entry) {
+          var name = entry.split('=')[0].trim();
+          if (name === '_ga' || name.indexOf('_ga_') === 0 || name === '_gid' || name === '_gat') {
+            domains.forEach(function (domain) {
+              document.cookie =
+                name + '=; Max-Age=0; path=/' + (domain ? '; domain=' + domain : '');
+            });
+          }
+        });
+      }
+
+      if (hasAnalyticsConsent()) {
+        injectGA();
+      } else {
+        window.addEventListener('bool:consent-granted', function handler(e) {
+          if (e.detail && e.detail.analytics === true) {
+            injectGA();
+            window.removeEventListener('bool:consent-granted', handler);
+          }
+        });
+      }
+
+      window.addEventListener('bool:consent-revoked', function (e) {
+        if (e.detail && e.detail.analytics === true) {
+          deleteGACookies();
+          location.reload();
+        }
+      });
+    })();
+  </script>
+  </Fragment>
+)}

@@ -1,0 +1,289 @@
+---
+import { getEvents, resolveImage, transformEvent } from '@bool/content';
+import { t, tCollection, isValidLocale, defaultLocale, tOptional, isVisible } from '@bool/i18n';
+import type { Locale } from '@bool/i18n';
+import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
+import ContactSection from '@bool/ui/sections/ContactSection.astro';
+import EventsSection from '@bool/ui/sections/EventsSection.astro';
+import HeroSection from '@bool/ui/sections/HeroSection.astro';
+import InsightsSection from '@bool/ui/sections/InsightsSection.astro';
+import NewsletterBarSection from '@bool/ui/sections/NewsletterBarSection.astro';
+import NewsletterCTASection from '@bool/ui/sections/NewsletterCTASection.astro';
+import PeopleSection from '@bool/ui/sections/PeopleSection.astro';
+import PowerAISection from '@bool/ui/sections/PowerAISection.astro';
+import PromiseSection from '@bool/ui/sections/PromiseSection.astro';
+import ServicesSection from '@bool/ui/sections/ServicesSection.astro';
+import TestimonialsSection from '@bool/ui/sections/TestimonialsSection.astro';
+import {
+  getHeaderLabels,
+  getFooterLabels,
+  getContactSectionProps,
+  getNewsletterLabels,
+  getCalendarLabels,
+  getEventScheduleLabels,
+} from '../labels';
+
+const rawLocale = Astro.currentLocale ?? defaultLocale;
+const locale: Locale = isValidLocale(rawLocale) ? rawLocale : 'en';
+
+const events = await getEvents();
+const eventItems = events.map(transformEvent);
+
+const postItems = tCollection('insightsPreview.posts', [
+  'slug',
+  'title',
+  'author',
+  'date',
+  'image',
+]).map((p) => ({
+  slug: p.slug,
+  title: p.title,
+  author: p.author,
+  date: p.date,
+  image: resolveImage(p.image).src,
+}));
+
+const serviceItems = tCollection('serviceCards.items', [
+  'title',
+  'description',
+  'href',
+  'image',
+]).map((s) => ({
+  title: s.title,
+  description: s.description,
+  href: s.href,
+  image: resolveImage(s.image),
+}));
+
+const modelItems = tCollection('ourPromise.items', ['title', 'subtitle', 'iconName', 'href']).map(
+  (m) => ({ title: m.title, subtitle: m.subtitle, icon: m.iconName, href: m.href })
+);
+
+const testimonialItems = tCollection('testimonials.items', [
+  'quote',
+  'company',
+  'designation',
+  'avatar',
+]).map((t) => ({
+  quote: t.quote,
+  company: t.company,
+  designation: t.designation,
+  avatar: resolveImage(t.avatar).src,
+}));
+
+const heroSlides = tCollection(
+  'hero.slides',
+  [
+    'title',
+    'subtitle',
+    'backgroundImage',
+    'cta.primary.label',
+    'cta.primary.href',
+    'cta.secondary.label',
+    'cta.secondary.href',
+  ],
+  locale
+).map((s) => {
+  const slideBg = s.backgroundImage ? resolveImage(s.backgroundImage) : undefined;
+  return {
+    title: s.title,
+    subtitle: s.subtitle,
+    backgroundImage: slideBg
+      ? { src: slideBg.src, width: slideBg.width, height: slideBg.height }
+      : undefined,
+    ctas: {
+      primary: { label: s['cta.primary.label'], href: s['cta.primary.href'] },
+      secondary: { label: s['cta.secondary.label'], href: s['cta.secondary.href'] },
+    },
+  };
+});
+
+const bgNewsletterBar = tOptional('newsletterBar.backgroundImage');
+const bgPowerAi = tOptional('powerAi.backgroundImage');
+const bgServices = tOptional('serviceCards.backgroundImage');
+const bgPromise = tOptional('ourPromise.backgroundImage');
+const bgTestimonials = tOptional('testimonials.backgroundImage');
+const bgPeople = tOptional('teamPreview.backgroundImage');
+const bgInsights = tOptional('insightsPreview.backgroundImage');
+const bgEvents = tOptional('eventsPreview.backgroundImage');
+const bgNewsletterCta = tOptional('newsletterCta.backgroundImage');
+const bgContactSection = tOptional('contactSection.backgroundImage');
+
+const showHero = isVisible('hero.visible', locale);
+const showNewsletterBar = isVisible('newsletterBar.visible', locale);
+const showPowerAi = isVisible('powerAi.visible', locale);
+const showServiceCards = isVisible('serviceCards.visible', locale);
+const showOurPromise = isVisible('ourPromise.visible', locale);
+const showTestimonials = isVisible('testimonials.visible', locale);
+const showTeamPreview = isVisible('teamPreview.visible', locale);
+const showInsightsPreview = isVisible('insightsPreview.visible', locale);
+const showEventsPreview = isVisible('eventsPreview.visible', locale);
+const showContactSection = isVisible('contactSection.visible', locale);
+const showNewsletterCta = isVisible('newsletterCta.visible', locale);
+---
+
+<BaseLayout
+  title={t('pageMeta.home.title', locale)}
+  description={t('pageMeta.home.description', locale)}
+  locale={locale}
+  headerLabels={getHeaderLabels(locale)}
+  footerLabels={getFooterLabels(locale)}
+>
+  {
+    showHero && (
+      <div id="hero" class="section-anchor">
+        <HeroSection
+          ariaLabel={t('hero.aria', locale)}
+          slides={heroSlides}
+          backgroundImage={resolveImage(t('hero.backgroundImage', locale))}
+          carouselAriaLabels={{
+            slideIndicators: t('carousel.slideIndicators.aria', locale),
+            slide: t('carousel.slideN.aria', locale),
+          }}
+        />
+      </div>
+    )
+  }
+  {
+    showNewsletterBar && (
+      <div id="newsletterBar" class="section-anchor">
+        <NewsletterBarSection
+          ariaLabel={t('newsletter.subscription.aria', locale)}
+          heading={t('newsletterBar.heading', locale)}
+          sub={t('newsletterBar.sub', locale)}
+          newsletterLabels={getNewsletterLabels(locale)}
+          backgroundImage={bgNewsletterBar ? resolveImage(bgNewsletterBar) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showPowerAi && (
+      <div id="powerAi" class="section-anchor">
+        <PowerAISection
+          heading={t('powerAi.heading', locale)}
+          body1={t('powerAi.body1', locale)}
+          body2={t('powerAi.body2', locale)}
+          cta={t('powerAi.cta', locale)}
+          ctaHref={t('powerAi.cta.href', locale)}
+          imageAlt={t('powerAi.image.alt', locale)}
+          image={resolveImage(t('powerAi.image', locale))}
+          backgroundImage={bgPowerAi ? resolveImage(bgPowerAi) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showServiceCards && (
+      <div id="serviceCards" class="section-anchor">
+        <ServicesSection
+          heading={t('serviceCards.heading', locale)}
+          services={serviceItems}
+          learnMoreLabel={t('common.learnMore', locale)}
+          backgroundImage={bgServices ? resolveImage(bgServices) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showOurPromise && (
+      <div id="ourPromise" class="section-anchor">
+        <PromiseSection
+          heading={t('ourPromise.heading', locale)}
+          body1={t('ourPromise.body1', locale)}
+          body2={t('ourPromise.body2', locale)}
+          cta={t('ourPromise.cta', locale)}
+          ctaHref={t('ourPromise.cta.href', locale)}
+          models={modelItems}
+          learnMoreLabel={t('common.learnMore', locale)}
+          backgroundImage={bgPromise ? resolveImage(bgPromise) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showTestimonials && (
+      <div id="testimonials" class="section-anchor">
+        <TestimonialsSection
+          heading={t('testimonials.heading', locale)}
+          description={t('testimonials.description', locale)}
+          testimonials={testimonialItems}
+          prevLabel={t('carousel.previous', locale)}
+          nextLabel={t('carousel.next', locale)}
+          backgroundImage={bgTestimonials ? resolveImage(bgTestimonials) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showTeamPreview && (
+      <div id="teamPreview" class="section-anchor">
+        <PeopleSection
+          imageAlt={t('teamPreview.image.alt', locale)}
+          heading={t('teamPreview.heading', locale)}
+          body={t('teamPreview.body', locale)}
+          ctaJoin={t('teamPreview.cta.join', locale)}
+          ctaJoinHref={t('teamPreview.cta.join.href', locale)}
+          ctaMeet={t('teamPreview.cta.meet', locale)}
+          ctaMeetHref={t('teamPreview.cta.meet.href', locale)}
+          image={resolveImage(t('teamPreview.image', locale))}
+          backgroundImage={bgPeople ? resolveImage(bgPeople) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showInsightsPreview && (
+      <div id="insightsPreview" class="section-anchor">
+        <InsightsSection
+          heading={t('insightsPreview.heading', locale)}
+          description={t('insightsPreview.description', locale)}
+          posts={postItems}
+          readMoreLabel={t('common.readMore', locale)}
+          backgroundImage={bgInsights ? resolveImage(bgInsights) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showEventsPreview && (
+      <div id="eventsPreview" class="section-anchor">
+        <EventsSection
+          heading={t('eventsPreview.heading', locale)}
+          description={t('eventsPreview.description', locale)}
+          cardHeading={t('eventsPreview.cardHeading', locale)}
+          cta={t('eventsPreview.cta', locale)}
+          ctaHref={t('eventsPreview.cta.href', locale)}
+          meetCta={t('eventsPreview.meetCta', locale)}
+          meetHref={t('eventsPreview.meetHref', locale)}
+          calendarLabels={getCalendarLabels(locale)}
+          scheduleLabels={getEventScheduleLabels(locale)}
+          events={eventItems}
+          backgroundImage={bgEvents ? resolveImage(bgEvents) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showContactSection && (
+      <div id="contactSection" class="section-anchor">
+        <ContactSection
+          {...getContactSectionProps(locale)}
+          backgroundImage={bgContactSection ? resolveImage(bgContactSection) : undefined}
+        />
+      </div>
+    )
+  }
+  {
+    showNewsletterCta && (
+      <div id="newsletterCta" class="section-anchor">
+        <NewsletterCTASection
+          heading={t('newsletterCta.heading', locale)}
+          body={t('newsletterCta.body', locale)}
+          newsletterLabels={getNewsletterLabels(locale)}
+          backgroundImage={bgNewsletterCta ? resolveImage(bgNewsletterCta) : undefined}
+        />
+      </div>
+    )
+  }
+</BaseLayout>

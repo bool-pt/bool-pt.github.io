@@ -1,0 +1,59 @@
+---
+interface Props {
+  background?: string;
+  backgroundImage?: string;
+  paddingBlock?: string;
+  class?: string;
+  id?: string;
+  'aria-labelledby'?: string;
+  'aria-label'?: string;
+  style?: string; // CSS custom property injection only (e.g., --bg: url(...))
+  contentVisibility?: boolean;
+}
+
+const {
+  background,
+  backgroundImage,
+  paddingBlock,
+  class: className,
+  id,
+  'aria-labelledby': ariaLabelledby,
+  'aria-label': ariaLabel,
+  style,
+  contentVisibility = true,
+} = Astro.props;
+
+const sectionStyle =
+  [
+    background ? `background-color: ${background}` : null,
+    backgroundImage
+      ? `background-image: url("${backgroundImage}"); background-size: cover; background-position: center; background-repeat: no-repeat`
+      : null,
+    paddingBlock ? `padding-block: ${paddingBlock}` : null,
+    style,
+  ]
+    .filter(Boolean)
+    .join('; ') || undefined;
+---
+
+<section
+  class:list={['section', { 'section--no-cv': !contentVisibility }, className]}
+  id={id}
+  aria-labelledby={ariaLabelledby}
+  aria-label={ariaLabel}
+  style={sectionStyle}
+>
+  <slot />
+</section>
+
+<style>
+  .section {
+    position: relative;
+    padding-block: 5rem;
+    content-visibility: auto;
+  }
+
+  .section--no-cv {
+    content-visibility: visible;
+  }
+</style>

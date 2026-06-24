@@ -1,0 +1,17 @@
+{
+  "name": "@bool/e2e",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "e2e": "playwright test --config playwright.config.ts",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "catalog:",
+    "@bool/i18n": "workspace:*",
+    "@bool/shared": "workspace:*",
+    "@playwright/test": "catalog:",
+    "playwright": "catalog:"
+  }
+}

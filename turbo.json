@@ -1,0 +1,37 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": [
+    "tooling/vite/src/**",
+    "tooling/vitest/**",
+    "packages/media/images/**",
+    "packages/i18n/src/locales/**"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "*.ts", "package.json", "tsconfig.json", "astro.config.*"],
+      "outputs": ["dist/**", ".astro/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {
+      "dependsOn": [],
+      "inputs": ["src/**", "package.json", "tsconfig.json"]
+    },
+    "typecheck": {
+      "dependsOn": [],
+      "inputs": ["src/**", "package.json", "tsconfig.json"]
+    },
+    "test": {
+      "dependsOn": [],
+      "inputs": ["src/**", "tests/**", "*.config.*"],
+      "outputs": ["coverage/**"]
+    },
+    "deploy": {
+      "dependsOn": ["^build"],
+      "cache": false
+    }
+  }
+}

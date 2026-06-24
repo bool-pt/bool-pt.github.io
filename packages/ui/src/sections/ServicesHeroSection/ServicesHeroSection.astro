@@ -1,0 +1,126 @@
+---
+import { Image } from 'astro:assets';
+import heroBgFallback from '@bool/media/images/backgrounds/home-hero-01.png';
+import BoolLettersOverlay from '../../compositions/BoolLettersOverlay/BoolLettersOverlay.astro';
+import DarkPageHero from '../../compositions/DarkPageHero/DarkPageHero.astro';
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+
+interface Props {
+  heading: string;
+  body1: string;
+  body2: string;
+  backgroundImage?: ImageMetadata;
+}
+
+const { heading, body1, body2, backgroundImage = heroBgFallback } = Astro.props;
+---
+
+<DarkPageHero
+  minBlockSize="559px"
+  paddingBlock="10rem 5rem"
+  aria-labelledby="services-hero-heading"
+>
+  <div class="heroBg">
+    <Image src={backgroundImage} alt="" aria-hidden="true" class="heroBgImg" loading="eager" />
+  </div>
+
+  <div class="heroLettersScaler">
+    <div class="heroLettersWrap">
+      <BoolLettersOverlay />
+    </div>
+  </div>
+
+  <SectionContainer>
+    <div class="heroContentWrap">
+      <SectionIntro
+        headingId="services-hero-heading"
+        headingSize="var(--font-size-hero)"
+        headingWeight="300"
+        colorScheme="dark"
+        headingLevel="h1"
+        align="start"
+        class="heroText"
+      >
+        <Fragment slot="heading" set:html={heading} />
+      </SectionIntro>
+      <div class="heroBody">
+        <p>{body1}</p>
+        <p>{body2}</p>
+      </div>
+    </div>
+  </SectionContainer>
+</DarkPageHero>
+
+<style>
+  .heroBg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .heroBgImg {
+    --hero-bg-opacity: 0.7;
+    --hero-bg-blur: 2px;
+
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    filter: grayscale(1) blur(var(--hero-bg-blur));
+    opacity: var(--hero-bg-opacity);
+  }
+
+  .heroLettersScaler {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+    block-size: 0;
+    z-index: 0;
+    pointer-events: none;
+    color: var(--color-on-dark);
+    opacity: 0.7;
+    container-type: inline-size;
+  }
+
+  .heroLettersWrap {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-end: 0;
+    inline-size: 100cqi;
+    aspect-ratio: 1440 / 518;
+    overflow: visible;
+    filter: blur(1.5px);
+  }
+
+  .heroContentWrap {
+    position: relative;
+    z-index: 2;
+  }
+
+  .heroContentWrap :global(.heroText) {
+    position: relative;
+    z-index: 1;
+    margin-block-end: 0;
+  }
+
+  .heroContentWrap :global(.heroText .section-intro-heading) {
+    margin-block-end: 2rem;
+  }
+
+  .heroBody {
+    max-inline-size: 1008px;
+  }
+
+  .heroBody p {
+    font-size: var(--font-size-sub);
+    font-weight: 400;
+    line-height: 1.3;
+    color: var(--color-on-dark);
+    margin: 0 0 1.5rem;
+  }
+
+  .heroBody p:last-child {
+    margin-block-end: 0;
+  }
+</style>

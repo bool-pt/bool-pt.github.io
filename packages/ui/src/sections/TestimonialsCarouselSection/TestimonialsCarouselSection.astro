@@ -1,0 +1,65 @@
+---
+import portraitPlaceholder from '@bool/media/images/portraits/portrait.png';
+import PortfolioTestimonialsCarousel from '../../compositions/PortfolioTestimonialsCarousel/PortfolioTestimonialsCarousel';
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+
+interface TestimonialItem {
+  quote: string;
+  company: string;
+  designation: string;
+  avatar?: string;
+}
+
+interface Props {
+  tag: string;
+  heading: string;
+  body: string;
+  testimonials: TestimonialItem[];
+  carouselAriaLabels: { prev: string; next: string };
+  backgroundImage?: ImageMetadata;
+}
+
+const { tag, heading, body, testimonials, carouselAriaLabels, backgroundImage } = Astro.props;
+
+const resolvedTestimonials = testimonials.map((item) => ({
+  ...item,
+  avatar: item.avatar ?? portraitPlaceholder.src,
+}));
+---
+
+<Section
+  background="var(--black-15)"
+  aria-labelledby="testimonials-carousel-heading"
+  class="testimonials-section"
+  backgroundImage={backgroundImage?.src}
+>
+  <SectionContainer>
+    <SectionIntro
+      headingId="testimonials-carousel-heading"
+      colorScheme="light"
+      align="start"
+      marginBlockEnd="1.5rem"
+      class="testimonials-intro"
+    >
+      <SectionTag slot="tag" tagColor="primary">{tag}</SectionTag>
+      <Fragment slot="heading">{heading}</Fragment>
+      <Fragment slot="description">{body}</Fragment>
+    </SectionIntro>
+
+    <PortfolioTestimonialsCarousel
+      client:visible
+      testimonials={resolvedTestimonials}
+      ariaLabels={carouselAriaLabels}
+    />
+  </SectionContainer>
+</Section>
+
+<style>
+  .testimonials-section {
+    block-size: 652px;
+    overflow: hidden;
+  }
+</style>

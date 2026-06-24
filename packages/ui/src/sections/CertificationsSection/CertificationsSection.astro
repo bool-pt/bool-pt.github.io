@@ -1,0 +1,166 @@
+---
+import { Image } from 'astro:assets';
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+
+interface CertificationItem {
+  name: string;
+  count: string;
+  label: string;
+  logo?: ImageMetadata | null;
+}
+
+interface Props {
+  tag: string;
+  heading: string;
+  body: string;
+  certifications: CertificationItem[];
+  backgroundImage?: ImageMetadata;
+}
+
+const { tag, heading, body, certifications, backgroundImage } = Astro.props;
+---
+
+<Section
+  background="var(--color-surface-warm-dark)"
+  aria-labelledby="certifications-heading"
+  class="certifications-section"
+  backgroundImage={backgroundImage?.src}
+>
+  <SectionContainer>
+    <SectionIntro
+      headingId="certifications-heading"
+      colorScheme="dark"
+      align="start"
+      descriptionMaxWidth="60rem"
+      marginBlockEnd="2.5rem"
+    >
+      <SectionTag slot="tag" tagColor="primary">{tag}</SectionTag>
+      <Fragment slot="heading">{heading}</Fragment>
+      <Fragment slot="description">{body}</Fragment>
+    </SectionIntro>
+
+    <div class="cert-grid">
+      {
+        certifications.map((cert) => (
+          <div class="cert-card">
+            <div class="cert-card-top">
+              <div class="cert-icon">
+                {cert.logo ? (
+                  <Image
+                    src={cert.logo}
+                    alt={cert.name}
+                    width={70}
+                    height={70}
+                    class="cert-logo"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div class="cert-icon-spacer" />
+                )}
+              </div>
+              <p class="cert-name">{cert.name}</p>
+            </div>
+            <div class="cert-card-bottom">
+              <p class="cert-count">{cert.count}</p>
+              <p class="cert-label">{cert.label}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </SectionContainer>
+</Section>
+
+<style>
+  .cert-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .cert-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .cert-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .cert-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2rem;
+    border: 1px solid var(--white-15);
+    border-radius: 0.75rem;
+    background-color: var(--white-6);
+    text-align: center;
+    min-block-size: 280px;
+  }
+
+  .cert-card-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .cert-icon {
+    block-size: 70px;
+    inline-size: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cert-logo {
+    inline-size: 70px;
+    block-size: 70px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+  }
+
+  .cert-icon-spacer {
+    inline-size: 70px;
+    block-size: 70px;
+  }
+
+  .cert-name {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-on-dark);
+    margin: 0;
+  }
+
+  .cert-card-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .cert-count {
+    font-family: var(--font-display);
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--color-on-dark);
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  .cert-label {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 20px;
+    color: var(--color-on-dark);
+    margin: 0;
+  }
+</style>

@@ -1,0 +1,158 @@
+---
+import { Image } from 'astro:assets';
+import cultureImg1 from '@bool/media/images/gallery/gallery-01.png';
+import cultureImg2 from '@bool/media/images/gallery/gallery-03.jpg';
+import cultureImg3 from '@bool/media/images/gallery/gallery-04.jpg';
+import cultureImg4 from '@bool/media/images/gallery/gallery-05.jpg';
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+
+interface Props {
+  tag: string;
+  heading: string;
+  body: string;
+  cards: Array<{ label: string; title: string; body: string; image?: ImageMetadata }>;
+  backgroundImage?: ImageMetadata;
+}
+
+const { tag, heading, body, cards, backgroundImage } = Astro.props;
+
+const fallbackImages = [cultureImg1, cultureImg2, cultureImg3, cultureImg4];
+---
+
+<Section
+  background="var(--color-surface-warm-dark)"
+  backgroundImage={backgroundImage?.src}
+  aria-labelledby="beyond-sprint-heading"
+>
+  <SectionContainer>
+    <SectionIntro
+      headingId="beyond-sprint-heading"
+      colorScheme="dark"
+      align="start"
+      headingSize="58px"
+      bodySize="22px"
+    >
+      <SectionTag slot="tag" tagColor="primary">{tag}</SectionTag>
+      <Fragment slot="heading">{heading}</Fragment>
+      <Fragment slot="description">{body}</Fragment>
+    </SectionIntro>
+
+    <div class="beyond-grid">
+      {
+        cards.map((card, i) => (
+          <div class:list={['beyond-row', i % 2 !== 0 && 'beyond-row--reversed']}>
+            <div class="beyond-image">
+              <Image
+                src={card.image ?? (fallbackImages[i % fallbackImages.length] as ImageMetadata)}
+                alt={card.title}
+                class="culture-img"
+                loading="lazy"
+              />
+            </div>
+            <div class="beyond-text">
+              <span class="culture-card-label">{card.label}</span>
+              <h3 class="culture-card-title">{card.title}</h3>
+              <p class="culture-card-body">{card.body}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </SectionContainer>
+</Section>
+
+<style>
+  .beyond-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .beyond-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  @media (min-width: 900px) {
+    .beyond-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      align-items: stretch;
+    }
+
+    .beyond-row--reversed .beyond-image {
+      order: 2;
+    }
+
+    .beyond-row--reversed .beyond-text {
+      order: 1;
+    }
+
+    .beyond-row .beyond-text {
+      border-inline-start: none;
+    }
+
+    .beyond-row--reversed .beyond-text {
+      border-inline-start: 2px dashed var(--white-50);
+      border-inline-end: none;
+    }
+  }
+
+  .beyond-image {
+    border-radius: 8px;
+    overflow: hidden;
+    aspect-ratio: 608 / 222;
+    flex-shrink: 0;
+  }
+
+  .culture-img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .beyond-text {
+    border: 2px dashed var(--white-50);
+    border-radius: 8px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    flex-shrink: 0;
+  }
+
+  .culture-card-label {
+    display: block;
+    font-size: var(--font-size-caption);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin-block-end: 0.75rem;
+  }
+
+  .culture-card-title {
+    font-family: var(--font-display);
+    font-size: var(--font-size-lead);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-on-dark);
+    margin: 0 0 0.5rem;
+  }
+
+  .culture-card-body {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--color-on-dark-muted);
+    margin: 0;
+  }
+</style>

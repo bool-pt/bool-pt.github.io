@@ -1,0 +1,60 @@
+---
+import ButtonLink from '../../primitives/ButtonLink/ButtonLink.astro';
+import CardTitle from '../../primitives/CardTitle/CardTitle.astro';
+import ImagePlaceholder from '../../primitives/ImagePlaceholder/ImagePlaceholder.astro';
+import ContentCard from '../ContentCard/ContentCard.astro';
+import MetricsStrip from '../MetricsStrip/MetricsStrip.astro';
+import TagGroup from '../TagGroup/TagGroup.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  client: string;
+  tags: string[];
+  image: string;
+  metrics?: Array<{ value: string; label: string }>;
+  ctaLabel: string;
+  class?: string;
+}
+
+const { title, client, tags, metrics, ctaLabel, class: className } = Astro.props;
+---
+
+<ContentCard
+  imageAspectRatio="480 / 297"
+  hoverEffect="glow"
+  class:list={['case-study-card', className]}
+>
+  <ImagePlaceholder label={client} slot="image" />
+  <CardTitle class="case-study-card-title">{title}</CardTitle>
+  {
+    metrics && metrics.length > 0 && (
+      <MetricsStrip metrics={metrics} class="case-study-card-metrics" />
+    )
+  }
+  <TagGroup tags={tags} variant="ghost" colorScheme="primary" class="case-study-card-tags" />
+  <ButtonLink href="#" variant="outline" class="case-study-card-cta">{ctaLabel}</ButtonLink>
+</ContentCard>
+
+<style>
+  .case-study-card-title {
+    margin-block-end: 0.625rem;
+  }
+
+  .case-study-card-metrics {
+    margin-block-end: 1rem;
+  }
+
+  .case-study-card-tags {
+    margin-block-end: 1.25rem;
+    flex: 1;
+    align-content: flex-end;
+  }
+
+  .case-study-card-cta {
+    align-self: flex-start;
+    font-size: var(--font-size-body-sm);
+    padding-inline: 1.25rem;
+    padding-block: 0.5rem;
+  }
+</style>

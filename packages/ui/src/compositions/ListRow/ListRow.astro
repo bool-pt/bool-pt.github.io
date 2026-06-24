@@ -1,0 +1,79 @@
+---
+interface Props {
+  colorScheme?: 'light' | 'dark';
+  class?: string;
+}
+
+const { colorScheme = 'dark', class: className } = Astro.props;
+---
+
+<article class:list={['list-row', `list-row--${colorScheme}`, className]}>
+  <div class="list-row-leading">
+    <slot name="leading" />
+  </div>
+  <div class="list-row-content">
+    <slot name="content" />
+  </div>
+  <div class="list-row-trailing">
+    <slot name="trailing" />
+  </div>
+</article>
+
+<style>
+  .list-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding-block: 2.25rem;
+    border-block-start: 1px solid var(--color-border);
+    transition: background-color 150ms;
+  }
+
+  .list-row--dark {
+    border-block-start-color: var(--color-border-on-dark);
+  }
+
+  .list-row--dark:hover {
+    background-color: var(--white-2);
+  }
+
+  .list-row--light:hover {
+    background-color: var(--black-2);
+  }
+
+  .list-row:last-child {
+    border-block-end: 1px solid var(--color-border);
+  }
+
+  .list-row--dark:last-child {
+    border-block-end-color: var(--color-border-on-dark);
+  }
+
+  @media (min-width: 768px) {
+    .list-row {
+      grid-template-columns: 140px 1fr auto;
+      gap: 2.5rem;
+      align-items: start;
+      padding-inline: 1rem;
+    }
+  }
+
+  .list-row-leading {
+    display: flex;
+    align-items: flex-start;
+    padding-block-start: 0.25rem;
+  }
+
+  .list-row-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .list-row-trailing {
+    display: flex;
+    align-items: flex-start;
+    padding-block-start: 0.25rem;
+    flex-shrink: 0;
+  }
+</style>

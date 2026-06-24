@@ -1,0 +1,69 @@
+---
+interface Props {
+  backgroundImage?: string;
+  gradientOverlay?: string;
+  minBlockSize?: string;
+  paddingBlock?: string;
+  align?: 'start' | 'center';
+  'aria-labelledby'?: string;
+  'aria-label'?: string;
+  class?: string;
+}
+
+const {
+  backgroundImage,
+  gradientOverlay = 'var(--overlay-image), var(--overlay-image)',
+  minBlockSize = 'clamp(32rem, 60vh, 60rem)',
+  paddingBlock = '6rem 5rem',
+  align = 'start',
+  'aria-labelledby': ariaLabelledby,
+  'aria-label': ariaLabel,
+  class: className,
+} = Astro.props;
+
+const style = [
+  `--hero-min-block-size: ${minBlockSize}`,
+  `--hero-padding-block: ${paddingBlock}`,
+  backgroundImage
+    ? `background-image: linear-gradient(${gradientOverlay}), url(${backgroundImage})`
+    : null,
+]
+  .filter(Boolean)
+  .join('; ');
+---
+
+<section
+  class:list={['dark-page-hero', `dark-page-hero--${align}`, className]}
+  aria-labelledby={ariaLabelledby}
+  aria-label={ariaLabel}
+  style={style}
+>
+  <slot />
+</section>
+
+<style>
+  .dark-page-hero {
+    position: relative;
+    background-color: var(--color-surface-dark);
+    background-size: cover;
+    background-position: center;
+    padding-block: var(--hero-padding-block);
+    min-block-size: 100dvh;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .dark-page-hero {
+      min-block-size: var(--hero-min-block-size);
+    }
+  }
+
+  .dark-page-hero--start {
+    display: block;
+  }
+
+  .dark-page-hero--center {
+    display: flex;
+    align-items: center;
+  }
+</style>

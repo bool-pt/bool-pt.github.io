@@ -1,0 +1,95 @@
+---
+import { Image } from 'astro:assets';
+import heroBgFallback from '@bool/media/images/backgrounds/hero-background.jpg';
+import BoolLettersOverlay from '../../compositions/BoolLettersOverlay/BoolLettersOverlay.astro';
+import HeroCarousel from './HeroCarousel';
+
+interface Props {
+  ariaLabel: string;
+  slides: Array<{
+    title: string;
+    subtitle: string;
+    backgroundImage?: { src: string; width: number; height: number };
+    ctas: {
+      primary: { label: string; href: string };
+      secondary: { label: string; href: string };
+    };
+  }>;
+  carouselAriaLabels: { slideIndicators: string; slide: string };
+  backgroundImage?: ImageMetadata;
+}
+
+const { ariaLabel, slides, carouselAriaLabels, backgroundImage = heroBgFallback } = Astro.props;
+---
+
+<section class="hero" aria-label={ariaLabel}>
+  <div class="hero-bg">
+    <Image src={backgroundImage} alt="" aria-hidden="true" class="hero-bg-img" loading="eager" />
+    <div class="hero-overlay" aria-hidden="true"></div>
+  </div>
+
+  <HeroCarousel client:load slides={slides} ariaLabels={carouselAriaLabels} />
+
+  <div class="hero-letters-scaler">
+    <div class="hero-letters-wrap">
+      <BoolLettersOverlay />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-block-size: 100dvh;
+    background-color: var(--color-surface-dark);
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .hero {
+      block-size: 870px;
+      min-block-size: auto;
+    }
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .hero-bg-img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    filter: grayscale(1) blur(1px);
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: var(--overlay-dark);
+  }
+
+  .hero-letters-scaler {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+    block-size: 0;
+    z-index: 1;
+    pointer-events: none;
+    color: var(--color-on-dark);
+    filter: blur(1.5px);
+    container-type: inline-size;
+  }
+
+  .hero-letters-wrap {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-end: 0;
+    inline-size: 100cqi;
+    aspect-ratio: 1440 / 518;
+    overflow: visible;
+  }
+</style>

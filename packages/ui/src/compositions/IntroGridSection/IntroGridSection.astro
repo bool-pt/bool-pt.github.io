@@ -1,0 +1,99 @@
+---
+import ResponsiveGrid from '../../primitives/ResponsiveGrid/ResponsiveGrid.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+import SectionIntro from '../SectionIntro/SectionIntro.astro';
+
+interface Props {
+  headingId: string;
+  background?: string;
+  backgroundImage?: string;
+  colorScheme?: 'light' | 'dark';
+  introAlign?: 'center' | 'start';
+  introSize?: 'default' | 'lg';
+  headingSize?: string;
+  bodySize?: string;
+  bodyLineHeight?: string;
+  headingLevel?: 'h1' | 'h2' | 'h3';
+  descriptionMaxWidth?: string;
+  introMarginBlockEnd?: string;
+  gridColumns?: 2 | 3 | 4;
+  gridCollapseAt?: 'sm' | 'md';
+  gridGap?: string;
+  gridRole?: string;
+  gridAriaLabel?: string;
+  paddingBlock?: string;
+  contentVisibility?: boolean;
+  id?: string;
+  class?: string;
+}
+
+const {
+  headingId,
+  background,
+  backgroundImage,
+  colorScheme = 'light',
+  introAlign = 'center',
+  introSize = 'default',
+  headingSize,
+  bodySize,
+  bodyLineHeight,
+  headingLevel,
+  descriptionMaxWidth,
+  introMarginBlockEnd,
+  gridColumns = 3,
+  gridCollapseAt = 'sm',
+  gridGap = '1.5rem',
+  gridRole,
+  gridAriaLabel,
+  paddingBlock,
+  contentVisibility,
+  id,
+  class: className,
+} = Astro.props;
+
+const hasBetween = Astro.slots.has('between');
+const hasAction = Astro.slots.has('action');
+---
+
+<Section
+  background={background}
+  backgroundImage={backgroundImage}
+  aria-labelledby={headingId}
+  paddingBlock={paddingBlock}
+  contentVisibility={contentVisibility}
+  id={id}
+  class={className}
+>
+  <SectionContainer>
+    <SectionIntro
+      headingId={headingId}
+      colorScheme={colorScheme}
+      align={introAlign}
+      size={introSize}
+      headingSize={headingSize}
+      bodySize={bodySize}
+      bodyLineHeight={bodyLineHeight}
+      headingLevel={headingLevel}
+      descriptionMaxWidth={descriptionMaxWidth}
+      marginBlockEnd={introMarginBlockEnd}
+    >
+      <slot name="tag" slot="tag" />
+      <slot name="heading" slot="heading" />
+      <slot name="description" slot="description" />
+      {hasAction && <slot name="action" slot="action" />}
+    </SectionIntro>
+
+    {hasBetween && <slot name="between" />}
+
+    <ResponsiveGrid
+      columns={gridColumns}
+      collapseAt={gridCollapseAt}
+      gap={gridGap}
+      role={gridRole}
+      aria-label={gridAriaLabel}
+    >
+      <slot />
+    </ResponsiveGrid>
+  </SectionContainer>
+</Section>

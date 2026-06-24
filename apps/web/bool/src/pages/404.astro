@@ -1,0 +1,23 @@
+---
+import { t } from '@bool/i18n';
+import { ROUTES } from '@bool/shared';
+import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
+import NotFoundSection from '@bool/ui/sections/NotFoundSection.astro';
+import { getHeaderLabels, getFooterLabels } from '../labels';
+---
+
+<BaseLayout
+  title={t('notFound.title')}
+  description={t('notFound.description')}
+  noindex
+  headerLabels={getHeaderLabels()}
+  footerLabels={getFooterLabels()}
+>
+  <NotFoundSection
+    code={t('notFound.heading')}
+    subtitle={t('notFound.subtitle')}
+    message={t('notFound.message')}
+    ctaLabel={t('notFound.cta')}
+    ctaHref={ROUTES.home}
+  />
+</BaseLayout>

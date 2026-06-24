@@ -1,0 +1,178 @@
+---
+import { Image } from 'astro:assets';
+import boolLogo from '@bool/media/images/logos/brand/bool-logo-text.svg';
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+import SectionTag from '../../compositions/SectionTag/SectionTag.astro';
+import Section from '../../primitives/Section/Section.astro';
+import SectionContainer from '../../primitives/SectionContainer/SectionContainer.astro';
+
+const logoModules = import.meta.glob<{ default: ImageMetadata }>(
+  '../../../../media/images/client-logos/*.{png,jpg,jpeg,svg,webp,avif}',
+  { eager: true }
+);
+const folderLogos = Object.values(logoModules).map((m) => m.default);
+
+const placeholderRow = Array.from({ length: 8 }, () => boolLogo);
+
+interface Props {
+  tag: string;
+  heading: string;
+  body: string;
+  /**
+   * Curated logos to display. When omitted/empty, falls back to every image in
+   * the `client-logos` media folder; when that's empty too, a placeholder row.
+   */
+  logos?: ImageMetadata[];
+  backgroundImage?: ImageMetadata;
+}
+
+const { tag, heading, body, logos, backgroundImage } = Astro.props;
+
+const selected = logos && logos.length > 0 ? logos : folderLogos;
+
+// Duplicate the set — animation moves -50% so the seam is invisible
+const row =
+  selected.length > 0 ? [...selected, ...selected] : [...placeholderRow, ...placeholderRow];
+---
+
+<Section
+  background="var(--color-background)"
+  aria-labelledby="client-logos-heading"
+  class="logos-section"
+  paddingBlock="4rem 0"
+  backgroundImage={backgroundImage?.src}
+>
+  <SectionContainer>
+    <SectionIntro
+      headingId="client-logos-heading"
+      colorScheme="light"
+      align="start"
+      descriptionMaxWidth="60rem"
+      class="logos-intro"
+    >
+      <SectionTag slot="tag" tagColor="primary">{tag}</SectionTag>
+      <Fragment slot="heading">{heading}</Fragment>
+      <Fragment slot="description">{body}</Fragment>
+    </SectionIntro>
+  </SectionContainer>
+
+  <div class="logos-rows" aria-hidden="true">
+    <div class="logos-track">
+      <div class="logos-strip logos-strip--ltr">
+        {
+          row.map((logo) => (
+            <div class="logo-cell">
+              <Image
+                src={logo}
+                alt=""
+                width={logo.width}
+                height={logo.height}
+                class="logo-img"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+    <div class="logos-track">
+      <div class="logos-strip logos-strip--rtl">
+        {
+          row.map((logo) => (
+            <div class="logo-cell">
+              <Image
+                src={logo}
+                alt=""
+                width={logo.width}
+                height={logo.height}
+                class="logo-img"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style>
+  :global(.logos-intro .section-intro-heading) {
+    max-inline-size: 38rem;
+  }
+
+  .logos-section {
+    overflow: hidden;
+  }
+
+  .logos-rows {
+    margin-block-start: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-block-end: 4rem;
+  }
+
+  .logos-track {
+    overflow: hidden;
+    inline-size: 100%;
+  }
+
+  .logos-strip {
+    display: flex;
+    gap: 3rem;
+    inline-size: max-content;
+  }
+
+  .logos-strip--ltr {
+    animation: marquee-ltr 140s linear infinite;
+  }
+
+  .logos-strip--rtl {
+    animation: marquee-rtl 170s linear infinite;
+  }
+
+  @keyframes marquee-ltr {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes marquee-rtl {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  .logos-track:hover .logos-strip {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .logos-strip {
+      animation: none;
+    }
+  }
+
+  .logo-cell {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logo-img {
+    block-size: 48px;
+    inline-size: auto;
+    object-fit: contain;
+    user-select: none;
+  }
+</style>

@@ -1,0 +1,21 @@
+---
+import DarkPageHero from '../../compositions/DarkPageHero/DarkPageHero.astro';
+import SectionIntro from '../../compositions/SectionIntro/SectionIntro.astro';
+
+interface Props {
+  headingId: string;
+  ariaLabel: string;
+  heading: string;
+  description: string;
+  backgroundImage?: ImageMetadata;
+}
+
+const { headingId, ariaLabel, heading, description, backgroundImage } = Astro.props;
+---
+
+<DarkPageHero aria-label={ariaLabel} backgroundImage={backgroundImage?.src}>
+  <SectionIntro headingId={headingId} headingLevel="h1" colorScheme="dark">
+    <Fragment slot="heading">{heading}</Fragment>
+    <p>{description}</p>
+  </SectionIntro>
+</DarkPageHero>

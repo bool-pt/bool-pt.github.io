@@ -1,0 +1,31 @@
+---
+import { t, tCollection } from '@bool/i18n';
+import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
+import LegalPageSection from '@bool/ui/sections/LegalPageSection.astro';
+import { getHeaderLabels, getFooterLabels } from '../labels';
+
+const sections = tCollection('privacy.section', ['heading', 'body']);
+---
+
+<BaseLayout
+  title={t('pageMeta.privacy.title')}
+  description={t('pageMeta.privacy.description')}
+  headerLabels={getHeaderLabels()}
+  footerLabels={getFooterLabels()}
+>
+  <LegalPageSection
+    headingId="privacy-heading"
+    ariaLabel={t('privacy.heading')}
+    heading={t('privacy.heading')}
+    subtitle={t('privacy.lastUpdated')}
+  >
+    {
+      sections.map((section) => (
+        <Fragment>
+          <h2>{section.heading}</h2>
+          <Fragment set:html={section.body} />
+        </Fragment>
+      ))
+    }
+  </LegalPageSection>
+</BaseLayout>
