@@ -574,7 +574,7 @@
   "serviceHighlights.items.3.label": "Learn more",
   "serviceHighlights.items.3.title": "Agentic Systems Engineering",
   "serviceHighlights.items.4.href": "modal:ai-adoption-and-governance",
-  "serviceHighlights.items.4.iconName": "grid-plus",
+  "serviceHighlights.items.4.iconName": "shield",
   "serviceHighlights.items.4.label": "Learn more",
   "serviceHighlights.items.4.title": "AI Adoption & Governance",
   "aiPitch.visible": "true",
