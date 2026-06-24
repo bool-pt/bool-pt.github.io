@@ -15,7 +15,7 @@ const gaEnabled = Boolean(process.env.PUBLIC_GA_MEASUREMENT_ID);
 
 export default defineConfig({
   site: SITE_URL,
-  base: '/bool/',
+  base: '/',
   output: 'static',
   integrations: [
     react(),
