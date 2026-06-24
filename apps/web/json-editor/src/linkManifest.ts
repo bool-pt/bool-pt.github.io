@@ -1,6 +1,6 @@
 /**
  * Manifest powering the LinkPicker's cascading dropdowns:
- *   base (/bool) → page → section anchor.
+ *   base (root) → page → section anchor.
  *
  * - The base + page list come from @bool/shared ROUTES so they stay in sync
  *   with the real site routes.
@@ -30,7 +30,7 @@ export interface LinkSection {
 }
 
 export interface LinkPage {
-  /** Full path including base, e.g. "/bool/services". */
+  /** Full site-relative path, e.g. "/services". */
   path: string;
   label: string;
   sections: LinkSection[];

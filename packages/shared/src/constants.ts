@@ -1,5 +1,5 @@
 export const SITE_URL = 'https://bool.pt';
-export const BASE_PATH = '/bool';
+export const BASE_PATH = '';
 export const SITE_NAME = 'Bool';
 
 export const COMPANY = {

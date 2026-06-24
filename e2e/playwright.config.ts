@@ -10,13 +10,13 @@ export default defineConfig({
   workers: process.env.CI ? 4 : undefined,
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:4321/bool/',
+    baseURL: 'http://localhost:4321/',
     trace: 'on-first-retry',
   },
   webServer: {
     command: 'pnpm --filter @bool/web preview',
     cwd: '..',
-    url: 'http://localhost:4321/bool/',
+    url: 'http://localhost:4321/',
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },
