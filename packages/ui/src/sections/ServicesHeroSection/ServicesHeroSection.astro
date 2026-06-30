@@ -22,7 +22,16 @@ const { heading, body1, body2, backgroundImage = heroBgFallback } = Astro.props;
   aria-labelledby="services-hero-heading"
 >
   <div class="heroBg">
-    <Image src={backgroundImage} alt="" aria-hidden="true" class="heroBgImg" loading="eager" />
+    <Image
+      src={backgroundImage}
+      alt=""
+      aria-hidden="true"
+      class="heroBgImg"
+      loading="eager"
+      widths={[640, 960, 1280, 1920, 2560]}
+      sizes="100vw"
+      quality={50}
+    />
   </div>
 
   <div class="heroLettersScaler">
