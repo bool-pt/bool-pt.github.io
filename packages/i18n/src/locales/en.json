@@ -354,6 +354,8 @@
   "footer.findUs": "To find us",
   "footer.address": "Office Lisboa, R. do Centro Cultural 27A, 1700-106 Lisboa",
   "footer.copyright": "Copyright",
+  "footer.signature.image": "signature/COMPETE2030_PB.png",
+  "footer.signature.alt": "Cofinanciado por COMPETE 2030, Portugal 2030 e União Europeia",
   "footer.social.aria": "Social media links",
   "footer.legalLinks.items.1.href": "/privacy",
   "footer.legalLinks.items.1.label": "Privacy Policy",

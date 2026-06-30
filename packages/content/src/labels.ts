@@ -51,6 +51,8 @@ export function getFooterLabels(locale: Locale = 'en') {
     findUsHeading: t('footer.findUs', locale),
     address: t('footer.address', locale),
     copyright: t('footer.copyright', locale),
+    signatureImage: resolveImage(t('footer.signature.image', locale)),
+    signatureAlt: t('footer.signature.alt', locale),
     companyName: t('company.name', locale),
     companyEmail: t('company.email', locale),
     companyPhone: t('company.phone', locale),
