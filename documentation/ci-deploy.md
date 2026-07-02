@@ -31,12 +31,12 @@ All configuration lives in GitHub — no `.env.local` files needed. Configure at
 
 ### Variables (`vars.*`) — non-sensitive, visible in logs
 
-| Variable                    | Used by                | Description                                                              |
-| --------------------------- | ---------------------- | ------------------------------------------------------------------------ |
-| `PUBLIC_API_BASE_URL`       | CI, Deploy, Lighthouse | Form API base URL; paths `/contact`, `/subscribe`, `/event` are appended |
-| `PUBLIC_TURNSTILE_SITE_KEY` | CI, Deploy, Lighthouse | Cloudflare Turnstile site key (public, identifies site)                  |
-| `PUBLIC_GA_MEASUREMENT_ID`  | CI, Deploy, Lighthouse | Google Analytics 4 measurement ID                                        |
-| `PUBLIC_SENTRY_DSN`         | CI, Deploy             | Sentry DSN for error monitoring                                          |
+| Variable                    | Used by                | Description                                                                                                            |
+| --------------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `PUBLIC_API_BASE_URL`       | CI, Deploy, Lighthouse | Form API base URL; paths `/contact`, `/subscribe`, `/event` are appended. Build-required — a CI build throws if unset. |
+| `PUBLIC_TURNSTILE_SITE_KEY` | CI, Deploy, Lighthouse | Cloudflare Turnstile site key (public, identifies site). Build-required — a CI build throws if unset.                  |
+| `PUBLIC_GA_MEASUREMENT_ID`  | CI, Deploy, Lighthouse | Google Analytics 4 measurement ID                                                                                      |
+| `PUBLIC_SENTRY_DSN`         | CI, Deploy             | Sentry DSN for error monitoring                                                                                        |
 
 ### Secrets (`secrets.*`) — encrypted, masked in logs
 
