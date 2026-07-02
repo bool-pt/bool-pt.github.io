@@ -3,7 +3,7 @@ import { CheckCircle } from 'lucide-react';
 import { useCallback, useId, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { trackEvent } from '@bool/analytics';
-import { submitContactForm } from '@bool/api';
+import { ApiError, submitContactForm } from '@bool/api';
 import {
   contactFormSchema,
   contactFormSimpleSchema,
@@ -94,11 +94,19 @@ export default function ContactForm({
         reset();
         setCaptchaToken('');
         captchaRef.current?.reset();
-      } catch {
-        setError('root', { message: labels.error });
+      } catch (err) {
+        // The Turnstile token is single-use and now spent, so always reset the
+        // widget — the next submit runs a fresh challenge. A 403 means the token
+        // failed server-side validation, so surface the captcha label rather
+        // than the generic error.
+        const message =
+          err instanceof ApiError && err.status === 403 ? labels.captchaRequired : labels.error;
+        setError('root', { message });
+        setCaptchaToken('');
+        captchaRef.current?.reset();
       }
     },
-    [captchaSiteKey, captchaToken, layout, labels.error, reset, setError]
+    [captchaSiteKey, captchaToken, layout, labels.captchaRequired, labels.error, reset, setError]
   );
 
   function handleCaptchaVerify(token: string) {
