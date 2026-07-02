@@ -1,10 +1,12 @@
 import { cleanup, render, screen, act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { submitEventSchedule } from '@bool/api';
+import { ApiError, submitEventSchedule } from '@bool/api';
 import EventScheduleModal, { type EventScheduleLabels } from './EventScheduleModal';
 
-vi.mock('@bool/api', () => ({
+// Keep the real ApiError export so the modal's `err instanceof ApiError` check works.
+vi.mock('@bool/api', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
   submitEventSchedule: vi.fn(() => Promise.resolve()),
 }));
 
@@ -39,8 +41,6 @@ const labels: EventScheduleLabels = {
   messagePlaceholder: 'Any additional notes',
   submit: 'Schedule',
   success: 'Your slot has been requested!',
-  required: 'Required',
-  emailInvalid: 'Invalid email',
   captchaRequired: 'Please complete the CAPTCHA.',
   error: 'Something went wrong. Please try again.',
 };
@@ -96,7 +96,8 @@ describe('EventScheduleModal', () => {
     await user.click(screen.getByRole('button', { name: 'Schedule' }));
 
     await waitFor(() => {
-      expect(screen.getAllByText('Required').length).toBeGreaterThan(0);
+      expect(screen.getByText('Name must be at least 2 characters')).toBeInTheDocument();
+      expect(screen.getByText('Message is required')).toBeInTheDocument();
     });
   });
 
@@ -109,7 +110,7 @@ describe('EventScheduleModal', () => {
     await user.click(screen.getByRole('button', { name: 'Schedule' }));
 
     await waitFor(() => {
-      expect(screen.getByText('Invalid email')).toBeInTheDocument();
+      expect(screen.getByText('Invalid email address')).toBeInTheDocument();
     });
   });
 
@@ -139,6 +140,63 @@ describe('EventScheduleModal', () => {
       message: 'Looking forward to it.',
       turnstileToken: '',
     });
+  });
+
+  it('submits successfully without a phone (now optional)', async () => {
+    const user = userEvent.setup();
+    render(<EventScheduleModal labels={labels} captchaSiteKey="" />);
+    openModal('OutSystems NextStep 2026');
+
+    await user.type(screen.getByLabelText('Full Name'), 'Jane Doe');
+    await user.type(screen.getByLabelText('Email'), 'jane@example.com');
+    await user.selectOptions(screen.getByLabelText('Preferred time'), '11:00');
+    await user.type(screen.getByLabelText('Message'), 'Looking forward to it.');
+
+    await user.click(screen.getByRole('button', { name: 'Schedule' }));
+
+    await waitFor(() => {
+      expect(screen.getByText('Your slot has been requested!')).toBeInTheDocument();
+    });
+    expect(submitEventSchedule).toHaveBeenCalledWith(
+      expect.objectContaining({ name: 'Jane Doe', phone: '' })
+    );
+  });
+
+  it('maps a 403 to the captcha message instead of the generic error', async () => {
+    vi.mocked(submitEventSchedule).mockRejectedValueOnce(
+      new ApiError(403, { error: 'CAPTCHA validation failed. Please try again.' })
+    );
+    const user = userEvent.setup();
+    render(<EventScheduleModal labels={labels} captchaSiteKey="" />);
+    openModal('OutSystems NextStep 2026');
+
+    await user.type(screen.getByLabelText('Full Name'), 'Jane Doe');
+    await user.type(screen.getByLabelText('Email'), 'jane@example.com');
+    await user.selectOptions(screen.getByLabelText('Preferred time'), '11:00');
+    await user.type(screen.getByLabelText('Message'), 'Looking forward to it.');
+
+    await user.click(screen.getByRole('button', { name: 'Schedule' }));
+
+    expect(await screen.findByText('Please complete the CAPTCHA.')).toBeInTheDocument();
+    expect(screen.queryByText('Something went wrong. Please try again.')).not.toBeInTheDocument();
+  });
+
+  it('does not submit when opened without an event name', async () => {
+    const user = userEvent.setup();
+    render(<EventScheduleModal labels={labels} captchaSiteKey="" />);
+    act(() => {
+      window.dispatchEvent(new CustomEvent('bool:open-event-schedule', { detail: {} }));
+    });
+
+    await user.type(screen.getByLabelText('Full Name'), 'Jane Doe');
+    await user.type(screen.getByLabelText('Email'), 'jane@example.com');
+    await user.selectOptions(screen.getByLabelText('Preferred time'), '11:00');
+    await user.type(screen.getByLabelText('Message'), 'Looking forward to it.');
+
+    await user.click(screen.getByRole('button', { name: 'Schedule' }));
+
+    expect(await screen.findByText('Something went wrong. Please try again.')).toBeInTheDocument();
+    expect(submitEventSchedule).not.toHaveBeenCalled();
   });
 
   it('closes when the X button is clicked', async () => {
