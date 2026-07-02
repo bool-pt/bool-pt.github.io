@@ -21,21 +21,23 @@ Emitted:
 
 ### CSP directives
 
-| Directive     | Sources                                                                                                                  | Why                                    |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------------------------- |
-| `default-src` | `'self'`                                                                                                                 | deny by default                        |
-| `script-src`  | `'self' 'unsafe-inline' challenges.cloudflare.com googletagmanager.com`                                                  | Astro island hydration, Turnstile, GTM |
-| `style-src`   | `'self' 'unsafe-inline'`                                                                                                 | Tailwind + Astro scoped styles         |
-| `frame-src`   | `'self' challenges.cloudflare.com`                                                                                       | Turnstile challenge iframe             |
-| `worker-src`  | `'self' blob:`                                                                                                           | Partytown GA4 worker                   |
-| `img-src`     | `'self' data: www.google-analytics.com`                                                                                  | inline data URIs, GA pixels            |
-| `connect-src` | `'self' challenges.cloudflare.com *.amazonaws.com www.google-analytics.com analytics.google.com stats.g.doubleclick.net` | form API (AWS), Turnstile, GA          |
-| `font-src`    | `'self'`                                                                                                                 | self-hosted WOFF2 only                 |
-| `object-src`  | `'none'`                                                                                                                 | no plugins                             |
-| `base-uri`    | `'self'`                                                                                                                 | block `<base>` injection               |
-| `form-action` | `'self'`                                                                                                                 | block off-origin native form posts     |
+| Directive     | Sources                                                                                                                               | Why                                    |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
+| `default-src` | `'self'`                                                                                                                              | deny by default                        |
+| `script-src`  | `'self' 'unsafe-inline' challenges.cloudflare.com googletagmanager.com`                                                               | Astro island hydration, Turnstile, GTM |
+| `style-src`   | `'self' 'unsafe-inline'`                                                                                                              | Tailwind + Astro scoped styles         |
+| `frame-src`   | `'self' challenges.cloudflare.com`                                                                                                    | Turnstile challenge iframe             |
+| `worker-src`  | `'self' blob:`                                                                                                                        | Partytown GA4 worker                   |
+| `img-src`     | `'self' data: www.google-analytics.com`                                                                                               | inline data URIs, GA pixels            |
+| `connect-src` | `'self' challenges.cloudflare.com <PUBLIC_API_BASE_URL origin> www.google-analytics.com analytics.google.com stats.g.doubleclick.net` | form API (exact origin), Turnstile, GA |
+| `font-src`    | `'self'`                                                                                                                              | self-hosted WOFF2 only                 |
+| `object-src`  | `'none'`                                                                                                                              | no plugins                             |
+| `base-uri`    | `'self'`                                                                                                                              | block `<base>` injection               |
+| `form-action` | `'self'`                                                                                                                              | block off-origin native form posts     |
 
 `'unsafe-inline'` on `script-src`/`style-src` is required by Astro's hydration and scoped-style model; tightening it would mean a nonce/hash strategy the static build doesn't currently emit. If you add a third-party origin (a new analytics or embed), it must be added to the matching directive or the browser blocks it.
+
+`connect-src` is pinned to the exact form-API origin derived from `PUBLIC_API_BASE_URL` (not a broad `*.amazonaws.com`), so a compromised inline script can only reach the one endpoint the site actually uses. Because the origin is build-time config, `astro.config.ts` throws in CI if `PUBLIC_API_BASE_URL` or `PUBLIC_TURNSTILE_SITE_KEY` is missing — a missing key would otherwise ship a site whose forms silently fail.
 
 `SEOHead.astro` also renders `<meta name="robots" content="noindex, nofollow">` when a page passes `noindex` (used for legal/utility pages).
 

@@ -3,12 +3,18 @@
 // Note: frame-ancestors and X-Frame-Options cannot be enforced via meta tags — browsers
 // require those as HTTP response headers. Framing protection requires a CDN (e.g. Cloudflare)
 // in front of GitHub Pages if it becomes a requirement.
-// The form API (API Gateway + Lambda) is reached over https://*.amazonaws.com (connect-src).
+// The form API (API Gateway + Lambda) is reached over its exact origin, pinned
+// in connect-src from PUBLIC_API_BASE_URL (empty in local dev, where no API call runs).
 // Cloudflare Turnstile loads its script and challenge iframe from challenges.cloudflare.com.
 // The policy itself (incl. conditional GA domains) is built by buildContentSecurityPolicy.
 import { buildContentSecurityPolicy } from './csp';
 
-const csp = buildContentSecurityPolicy(Boolean(import.meta.env.PUBLIC_GA_MEASUREMENT_ID));
+const apiBaseUrl = import.meta.env.PUBLIC_API_BASE_URL;
+const apiOrigin = apiBaseUrl ? new URL(apiBaseUrl).origin : '';
+const csp = buildContentSecurityPolicy(
+  Boolean(import.meta.env.PUBLIC_GA_MEASUREMENT_ID),
+  apiOrigin
+);
 ---
 
 <meta http-equiv="Content-Security-Policy" content={csp} />

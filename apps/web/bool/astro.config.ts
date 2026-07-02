@@ -13,6 +13,22 @@ import { baseViteConfig } from '@bool/vite-config/base';
 // site that loads no analytics. Read from process.env (set in CI) at config time.
 const gaEnabled = Boolean(process.env.PUBLIC_GA_MEASUREMENT_ID);
 
+// Fail the deploy loudly if the public form-config vars are missing. Without
+// them the site builds fine but every form POSTs to an empty URL / with an
+// empty Turnstile token and silently 400/403s in production. A missing GitHub
+// repo variable arrives as an empty string, so check for falsy, not undefined.
+// Only enforced in CI — locally these stay optional so `pnpm dev` works without
+// them (posts from localhost are CORS-blocked by the API anyway).
+if (process.env.CI) {
+  for (const name of ['PUBLIC_API_BASE_URL', 'PUBLIC_TURNSTILE_SITE_KEY'] as const) {
+    if (!process.env[name]) {
+      throw new Error(
+        `Missing required build variable ${name}. Set it in the GitHub repo variables (see documentation/ci-deploy.md).`
+      );
+    }
+  }
+}
+
 export default defineConfig({
   site: SITE_URL,
   base: '/bool/',
