@@ -17,9 +17,12 @@ const gaEnabled = Boolean(process.env.PUBLIC_GA_MEASUREMENT_ID);
 // them the site builds fine but every form POSTs to an empty URL / with an
 // empty Turnstile token and silently 400/403s in production. A missing GitHub
 // repo variable arrives as an empty string, so check for falsy, not undefined.
-// Only enforced in CI — locally these stay optional so `pnpm dev` works without
-// them (posts from localhost are CORS-blocked by the API anyway).
-if (process.env.CI) {
+// Scoped to `astro build` in CI: the config also loads for `astro check`
+// (typecheck) and `astro preview` (e2e serves the pre-built dist), and neither
+// of those is given the vars. Locally the vars stay optional so `pnpm dev`/`pnpm
+// build` work without them (posts from localhost are CORS-blocked anyway).
+const isProductionBuild = process.env.CI && process.argv.includes('build');
+if (isProductionBuild) {
   for (const name of ['PUBLIC_API_BASE_URL', 'PUBLIC_TURNSTILE_SITE_KEY'] as const) {
     if (!process.env[name]) {
       throw new Error(
