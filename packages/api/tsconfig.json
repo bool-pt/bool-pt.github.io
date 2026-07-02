@@ -1,5 +1,12 @@
 {
   "extends": "@bool/tsconfig/library.json",
+  "compilerOptions": {
+    // This package is consumed as raw TS (exports -> ./index.ts), never emitted,
+    // and its barrel imports use .ts extensions. Force noEmit so
+    // allowImportingTsExtensions (from base.json) is valid — otherwise the
+    // library preset's noEmit:false triggers TS5096.
+    "noEmit": true
+  },
   "include": ["src", "index.ts"],
   "exclude": ["dist", "node_modules"]
 }

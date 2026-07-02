@@ -72,7 +72,7 @@ Zod schemas in `@bool/shared` (`src/validation.ts`) validate form input client-s
 | `contactFormSimpleSchema` | `name` 2–100; valid `email`; `message` 10–2000                                                               |
 | `newsletterSchema`        | `name` 2–100; valid `email`                                                                                  |
 
-The `@bool/api` client (`src/client.ts`) sets a 15s timeout via `AbortController`, retries twice with exponential backoff on `429`/`5xx` only, and throws a typed `ApiError` otherwise.
+The `@bool/api` client (`src/client.ts`) sets a 15s timeout via `AbortController`, retries twice with exponential backoff on `429` and network errors only, and throws a typed `ApiError` otherwise. `5xx` is not retried — the single-use Turnstile token was already consumed, so a replay can only 403.
 
 ---
 
