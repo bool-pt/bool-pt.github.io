@@ -61,14 +61,29 @@ describe('apiFetch', () => {
     );
   });
 
-  it('retries on 500 errors', async () => {
+  it('does not retry on 500 errors (single-use Turnstile token is already consumed)', async () => {
+    const mockFetch = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 500,
+      json: () => Promise.resolve({ error: 'Server error' }),
+    });
+    vi.stubGlobal('fetch', mockFetch);
+
+    await expect(
+      apiFetch('https://api.example.com/data', { retries: 2, retryDelayMs: 1 })
+    ).rejects.toSatisfy((err: unknown) => {
+      expect(err).toBeInstanceOf(ApiError);
+      expect((err as ApiError).status).toBe(500);
+      return true;
+    });
+
+    expect(mockFetch).toHaveBeenCalledTimes(1);
+  });
+
+  it('retries on network errors', async () => {
     const mockFetch = vi
       .fn()
-      .mockResolvedValueOnce({
-        ok: false,
-        status: 500,
-        json: () => Promise.resolve({ error: 'Server error' }),
-      })
+      .mockRejectedValueOnce(new TypeError('Failed to fetch'))
       .mockResolvedValueOnce({
         ok: true,
         json: () => Promise.resolve({ data: 'recovered' }),

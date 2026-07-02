@@ -60,7 +60,7 @@ The site's only round-trip. Three forms, three routes, three Lambdas.
 
 ### `@bool/api`
 
-`submitters.ts` reads `PUBLIC_API_BASE_URL` (throws if missing), trims trailing slashes, and `POST`s JSON to `baseUrl + path`. `client.ts` (`apiFetch`) adds a 15s `AbortController` timeout and 2 retries with exponential backoff on `429`/`5xx`; anything else throws a typed `ApiError(status, body, operation)`. Request/response types live in `@bool/shared/src/types.ts` (`ContactFormData`, `NewsletterData`, `EventScheduleData`, `APIResponse`).
+`submitters.ts` reads `PUBLIC_API_BASE_URL` (throws if missing), trims trailing slashes, and `POST`s JSON to `baseUrl + path`. `client.ts` (`apiFetch`) adds a 15s `AbortController` timeout and 2 retries with exponential backoff on `429` and network errors/timeouts; any other status throws a typed `ApiError(status, body, operation)` immediately — `5xx` is never retried because the single-use Turnstile token in the body is consumed by the first attempt, so a replay can only fail CAPTCHA validation. Request/response types live in `@bool/shared/src/types.ts` (`ContactFormData`, `NewsletterData`, `EventScheduleData`, `APIResponse`).
 
 ### Backend (external, not in this repo)
 

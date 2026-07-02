@@ -11,8 +11,11 @@ const DEFAULT_TIMEOUT_MS = 15_000;
 const DEFAULT_RETRIES = 2;
 const DEFAULT_RETRY_DELAY_MS = 1_000;
 
+// 5xx is deliberately not retryable: the Lambdas validate the single-use
+// Turnstile token before anything else, so replaying the same body after a
+// 5xx (which the token already paid for) can only produce a 403.
 function isRetryable(status: number): boolean {
-  return status === 429 || status >= 500;
+  return status === 429;
 }
 
 export async function apiFetch<T>(url: string, options: FetchOptions = {}): Promise<T> {
