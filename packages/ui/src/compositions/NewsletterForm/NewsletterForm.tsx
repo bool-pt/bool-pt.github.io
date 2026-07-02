@@ -1,6 +1,6 @@
 import { useId, useRef, useState } from 'react';
 import { trackEvent } from '@bool/analytics';
-import { submitNewsletter } from '@bool/api';
+import { ApiError, submitNewsletter } from '@bool/api';
 import { newsletterSchema, ROUTES } from '@bool/shared';
 import { cn } from '@bool/shared';
 import { InlineInputButton } from '../../primitives/InlineInputButton/InlineInputButton';
@@ -39,15 +39,31 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
   const [captchaToken, setCaptchaToken] = useState('');
   const [marketingConsent, setMarketingConsent] = useState(false);
   const [status, setStatus] = useState<
-    'idle' | 'loading' | 'success' | 'error' | 'captcha-needed' | 'consent-needed' | 'name-needed'
+    | 'idle'
+    | 'loading'
+    | 'success'
+    | 'error'
+    | 'captcha-needed'
+    | 'consent-needed'
+    | 'name-needed'
+    | 'email-needed'
   >('idle');
+  const [emailError, setEmailError] = useState('');
   const captchaRef = useRef<CaptchaHandle>(null);
 
   async function handleSubmit() {
     const validation = newsletterSchema.safeParse({ name, email });
     if (!validation.success) {
-      const hasNameIssue = validation.error.issues.some((i) => i.path[0] === 'name');
-      setStatus(hasNameIssue ? 'name-needed' : 'error');
+      const nameIssue = validation.error.issues.find((i) => i.path[0] === 'name');
+      if (nameIssue) {
+        setStatus('name-needed');
+      } else {
+        // No dedicated locale key for an invalid newsletter email; surface the
+        // schema's own message rather than the generic failure text.
+        const emailIssue = validation.error.issues.find((i) => i.path[0] === 'email');
+        setEmailError(emailIssue?.message ?? labels.error);
+        setStatus('email-needed');
+      }
       return;
     }
 
@@ -74,8 +90,13 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
       setEmail('');
       setCaptchaToken('');
       captchaRef.current?.reset();
-    } catch {
-      setStatus('error');
+    } catch (err) {
+      // Token is single-use and now spent — reset the widget so the next submit
+      // runs a fresh challenge. A 403 is a failed token validation, so point the
+      // user at the captcha rather than showing the generic error.
+      setStatus(err instanceof ApiError && err.status === 403 ? 'captcha-needed' : 'error');
+      setCaptchaToken('');
+      captchaRef.current?.reset();
     }
   }
 
@@ -128,7 +149,10 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
       {status === 'name-needed' && <p className={styles.consentError}>{labels.nameRequired}</p>}
       <InlineInputButton
         value={email}
-        onChange={setEmail}
+        onChange={(value) => {
+          setEmail(value);
+          if (status === 'email-needed') setStatus('idle');
+        }}
         onSubmit={() => void handleSubmit()}
         label={labels.label}
         placeholder={labels.placeholder}
@@ -136,6 +160,7 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
         disabled={isDisabled}
         type="email"
       />
+      {status === 'email-needed' && <p className={styles.consentError}>{emailError}</p>}
       <label
         className={cn(styles.consentLabel, isBar ? styles.consentLabelBar : styles.consentLabelCta)}
       >
@@ -169,12 +194,14 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
             theme={isBar ? 'light' : 'dark'}
             size="flexible"
           />
-          {status === 'captcha-needed' && (
-            <p className={styles.consentError}>{labels.captchaRequired}</p>
-          )}
-          {status === 'error' && <p className={styles.consentError}>{labels.error}</p>}
         </div>
       )}
+      {/* Kept outside the captcha wrapper so a failed submit is never silent,
+          even when the widget is not mounted (no site key / no input yet). */}
+      {status === 'captcha-needed' && (
+        <p className={styles.consentError}>{labels.captchaRequired}</p>
+      )}
+      {status === 'error' && <p className={styles.consentError}>{labels.error}</p>}
     </div>
   );
 }

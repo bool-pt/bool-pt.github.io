@@ -2,10 +2,14 @@ import { render, screen, cleanup, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import { trackEvent } from '@bool/analytics';
-import { submitContactForm } from '@bool/api';
+import { ApiError, submitContactForm } from '@bool/api';
 import ContactForm from './ContactForm';
 
-vi.mock('@bool/api', () => ({
+const { captchaReset } = vi.hoisted(() => ({ captchaReset: vi.fn() }));
+
+// Keep the real ApiError export so the form's `err instanceof ApiError` check works.
+vi.mock('@bool/api', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
   submitContactForm: vi.fn(() => Promise.resolve()),
 }));
 
@@ -13,16 +17,17 @@ vi.mock('@bool/analytics', () => ({
   trackEvent: vi.fn(),
 }));
 
-vi.mock('../Captcha/Captcha', () => ({
-  default: ({
+vi.mock('../Captcha/Captcha', async () => {
+  const { useImperativeHandle } = await import('react');
+  const MockCaptcha = ({
     onVerify,
+    ref,
   }: {
     onVerify: (token: string) => void;
-    onExpire?: () => void;
-    siteKey: string;
-    theme?: string;
-    ref?: React.Ref<unknown>;
+    ref?: React.Ref<{ reset: () => void; execute: () => Promise<string> }>;
   }) => {
+    // execute() returns '' so an un-clicked widget behaves like "not verified".
+    useImperativeHandle(ref, () => ({ reset: captchaReset, execute: () => Promise.resolve('') }));
     return (
       <button
         type="button"
@@ -32,8 +37,9 @@ vi.mock('../Captcha/Captcha', () => ({
         Verify
       </button>
     );
-  },
-}));
+  };
+  return { default: MockCaptcha };
+});
 
 afterEach(() => {
   cleanup();
@@ -148,7 +154,7 @@ describe('ContactForm', { timeout: 15_000 }, () => {
     });
   });
 
-  it('shows error message when API call fails', async () => {
+  it('shows error message and resets the captcha when API call fails', async () => {
     const user = userEvent.setup();
     vi.mocked(submitContactForm).mockRejectedValueOnce(new Error('API Error'));
 
@@ -167,6 +173,33 @@ describe('ContactForm', { timeout: 15_000 }, () => {
     await waitFor(() => {
       expect(screen.getByText('Something went wrong. Please try again.')).toBeInTheDocument();
     });
+    // The spent, single-use token must be cleared so a retry runs a fresh challenge.
+    expect(captchaReset).toHaveBeenCalled();
+  });
+
+  it('maps a 403 to the captcha message instead of the generic error', async () => {
+    const user = userEvent.setup();
+    vi.mocked(submitContactForm).mockRejectedValueOnce(
+      new ApiError(403, { error: 'CAPTCHA validation failed. Please try again.' })
+    );
+
+    render(<ContactForm layout="simple" captchaSiteKey="test-key" labels={labels} />);
+
+    await user.type(screen.getByLabelText('Name'), 'John Doe');
+    await user.type(screen.getByLabelText('Email'), 'john@example.com');
+    await user.type(
+      screen.getByLabelText('Message'),
+      'This is a test message that is long enough.'
+    );
+
+    await user.click(screen.getByTestId('mock-captcha'));
+    await user.click(screen.getByRole('button', { name: 'Send' }));
+
+    await waitFor(() => {
+      expect(screen.getByText('Please complete the captcha.')).toBeInTheDocument();
+    });
+    expect(screen.queryByText('Something went wrong. Please try again.')).not.toBeInTheDocument();
+    expect(captchaReset).toHaveBeenCalled();
   });
 
   it('has correct aria-label on form', () => {
