@@ -1,9 +1,11 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { CheckCircle, ChevronDown, X } from 'lucide-react';
 import { useEffect, useId, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { trackEvent } from '@bool/analytics';
-import { submitEventSchedule } from '@bool/api';
+import { ApiError, submitEventSchedule } from '@bool/api';
+import { eventScheduleSchema, type EventScheduleInput } from '@bool/shared';
 import Captcha from '../Captcha/Captcha';
 import type { CaptchaHandle } from '../Captcha/Captcha';
 import styles from './EventScheduleModal.module.css';
@@ -26,26 +28,14 @@ export interface EventScheduleLabels {
   messagePlaceholder: string;
   submit: string;
   success: string;
-  required: string;
-  emailInvalid: string;
   captchaRequired: string;
   error: string;
-}
-
-interface FormFields {
-  fullName: string;
-  phone: string;
-  email: string;
-  time: string;
-  message: string;
 }
 
 /** Event detail dispatched by the "Meet us there" triggers in EventsSection. */
 interface OpenEventDetail {
   title?: string;
 }
-
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 interface Props {
   labels: EventScheduleLabels;
@@ -66,7 +56,7 @@ export default function EventScheduleModal({ labels, captchaSiteKey }: Props) {
     reset,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<FormFields>();
+  } = useForm<EventScheduleInput>({ resolver: zodResolver(eventScheduleSchema) });
 
   useEffect(() => {
     function handleOpen(event: Event) {
@@ -82,7 +72,14 @@ export default function EventScheduleModal({ labels, captchaSiteKey }: Props) {
     return () => window.removeEventListener('bool:open-event-schedule', handleOpen);
   }, [reset]);
 
-  async function onSubmit(data: FormFields) {
+  async function onSubmit(data: EventScheduleInput) {
+    // The event name comes from the trigger's dispatched detail; guard against a
+    // trigger that opened the modal without one (would POST an empty event_name).
+    if (!eventTitle) {
+      setError('root', { message: labels.error });
+      return;
+    }
+
     let token = captchaToken;
     if (captchaSiteKey && !token) {
       token = (await captchaRef.current?.execute()) ?? '';
@@ -97,7 +94,7 @@ export default function EventScheduleModal({ labels, captchaSiteKey }: Props) {
       await submitEventSchedule({
         eventName: eventTitle,
         name: data.fullName,
-        phone: data.phone,
+        phone: data.phone ?? '',
         email: data.email,
         timeSuggestion: data.time,
         message: data.message,
@@ -105,8 +102,12 @@ export default function EventScheduleModal({ labels, captchaSiteKey }: Props) {
       });
       trackEvent('form_submission', { type: 'event' });
       setSubmitted(true);
-    } catch {
-      setError('root', { message: labels.error });
+    } catch (err) {
+      // Token is single-use and now spent; reset the widget. A 403 is a failed
+      // token validation, so surface the captcha label rather than the generic error.
+      const message =
+        err instanceof ApiError && err.status === 403 ? labels.captchaRequired : labels.error;
+      setError('root', { message });
       setCaptchaToken('');
       captchaRef.current?.reset();
     }
@@ -172,7 +173,7 @@ export default function EventScheduleModal({ labels, captchaSiteKey }: Props) {
                     autoComplete="name"
                     placeholder={labels.fullNamePlaceholder}
                     className={styles.input}
-                    {...register('fullName', { required: labels.required })}
+                    {...register('fullName')}
                   />
                   {errors.fullName && (
                     <p className={styles.fieldError}>{errors.fullName.message}</p>
@@ -191,6 +192,7 @@ export default function EventScheduleModal({ labels, captchaSiteKey }: Props) {
                     className={styles.input}
                     {...register('phone')}
                   />
+                  {errors.phone && <p className={styles.fieldError}>{errors.phone.message}</p>}
                 </div>
               </div>
 
@@ -205,10 +207,7 @@ export default function EventScheduleModal({ labels, captchaSiteKey }: Props) {
                     autoComplete="email"
                     placeholder={labels.emailPlaceholder}
                     className={styles.input}
-                    {...register('email', {
-                      required: labels.required,
-                      pattern: { value: EMAIL_PATTERN, message: labels.emailInvalid },
-                    })}
+                    {...register('email')}
                   />
                   {errors.email && <p className={styles.fieldError}>{errors.email.message}</p>}
                 </div>
@@ -222,7 +221,7 @@ export default function EventScheduleModal({ labels, captchaSiteKey }: Props) {
                       id={`${formId}-time`}
                       defaultValue=""
                       className={styles.select}
-                      {...register('time', { required: labels.required })}
+                      {...register('time')}
                     >
                       <option value="" disabled>
                         {labels.timePlaceholder}
@@ -248,7 +247,7 @@ export default function EventScheduleModal({ labels, captchaSiteKey }: Props) {
                   rows={4}
                   placeholder={labels.messagePlaceholder}
                   className={styles.textarea}
-                  {...register('message', { required: labels.required })}
+                  {...register('message')}
                 />
                 {errors.message && <p className={styles.fieldError}>{errors.message.message}</p>}
               </div>

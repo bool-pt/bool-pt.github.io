@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { contactFormSchema, contactFormSimpleSchema, newsletterSchema } from './validation.ts';
+import {
+  contactFormSchema,
+  contactFormSimpleSchema,
+  eventScheduleSchema,
+  newsletterSchema,
+} from './validation.ts';
 
 describe('contactFormSchema', () => {
   const valid = {
@@ -103,5 +108,60 @@ describe('newsletterSchema', () => {
 
   it('rejects missing name', () => {
     expect(newsletterSchema.safeParse({ email: 'test@example.com' }).success).toBe(false);
+  });
+});
+
+describe('eventScheduleSchema', () => {
+  const valid = {
+    fullName: 'Jane Doe',
+    phone: '+351 912 345 678',
+    email: 'jane@example.com',
+    time: 'Morning',
+    message: 'Looking forward to it.',
+  };
+
+  it('accepts valid input', () => {
+    expect(eventScheduleSchema.safeParse(valid).success).toBe(true);
+  });
+
+  it('accepts an empty phone (now optional)', () => {
+    expect(eventScheduleSchema.safeParse({ ...valid, phone: '' }).success).toBe(true);
+  });
+
+  it('accepts a missing phone', () => {
+    const { phone: _phone, ...withoutPhone } = valid;
+    expect(eventScheduleSchema.safeParse(withoutPhone).success).toBe(true);
+  });
+
+  it('rejects a malformed phone', () => {
+    expect(eventScheduleSchema.safeParse({ ...valid, phone: 'abc' }).success).toBe(false);
+  });
+
+  it('rejects short fullName', () => {
+    expect(eventScheduleSchema.safeParse({ ...valid, fullName: 'J' }).success).toBe(false);
+  });
+
+  it('rejects invalid email', () => {
+    expect(eventScheduleSchema.safeParse({ ...valid, email: 'not-an-email' }).success).toBe(false);
+  });
+
+  it('rejects empty time', () => {
+    expect(eventScheduleSchema.safeParse({ ...valid, time: '' }).success).toBe(false);
+  });
+
+  it('rejects empty message', () => {
+    expect(eventScheduleSchema.safeParse({ ...valid, message: '' }).success).toBe(false);
+  });
+
+  it('rejects message over 5000 chars', () => {
+    expect(eventScheduleSchema.safeParse({ ...valid, message: 'x'.repeat(5001) }).success).toBe(
+      false
+    );
+  });
+
+  it('accepts message at exactly 5000 chars', () => {
+    expect(eventScheduleSchema.safeParse({ ...valid, message: 'x'.repeat(5000) }).success).toBe(
+      true
+    );
   });
 });

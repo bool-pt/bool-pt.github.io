@@ -66,11 +66,12 @@ Forms attach a Turnstile token that the Lambda verifies server-side before sendi
 
 Zod schemas in `@bool/shared` (`src/validation.ts`) validate form input client-side via `react-hook-form` + `@hookform/resolvers`. The Lambda re-validates server-side — client validation is UX, not a trust boundary.
 
-| Schema                    | Key constraints                                                                                              |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `contactFormSchema`       | `firstName`/`lastName` 2–50; valid `email`; optional `phone` (`/^\+?[\d\s\-().]{7,20}$/`); `message` 10–2000 |
-| `contactFormSimpleSchema` | `name` 2–100; valid `email`; `message` 10–2000                                                               |
-| `newsletterSchema`        | `name` 2–100; valid `email`                                                                                  |
+| Schema                    | Key constraints                                                                                               |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `contactFormSchema`       | `firstName`/`lastName` 2–50; valid `email`; optional `phone` (`/^\+?[\d\s\-().]{7,20}$/`); `message` 10–2000  |
+| `contactFormSimpleSchema` | `name` 2–100; valid `email`; `message` 10–2000                                                                |
+| `newsletterSchema`        | `name` 2–100; valid `email`                                                                                   |
+| `eventScheduleSchema`     | `fullName` 2–100; optional `phone` (same pattern); valid `email`; `time` required; `message` 1–5000 (API cap) |
 
 The `@bool/api` client (`src/client.ts`) sets a 15s timeout via `AbortController`, retries twice with exponential backoff on `429`/`5xx` only, and throws a typed `ApiError` otherwise.
 
