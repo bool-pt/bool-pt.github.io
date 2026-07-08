@@ -31,6 +31,7 @@ export function getHeaderLabels(locale: Locale = 'en') {
 export function getFooterLabels(locale: Locale = 'en') {
   return {
     tagline: t('footer.tagline', locale),
+    taglineHref: t('footer.tagline.href', locale),
     socialAria: t('footer.social.aria', locale),
     socialLabels: {
       facebook: t('footer.social.facebook.label', locale),
