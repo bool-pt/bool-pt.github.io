@@ -29,6 +29,18 @@
   -webkit-backface-visibility: hidden;
   overflow: hidden;
   border-radius: 0;
+  /* Belt-and-braces backface culling: some browsers/GPUs fail to hide the
+     reverse side via `backface-visibility` when a face's children form their
+     own composited layers (here: z-index, filter: grayscale), so the rotated
+     (mirrored) content bleeds through and overlaps the visible face. Toggle
+     `visibility` too, switched at the rotation midpoint (250ms of the 500ms
+     flip) so the hidden face can never paint while the animation is preserved. */
+  transition: visibility 0s 250ms;
+}
+
+/* Back starts hidden; only the front paints until the card flips. */
+.flipCardBack {
+  visibility: hidden;
 }
 
 /* Front face */
@@ -102,11 +114,13 @@
 
 .flipCard:hover .flipCardBack,
 .flipCardInnerFlipped .flipCardBack {
+  visibility: visible;
   pointer-events: auto;
 }
 
 .flipCard:hover .flipCardFront,
 .flipCardInnerFlipped .flipCardFront {
+  visibility: hidden;
   pointer-events: none;
 }
 
