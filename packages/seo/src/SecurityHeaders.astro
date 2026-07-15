@@ -1,8 +1,11 @@
 ---
 // CSP is delivered via meta tags because GitHub Pages does not support custom HTTP headers.
-// Note: frame-ancestors and X-Frame-Options cannot be enforced via meta tags — browsers
-// require those as HTTP response headers. Framing protection requires a CDN (e.g. Cloudflare)
-// in front of GitHub Pages if it becomes a requirement.
+// Note: only Content-Security-Policy and `<meta name="referrer">` are actually honoured
+// as meta tags. frame-ancestors / X-Frame-Options, AND X-Content-Type-Options (nosniff)
+// and Permissions-Policy, are enforced by browsers ONLY as real HTTP response headers —
+// as meta tags they are inert. They are emitted here so the intended policy is documented
+// in one place and takes effect the moment a CDN (e.g. Cloudflare) is put in front of Pages
+// and configured to promote them to response headers; until then they are best-effort.
 // The form API (API Gateway + Lambda) is reached over its exact origin, pinned
 // in connect-src from PUBLIC_API_BASE_URL (empty in local dev, where no API call runs).
 // Cloudflare Turnstile loads its script and challenge iframe from challenges.cloudflare.com.
@@ -18,8 +21,12 @@ const csp = buildContentSecurityPolicy(
 ---
 
 <meta http-equiv="Content-Security-Policy" content={csp} />
-<meta http-equiv="X-Content-Type-Options" content="nosniff" />
 <meta name="referrer" content="strict-origin-when-cross-origin" />
+{
+  /* Inert as meta tags on GitHub Pages (see note above) — kept for documentation
+    and to activate automatically behind a header-capable CDN. */
+}
+<meta http-equiv="X-Content-Type-Options" content="nosniff" />
 <meta
   http-equiv="Permissions-Policy"
   content="camera=(), microphone=(), geolocation=(), payment=(), usb=()"

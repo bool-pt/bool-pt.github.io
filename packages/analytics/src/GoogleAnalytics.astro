@@ -1,5 +1,5 @@
 ---
-import { CONSENT_STORAGE_KEY, CONSENT_ENABLED } from '@bool/compliance';
+import { CONSENT_STORAGE_KEY, CONSENT_VERSION, CONSENT_ENABLED } from '@bool/compliance';
 import { GA_MEASUREMENT_ID } from './config';
 
 // GA4 via Partytown — runs off main thread.
@@ -17,7 +17,7 @@ import { GA_MEASUREMENT_ID } from './config';
   <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
   <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
   <script
-    define:vars={{ GA_MEASUREMENT_ID, CONSENT_STORAGE_KEY }}
+    define:vars={{ GA_MEASUREMENT_ID, CONSENT_STORAGE_KEY, CONSENT_VERSION }}
   >
     (function () {
       function hasAnalyticsConsent() {
@@ -25,7 +25,9 @@ import { GA_MEASUREMENT_ID } from './config';
           var stored = localStorage.getItem(CONSENT_STORAGE_KEY);
           if (!stored) return false;
           var consent = JSON.parse(stored);
-          return consent && consent.analytics === true;
+          // Mirror getConsent(): a version mismatch counts as "no decision", so a
+          // stale record can't silently re-enable analytics after the policy changes.
+          return !!consent && consent.analytics === true && consent.version === CONSENT_VERSION;
         } catch {
           return false;
         }

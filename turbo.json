@@ -10,7 +10,8 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["src/**", "*.ts", "package.json", "tsconfig.json", "astro.config.*"],
-      "outputs": ["dist/**", ".astro/**"]
+      "outputs": ["dist/**", ".astro/**"],
+      "env": ["PUBLIC_*"]
     },
     "dev": {
       "cache": false,

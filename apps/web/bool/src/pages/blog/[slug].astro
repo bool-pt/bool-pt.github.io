@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { getCollection, render } from 'astro:content';
-import { blogPostingJsonLd } from '@bool/seo';
+import { blogPostingJsonLd, serializeJsonLd } from '@bool/seo';
 import { SITE_URL, BASE_PATH } from '@bool/shared';
 import BaseLayout from '@bool/ui/layout/BaseLayout.astro';
 import { getHeaderLabels, getFooterLabels } from '../../labels';
@@ -35,7 +35,7 @@ const jsonLd = blogPostingJsonLd({
   headerLabels={getHeaderLabels()}
   footerLabels={getFooterLabels()}
 >
-  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script is:inline type="application/ld+json" set:html={serializeJsonLd(jsonLd)} />
   <article>
     <Content />
   </article>

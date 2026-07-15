@@ -5,6 +5,7 @@ import {
   blogPostingJsonLd,
   breadcrumbListJsonLd,
   eventJsonLd,
+  serializeJsonLd,
 } from './structured-data';
 
 describe('organizationJsonLd', () => {
@@ -114,5 +115,25 @@ describe('eventJsonLd', () => {
 
     expect(result.endDate).toBeUndefined();
     expect(result.location).toBeUndefined();
+  });
+});
+
+describe('serializeJsonLd', () => {
+  it('escapes </script> breakout attempts in string values', () => {
+    const output = serializeJsonLd({ name: '</script><script>alert(1)</script>' });
+    expect(output).not.toContain('</script>');
+    expect(output).not.toContain('<script>');
+    expect(output).toContain('\\u003c');
+  });
+
+  it('escapes <, > and & to their \\uXXXX forms', () => {
+    expect(serializeJsonLd({ v: '<' })).toContain('\\u003c');
+    expect(serializeJsonLd({ v: '>' })).toContain('\\u003e');
+    expect(serializeJsonLd({ v: '&' })).toContain('\\u0026');
+  });
+
+  it('produces valid JSON that round-trips back to the original object', () => {
+    const data = { headline: 'A & B < C > D', nested: { url: 'https://bool.pt/</script>' } };
+    expect(JSON.parse(serializeJsonLd(data))).toEqual(data);
   });
 });

@@ -13,20 +13,23 @@ import { baseViteConfig } from '@bool/vite-config/base';
 // site that loads no analytics. Read from process.env (set in CI) at config time.
 const gaEnabled = Boolean(process.env.PUBLIC_GA_MEASUREMENT_ID);
 
-// Fail the deploy loudly if the public form-config vars are missing. Without
-// them the site builds fine but every form POSTs to an empty URL / with an
-// empty Turnstile token and silently 400/403s in production. A missing GitHub
-// repo variable arrives as an empty string, so check for falsy, not undefined.
-// Scoped to `astro build` in CI: the config also loads for `astro check`
-// (typecheck) and `astro preview` (e2e serves the pre-built dist), and neither
-// of those is given the vars. Locally the vars stay optional so `pnpm dev`/`pnpm
-// build` work without them (posts from localhost are CORS-blocked anyway).
-const isProductionBuild = process.env.CI && process.argv.includes('build');
-if (isProductionBuild) {
+// Fail the build loudly if the public form-config vars are missing. Without them
+// the site builds fine but every form POSTs to an empty URL / with an empty
+// Turnstile token and silently 400/403s in production. A missing GitHub repo
+// variable arrives as an empty string, so check for falsy, not undefined.
+// Scoped to `astro build`: the config also loads for `astro check` (typecheck)
+// and `astro preview` (e2e serves the pre-built dist), neither of which is given
+// the vars. This fires for ANY build (not just CI) so a manual production build
+// can't silently ship broken forms; set SKIP_ENV_VALIDATION=1 for a deliberate
+// local build without them (posts from localhost are CORS-blocked anyway).
+const isBuild = process.argv.includes('build');
+const skipEnvValidation = process.env.SKIP_ENV_VALIDATION === '1';
+if (isBuild && !skipEnvValidation) {
   for (const name of ['PUBLIC_API_BASE_URL', 'PUBLIC_TURNSTILE_SITE_KEY'] as const) {
     if (!process.env[name]) {
       throw new Error(
-        `Missing required build variable ${name}. Set it in the GitHub repo variables (see documentation/ci-deploy.md).`
+        `Missing required build variable ${name}. Set it in the GitHub repo variables ` +
+          `(see documentation/ci-deploy.md), or set SKIP_ENV_VALIDATION=1 for a local build without it.`
       );
     }
   }

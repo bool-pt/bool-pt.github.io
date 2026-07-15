@@ -62,7 +62,7 @@
  *   --delete     Remove local files not present in Drive (media only)
  */
 
-import { createSign } from 'node:crypto';
+import { createSign, randomUUID } from 'node:crypto';
 import {
   readFileSync,
   writeFileSync,
@@ -858,12 +858,16 @@ if (block) {
   }
   // 2) PR body — exposed as a multiline step output named "warnings"
   if (process.env.GITHUB_OUTPUT) {
-    const delim = 'SYNC_WARNINGS_EOF';
+    // Unguessable per-run delimiter: `block` is built from Drive-controlled file
+    // names and locale strings, so a fixed delimiter could be closed early by a
+    // matching line and inject extra step outputs into the PR body.
+    const delim = `SYNC_WARNINGS_EOF_${randomUUID()}`;
     appendFileSync(process.env.GITHUB_OUTPUT, `warnings<<${delim}\n${block}\n${delim}\n`);
   }
 } else if (process.env.GITHUB_OUTPUT) {
   // Emit an empty output so the workflow reference never errors.
-  appendFileSync(process.env.GITHUB_OUTPUT, 'warnings<<SYNC_WARNINGS_EOF\nSYNC_WARNINGS_EOF\n');
+  const delim = `SYNC_WARNINGS_EOF_${randomUUID()}`;
+  appendFileSync(process.env.GITHUB_OUTPUT, `warnings<<${delim}\n${delim}\n`);
 }
 
 // Summary

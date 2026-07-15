@@ -98,3 +98,29 @@ describe('setUser', () => {
     expect(mockSetUser).not.toHaveBeenCalled();
   });
 });
+
+describe('beforeSend PII scrubbing', () => {
+  it('does not send default PII', async () => {
+    await initSentry('https://key@sentry.io/123');
+    expect(mockInit.mock.calls[0]?.[0]?.sendDefaultPii).toBe(false);
+  });
+
+  it('redacts emails from exceptions/breadcrumbs and drops cookies', async () => {
+    await initSentry('https://key@sentry.io/123');
+    const beforeSend = mockInit.mock.calls[0]?.[0]?.beforeSend;
+    expect(beforeSend).toBeTypeOf('function');
+
+    const scrubbed = beforeSend(
+      {
+        request: { cookies: 'session=abc' },
+        exception: { values: [{ value: 'Failed for jane.doe@example.com!' }] },
+        breadcrumbs: [{ message: 'contact form from john@bool.pt' }],
+      },
+      {}
+    );
+
+    expect(scrubbed.request.cookies).toBeUndefined();
+    expect(scrubbed.exception.values[0].value).toBe('Failed for [redacted-email]!');
+    expect(scrubbed.breadcrumbs[0].message).toBe('contact form from [redacted-email]');
+  });
+});
