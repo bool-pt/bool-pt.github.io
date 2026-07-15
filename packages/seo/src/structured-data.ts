@@ -1,6 +1,20 @@
 import { t } from '@bool/i18n';
 import { SITE_URL, SITE_NAME, COMPANY } from '@bool/shared';
 
+/**
+ * Serialize a JSON-LD object for embedding in `<script type="application/ld+json"
+ * set:html={...}>`. `JSON.stringify` does not escape `<`, `>`, or `&`, so a string
+ * value containing `</script>` (or `<!--` / `<script`) would close the element and
+ * let arbitrary markup through. Escaping those characters to their `\uXXXX` forms
+ * keeps the payload valid JSON while making script-context breakout impossible.
+ */
+export function serializeJsonLd(data: unknown): string {
+  return JSON.stringify(data)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026');
+}
+
 /** Social profile URLs are content-managed in `en.json` (`footer.social.*.href`). */
 const SOCIAL_URL_KEYS = [
   'footer.social.linkedin.href',

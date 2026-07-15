@@ -2,7 +2,7 @@
 import GoogleAnalytics from '@bool/analytics/GoogleAnalytics.astro';
 import { CookieBanner, CONSENT_ENABLED } from '@bool/compliance';
 import { enKeys, t, tOptional } from '@bool/i18n';
-import { organizationJsonLd, websiteJsonLd } from '@bool/seo';
+import { organizationJsonLd, websiteJsonLd, serializeJsonLd } from '@bool/seo';
 import SecurityHeaders from '@bool/seo/SecurityHeaders.astro';
 import SEOHead from '@bool/seo/SEOHead.astro';
 import ModalHost from '../../compositions/ModalHost/ModalHost';
@@ -146,29 +146,20 @@ const modals = modalKeys.map((key) => ({
       ogImage={ogImage}
       noindex={noindex}
     />
-    {allJsonLd.map((ld) => <script type="application/ld+json" set:html={JSON.stringify(ld)} />)}
+    {allJsonLd.map((ld) => <script type="application/ld+json" set:html={serializeJsonLd(ld)} />)}
     <GoogleAnalytics />
     <script>
       import { initSentry } from '@bool/analytics';
-      import { CONSENT_STORAGE_KEY, CONSENT_ENABLED } from '@bool/compliance';
+      import { getConsent, CONSENT_ENABLED } from '@bool/compliance';
 
       const dsn = import.meta.env.PUBLIC_SENTRY_DSN;
 
       // Gate on CONSENT_ENABLED so Sentry can never load without the consent UI
-      // that lets users grant/withdraw it (GDPR Art. 7(3)).
+      // that lets users grant/withdraw it (GDPR Art. 7(3)). getConsent() validates
+      // the stored record's shape and policy version, so a stale/old-version record
+      // is treated as "no decision" rather than silently re-enabling Sentry.
       if (CONSENT_ENABLED && dsn) {
-        function hasAnalyticsConsent(): boolean {
-          try {
-            const stored = localStorage.getItem(CONSENT_STORAGE_KEY);
-            if (!stored) return false;
-            const consent = JSON.parse(stored);
-            return consent?.analytics === true;
-          } catch {
-            return false;
-          }
-        }
-
-        if (hasAnalyticsConsent()) {
+        if (getConsent()?.analytics === true) {
           void initSentry(dsn);
         } else {
           window.addEventListener('bool:consent-granted', function handler(e: Event) {
@@ -198,6 +189,11 @@ const modals = modalKeys.map((key) => ({
     </main>
     <Footer labels={footerLabels} />
     {CONSENT_ENABLED && <CookieBanner client:load />}
+    {
+      /* client:idle: modals are never visible on first paint (they open from user
+        actions), so defer hydration until the main thread is idle rather than
+        competing with above-the-fold work. */
+    }
     {modals.length > 0 && <ModalHost client:idle modals={modals} closeLabel={t('common.close')} />}
   </body>
 </html>

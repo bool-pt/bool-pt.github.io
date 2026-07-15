@@ -1,8 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", "group:monorepos", "group:recommended"],
+  "extends": [
+    "config:recommended",
+    "group:monorepos",
+    "group:recommended",
+    "helpers:pinGitHubActionDigests"
+  ],
   "labels": ["dependencies"],
   "rangeStrategy": "bump",
+  "minimumReleaseAge": "7 days",
   "packageRules": [
     {
       "description": "Group Astro packages",
