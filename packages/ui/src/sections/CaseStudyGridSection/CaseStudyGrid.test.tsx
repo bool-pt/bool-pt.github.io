@@ -103,6 +103,15 @@ describe('CaseStudyGrid', () => {
     expect(screen.getByRole('tab', { name: 'PYTHON' })).toBeInTheDocument();
   });
 
+  it('renders the tech tags on the card front when present', () => {
+    render(
+      <CaseStudyGrid cases={cases} sectors={sectors} techFilters={techFilters} labels={labels} />
+    );
+
+    expect(screen.getByText('React')).toBeInTheDocument();
+    expect(screen.getByText('AWS')).toBeInTheDocument();
+  });
+
   it('renders metrics on the back when present, omits when empty', () => {
     render(
       <CaseStudyGrid cases={cases} sectors={sectors} techFilters={techFilters} labels={labels} />

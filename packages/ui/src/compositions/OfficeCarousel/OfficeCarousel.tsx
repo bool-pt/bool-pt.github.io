@@ -28,13 +28,35 @@ export default function OfficeCarousel({
   const [activeIndex, setActiveIndex] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+
+  const [mobileCardWidth, setMobileCardWidth] = useState(0);
+  const [viewportWidth, setViewportWidth] = useState(0);
+
+  useEffect(() => {
+    const update = () => {
+      setMobileCardWidth(window.innerWidth < 768 ? window.innerWidth - 48 : 0);
+      setViewportWidth(viewportRef.current?.clientWidth ?? 0);
+    };
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+
+  const gap = 24;
+  const cardWidth = mobileCardWidth || 384;
+  // How many whole cards the viewport shows — the track must never scroll past
+  // the point where the last card is flush right, or it reveals empty space.
+  const visibleCards =
+    viewportWidth > 0 ? Math.max(1, Math.floor((viewportWidth + gap) / (cardWidth + gap))) : 1;
+  const maxIndex = Math.max(0, offices.length - visibleCards);
 
   const resetTimer = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % offices.length);
+      setActiveIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
     }, autoRotateMs);
-  }, [offices.length, autoRotateMs]);
+  }, [maxIndex, autoRotateMs]);
 
   useEffect(() => {
     resetTimer();
@@ -44,37 +66,27 @@ export default function OfficeCarousel({
   }, [resetTimer]);
 
   const scrollPrev = useCallback(() => {
-    setActiveIndex((prev) => (prev - 1 + offices.length) % offices.length);
+    setActiveIndex((prev) => Math.max(0, prev - 1));
     resetTimer();
-  }, [offices.length, resetTimer]);
+  }, [resetTimer]);
 
   const scrollNext = useCallback(() => {
-    setActiveIndex((prev) => (prev + 1) % offices.length);
+    setActiveIndex((prev) => Math.min(maxIndex, prev + 1));
     resetTimer();
-  }, [offices.length, resetTimer]);
+  }, [maxIndex, resetTimer]);
 
   const handleCardClick = useCallback(
     (i: number) => {
-      setActiveIndex(i);
+      setActiveIndex(Math.min(i, maxIndex));
       resetTimer();
     },
-    [resetTimer]
+    [maxIndex, resetTimer]
   );
 
-  const [mobileCardWidth, setMobileCardWidth] = useState(0);
-
-  useEffect(() => {
-    const update = () => {
-      setMobileCardWidth(window.innerWidth < 768 ? window.innerWidth - 48 : 0);
-    };
-    update();
-    window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
-  }, []);
-
-  const gap = 24;
-  const cardWidth = mobileCardWidth || 384;
-  const offset = activeIndex * (cardWidth + gap);
+  // A resize can widen the viewport and lower `maxIndex` below the stored
+  // index, so clamp on read instead of syncing the state back in an effect.
+  const clampedIndex = Math.min(activeIndex, maxIndex);
+  const offset = clampedIndex * (cardWidth + gap);
 
   const swipeHandlers = useSwipe(scrollNext, scrollPrev);
   const isTopRight = navPosition === 'top-right';
@@ -86,6 +98,7 @@ export default function OfficeCarousel({
         aria-label={ariaLabels?.prev}
         className={styles.navBtn}
         type="button"
+        disabled={clampedIndex === 0}
       >
         <ChevronLeft size={18} strokeWidth={2.5} aria-hidden="true" />
       </button>
@@ -94,6 +107,7 @@ export default function OfficeCarousel({
         aria-label={ariaLabels?.next}
         className={styles.navBtn}
         type="button"
+        disabled={clampedIndex >= maxIndex}
       >
         <ChevronRight size={18} strokeWidth={2.5} aria-hidden="true" />
       </button>
@@ -105,7 +119,7 @@ export default function OfficeCarousel({
       {isTopRight && navButtons}
 
       <div className={cn(styles.wrapper, isTopRight && styles.wrapperFull)}>
-        <div className={styles.viewport}>
+        <div className={styles.viewport} ref={viewportRef}>
           <div className={styles.track} style={{ transform: `translateX(-${offset}px)` }}>
             {offices.map((office, i) => {
               // No card is selected/coloured by default — only on hover.

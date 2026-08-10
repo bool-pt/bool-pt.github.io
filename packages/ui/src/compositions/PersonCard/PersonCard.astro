@@ -72,34 +72,34 @@ const initials = name
           </span>
         )}
         <div class="pcv2-overlay">
-          <div class="pcv2-overlay-text">
+          <div class="pcv2-overlay-row">
             <p class="pcv2-name">{name}</p>
-            <p class="pcv2-role">{role}</p>
+            <div class="pcv2-icons">
+              {email && (
+                <a
+                  href="#"
+                  class="pcv2-icon-link"
+                  data-contact={btoa(`mailto:${email}`)}
+                  data-label={btoa(email)}
+                  aria-label={`${emailAriaPrefix} ${name}`}
+                >
+                  <Icon name="mail" size={20} strokeWidth={2} />
+                </a>
+              )}
+              {linkedin && (
+                <a
+                  href={linkedin}
+                  class="pcv2-icon-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${name} ${linkedinAriaSuffix}`}
+                >
+                  <Icon name="linkedin" size={20} strokeWidth={2} />
+                </a>
+              )}
+            </div>
           </div>
-          <div class="pcv2-icons">
-            {email && (
-              <a
-                href="#"
-                class="pcv2-icon-link"
-                data-contact={btoa(`mailto:${email}`)}
-                data-label={btoa(email)}
-                aria-label={`${emailAriaPrefix} ${name}`}
-              >
-                <Icon name="mail" size={20} strokeWidth={2} />
-              </a>
-            )}
-            {linkedin && (
-              <a
-                href={linkedin}
-                class="pcv2-icon-link"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${name} ${linkedinAriaSuffix}`}
-              >
-                <Icon name="linkedin" size={20} strokeWidth={2} />
-              </a>
-            )}
-          </div>
+          <p class="pcv2-role">{role}</p>
         </div>
       </div>
       <div class="pcv2-detail" data-person-detail hidden>
@@ -259,35 +259,39 @@ const initials = name
     position: absolute;
     inset-block-end: 0;
     inset-inline: 0;
-    padding: 0.625rem 0.75rem;
+    block-size: 7.9375rem;
+    padding-inline: 0.75rem;
+    padding-block: 0;
     background: var(--white-10);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border-radius: 0 0 11px 11px;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
     z-index: 1;
   }
 
   @media (min-width: 640px) {
     .pcv2-overlay {
-      padding: 0.75rem 1rem;
+      padding-inline: 1rem;
     }
   }
 
-  .pcv2-overlay-text {
+  .pcv2-overlay-row {
     display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    min-inline-size: 0;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
   }
 
   .pcv2-name {
     font-family: var(--font-display);
     font-size: clamp(1rem, 3vw, 1.375rem);
     font-weight: 700;
+    line-height: 0.909;
+    letter-spacing: 0;
     color: var(--color-on-dark);
     margin: 0;
     white-space: nowrap;
@@ -297,6 +301,9 @@ const initials = name
 
   .pcv2-role {
     font-size: clamp(0.875rem, 2.5vw, 1.125rem);
+    font-weight: 400;
+    line-height: 0.889;
+    letter-spacing: -0.05em;
     color: var(--color-on-dark-muted);
     margin: 0;
   }
@@ -305,7 +312,6 @@ const initials = name
     display: flex;
     gap: 0.5rem;
     flex-shrink: 0;
-    align-self: flex-start;
   }
 
   .pcv2-icon-link {

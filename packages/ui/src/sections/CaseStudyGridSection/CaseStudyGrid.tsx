@@ -76,6 +76,15 @@ function CaseFlipCard({
           <div className={styles.frontContent}>
             <span className={styles.frontLabel}>{`${item.sector} - ${item.tech}`}</span>
             <div className={styles.frontTitle}>{item.subtitle}</div>
+            {item.tags.length > 0 && (
+              <div className={styles.frontTags}>
+                {item.tags.map((tag) => (
+                  <span key={tag} className={styles.frontTag}>
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </>
       }

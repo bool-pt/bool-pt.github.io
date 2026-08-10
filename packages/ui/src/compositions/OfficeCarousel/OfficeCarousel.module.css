@@ -201,10 +201,16 @@
   flex-shrink: 0;
   transition:
     background-color 150ms,
-    color 150ms;
+    color 150ms,
+    opacity 150ms;
 }
 
-.navBtn:hover {
+.navBtn:hover:not(:disabled) {
   background-color: var(--color-primary);
   color: var(--color-on-dark);
+}
+
+.navBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }

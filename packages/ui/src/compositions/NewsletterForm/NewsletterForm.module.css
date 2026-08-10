@@ -102,10 +102,24 @@
 }
 
 .consentError {
-  color: var(--color-primary);
   font-size: var(--font-size-body-sm);
   margin-block-start: 0.5rem;
   text-align: center;
+}
+
+/* The bar variant sits on the primary red, where red error text is invisible. */
+.consentErrorBar {
+  color: var(--color-on-dark);
+}
+
+.consentErrorCta {
+  color: var(--color-primary);
+}
+
+/* Errors rendered above an input need their own bottom gap — the following
+   field has no top margin to separate them. */
+.fieldError {
+  margin-block-end: 0.75rem;
 }
 
 .captchaWrapper {
