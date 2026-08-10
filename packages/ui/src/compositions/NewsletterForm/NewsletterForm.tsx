@@ -117,6 +117,11 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
   // idle widget on every page load.
   const hasInput = name.trim() !== '' || email.trim() !== '';
 
+  const errorClass = cn(
+    styles.consentError,
+    isBar ? styles.consentErrorBar : styles.consentErrorCta
+  );
+
   const buttonText =
     status === 'success'
       ? labels.subscribed
@@ -146,7 +151,9 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
           className={styles.nameInput}
         />
       </div>
-      {status === 'name-needed' && <p className={styles.consentError}>{labels.nameRequired}</p>}
+      {status === 'name-needed' && (
+        <p className={cn(errorClass, styles.fieldError)}>{labels.nameRequired}</p>
+      )}
       <InlineInputButton
         value={email}
         onChange={(value) => {
@@ -160,7 +167,7 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
         disabled={isDisabled}
         type="email"
       />
-      {status === 'email-needed' && <p className={styles.consentError}>{emailError}</p>}
+      {status === 'email-needed' && <p className={errorClass}>{emailError}</p>}
       <label
         className={cn(styles.consentLabel, isBar ? styles.consentLabelBar : styles.consentLabelCta)}
       >
@@ -181,9 +188,7 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
           {labels.consentAfter}
         </span>
       </label>
-      {status === 'consent-needed' && (
-        <p className={styles.consentError}>{labels.consentRequired}</p>
-      )}
+      {status === 'consent-needed' && <p className={errorClass}>{labels.consentRequired}</p>}
       {captchaSiteKey && hasInput && (
         <div className={styles.captchaWrapper}>
           <Captcha
@@ -198,10 +203,8 @@ export default function NewsletterForm({ variant = 'bar', captchaSiteKey, labels
       )}
       {/* Kept outside the captcha wrapper so a failed submit is never silent,
           even when the widget is not mounted (no site key / no input yet). */}
-      {status === 'captcha-needed' && (
-        <p className={styles.consentError}>{labels.captchaRequired}</p>
-      )}
-      {status === 'error' && <p className={styles.consentError}>{labels.error}</p>}
+      {status === 'captcha-needed' && <p className={errorClass}>{labels.captchaRequired}</p>}
+      {status === 'error' && <p className={errorClass}>{labels.error}</p>}
     </div>
   );
 }
