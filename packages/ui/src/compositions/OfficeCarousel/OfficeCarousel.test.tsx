@@ -1,4 +1,4 @@
-import { render, screen, cleanup } from '@testing-library/react';
+import { render, screen, cleanup, act, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import OfficeCarousel from './OfficeCarousel';
 
@@ -77,5 +77,34 @@ describe('OfficeCarousel', () => {
     expect(screen.getByText('Rua Augusta 100')).toBeInTheDocument();
     expect(screen.getByText('Hub Central')).toBeInTheDocument();
     expect(screen.getByText('Av. dos Aliados 50')).toBeInTheDocument();
+  });
+
+  it('disables the arrows at the bounds so the track never scrolls past the last card', () => {
+    vi.useFakeTimers();
+    render(<OfficeCarousel offices={offices} navPosition="top-right" ariaLabels={ariaLabels} />);
+
+    const prev = screen.getByRole('button', { name: 'Previous office' });
+    const next = screen.getByRole('button', { name: 'Next office' });
+
+    expect(prev).toBeDisabled();
+    expect(next).toBeEnabled();
+
+    // Advance to the last reachable index.
+    act(() => {
+      fireEvent.click(next);
+      fireEvent.click(next);
+    });
+
+    expect(next).toBeDisabled();
+    expect(prev).toBeEnabled();
+
+    // Further clicks must not move the track further.
+    const trackTransform = document.querySelector('[style*="translateX"]')?.getAttribute('style');
+    act(() => {
+      fireEvent.click(next);
+    });
+    expect(document.querySelector('[style*="translateX"]')?.getAttribute('style')).toBe(
+      trackTransform
+    );
   });
 });
