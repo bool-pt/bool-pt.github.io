@@ -88,7 +88,7 @@ catalog:
 
   # Build tooling
   turbo: 2.9.16
-  sharp: ^0.34.5
+  sharp: ^0.35.0
 
   # Git hooks & commits
   husky: ^9.1.7
