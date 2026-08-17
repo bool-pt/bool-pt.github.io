@@ -204,7 +204,7 @@ Override via the `paddingBlock` prop: `<Section paddingBlock="3rem 0">`.
 `<SectionContainer>` constrains content width:
 
 ```css
-max-inline-size: 1440px;
+max-inline-size: 1920px;
 margin-inline: auto;
 padding-inline: 1.5rem; /* 24px on mobile */
 
@@ -437,7 +437,7 @@ background: var(--overlay-dark); /* rgba(0,0,0,0.8) */
 | `xl`  | 1280px | Wide content                                               |
 | `2xl` | 1536px | Max breakpoint                                             |
 
-**Max content width**: 1440px (set on `<body>` and `<SectionContainer>`)
+**Max content width**: 1920px (set on `<body>` and `<SectionContainer>`)
 
 ### 8.2 Collapse Patterns
 
