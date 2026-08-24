@@ -17,6 +17,8 @@ interface FooterLabels {
   copyright: string;
   signatureImage: ImageMetadata;
   signatureAlt: string;
+  signatureDocSuffix: string;
+  signatureLinks: { label: string; href: string }[];
   companyName: string;
   companyEmail: string;
   companyPhone: string;
@@ -38,6 +40,16 @@ const socialLinks = [
   { key: 'twitter', href: labels.socialUrls.twitter, size: 26 },
   { key: 'youtube', href: labels.socialUrls.youtube },
 ].filter((s) => s.href);
+
+// The funding signature is a legal attribution — if the operation fact sheets
+// are missing from the locale the footer must fail the build, not quietly ship
+// an unlinked logo.
+if (labels.signatureLinks.length === 0) {
+  throw new Error(
+    'footer.signature.links is empty — define at least one operation fact sheet in en.json.'
+  );
+}
+const [primaryDoc, ...extraDocs] = labels.signatureLinks;
 ---
 
 <footer class="site-footer">
@@ -140,17 +152,87 @@ const socialLinks = [
         {new Date().getFullYear()}
         {labels.companyName}
       </p>
-      <Image
-        src={labels.signatureImage}
-        alt={labels.signatureAlt}
-        width={384}
-        height={32}
-        class="footer-signature"
-        loading="lazy"
-      />
+      <a
+        class="footer-signature-link"
+        href={primaryDoc.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`${primaryDoc.label}${labels.signatureDocSuffix}`}
+        title={labels.signatureLinks.map((doc) => doc.label).join(' · ')}
+        data-extra-docs={JSON.stringify(extraDocs.map((doc) => doc.href))}
+      >
+        <Image
+          src={labels.signatureImage}
+          alt={labels.signatureAlt}
+          width={384}
+          height={32}
+          class="footer-signature"
+          loading="lazy"
+        />
+      </a>
+      {
+        extraDocs.map((doc) => (
+          <a
+            class="footer-signature-doc"
+            href={doc.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${doc.label}${labels.signatureDocSuffix}`}
+          >
+            {doc.label}
+          </a>
+        ))
+      }
     </div>
   </div>
 </footer>
+
+<script>
+  // One click has to land each co-funding fact sheet in its own tab, and that
+  // fights the popup blocker: Chrome and Edge grant a *task* one new tab, so a
+  // second `window.open()` in the same handler is dropped (it returns null) —
+  // as is a second synthetic anchor click. Deferring each extra document to its
+  // own later task gets a fresh allowance, and the click's transient user
+  // activation (~5s) is still valid there, so every tab opens. Verified in
+  // Chrome 151 and Edge 151: same-task opens yield 1 tab, deferred ones yield
+  // all of them. A 0ms/rAF deferral is measurably flaky, hence the stagger.
+  const OPEN_STAGGER_MS = 120;
+
+  const openInNewTab = (href: string) => {
+    const opener = document.createElement('a');
+    opener.href = href;
+    opener.target = '_blank';
+    opener.rel = 'noopener noreferrer';
+    opener.style.display = 'none';
+    document.body.appendChild(opener);
+    opener.click();
+    opener.remove();
+  };
+
+  document.querySelectorAll('.footer-signature-link').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      const mouseEvent = event as MouseEvent;
+      // Let modified clicks (new window, download, middle-click) behave natively.
+      if (
+        mouseEvent.metaKey ||
+        mouseEvent.ctrlKey ||
+        mouseEvent.shiftKey ||
+        mouseEvent.altKey ||
+        mouseEvent.button !== 0
+      ) {
+        return;
+      }
+      // Malformed JSON throws here on purpose: the anchor's own navigation still
+      // opens the primary fact sheet and the error surfaces in the console.
+      const extraDocs: string[] = JSON.parse((link as HTMLElement).dataset.extraDocs || '[]');
+      // The anchor's own navigation spends this task's allowance on the primary
+      // document; each extra gets its own task.
+      extraDocs.forEach((href, index) => {
+        window.setTimeout(() => openInNewTab(href), (index + 1) * OPEN_STAGGER_MS);
+      });
+    });
+  });
+</script>
 
 <style>
   .site-footer {
@@ -320,10 +402,56 @@ const socialLinks = [
     color: var(--white-40);
   }
 
+  .footer-signature-link {
+    display: inline-flex;
+    flex-shrink: 0;
+    border-radius: 0.25rem;
+    transition: opacity 150ms;
+  }
+
+  .footer-signature-link:hover {
+    opacity: 0.75;
+  }
+
+  .footer-signature-link:focus-visible {
+    outline: 2px solid var(--color-on-dark);
+    outline-offset: 4px;
+  }
+
+  /* A browser grants keyboard activation exactly one new tab, so the logo's
+     click fan-out cannot deliver the second fact sheet to a keyboard user.
+     Each extra document therefore gets its own link, hidden until focused.
+     It reveals in flow rather than over the row, so nothing is obscured. */
+  .footer-signature-doc {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .footer-signature-doc:focus-visible {
+    position: static;
+    inline-size: auto;
+    block-size: auto;
+    margin: 0;
+    padding: 0.75rem 1.5rem;
+    overflow: visible;
+    clip: auto;
+    background-color: var(--color-primary);
+    color: var(--color-primary-foreground);
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: var(--radius-md);
+  }
+
   .footer-signature {
     inline-size: 384px;
     max-inline-size: 100%;
     block-size: auto;
-    flex-shrink: 0;
   }
 </style>

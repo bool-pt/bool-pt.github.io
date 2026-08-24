@@ -54,6 +54,8 @@ export function getFooterLabels(locale: Locale = 'en') {
     copyright: t('footer.copyright', locale),
     signatureImage: resolveImage(t('footer.signature.image', locale)),
     signatureAlt: t('footer.signature.alt', locale),
+    signatureDocSuffix: t('footer.signature.docSuffix', locale),
+    signatureLinks: tCollection('footer.signature.links', ['label', 'href'], locale),
     companyName: t('company.name', locale),
     companyEmail: t('company.email', locale),
     companyPhone: t('company.phone', locale),
