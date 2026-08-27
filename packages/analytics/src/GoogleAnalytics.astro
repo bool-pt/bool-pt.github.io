@@ -10,12 +10,16 @@ import { GA_MEASUREMENT_ID } from './config';
 // If none, listens for the 'bool:consent-granted' event from @bool/compliance.
 // On 'bool:consent-revoked' (analytics withdrawn) it deletes GA cookies and reloads,
 // which tears down the running gtag worker and Sentry for the rest of the session.
+// Partytown scans for text/partytown scripts once, at page load, when consent has
+// not been given yet and none exist — so injectGA() must dispatch 'ptupdate' to
+// make it rescan, or the scripts it appends stay inert and GA never loads.
+// The googletagmanager/google-analytics preconnects are issued from injectGA()
+// rather than rendered in the document head: as head markup they opened a TLS
+// connection to Google on every page load, before any consent decision.
 ---
 
 {CONSENT_ENABLED && GA_MEASUREMENT_ID && (
   <Fragment>
-  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
-  <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
   <script
     define:vars={{ GA_MEASUREMENT_ID, CONSENT_STORAGE_KEY, CONSENT_VERSION }}
   >
@@ -33,8 +37,19 @@ import { GA_MEASUREMENT_ID } from './config';
         }
       }
 
+      function preconnect(href) {
+        var link = document.createElement('link');
+        link.rel = 'preconnect';
+        link.href = href;
+        link.crossOrigin = '';
+        document.head.appendChild(link);
+      }
+
       function injectGA() {
         if (document.querySelector('script[data-ga-injected]')) return;
+
+        preconnect('https://www.googletagmanager.com');
+        preconnect('https://www.google-analytics.com');
 
         var gtagScript = document.createElement('script');
         gtagScript.async = true;
@@ -57,6 +72,11 @@ import { GA_MEASUREMENT_ID } from './config';
           // processing under analytics-only consent.
           "',{anonymize_ip:true,allow_google_signals:false,allow_ad_personalization_signals:false});";
         document.head.appendChild(inlineScript);
+
+        // Partytown already initialised (at page load, before consent) and does
+        // not observe later DOM changes, so both scripts above are inert until
+        // it is told to rescan. Without this GA never loads at all.
+        window.dispatchEvent(new CustomEvent('ptupdate'));
       }
 
       function deleteGACookies() {
