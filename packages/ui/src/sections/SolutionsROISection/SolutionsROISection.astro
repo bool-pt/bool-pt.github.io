@@ -19,6 +19,7 @@ const { heading, colSolutions, colResults, ariaLabel, solutions, backgroundImage
   background="var(--color-surface-muted)"
   aria-labelledby="solutions-heading"
   paddingBlock="5rem"
+  class="solutions-roi"
   backgroundImage={backgroundImage?.src}
 >
   <SectionContainer>
@@ -55,6 +56,41 @@ const { heading, colSolutions, colResults, ariaLabel, solutions, backgroundImage
 </Section>
 
 <style>
+  /* Decorative depth cloud behind the cards: densest through the vertical middle
+     of the section, fading to the plain muted surface at the corners. The Section
+     primitive sets background-color inline, so this has to be an overlay layer —
+     a background-image rule on the section itself would be overridden. */
+  :global(.solutions-roi) {
+    isolation: isolate;
+  }
+
+  :global(.solutions-roi::before) {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        ellipse 115% 40% at 50% 50%,
+        color-mix(in srgb, var(--color-surface-black) 24%, transparent) 0%,
+        color-mix(in srgb, var(--color-surface-black) 21%, transparent) 45%,
+        color-mix(in srgb, var(--color-surface-black) 11%, transparent) 78%,
+        color-mix(in srgb, var(--color-surface-black) 4%, transparent) 100%
+      ),
+      radial-gradient(
+        ellipse 75% 62% at 50% 50%,
+        color-mix(in srgb, var(--color-surface-black) 5%, transparent) 0%,
+        color-mix(in srgb, var(--color-surface-black) 2%, transparent) 60%,
+        transparent 100%
+      );
+  }
+
+  :global(.solutions-roi .section-container) {
+    position: relative;
+    z-index: 1;
+  }
+
   .solutionsHeading {
     font-family: var(--font-display);
     font-size: var(--font-size-display);
