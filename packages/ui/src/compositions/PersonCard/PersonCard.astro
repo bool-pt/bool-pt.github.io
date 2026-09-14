@@ -219,6 +219,9 @@ const initials = name
     --card-radius: 0.75rem;
     position: relative;
     cursor: pointer;
+    inline-size: 100%;
+    max-inline-size: 384px;
+    margin-inline: auto;
     border: 2px dashed var(--white-80);
     border-radius: var(--card-radius);
     padding: 0;
@@ -352,7 +355,7 @@ const initials = name
   .pcv2-detail {
     position: absolute;
     inset-block-start: 0;
-    inset-inline-start: 0.5rem;
+    inset-inline-start: 0;
     inline-size: 100%;
     max-inline-size: 384px;
     aspect-ratio: 384 / 470;
@@ -372,7 +375,6 @@ const initials = name
 
   @media (min-width: 640px) {
     .pcv2-detail {
-      inset-inline-start: 1.0625rem;
       padding: 2rem 1.5rem;
       transform: translateY(190px) rotate(8deg) scale(0.95);
     }
