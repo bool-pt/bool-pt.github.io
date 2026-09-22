@@ -1,0 +1,75 @@
+---
+// LinkedIn Insight Tag — ad conversion tracking and retargeting.
+//
+// Gated on the `marketing` consent category, not `analytics`: the tag builds
+// retargeting audiences and attributes ad conversions, which is a different
+// purpose from measuring site usage. @bool/compliance's shared gate also enforces
+// CONSENT_ENABLED, so the tag can never load without the withdrawal UI.
+//
+// Not run through Partytown. Partytown is configured to forward GA4's dataLayer
+// only, and the Insight Tag drives its own image beacons and DOM reads that do not
+// survive the worker proxy — so it loads async on the main thread, as LinkedIn
+// ships it.
+//
+// LinkedIn's own snippet ends with a <noscript> tracking pixel. It is deliberately
+// omitted: browser markup cannot be consent-gated, so it would fire on every page
+// load regardless of the user's choice.
+//
+// Rendered unconditionally and guarded on the partner ID inside — Astro hoists
+// bundled <script> tags at build time, so a template conditional does not reliably
+// keep one out of the page. Vite inlines the env var, so an unconfigured
+// deployment dead-code-eliminates the body.
+---
+
+<script>
+  import { onConsentGranted, onConsentRevoked, deleteCookies } from '@bool/compliance';
+  import { LINKEDIN_PARTNER_ID } from './config';
+
+  if (LINKEDIN_PARTNER_ID) {
+    const injectInsightTag = () => {
+      if (document.querySelector('script[data-linkedin-injected]')) return;
+
+      const w = window as typeof window & {
+        _linkedin_data_partner_ids?: string[];
+        lintrk?: { (action: string, payload: unknown): void; q: unknown[][] };
+      };
+
+      w._linkedin_data_partner_ids = w._linkedin_data_partner_ids ?? [];
+      w._linkedin_data_partner_ids.push(LINKEDIN_PARTNER_ID);
+
+      // Queue shim: callers can fire lintrk() before insight.min.js has loaded,
+      // and the real implementation drains `q` on startup.
+      if (!w.lintrk) {
+        const lintrk = ((action: string, payload: unknown) => {
+          lintrk.q.push([action, payload]);
+        }) as { (action: string, payload: unknown): void; q: unknown[][] };
+        lintrk.q = [];
+        w.lintrk = lintrk;
+      }
+
+      const link = document.createElement('link');
+      link.rel = 'preconnect';
+      link.href = 'https://snap.licdn.com';
+      link.crossOrigin = '';
+      document.head.appendChild(link);
+
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://snap.licdn.com/li.lms-analytics/insight.min.js';
+      script.setAttribute('data-linkedin-injected', 'true');
+      document.head.appendChild(script);
+    };
+
+    onConsentGranted('marketing', injectInsightTag);
+
+    onConsentRevoked('marketing', () => {
+      // Only the first-party cookies the tag writes on our own domain are within
+      // reach. LinkedIn's third-party cookies on linkedin.com can only be cleared
+      // through LinkedIn's own opt-out, which the Cookie Policy links to.
+      const FIRST_PARTY_COOKIES = ['_guid', 'bcookie', 'bscookie', 'lidc', 'UserMatchHistory'];
+      deleteCookies((name) => name.startsWith('li_') || FIRST_PARTY_COOKIES.includes(name));
+      // The tag has no teardown API; reloading stops it for the rest of the session.
+      location.reload();
+    });
+  }
+</script>

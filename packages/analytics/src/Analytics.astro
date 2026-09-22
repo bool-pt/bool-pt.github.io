@@ -1,0 +1,11 @@
+---
+// Single mount point for every consent-gated tracker, so BaseLayout composes one
+// component and adding a tracker never touches the layout. Each tracker below
+// guards on its own PUBLIC_* env var and routes its consent through
+// @bool/compliance's shared gate.
+import GoogleAnalytics from './GoogleAnalytics.astro';
+import LinkedInInsight from './LinkedInInsight.astro';
+---
+
+<GoogleAnalytics />
+<LinkedInInsight />

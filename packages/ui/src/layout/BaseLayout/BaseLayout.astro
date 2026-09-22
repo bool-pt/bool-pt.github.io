@@ -1,5 +1,5 @@
 ---
-import GoogleAnalytics from '@bool/analytics/GoogleAnalytics.astro';
+import Analytics from '@bool/analytics/Analytics.astro';
 import { CookieBanner, CONSENT_ENABLED } from '@bool/compliance';
 import { enKeys, t, tOptional } from '@bool/i18n';
 import { organizationJsonLd, websiteJsonLd, serializeJsonLd } from '@bool/seo';
@@ -147,7 +147,7 @@ const modals = modalKeys.map((key) => ({
       noindex={noindex}
     />
     {allJsonLd.map((ld) => <script type="application/ld+json" set:html={serializeJsonLd(ld)} />)}
-    <GoogleAnalytics />
+    <Analytics />
     <script>
       import { initSentry } from '@bool/analytics';
       import { getConsent, CONSENT_ENABLED } from '@bool/compliance';

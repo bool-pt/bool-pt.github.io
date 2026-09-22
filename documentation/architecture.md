@@ -25,8 +25,8 @@ Eleven workspace packages, imported only via barrel/subpath (never internals):
 | `@bool/content`          | Content loaders + Zod schemas (blog, events, case studies, team grid, section labels); media/icon resolution                    |
 | `@bool/i18n`             | Flat-key translation system — `t()`, `tOptional()`, `tCollection()`, `tList()`, locale metadata                                 |
 | `@bool/seo`              | Structured data (`*JsonLd`), `SEOHead`, `SecurityHeaders`, sitemap config                                                       |
-| `@bool/analytics`        | GA4 tracking (`trackEvent`/`trackConversion`/`trackEngagement`) + Sentry (`initSentry`/`captureError`)                          |
-| `@bool/compliance`       | Cookie consent banner, consent storage, `useConsent()` hook                                                                     |
+| `@bool/analytics`        | GA4 tracking (`trackEvent`/`trackConversion`/`trackEngagement`), LinkedIn Insight Tag, Sentry (`initSentry`/`captureError`)     |
+| `@bool/compliance`       | Cookie consent banner, consent storage, `useConsent()` hook, the shared tracker consent gate                                    |
 | `@bool/api`              | Typed form client (`submitContactForm`/`submitNewsletter`/`submitEventSchedule`), `ApiError`                                    |
 | `@bool/media`            | Image + font assets (synced from Google Drive); no logic                                                                        |
 | `@bool/shared`           | Types, Zod validation schemas, route/company constants, design tokens, `cn()`/`slugify()`/`formatDate()`                        |

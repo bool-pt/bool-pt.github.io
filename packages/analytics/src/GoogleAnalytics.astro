@@ -1,124 +1,74 @@
 ---
-import { CONSENT_STORAGE_KEY, CONSENT_VERSION, CONSENT_ENABLED } from '@bool/compliance';
-import { GA_MEASUREMENT_ID } from './config';
-
-// GA4 via Partytown — runs off main thread.
-// Gated on CONSENT_ENABLED so analytics can never load without the consent UI
-// that lets users grant/withdraw it (GDPR Art. 7(3)).
-// Scripts are injected only after the user grants analytics consent.
-// On page load, checks localStorage for existing consent.
-// If none, listens for the 'bool:consent-granted' event from @bool/compliance.
-// On 'bool:consent-revoked' (analytics withdrawn) it deletes GA cookies and reloads,
-// which tears down the running gtag worker and Sentry for the rest of the session.
-// Partytown scans for text/partytown scripts once, at page load, when consent has
-// not been given yet and none exist — so injectGA() must dispatch 'ptupdate' to
-// make it rescan, or the scripts it appends stay inert and GA never loads.
+// GA4 via Partytown — runs off the main thread.
+//
+// Consent handling lives in @bool/compliance's shared gate (`onConsentGranted` /
+// `onConsentRevoked`), which also enforces CONSENT_ENABLED, so GA can never load
+// without the UI that lets users withdraw it (GDPR Art. 7(3)).
+//
+// The script is rendered unconditionally and guards on GA_MEASUREMENT_ID inside:
+// Astro hoists bundled <script> tags at build time, so wrapping one in a template
+// conditional does not reliably keep it out of the page. Vite inlines the env var,
+// so an unconfigured deployment dead-code-eliminates the body.
+//
 // The googletagmanager/google-analytics preconnects are issued from injectGA()
 // rather than rendered in the document head: as head markup they opened a TLS
 // connection to Google on every page load, before any consent decision.
 ---
 
-{CONSENT_ENABLED && GA_MEASUREMENT_ID && (
-  <Fragment>
-  <script
-    define:vars={{ GA_MEASUREMENT_ID, CONSENT_STORAGE_KEY, CONSENT_VERSION }}
-  >
-    (function () {
-      function hasAnalyticsConsent() {
-        try {
-          var stored = localStorage.getItem(CONSENT_STORAGE_KEY);
-          if (!stored) return false;
-          var consent = JSON.parse(stored);
-          // Mirror getConsent(): a version mismatch counts as "no decision", so a
-          // stale record can't silently re-enable analytics after the policy changes.
-          return !!consent && consent.analytics === true && consent.version === CONSENT_VERSION;
-        } catch {
-          return false;
-        }
-      }
+<script>
+  import { onConsentGranted, onConsentRevoked, deleteCookies } from '@bool/compliance';
+  import { GA_MEASUREMENT_ID } from './config';
 
-      function preconnect(href) {
-        var link = document.createElement('link');
-        link.rel = 'preconnect';
-        link.href = href;
-        link.crossOrigin = '';
-        document.head.appendChild(link);
-      }
+  if (GA_MEASUREMENT_ID) {
+    const preconnect = (href: string) => {
+      const link = document.createElement('link');
+      link.rel = 'preconnect';
+      link.href = href;
+      link.crossOrigin = '';
+      document.head.appendChild(link);
+    };
 
-      function injectGA() {
-        if (document.querySelector('script[data-ga-injected]')) return;
+    const injectGA = () => {
+      if (document.querySelector('script[data-ga-injected]')) return;
 
-        preconnect('https://www.googletagmanager.com');
-        preconnect('https://www.google-analytics.com');
+      preconnect('https://www.googletagmanager.com');
+      preconnect('https://www.google-analytics.com');
 
-        var gtagScript = document.createElement('script');
-        gtagScript.async = true;
-        gtagScript.type = 'text/partytown';
-        gtagScript.src =
-          'https://www.googletagmanager.com/gtag/js?id=' + GA_MEASUREMENT_ID;
-        gtagScript.setAttribute('data-ga-injected', 'true');
-        document.head.appendChild(gtagScript);
+      const gtagScript = document.createElement('script');
+      gtagScript.async = true;
+      gtagScript.type = 'text/partytown';
+      gtagScript.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+      gtagScript.setAttribute('data-ga-injected', 'true');
+      document.head.appendChild(gtagScript);
 
-        var inlineScript = document.createElement('script');
-        inlineScript.type = 'text/partytown';
-        inlineScript.textContent =
-          'window.dataLayer=window.dataLayer||[];' +
-          'function gtag(){dataLayer.push(arguments);}' +
-          "gtag('js',new Date());" +
-          "gtag('config','" +
-          GA_MEASUREMENT_ID +
-          // anonymize_ip keeps analytics within the analytics purpose; the
-          // signals flags prevent GA from enabling advertising/marketing-grade
-          // processing under analytics-only consent.
-          "',{anonymize_ip:true,allow_google_signals:false,allow_ad_personalization_signals:false});";
-        document.head.appendChild(inlineScript);
+      const inlineScript = document.createElement('script');
+      inlineScript.type = 'text/partytown';
+      inlineScript.textContent =
+        'window.dataLayer=window.dataLayer||[];' +
+        'function gtag(){dataLayer.push(arguments);}' +
+        "gtag('js',new Date());" +
+        `gtag('config','${GA_MEASUREMENT_ID}',` +
+        // anonymize_ip keeps analytics within the analytics purpose; the signals
+        // flags prevent GA from enabling advertising/marketing-grade processing
+        // under analytics-only consent.
+        '{anonymize_ip:true,allow_google_signals:false,allow_ad_personalization_signals:false});';
+      document.head.appendChild(inlineScript);
 
-        // Partytown already initialised (at page load, before consent) and does
-        // not observe later DOM changes, so both scripts above are inert until
-        // it is told to rescan. Without this GA never loads at all.
-        window.dispatchEvent(new CustomEvent('ptupdate'));
-      }
+      // Partytown scans for text/partytown scripts once, at its own startup, and
+      // does not observe later DOM changes — so both scripts above stay inert
+      // until it is told to rescan. Without this GA never loads at all.
+      window.dispatchEvent(new CustomEvent('ptupdate'));
+    };
 
-      function deleteGACookies() {
-        // GA4 (cookie_domain:'auto') sets _ga/_ga_* on the registrable domain,
-        // e.g. ".bool.pt" even when served from "www.bool.pt". To reliably clear
-        // them we try the host-only form plus every parent-domain suffix (down to
-        // eTLD+1), each with and without a leading dot.
-        var parts = location.hostname.split('.');
-        var domains = [''];
-        for (var i = 0; i < parts.length - 1; i++) {
-          var suffix = parts.slice(i).join('.');
-          domains.push(suffix, '.' + suffix);
-        }
-        document.cookie.split(';').forEach(function (entry) {
-          var name = entry.split('=')[0].trim();
-          if (name === '_ga' || name.indexOf('_ga_') === 0 || name === '_gid' || name === '_gat') {
-            domains.forEach(function (domain) {
-              document.cookie =
-                name + '=; Max-Age=0; path=/' + (domain ? '; domain=' + domain : '');
-            });
-          }
-        });
-      }
+    onConsentGranted('analytics', injectGA);
 
-      if (hasAnalyticsConsent()) {
-        injectGA();
-      } else {
-        window.addEventListener('bool:consent-granted', function handler(e) {
-          if (e.detail && e.detail.analytics === true) {
-            injectGA();
-            window.removeEventListener('bool:consent-granted', handler);
-          }
-        });
-      }
-
-      window.addEventListener('bool:consent-revoked', function (e) {
-        if (e.detail && e.detail.analytics === true) {
-          deleteGACookies();
-          location.reload();
-        }
-      });
-    })();
-  </script>
-  </Fragment>
-)}
+    onConsentRevoked('analytics', () => {
+      deleteCookies(
+        (name) => name === '_ga' || name.startsWith('_ga_') || name === '_gid' || name === '_gat'
+      );
+      // Reloading tears down the running gtag worker (and Sentry) for the rest of
+      // the session — there is no supported way to unload Partytown in place.
+      location.reload();
+    });
+  }
+</script>

@@ -11,6 +11,8 @@ import { baseViteConfig } from '@bool/vite-config/base';
 // Partytown only exists to run GA4 off the main thread. Skip the integration
 // entirely when GA is not configured so the worker bundle is never shipped on a
 // site that loads no analytics. Read from process.env (set in CI) at config time.
+// The LinkedIn Insight Tag deliberately does NOT go through Partytown (see
+// LinkedInInsight.astro), so it needs nothing here.
 const gaEnabled = Boolean(process.env.PUBLIC_GA_MEASUREMENT_ID);
 
 // Fail the build loudly if the public form-config vars are missing. Without them

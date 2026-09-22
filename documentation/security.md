@@ -21,19 +21,21 @@ Emitted:
 
 ### CSP directives
 
-| Directive     | Sources                                                                                                                               | Why                                    |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
-| `default-src` | `'self'`                                                                                                                              | deny by default                        |
-| `script-src`  | `'self' 'unsafe-inline' challenges.cloudflare.com googletagmanager.com`                                                               | Astro island hydration, Turnstile, GTM |
-| `style-src`   | `'self' 'unsafe-inline'`                                                                                                              | Tailwind + Astro scoped styles         |
-| `frame-src`   | `'self' challenges.cloudflare.com`                                                                                                    | Turnstile challenge iframe             |
-| `worker-src`  | `'self' blob:`                                                                                                                        | Partytown GA4 worker                   |
-| `img-src`     | `'self' data: www.google-analytics.com`                                                                                               | inline data URIs, GA pixels            |
-| `connect-src` | `'self' challenges.cloudflare.com <PUBLIC_API_BASE_URL origin> www.google-analytics.com analytics.google.com stats.g.doubleclick.net` | form API (exact origin), Turnstile, GA |
-| `font-src`    | `'self'`                                                                                                                              | self-hosted WOFF2 only                 |
-| `object-src`  | `'none'`                                                                                                                              | no plugins                             |
-| `base-uri`    | `'self'`                                                                                                                              | block `<base>` injection               |
-| `form-action` | `'self'`                                                                                                                              | block off-origin native form posts     |
+| Directive     | Sources                                                                                                                                                                        | Why                                                          |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
+| `default-src` | `'self'`                                                                                                                                                                       | deny by default                                              |
+| `script-src`  | `'self' 'unsafe-inline' challenges.cloudflare.com googletagmanager.com snap.licdn.com`                                                                                         | Astro island hydration, Turnstile, GTM, LinkedIn Insight Tag |
+| `style-src`   | `'self' 'unsafe-inline'`                                                                                                                                                       | Tailwind + Astro scoped styles                               |
+| `frame-src`   | `'self' challenges.cloudflare.com`                                                                                                                                             | Turnstile challenge iframe                                   |
+| `worker-src`  | `'self' blob:`                                                                                                                                                                 | Partytown GA4 worker                                         |
+| `img-src`     | `'self' data: www.google-analytics.com px.ads.linkedin.com px4.ads.linkedin.com www.linkedin.com`                                                                              | inline data URIs, GA + LinkedIn pixels                       |
+| `connect-src` | `'self' challenges.cloudflare.com <PUBLIC_API_BASE_URL origin> www.google-analytics.com analytics.google.com stats.g.doubleclick.net px.ads.linkedin.com px4.ads.linkedin.com` | form API (exact origin), Turnstile, GA, LinkedIn             |
+| `font-src`    | `'self'`                                                                                                                                                                       | self-hosted WOFF2 only                                       |
+| `object-src`  | `'none'`                                                                                                                                                                       | no plugins                                                   |
+| `base-uri`    | `'self'`                                                                                                                                                                       | block `<base>` injection                                     |
+| `form-action` | `'self'`                                                                                                                                                                       | block off-origin native form posts                           |
+
+Each tracker's hosts are added by `buildContentSecurityPolicy` only when that tracker is configured, so a deployment without `PUBLIC_GA_MEASUREMENT_ID` / `PUBLIC_LINKEDIN_PARTNER_ID` never widens the policy to endpoints it cannot use (`csp.test.ts` covers each combination).
 
 `'unsafe-inline'` on `script-src`/`style-src` is required by Astro's hydration and scoped-style model; tightening it would mean a nonce/hash strategy the static build doesn't currently emit. If you add a third-party origin (a new analytics or embed), it must be added to the matching directive or the browser blocks it.
 
@@ -57,7 +59,7 @@ Forms attach a Turnstile token that the Lambda verifies server-side before sendi
 ## Secret model
 
 - **No `.env` files are committed.** All config lives in GitHub repo variables/secrets (`ci-deploy.md`).
-- Only `PUBLIC_*` values reach the browser and are inherently public: `PUBLIC_API_BASE_URL`, `PUBLIC_TURNSTILE_SITE_KEY`, `PUBLIC_GA_MEASUREMENT_ID`, `PUBLIC_SENTRY_DSN`. Declared in `apps/web/bool/src/env.d.ts`.
+- Only `PUBLIC_*` values reach the browser and are inherently public: `PUBLIC_API_BASE_URL`, `PUBLIC_TURNSTILE_SITE_KEY`, `PUBLIC_GA_MEASUREMENT_ID`, `PUBLIC_SENTRY_DSN`, `PUBLIC_LINKEDIN_PARTNER_ID`. Declared in `apps/web/bool/src/env.d.ts`.
 - The Turnstile **secret key**, AWS credentials, and SES config live in the **Lambda environment, not in this repo** — there is no `TURNSTILE_SECRET` anywhere in the tree.
 - API CORS allows `bool.pt` / `www.bool.pt` only, so form posts from `localhost` are blocked unless the backend allowlists them.
 - External links use `rel="noopener noreferrer"` (footer, person/expert cards, share menu).
@@ -89,4 +91,16 @@ The `@bool/api` client (`src/client.ts`) sets a 15s timeout via `AbortController
 
 ## Consent gating
 
-Analytics (GA4) and error monitoring (Sentry) are gated behind cookie consent (`@bool/compliance`). See that package's README and `ci-deploy.md` for the env wiring; the banner only shows when consent-requiring tech is actually enabled.
+Every tracker is gated behind cookie consent (`@bool/compliance`). See that package's README and `ci-deploy.md` for the env wiring.
+
+| Tracker                                             | Category    | Loads via                            |
+| --------------------------------------------------- | ----------- | ------------------------------------ |
+| GA4 (`PUBLIC_GA_MEASUREMENT_ID`)                    | `analytics` | `Analytics.astro` → Partytown worker |
+| Sentry (`PUBLIC_SENTRY_DSN`)                        | `analytics` | `BaseLayout.astro`                   |
+| LinkedIn Insight Tag (`PUBLIC_LINKEDIN_PARTNER_ID`) | `marketing` | `Analytics.astro` → main thread      |
+
+The LinkedIn Insight Tag is ad-conversion tracking, so it is gated on `marketing`, not `analytics` — rejecting marketing while accepting analytics must leave it unloaded.
+
+Trackers never read consent themselves: they call `onConsentGranted` / `onConsentRevoked` from `@bool/compliance`'s shared gate (`consent-gate.ts`), which enforces `CONSENT_ENABLED`, validates the stored record's policy version, and loads only after an explicit grant. On withdrawal each tracker deletes the first-party cookies it can reach and reloads. Adding a tracker means adding it to `Analytics.astro` through that gate — never a raw `<script>` in a layout, and never a `<noscript>` pixel, which cannot be consent-gated.
+
+Bumping `CONSENT_VERSION` invalidates every stored consent record and re-prompts, which is required whenever the categories or processors change (it went to `2` when the Insight Tag introduced marketing cookies).

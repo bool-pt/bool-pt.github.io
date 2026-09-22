@@ -94,6 +94,33 @@ test.describe('Cookie Consent', () => {
     // or one labelled toggle should now be visible inside the dialog.
     await expect(banner.locator('input[type="checkbox"], [role="switch"]').first()).toBeVisible();
   });
+
+  test('no tracker is requested before a consent decision is made', async ({ page }) => {
+    // The trackers are the whole reason the banner exists: if any of these hosts
+    // is contacted while the banner is still up, consent is being bypassed. Holds
+    // whether or not the tracker env vars are configured for this build — an
+    // unconfigured build ships no tracker at all, a configured one must wait.
+    const TRACKER_HOSTS = [
+      'snap.licdn.com',
+      'px.ads.linkedin.com',
+      'px4.ads.linkedin.com',
+      'www.googletagmanager.com',
+      'www.google-analytics.com',
+    ];
+
+    const requested: string[] = [];
+    page.on('request', (request) => {
+      const host = new URL(request.url()).hostname;
+      if (TRACKER_HOSTS.includes(host)) requested.push(host);
+    });
+
+    await page.goto(ROUTES.home);
+    await page.evaluate(() => localStorage.clear());
+    await page.reload();
+    await page.waitForLoadState('networkidle');
+
+    expect(requested).toEqual([]);
+  });
 });
 
 test.describe('Contact Form', () => {
