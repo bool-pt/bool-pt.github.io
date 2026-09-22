@@ -99,11 +99,10 @@ describe('CookieBanner', () => {
     expect(screen.getByText('cookie.back')).toBeInTheDocument();
     expect(screen.getByText('consent.essential.label')).toBeInTheDocument();
     expect(screen.getByText('consent.analytics.label')).toBeInTheDocument();
-    // Marketing is hidden until the site actually uses marketing cookies.
-    expect(screen.queryByText('consent.marketing.label')).not.toBeInTheDocument();
+    expect(screen.getByText('consent.marketing.label')).toBeInTheDocument();
 
     const checkboxes = screen.getAllByRole('checkbox');
-    expect(checkboxes).toHaveLength(2); // essential (locked) + analytics
+    expect(checkboxes).toHaveLength(3); // essential (locked) + analytics + marketing
     const essentialToggle = checkboxes[0];
     expect(essentialToggle).toBeChecked();
     expect(essentialToggle).toBeDisabled();
@@ -141,17 +140,19 @@ describe('CookieBanner', () => {
     });
   });
 
-  it('omits unconfigured analytics tools from the description (no Sentry when DSN empty)', async () => {
+  it('omits unconfigured tools from the descriptions (no tool named when no env var is set)', async () => {
     const user = userEvent.setup();
     setupMock();
 
     const { container } = render(<CookieBanner />);
     await user.click(screen.getByText('cookie.manage'));
 
-    // With no PUBLIC_* analytics env vars set (the test default), the analytics
-    // description must not name any tool.
-    expect(container.textContent).not.toContain('consent.analytics.tools.sentry');
-    expect(container.textContent).not.toContain('consent.analytics.tools.googleAnalytics');
+    // With no PUBLIC_* tracker env vars set (the test default), no category
+    // description may name a tool.
+    expect(container.textContent).not.toContain('consent.tools.prefix');
+    expect(container.textContent).not.toContain('consent.tools.sentry');
+    expect(container.textContent).not.toContain('consent.tools.googleAnalytics');
+    expect(container.textContent).not.toContain('consent.tools.linkedIn');
   });
 
   it('names a tool only when its env var is configured', async () => {
@@ -162,10 +163,37 @@ describe('CookieBanner', () => {
     const { container } = render(<CookieBanner />);
     await user.click(screen.getByText('cookie.manage'));
 
-    expect(container.textContent).toContain('consent.analytics.tools.sentry');
-    expect(container.textContent).toContain('consent.analytics.tools.prefix');
+    expect(container.textContent).toContain('consent.tools.sentry');
+    expect(container.textContent).toContain('consent.tools.prefix');
     // GA is still unconfigured, so it must not appear.
-    expect(container.textContent).not.toContain('consent.analytics.tools.googleAnalytics');
+    expect(container.textContent).not.toContain('consent.tools.googleAnalytics');
+  });
+
+  it('names the LinkedIn Insight Tag under marketing, not analytics', async () => {
+    vi.stubEnv('PUBLIC_LINKEDIN_PARTNER_ID', '10229265');
+    vi.stubEnv('PUBLIC_SENTRY_DSN', '');
+    const user = userEvent.setup();
+    setupMock();
+
+    render(<CookieBanner />);
+    await user.click(screen.getByText('cookie.manage'));
+
+    // The tag is ad-conversion tracking: it must be described under the category
+    // that actually gates it, so a user rejecting marketing knows what they refused.
+    const marketing = screen.getByText('consent.marketing.label').closest('label');
+    const analytics = screen.getByText('consent.analytics.label').closest('label');
+    expect(marketing?.textContent).toContain('consent.tools.linkedIn');
+    expect(analytics?.textContent).not.toContain('consent.tools.linkedIn');
+  });
+
+  it('offers a marketing toggle, so the Insight Tag can be refused', async () => {
+    const user = userEvent.setup();
+    setupMock();
+
+    render(<CookieBanner />);
+    await user.click(screen.getByText('cookie.manage'));
+
+    expect(screen.getByText('consent.marketing.label')).toBeInTheDocument();
   });
 
   it('opens preferences view when bool:open-preferences fires even if hasDecided is true', () => {

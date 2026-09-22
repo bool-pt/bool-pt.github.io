@@ -13,27 +13,44 @@ const optionalKeys = allCategoryKeys.filter(
 ) as ConsentCategory[];
 
 /**
- * Analytics description, naming only the tools that are actually configured.
- * GA/Sentry are listed only when their PUBLIC_* env var is set, so the banner
- * never claims to use a service that isn't running (e.g. no "Sentry" mention
- * when PUBLIC_SENTRY_DSN is empty).
+ * The tools that run under each category, so the banner can name them.
+ *
+ * A tool is listed only where it actually runs, so the banner never claims to use
+ * a service that isn't configured. `configured` is a thunk over a static
+ * `import.meta.env.PUBLIC_*` reference: static so Vite inlines it at build time,
+ * a thunk so it is read per render rather than frozen at module load.
  */
+const CATEGORY_TOOLS: Partial<
+  Record<keyof typeof CONSENT_CATEGORIES, { configured: () => boolean; labelKey: string }[]>
+> = {
+  analytics: [
+    {
+      configured: () => Boolean(import.meta.env.PUBLIC_GA_MEASUREMENT_ID),
+      labelKey: 'consent.tools.googleAnalytics',
+    },
+    {
+      configured: () => Boolean(import.meta.env.PUBLIC_SENTRY_DSN),
+      labelKey: 'consent.tools.sentry',
+    },
+  ],
+  marketing: [
+    {
+      configured: () => Boolean(import.meta.env.PUBLIC_LINKEDIN_PARTNER_ID),
+      labelKey: 'consent.tools.linkedIn',
+    },
+  ],
+};
+
 function describeCategory(key: keyof typeof CONSENT_CATEGORIES): string {
   const base = t(CONSENT_CATEGORIES[key].descriptionKey);
-  if (key !== 'analytics') return base;
-
-  const tools: string[] = [];
-  if (import.meta.env.PUBLIC_GA_MEASUREMENT_ID) {
-    tools.push(t('consent.analytics.tools.googleAnalytics'));
-  }
-  if (import.meta.env.PUBLIC_SENTRY_DSN) {
-    tools.push(t('consent.analytics.tools.sentry'));
-  }
+  const tools = (CATEGORY_TOOLS[key] ?? [])
+    .filter((tool) => tool.configured())
+    .map((tool) => t(tool.labelKey));
   if (tools.length === 0) return base;
 
   const list =
     tools.length > 1 ? `${tools.slice(0, -1).join(', ')} and ${tools[tools.length - 1]}` : tools[0];
-  return `${base} ${t('consent.analytics.tools.prefix')} ${list}.`;
+  return `${base} ${t('consent.tools.prefix')} ${list}.`;
 }
 
 export function CookieBanner() {

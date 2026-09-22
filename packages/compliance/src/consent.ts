@@ -1,5 +1,10 @@
 import type { ConsentState } from '@bool/shared';
-import { CONSENT_STORAGE_KEY, CONSENT_VERSION } from './config';
+import {
+  CONSENT_STORAGE_KEY,
+  CONSENT_VERSION,
+  CONSENT_GRANTED_EVENT,
+  CONSENT_REVOKED_EVENT,
+} from './config';
 
 const DEFAULT_MAX_AGE_MS = 365 * 24 * 60 * 60 * 1000;
 
@@ -35,7 +40,7 @@ export function setConsent(state: Omit<ConsentState, 'timestamp' | 'version'>): 
   localStorage.setItem(CONSENT_STORAGE_KEY, JSON.stringify(record));
   window.dispatchEvent(new CustomEvent('bool:consent-updated', { detail: record }));
   if (state.analytics || state.marketing) {
-    window.dispatchEvent(new CustomEvent('bool:consent-granted', { detail: record }));
+    window.dispatchEvent(new CustomEvent(CONSENT_GRANTED_EVENT, { detail: record }));
   }
   // Fire a revoke event for any category that was previously granted and is now
   // denied, so already-loaded trackers (GA, Sentry) can tear themselves down.
@@ -43,7 +48,7 @@ export function setConsent(state: Omit<ConsentState, 'timestamp' | 'version'>): 
   const marketingRevoked = previous?.marketing === true && state.marketing === false;
   if (analyticsRevoked || marketingRevoked) {
     window.dispatchEvent(
-      new CustomEvent('bool:consent-revoked', {
+      new CustomEvent(CONSENT_REVOKED_EVENT, {
         detail: { analytics: analyticsRevoked, marketing: marketingRevoked },
       })
     );

@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { CONSENT_STORAGE_KEY, CONSENT_VERSION } from './config';
+import { CONSENT_STORAGE_KEY, CONSENT_VERSION, CONSENT_CATEGORIES } from './config';
 import { useConsent } from './hooks';
 
 beforeEach(() => {
@@ -33,15 +33,17 @@ describe('useConsent', () => {
     expect(result.current.hasDecided).toBe(true);
   });
 
-  it('acceptAll grants only available categories (marketing is hidden)', () => {
+  it('acceptAll grants exactly the categories shown in the banner', () => {
     const { result } = renderHook(() => useConsent());
 
     act(() => {
       result.current.accept();
     });
 
-    expect(result.current.consent?.analytics).toBe(true);
-    expect(result.current.consent?.marketing).toBe(false);
+    // "Accept all" must never record consent for a category the user was not
+    // shown, so it mirrors CONSENT_CATEGORIES rather than granting blindly.
+    expect(result.current.consent?.analytics).toBe(CONSENT_CATEGORIES.analytics.available);
+    expect(result.current.consent?.marketing).toBe(CONSENT_CATEGORIES.marketing.available);
     expect(result.current.hasDecided).toBe(true);
 
     const raw = localStorage.getItem(CONSENT_STORAGE_KEY);
@@ -51,8 +53,8 @@ describe('useConsent', () => {
       marketing: boolean;
       timestamp: number;
     };
-    expect(stored.analytics).toBe(true);
-    expect(stored.marketing).toBe(false);
+    expect(stored.analytics).toBe(CONSENT_CATEGORIES.analytics.available);
+    expect(stored.marketing).toBe(CONSENT_CATEGORIES.marketing.available);
     expect(typeof stored.timestamp).toBe('number');
   });
 

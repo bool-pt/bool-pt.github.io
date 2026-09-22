@@ -1,3 +1,5 @@
 # @bool/compliance
 
-Cookie consent banner, consent storage, and the `useConsent` hook. See [CLAUDE.md](../../.claude/CLAUDE.md).
+Cookie consent banner, consent storage, the `useConsent` hook, and the shared consent gate
+(`onConsentGranted` / `onConsentRevoked` / `deleteCookies`) that every tracker loads through.
+See [CLAUDE.md](../../.claude/CLAUDE.md).
