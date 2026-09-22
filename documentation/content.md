@@ -48,6 +48,8 @@ Media and locale files are synced from a shared Google Drive folder via GitHub A
 
 The `media/` and `locales/` subfolders are optional — the sync script downloads whichever it finds.
 
+They do not have to sit directly in the configured folder: if the root holds neither, but exactly one folder one level down holds them, the sync descends into it. That keeps the sync working when the Drive root is moved under a new parent folder. Two or more such subfolders are ambiguous and the sync stops — point `GOOGLE_DRIVE_FOLDER_ID` at the one to sync from.
+
 ### Setup (one-time)
 
 **Step 1 — Google Cloud Console** ([console.cloud.google.com](https://console.cloud.google.com))

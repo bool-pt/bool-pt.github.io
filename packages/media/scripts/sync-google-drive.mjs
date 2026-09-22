@@ -16,7 +16,10 @@
  *       ├── en.json
  *       └── pt.json (future)
  *
- * Both subfolders are optional — the script syncs whichever it finds.
+ * Both subfolders are optional — the script syncs whichever it finds. If the
+ * configured root holds neither but a single subfolder inside it does, the
+ * script descends into that one — a Drive reorganisation that nests the old
+ * root under a new parent folder keeps working without a config change.
  *
  * ## Key features
  *
@@ -201,6 +204,52 @@ async function findSubfolder(parentId, name, token) {
     pageSize: '1',
   });
   return data.files[0]?.id ?? null;
+}
+
+/**
+ * Locates the folder that directly holds media/ and locales/.
+ *
+ * Normally that is the configured root. When it is not, but exactly one folder
+ * one level down holds either of them, that one is used — Drive reorganisations
+ * tend to nest the existing root under a new parent, and the layout is
+ * unambiguous. Two or more candidates are ambiguous, so the sync stops rather
+ * than picking one.
+ *
+ * Returns { media, locales } folder IDs (either may be null).
+ */
+async function resolveContentRoot(rootId, token) {
+  const media = await findSubfolder(rootId, 'media', token);
+  const locales = await findSubfolder(rootId, 'locales', token);
+  if (media || locales) return { media, locales };
+
+  const children = await driveGet('files', token, {
+    q: `'${rootId}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
+    fields: 'files(id, name)',
+    pageSize: '100',
+  });
+
+  const candidates = [];
+  for (const child of children.files) {
+    const nestedMedia = await findSubfolder(child.id, 'media', token);
+    const nestedLocales = await findSubfolder(child.id, 'locales', token);
+    if (nestedMedia || nestedLocales) {
+      candidates.push({ name: child.name, media: nestedMedia, locales: nestedLocales });
+    }
+  }
+
+  if (candidates.length === 0) return { media: null, locales: null };
+
+  if (candidates.length > 1) {
+    throw new Error(
+      `Ambiguous Drive layout: ${candidates.length} subfolders of the configured root ` +
+        `contain media/ or locales/ (${candidates.map((c) => `"${c.name}"`).join(', ')}).\n` +
+        'Point GOOGLE_DRIVE_FOLDER_ID at the one to sync from.'
+    );
+  }
+
+  const [only] = candidates;
+  console.log(`  (descending into "${only.name}/" — the configured root only wraps it)`);
+  return { media: only.media, locales: only.locales };
 }
 
 /**
@@ -738,11 +787,13 @@ const sa = loadServiceAccount();
 const token = await getAccessToken(sa);
 console.log(`Authenticated as ${sa.client_email}\n`);
 
-// Discover subfolders. media/ may optionally contain an images/ subfolder
-// to mirror packages/media/images/ — if so, sync from inside that.
+// Discover subfolders. The configured root may just wrap the folder that holds
+// media/ and locales/, and media/ may itself contain an images/ subfolder to
+// mirror packages/media/images/ — descend through both when present.
 console.log('Looking for media/ and locales/ subfolders…');
-let mediaFolderId = await findSubfolder(folderId, 'media', token);
-const localesFolderId = await findSubfolder(folderId, 'locales', token);
+const contentRoot = await resolveContentRoot(folderId, token);
+let mediaFolderId = contentRoot.media;
+const localesFolderId = contentRoot.locales;
 
 if (mediaFolderId) {
   const nestedImages = await findSubfolder(mediaFolderId, 'images', token);
@@ -754,7 +805,8 @@ if (mediaFolderId) {
 
 if (!mediaFolderId && !localesFolderId) {
   console.error(
-    'Neither media/ nor locales/ subfolder found in Drive.\n' +
+    'Neither media/ nor locales/ subfolder found in Drive — not in the\n' +
+      'configured root, nor in any single folder one level inside it.\n' +
       'Expected folder structure:\n' +
       '  <root>/\n' +
       '  ├── media/     (images)\n' +

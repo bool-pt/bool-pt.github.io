@@ -176,20 +176,67 @@ if (data.files.length === 0) {
   }
 }
 
-// Step 4: Check expected subfolders
+// Step 4: Check expected subfolders. They normally sit directly in the
+// configured root; if not, a single folder one level down may hold them. The
+// sync resolves the same way (resolveContentRoot in sync-google-drive.mjs), so
+// look there before reporting them missing.
 console.log('\n4. Checking expected subfolders…');
-const folderNames = data.files
-  .filter((f) => f.mimeType === 'application/vnd.google-apps.folder')
-  .map((f) => f.name);
+const rootFolders = data.files.filter((f) => f.mimeType === 'application/vnd.google-apps.folder');
 
-const hasMedia = folderNames.includes('media');
-const hasLocales = folderNames.includes('locales');
+let mediaFolder = rootFolders.find((f) => f.name === 'media') ?? null;
+let localesFolder = rootFolders.find((f) => f.name === 'locales') ?? null;
+let container = '';
 
-console.log(`   media/   ${hasMedia ? 'found' : 'NOT FOUND'}`);
-console.log(`   locales/ ${hasLocales ? 'found' : 'NOT FOUND'}`);
+if (!mediaFolder && !localesFolder) {
+  for (const child of rootFolders) {
+    const nested = await driveGet('files', token, {
+      q: `'${child.id}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false`,
+      fields: 'files(id, name)',
+      pageSize: '100',
+    });
+    const nestedMedia = nested.files.find((f) => f.name === 'media') ?? null;
+    const nestedLocales = nested.files.find((f) => f.name === 'locales') ?? null;
+    if (!nestedMedia && !nestedLocales) continue;
 
-record('media/ subfolder', hasMedia ? 'ok' : 'warn', hasMedia ? 'present' : 'missing');
-record('locales/ subfolder', hasLocales ? 'ok' : 'warn', hasLocales ? 'present' : 'missing');
+    if (container) {
+      console.error(
+        `   Ambiguous: "${container}" and "${child.name}" both hold media/ or locales/.`
+      );
+      record(
+        'Drive layout',
+        'fail',
+        `ambiguous — "${container}" and "${child.name}" both qualify; point GOOGLE_DRIVE_FOLDER_ID at one`
+      );
+      renderSummary();
+      process.exit(1);
+    }
+
+    mediaFolder = nestedMedia;
+    localesFolder = nestedLocales;
+    container = child.name;
+  }
+
+  if (container) {
+    console.log(`   (nested inside "${container}/" — the sync descends into it)`);
+    record('Drive layout', 'ok', `media/ and locales/ nested inside "${container}/"`);
+  }
+}
+
+const prefix = container ? `${container}/` : '';
+
+console.log(`   ${prefix}media/   ${mediaFolder ? 'found' : 'NOT FOUND'}`);
+console.log(`   ${prefix}locales/ ${localesFolder ? 'found' : 'NOT FOUND'}`);
+
+record(
+  'media/ subfolder',
+  mediaFolder ? 'ok' : 'warn',
+  mediaFolder ? `${prefix}media/` : 'missing'
+);
+record(
+  'locales/ subfolder',
+  localesFolder ? 'ok' : 'warn',
+  localesFolder ? `${prefix}locales/` : 'missing'
+);
 
 // Step 5: Recursively list files in each subfolder
 async function listAllRecursive(folderId, token, depth = 0) {
@@ -217,11 +264,10 @@ async function listAllRecursive(folderId, token, depth = 0) {
   return items;
 }
 
-if (hasMedia) {
-  const mediaFolder = data.files.find((f) => f.name === 'media');
+if (mediaFolder) {
   const mediaItems = await listAllRecursive(mediaFolder.id, token);
   const fileCount = mediaItems.filter((i) => !i.isFolder).length;
-  groupStart(`media/ contains ${fileCount} files`);
+  groupStart(`${prefix}media/ contains ${fileCount} files`);
   for (const item of mediaItems) {
     const indent = '  '.repeat(item.depth + 1);
     if (item.isFolder) {
@@ -234,15 +280,14 @@ if (hasMedia) {
   groupEnd();
 }
 
-if (hasLocales) {
-  const localesFolder = data.files.find((f) => f.name === 'locales');
+if (localesFolder) {
   const localesData = await driveGet('files', token, {
     q: `'${localesFolder.id}' in parents and trashed = false`,
     fields: 'files(id, name)',
     pageSize: '100',
   });
   const names = localesData.files.map((f) => f.name).join(', ') || '(empty)';
-  groupStart(`locales/ contains: ${names}`);
+  groupStart(`${prefix}locales/ contains: ${names}`);
   console.log(names);
   groupEnd();
 }
