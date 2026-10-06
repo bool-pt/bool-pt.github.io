@@ -18,7 +18,7 @@ describe('en.json compliance content', () => {
   it('privacy policy identifies the controller with VAT and address (BOOL-07a/b)', () => {
     const body = t['privacy.section.1.body'];
     expect(body).toContain('PT510768105');
-    expect(body).toContain('Kube Coworking');
+    expect(body).toContain('Praia da Vitória');
   });
 
   it('policies promise the footer "Cookie preferences" link (premise of BOOL-01)', () => {
