@@ -1,5 +1,5 @@
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { X, Maximize2, Minimize2 } from 'lucide-react';
+import { X, Maximize2, Minimize2, ExternalLink } from 'lucide-react';
 import { useState } from 'react';
 import Icon from '../../primitives/Icon/Icon';
 import ShareMenu from '../ShareMenu/ShareMenu';
@@ -35,6 +35,12 @@ export interface InsightArticleLabels {
   backToArticles: string;
   copyLink: string;
   copied: string;
+  readFullArticle: string;
+}
+
+/** External article URLs (e.g. LinkedIn) get a visible "read the full article" link. */
+function isExternalUrl(url: string): boolean {
+  return /^https?:\/\//.test(url);
 }
 
 interface Props {
@@ -170,6 +176,17 @@ export default function InsightArticleModal({ article, open, onClose, labels }: 
                 <Icon name="arrow-left" size={16} strokeWidth={2.5} />
                 {labels.backToArticles}
               </button>
+              {isExternalUrl(article.url) && (
+                <a
+                  href={article.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.externalLink}
+                >
+                  {labels.readFullArticle}
+                  <ExternalLink size={16} strokeWidth={2.5} aria-hidden="true" />
+                </a>
+              )}
             </div>
           </div>
         </DialogPrimitive.Content>

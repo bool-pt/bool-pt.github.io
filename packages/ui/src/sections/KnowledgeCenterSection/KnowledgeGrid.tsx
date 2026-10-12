@@ -42,6 +42,7 @@ interface Props {
     backToArticles: string;
     copyLink: string;
     copied: string;
+    readFullArticle: string;
     shareChannels: Array<{ key: string; visible: boolean }>;
   };
 }
@@ -148,6 +149,7 @@ export default function KnowledgeGrid({ articles, filters, labels }: Props) {
     backToArticles: labels.backToArticles,
     copyLink: labels.copyLink,
     copied: labels.copied,
+    readFullArticle: labels.readFullArticle,
   };
 
   return (

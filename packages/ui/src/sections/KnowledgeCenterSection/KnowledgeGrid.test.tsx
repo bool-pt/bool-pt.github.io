@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import KnowledgeGrid from './KnowledgeGrid';
 
@@ -31,6 +31,14 @@ const articles = [
     href: '/blog/design-systems',
     tags: ['design', 'frontend'],
   },
+  {
+    category: 'Engineering',
+    title: 'Published on LinkedIn',
+    author: 'Jane Doe',
+    readTime: '8 min',
+    href: 'https://www.linkedin.com/pulse/published-on-linkedin/',
+    tags: ['engineering'],
+  },
 ];
 
 const filters = ['All', 'ENGINEERING', 'DESIGN'];
@@ -47,6 +55,8 @@ const labels = {
   techStack: 'Tech Stack',
   talkToExpert: 'Talk to Expert',
   backToArticles: 'Back to articles',
+  readFullArticle: 'Read the full article on LinkedIn',
+  shareChannels: [],
   ctaHref: '/contacts',
 };
 
@@ -65,5 +75,27 @@ describe('KnowledgeGrid', () => {
     expect(screen.getByRole('tab', { name: 'All' })).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: 'ENGINEERING' })).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: 'DESIGN' })).toBeInTheDocument();
+  });
+
+  it('links to the full article when its href is external', () => {
+    render(<KnowledgeGrid articles={articles} filters={filters} labels={labels} />);
+
+    const readButtons = screen.getAllByRole('button', { name: /Read Article/ });
+    fireEvent.click(readButtons[2]);
+
+    const link = screen.getByRole('link', { name: /Read the full article on LinkedIn/ });
+    expect(link).toHaveAttribute('href', 'https://www.linkedin.com/pulse/published-on-linkedin/');
+    expect(link).toHaveAttribute('target', '_blank');
+  });
+
+  it('shows no full-article link for internal hrefs', () => {
+    render(<KnowledgeGrid articles={articles} filters={filters} labels={labels} />);
+
+    fireEvent.click(screen.getAllByRole('button', { name: /Read Article/ })[0]);
+
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: /Read the full article on LinkedIn/ })
+    ).not.toBeInTheDocument();
   });
 });
