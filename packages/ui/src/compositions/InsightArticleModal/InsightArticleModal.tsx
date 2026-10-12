@@ -110,10 +110,14 @@ export default function InsightArticleModal({ article, open, onClose, labels }: 
               </div>
             )}
 
-            <div className={styles.bodyColumns}>
-              <p className={styles.bodyHighlight}>{article.highlightedContent}</p>
-              <p className={styles.bodyContent}>{article.content}</p>
-            </div>
+            {(article.highlightedContent || article.content) && (
+              <div className={styles.bodyColumns}>
+                {article.highlightedContent && (
+                  <p className={styles.bodyHighlight}>{article.highlightedContent}</p>
+                )}
+                {article.content && <p className={styles.bodyContent}>{article.content}</p>}
+              </div>
+            )}
 
             <div className={styles.aboutCard}>
               <h3 className={styles.aboutHeading}>{labels.aboutThisArticle}</h3>
