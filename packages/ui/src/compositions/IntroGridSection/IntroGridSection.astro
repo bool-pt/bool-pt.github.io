@@ -23,7 +23,6 @@ interface Props {
   gridRole?: string;
   gridAriaLabel?: string;
   paddingBlock?: string;
-  contentVisibility?: boolean;
   id?: string;
   class?: string;
 }
@@ -47,7 +46,6 @@ const {
   gridRole,
   gridAriaLabel,
   paddingBlock,
-  contentVisibility,
   id,
   class: className,
 } = Astro.props;
@@ -61,7 +59,6 @@ const hasAction = Astro.slots.has('action');
   backgroundImage={backgroundImage}
   aria-labelledby={headingId}
   paddingBlock={paddingBlock}
-  contentVisibility={contentVisibility}
   id={id}
   class={className}
 >
