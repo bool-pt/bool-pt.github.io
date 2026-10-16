@@ -89,7 +89,7 @@ export const LINK_PAGES: LinkPage[] = [
           { id: 'outsystems', label: 'OutSystems' },
           { id: 'mendix', label: 'Mendix' },
           { id: 'microsoft-power-platform', label: 'Microsoft Power Platform' },
-          { id: 'open-source-and-custom-stack', label: 'Open Source & Custom Stack' },
+          { id: 'ai-engineering', label: 'AI Engineering' },
         ],
       },
       S('howWeWork', 'How We Work'),
