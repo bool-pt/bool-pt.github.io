@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bool.pt/sitemap-index.xml

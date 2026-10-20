@@ -1,0 +1,1834 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+      (function () {
+        var theme = localStorage.getItem("theme");
+        if (theme === "dark") {
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="icon" type="image/png" href="./favicon.png" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="preconnect" href="https://challenges.cloudflare.com" crossorigin="" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; frame-src 'self' https://challenges.cloudflare.com; worker-src 'self' blob:; img-src 'self' data:; connect-src 'self' https://challenges.cloudflare.com https://api.invalid; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';"
+    />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=()" />
+    <title>Bool | AI-Augmented Development Consultancy | Bool</title>
+    <meta
+      name="description"
+      content="Bool is an AI-Augmented Development consultancy. We build enterprise software faster, leaner, and smarter, 13 years, 300+ projects, real outcomes."
+    />
+    <link rel="canonical" href="https://bool.pt/" />
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bool.pt/" />
+    <meta property="og:title" content="Bool | AI-Augmented Development Consultancy | Bool" />
+    <meta
+      property="og:description"
+      content="Bool is an AI-Augmented Development consultancy. We build enterprise software faster, leaner, and smarter, 13 years, 300+ projects, real outcomes."
+    />
+    <meta property="og:image" content="https://bool.pt/og/default.png" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Bool" />
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@wearebool" />
+    <meta name="twitter:title" content="Bool | AI-Augmented Development Consultancy | Bool" />
+    <meta
+      name="twitter:description"
+      content="Bool is an AI-Augmented Development consultancy. We build enterprise software faster, leaner, and smarter, 13 years, 300+ projects, real outcomes."
+    />
+    <meta name="twitter:image" content="https://bool.pt/og/default.png" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Bool",
+        "url": "https://bool.pt",
+        "sameAs": [
+          "https://www.linkedin.com/company/bool",
+          "https://github.com/bool-pt",
+          "https://x.com/wearebool",
+          "https://instagram.com/wearebool",
+          "https://www.facebook.com/BoolPT/",
+          "https://youtube.com/@bool-pt"
+        ],
+        "contactPoint": { "@type": "ContactPoint", "email": "info@bool.pt", "contactType": "customer service" }
+      }
+    </script>
+    <script type="application/ld+json">
+      { "@context": "https://schema.org", "@type": "WebSite", "name": "Bool", "url": "https://bool.pt" }
+    </script>
+    <link rel="stylesheet" href="./assets/site.css" />
+    <link rel="stylesheet" href="./assets/app.css" />
+    <script src="./assets/app.js" defer=""></script>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-nav">Skip to content</a>
+    <header class="site-header" data-c-header-actions="">
+      <nav aria-label="Main navigation" data-c-header-actions="">
+        <a href="./index.html" class="site-logo" aria-label="Bool home" data-c-header-actions="">
+          <img
+            src="./assets/img/bool-logo-142.svg"
+            alt=""
+            loading="lazy"
+            decoding="async"
+            width="50"
+            height="50"
+            data-c-header-actions=""
+          />
+        </a>
+        <ul class="nav-links" role="list" data-c-header-actions="">
+          <li data-c-header-actions="">
+            <a href="./index.html" aria-current="page" class="nav-link nav-link--active" data-c-header-actions="">
+              Home
+            </a>
+          </li>
+          <li data-c-header-actions="">
+            <a href="./about/index.html" class="nav-link" data-c-header-actions=""> About </a>
+          </li>
+          <li data-c-header-actions="">
+            <a href="./services/index.html" class="nav-link" data-c-header-actions=""> Services </a>
+          </li>
+          <li data-c-header-actions="">
+            <a href="./people/index.html" class="nav-link" data-c-header-actions=""> People </a>
+          </li>
+          <li data-c-header-actions="">
+            <a href="./portfolio/index.html" class="nav-link" data-c-header-actions=""> Portfolio </a>
+          </li>
+          <li data-c-header-actions="">
+            <a href="./blog/index.html" class="nav-link" data-c-header-actions=""> Insights </a>
+          </li>
+          <li data-c-header-actions="">
+            <a href="./contacts/index.html" class="nav-link" data-c-header-actions=""> Contacts </a>
+          </li>
+        </ul>
+        <div class="header-actions" data-c-header-actions="">
+          <a href="./contacts/index.html" class="header-cta" data-c-header-actions="">Talk to an Expert</a>
+          <!-- LanguageSelect hidden until multi-locale rollout
+      <LanguageSelect
+        client:load
+        currentLocale={languageSelectLabels.currentLocale}
+        defaultLocale={languageSelectLabels.defaultLocale}
+        locales={languageSelectLabels.locales}
+        ariaLabel={languageSelectLabels.ariaLabel}
+      /> -->
+          <div data-island="MobileNav">
+            <div>
+              <button
+                aria-label="Open menu"
+                aria-expanded="false"
+                aria-controls="mobile-nav"
+                class="hover:bg-muted focus-visible:ring-ring rounded-md p-2 text-white focus-visible:ring-2 focus-visible:outline-none"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-menu h-6 w-6"
+                  aria-hidden="true"
+                >
+                  <path d="M4 5h16"></path>
+                  <path d="M4 12h16"></path>
+                  <path d="M4 19h16"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main id="main-content">
+      <div id="hero" class="section-anchor">
+        <section class="hero" aria-label="Hero" data-c-hero="">
+          <div class="hero-bg" data-c-hero="">
+            <img
+              src="./assets/img/hero-background.webp"
+              alt=""
+              aria-hidden="true"
+              loading="eager"
+              decoding="async"
+              width="2000"
+              height="1333"
+              class="hero-bg-img"
+              data-c-hero=""
+            />
+            <div class="hero-overlay" aria-hidden="true" data-c-hero=""></div>
+          </div>
+          <div data-island="HeroCarousel">
+            <div class="hero__carousel" aria-roledescription="carousel">
+              <div
+                class="hero__slide hero__slide-active"
+                role="group"
+                aria-roledescription="slide"
+                aria-label="Slide {index} 1"
+              >
+                <div class="hero__slide-inner">
+                  <div class="hero__slide-layout">
+                    <div class="hero__content">
+                      <h2 class="hero__heading">AI-Augmented. We get it done!</h2>
+                      <p class="hero__body">
+                        Enterprise software amplified by AI. We bring governance, context, and execution to the table,
+                        because speed without structure is risk.
+                      </p>
+                      <div class="hero__actions">
+                        <a href="./services/index.html" class="hero__cta-link hero__cta-primary">Our Solutions</a
+                        ><a href="./contacts/index.html" class="hero__cta-link hero__cta-outline">Talk to an expert</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="hero__slide" role="group" aria-roledescription="slide" aria-label="Slide {index} 2">
+                <div class="hero__slide-inner">
+                  <div class="hero__slide-layout">
+                    <div class="hero__content">
+                      <h2 class="hero__heading">13 Years. 300+ Projects. One Constant: Results.</h2>
+                      <p class="hero__body">
+                        300+ projects delivered across 17 countries. From startups to enterprises, we bring the
+                        expertise that turns complexity into competitive advantage.
+                      </p>
+                      <div class="hero__actions">
+                        <a href="./portfolio/index.html" class="hero__cta-link hero__cta-primary">See Our Work</a
+                        ><a href="./contacts/index.html" class="hero__cta-link hero__cta-outline">Talk to an expert</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="hero__slide" role="group" aria-roledescription="slide" aria-label="Slide {index} 3">
+                <div class="hero__slide-inner">
+                  <div class="hero__slide-layout">
+                    <div class="hero__content">
+                      <h2 class="hero__heading">Into the AI-Augmented Era.</h2>
+                      <p class="hero__body">
+                        The platforms evolved. So did we. AI-Augmented Development on the enterprise stacks that power
+                        modern business.
+                      </p>
+                      <div class="hero__actions">
+                        <a href="./services/index.html" class="hero__cta-link hero__cta-primary">Our Tech Stack</a
+                        ><a href="./contacts/index.html" class="hero__cta-link hero__cta-outline">Talk to an expert</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="hero__slide" role="group" aria-roledescription="slide" aria-label="Slide {index} 4">
+                <div class="hero__slide-inner">
+                  <div class="hero__slide-layout">
+                    <div class="hero__content">
+                      <h2 class="hero__heading">Human Teams. AI Amplified.</h2>
+                      <p class="hero__body">
+                        AI handles the repetitive. Your team focuses on architecture and decisions. We make that
+                        transition real.
+                      </p>
+                      <div class="hero__actions">
+                        <a href="./services/index.html" class="hero__cta-link hero__cta-primary">How We Work</a
+                        ><a href="./contacts/index.html" class="hero__cta-link hero__cta-outline">Talk to an expert</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="hero__controls-bar">
+                <div class="hero__controls-spacer"></div>
+                <div class="hero__controls">
+                  <span class="hero__controls-line" aria-hidden="true"></span>
+                  <div class="hero__dots" role="tablist" aria-label="Slide indicators">
+                    <span
+                      class="hero__dot hero__dot-active"
+                      role="tab"
+                      aria-selected="true"
+                      aria-label="Slide {index} 1"
+                    ></span
+                    ><span class="hero__dot" role="tab" aria-selected="false" aria-label="Slide {index} 2"></span
+                    ><span class="hero__dot" role="tab" aria-selected="false" aria-label="Slide {index} 3"></span
+                    ><span class="hero__dot" role="tab" aria-selected="false" aria-label="Slide {index} 4"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <script type="application/json" data-island-props="">
+              {
+                "slides": [
+                  {
+                    "title": "AI-Augmented. We get it done!",
+                    "subtitle": "Enterprise software amplified by AI. We bring governance, context, and execution to the table, because speed without structure is risk.",
+                    "ctas": {
+                      "primary": { "label": "Our Solutions", "href": "/services" },
+                      "secondary": { "label": "Talk to an expert", "href": "/contacts" }
+                    }
+                  },
+                  {
+                    "title": "13 Years. 300+ Projects. One Constant: Results.",
+                    "subtitle": "300+ projects delivered across 17 countries. From startups to enterprises, we bring the expertise that turns complexity into competitive advantage.",
+                    "ctas": {
+                      "primary": { "label": "See Our Work", "href": "/portfolio" },
+                      "secondary": { "label": "Talk to an expert", "href": "/contacts" }
+                    }
+                  },
+                  {
+                    "title": "Into the AI-Augmented Era.",
+                    "subtitle": "The platforms evolved. So did we. AI-Augmented Development on the enterprise stacks that power modern business.",
+                    "ctas": {
+                      "primary": { "label": "Our Tech Stack", "href": "/services" },
+                      "secondary": { "label": "Talk to an expert", "href": "/contacts" }
+                    }
+                  },
+                  {
+                    "title": "Human Teams. AI Amplified.",
+                    "subtitle": "AI handles the repetitive. Your team focuses on architecture and decisions. We make that transition real.",
+                    "ctas": {
+                      "primary": { "label": "How We Work", "href": "/services" },
+                      "secondary": { "label": "Talk to an expert", "href": "/contacts" }
+                    }
+                  }
+                ],
+                "ariaLabels": { "slideIndicators": "Slide indicators", "slide": "Slide {index}" }
+              }
+            </script>
+          </div>
+          <div class="hero-letters-scaler" data-c-hero="">
+            <div class="hero-letters-wrap" data-c-hero="">
+              <div class="decorative-overlay decorative-overlay--visible" aria-hidden="true" data-c-wrw7cu3v="">
+                <div class="letters-wrap letters-wrap--default" style="opacity: 0.4" data-c-bsioup76="">
+                  <div class="letter letter-b" data-c-bsioup76="">
+                    <svg
+                      width="584.93"
+                      height="900"
+                      viewBox="0 0 401 617"
+                      fill="none"
+                      aria-hidden="true"
+                      class="brand-letter"
+                      data-c-uqgx6sio=""
+                    >
+                      <path
+                        d="M228.807 38.8661C236.767 41.3495 241.182 49.7656 238.701 57.7268L198.553 186.509C198.331 186.49 198.02 186.463 197.627 186.436C196.76 186.374 195.49 186.301 193.873 186.258C190.639 186.173 186.014 186.204 180.444 186.67C169.305 187.603 154.37 190.278 139.202 197.252C115.39 208.237 100.868 224.897 92.3007 238.806C90.1472 242.303 88.3691 245.626 86.9145 248.642L131.161 106.71L86.2145 92.6984C81.8697 91.3436 79.5384 85.9674 81.2387 80.513L90.5636 50.6007C91.882 46.3719 95.3376 43.4015 99.0215 43.1116L99.0222 43.1128C105.623 42.6138 116.444 41.0041 127.567 36.1062L128.645 35.6218C135.704 32.3792 144.772 26.6995 151.112 22.6647L151.116 22.6618C155.355 19.9142 160.495 19.0704 165.367 20.1447L165.365 20.1469L166.548 20.4963L228.807 38.8661Z"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        data-c-uqgx6sio=""
+                      ></path>
+                      <path
+                        d="M254.684 221.312C300.589 235.623 333.323 256.371 352.848 283.533C372.36 310.678 376.875 341.245 366.256 375.306L325.009 507.616C316.617 534.536 303.409 554.38 285.422 567.195C267.436 580.01 244.618 585.834 216.938 584.621C196.244 583.625 172.562 579.03 145.92 570.725C97.3837 555.593 63.8889 535.203 45.34 509.607C26.8111 484.04 23.1427 453.203 34.4205 417.026L75.6676 284.716C86.3488 250.453 107.367 227.74 138.748 216.626L138.749 216.625C170.119 205.439 208.779 207.001 254.684 221.312ZM236.605 279.829C216.319 273.505 199.833 272.571 187.19 277.132C174.517 281.704 165.794 291.764 160.979 307.208L117.385 447.047C112.226 463.597 113.557 477.168 121.603 487.573C129.607 497.925 143.773 506.23 164.055 512.553C184.317 518.87 200.802 519.803 213.451 515.244C226.131 510.674 234.868 500.618 239.682 485.173L283.277 345.334C288.437 328.782 287.002 315.181 278.908 304.762L278.907 304.76L278.523 304.276C270.362 294.121 256.376 285.992 236.605 279.829Z"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        data-c-uqgx6sio=""
+                      ></path>
+                    </svg>
+                  </div>
+                  <div class="letter letter-o1" data-c-bsioup76="">
+                    <svg
+                      width="715.61"
+                      height="900"
+                      viewBox="0 0 326 410"
+                      fill="none"
+                      aria-hidden="true"
+                      class="brand-letter"
+                      data-c-uqgx6sio=""
+                    >
+                      <path
+                        d="M135.7,3.7c47.6-7,86.1-2.5,115.4,13.5,29.4,16,46.7,41.6,51.9,76.9l20.2,137.1c4.1,27.9.8,51.5-9.8,70.9-10.6,19.3-28.7,34.5-54.1,45.4-19.1,8.1-42.4,14.2-70,18.3-50.3,7.4-89.3,3.6-117.1-11.4-27.8-15-44.5-41.2-50-78.7L1.9,138.5c-5.2-35.5,3.8-65.1,27.3-88.7h0C52.6,26.1,88.2,10.7,135.7,3.7ZM144.8,64.3c-21,3.1-36.3,9.4-45.7,19-9.4,9.6-12.9,22.5-10.6,38.5l21.4,144.9c2.5,17.1,9.6,28.8,21.4,34.7,11.7,5.9,28.1,7.2,49.1,4.1,21-3.1,36.3-9.4,45.7-19,9.4-9.6,13-22.5,10.6-38.5l-21.4-144.9c-2.5-17.2-9.7-28.8-21.5-34.7h0s-.6-.3-.6-.3c-11.8-5.6-27.9-6.9-48.4-3.8Z"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        data-c-uqgx6sio=""
+                      ></path>
+                    </svg>
+                  </div>
+                  <div class="letter letter-o2" data-c-bsioup76="">
+                    <svg
+                      width="715.61"
+                      height="900"
+                      viewBox="0 0 326 410"
+                      fill="none"
+                      aria-hidden="true"
+                      class="brand-letter"
+                      data-c-uqgx6sio=""
+                    >
+                      <path
+                        d="M135.7,3.7c47.6-7,86.1-2.5,115.4,13.5,29.4,16,46.7,41.6,51.9,76.9l20.2,137.1c4.1,27.9.8,51.5-9.8,70.9-10.6,19.3-28.7,34.5-54.1,45.4-19.1,8.1-42.4,14.2-70,18.3-50.3,7.4-89.3,3.6-117.1-11.4-27.8-15-44.5-41.2-50-78.7L1.9,138.5c-5.2-35.5,3.8-65.1,27.3-88.7h0C52.6,26.1,88.2,10.7,135.7,3.7ZM144.8,64.3c-21,3.1-36.3,9.4-45.7,19-9.4,9.6-12.9,22.5-10.6,38.5l21.4,144.9c2.5,17.1,9.6,28.8,21.4,34.7,11.7,5.9,28.1,7.2,49.1,4.1,21-3.1,36.3-9.4,45.7-19,9.4-9.6,13-22.5,10.6-38.5l-21.4-144.9c-2.5-17.2-9.7-28.8-21.5-34.7h0s-.6-.3-.6-.3c-11.8-5.6-27.9-6.9-48.4-3.8Z"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        data-c-uqgx6sio=""
+                      ></path>
+                    </svg>
+                  </div>
+                  <div class="letter letter-l" data-c-bsioup76="">
+                    <svg
+                      width="543.03"
+                      height="900"
+                      viewBox="0 0 322.8 535"
+                      fill="currentColor"
+                      aria-hidden="true"
+                      class="brand-letter"
+                      data-c-uqgx6sio=""
+                    >
+                      <path
+                        d="M241.7,432.5l.5-.9h0l-.5.9ZM166.5,146.6l-.4-.9-.8.3.2.8,1-.2h0ZM166.8,146.5l.4.9.8-.3-.2-.8-1,.2h0ZM121.1,6.1l-.2-1h0l.2,1ZM59.8,20.3l-.2-1h0l.2,1ZM47.5,29.8l.9.5h0l-.9-.5ZM34.7,51.5l.8.6h0l-.8-.6ZM13.4,71.8l-.6-.8h0l.6.8ZM70.6,111.4l1-.2-.2-1-1,.2.2,1ZM313.2,486.7h-1v.2h0l1-.2ZM308.4,436.4h-1,1ZM302.8,431.8v-1c-7.2.8-20.3,2.2-32.7,2.8-6.2.3-12.2.4-17.2,0-2.5-.1-4.7-.4-6.5-.7-1.8-.4-3.2-.8-4.2-1.4l-.5.9-.5.9c1.2.7,2.9,1.2,4.8,1.6,1.9.4,4.2.6,6.8.8,5.1.3,11.2.2,17.4,0,12.5-.6,25.7-2,32.7-2.8v-1h-.1ZM241.7,432.5l.5-.9c-10.1-5.9-17.2-18-21.2-36.6l-1,.2-1,.2c4,18.8,11.3,31.5,22.1,37.9l.5-.9h0ZM220.1,395.2l1-.2-53.6-248.7-1,.2-1,.2,53.6,248.7,1-.2h0ZM166.5,146.6l.4.9h.2c0-.1-.4-1-.4-1l-.4-.9h-.2c0,.1.4,1,.4,1ZM166.8,146.5l1-.2-27.8-128.7-1,.2-1,.2,27.7,128.7,1-.2h0ZM139.1,17.8l1-.2c-1.9-8.7-10.4-14.3-19.1-12.4l.2,1,.2,1c7.6-1.6,15.1,3.2,16.7,10.9l1-.2h0ZM121.1,6.1l-.2-1-61.3,14.2.2,1,.2,1,61.4-14.2-.2-1h-.1ZM59.8,20.3l-.2-1c-5.5,1.3-10.3,4.9-13,10l.9.5.9.5c2.4-4.5,6.7-7.8,11.7-9l-.2-1h-.1ZM47.5,29.8l-.9-.5c-3.4,6.5-8.3,15.5-12.7,21.5l.8.6.8.6c4.4-6.2,9.4-15.3,12.8-21.8l-.9-.5h.1ZM34.7,51.5l-.8-.6c-7,9.8-15.6,16.5-21.1,20.1l.6.8.6.8c5.6-3.7,14.4-10.6,21.6-20.6l-.8-.6h-.1ZM13.4,71.8l-.6-.8c-3.6,2.4-5.1,7.2-4.1,11.9l1-.2,1-.2c-.9-4.1.5-8,3.3-9.8l-.6-.8h0ZM9.7,82.7l-1,.2,6.4,29.8,1-.2,1-.2-6.4-29.8s-1,.2-1,.2ZM16.1,112.5l-1,.2c1.3,6,6.4,10.2,11.8,9.1l-.2-1-.2-1c-3.9.9-8.3-2.3-9.4-7.5,0,0-1,.2-1,.2ZM26.7,120.8l.2,1,43.9-9.5-.2-1-.2-1-43.9,9.5.2,1ZM70.6,111.4l-1,.2,65.3,303.3,1-.2,1-.2L71.6,111.2l-1,.2ZM135.9,414.6l-1,.2c8.8,41,24.4,68.6,46.9,82.2l.5-.9.5-.9c-21.8-13.3-37.2-40.1-46-80.9l-1,.2h.1ZM182.3,496.2l-.5.9c22.5,13.6,53,16.2,91.4,8l-.2-1-.2-1c-38.2,8.2-68.1,5.6-90-7.7l-.5.9h0ZM273,504.1l.2,1,33.6-7.2-.2-1-.2-1-33.6,7.2.2,1ZM306.6,496.8l.2,1c5.1-1.1,8.4-6.2,7.3-11.3l-1,.2-1,.2c.9,4.1-1.7,8.1-5.7,8.9l.2,1h0ZM313.2,486.7h1l-4.8-50.3h-1l-1,.2,4.8,50.2h1ZM308.4,436.4h1c-.3-3.5-3.4-6-6.8-5.6v1c.1,0,.2,1,.2,1,2.3-.3,4.3,1.4,4.5,3.7h1.1Z"
+                        fill="currentColor"
+                        stroke="none"
+                        data-c-uqgx6sio=""
+                      ></path>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div id="newsletterBar" class="section-anchor">
+        <section
+          class="section newsletter-bar"
+          aria-label="Newsletter subscription"
+          style="background-color: var(--color-primary); padding-block: 0"
+          data-c-pdbomyic=""
+        >
+          <div class="section-container" data-c-yfwknzfq="">
+            <div class="newsletter-bar-inner" data-c-ygrkkgdh="">
+              <div class="newsletter-bar-text" data-c-ygrkkgdh="">
+                <div
+                  class="text-block text-block--dark"
+                  style="--tb-heading-size: var(--font-size-display); --tb-heading-weight: 400; --tb-spacing: 0"
+                  data-c-wz6xpbld=""
+                >
+                  <p class="text-block-heading" data-c-wz6xpbld="">
+                    Get the <strong>latest news</strong><br />and <strong>updates</strong>
+                  </p>
+                </div>
+                <p class="newsletter-bar-sub" data-c-ygrkkgdh="">Stay Ahead of the AI-Augmented Transition</p>
+              </div>
+              <div class="newsletter-bar-form" data-c-ygrkkgdh="">
+                <div data-island="NewsletterForm">
+                  <div>
+                    <div class="newsletter__name-field">
+                      <label for="_r13R_0_" class="newsletter__sr-only">Name</label
+                      ><input
+                        id="_r13R_0_"
+                        type="text"
+                        placeholder="Name"
+                        autocomplete="name"
+                        class="newsletter__name-input"
+                        value=""
+                      />
+                    </div>
+                    <form class="inline-input__wrapper inline-input__wrapper-variant">
+                      <label for="_r13R_7_" class="inline-input__sr-only">Email address</label
+                      ><input
+                        id="_r13R_7_"
+                        type="email"
+                        placeholder="Insert your email"
+                        required=""
+                        class="inline-input__input"
+                        value=""
+                      /><button type="submit" class="inline-input__button inline-input__button-variant">
+                        Subscribe
+                      </button>
+                    </form>
+                    <label class="newsletter__consent-label newsletter__consent-label-bar"
+                      ><input type="checkbox" class="newsletter__checkbox" /><span
+                        >I agree to receive marketing emails from Bool. See our
+                        <a href="./privacy/index.html" class="newsletter__consent-link">Privacy Policy</a>.</span
+                      ></label
+                    >
+                  </div>
+                  <script type="application/json" data-island-props="">
+                    {
+                      "variant": "bar",
+                      "labels": {
+                        "subscribed": "✓ Check your email to confirm",
+                        "loading": "...",
+                        "ctaBar": "Subscribe",
+                        "ctaCta": "Subscribe now",
+                        "label": "Email address",
+                        "placeholder": "Insert your email",
+                        "nameLabel": "Name",
+                        "namePlaceholder": "Name",
+                        "nameRequired": "Please enter your name.",
+                        "captchaRequired": "Please complete the captcha verification.",
+                        "error": "Subscription failed. Please try again.",
+                        "consentBefore": "I agree to receive marketing emails from Bool. See our ",
+                        "consentLinkText": "Privacy Policy",
+                        "consentAfter": ".",
+                        "consentRequired": "You must agree to receive marketing emails."
+                      }
+                    }
+                  </script>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div id="powerAi" class="section-anchor">
+        <section
+          class="section"
+          aria-labelledby="ai-heading"
+          style="background-color: var(--color-background); min-block-size: 504px"
+          data-c-pdbomyic=""
+        >
+          <div class="section-container" data-c-yfwknzfq="">
+            <div class="power-ai" data-c-c7mmh3nv="">
+              <div
+                class="split-layout split-layout--collapse-lg"
+                style="--split-ratio: 7fr 5fr; --split-gap: 2rem; --split-align: center"
+                data-c-split-layout=""
+              >
+                <div class="split-layout-start" data-c-split-layout="">
+                  <div class="text-block-with-actions">
+                    <div
+                      class="text-block text-block--light"
+                      style="
+                        --tb-heading-size: var(--font-size-display);
+                        --tb-heading-weight: 400;
+                        --tb-body-size: var(--font-size-sub);
+                        --tb-body-max-width: 43rem;
+                        --tb-body-line-height: 1.27;
+                        --tb-spacing: 2rem;
+                      "
+                      data-c-wz6xpbld=""
+                    >
+                      <h2 id="ai-heading" class="text-block-heading" data-c-wz6xpbld="">
+                        AI-Augmented Development. Not a feature. The whole model.
+                      </h2>
+                      <div class="text-block-body" data-c-wz6xpbld="">
+                        <p data-c-c7mmh3nv="">
+                          Code is no longer the bottleneck. Context, governance, and integration expertise are. That's
+                          where Bool operates.
+                        </p>
+                        <p data-c-c7mmh3nv="">
+                          AI generates code fast. We make sure it doesn't break what already exists. Enterprise-grade
+                          governance, every time.
+                        </p>
+                      </div>
+                    </div>
+                    <div class="text-block-actions" style="margin-block-start: 2rem">
+                      <a href="./services/index.html" class="btn-link btn-link--primary" data-c-rcfgfa7e="">
+                        Explore AI-Augmented Delivery
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="split-layout-end" data-c-split-layout="">
+                  <div
+                    class="rounded-image power-ai-image"
+                    style="border-radius: 0.75rem; aspect-ratio: 488 / 340"
+                    data-c-trln74ua=""
+                  >
+                    <img
+                      src="./assets/img/shutterstock-2635431189-488.webp"
+                      alt="Keyboard with AI key — representing AI-native software delivery"
+                      loading="lazy"
+                      decoding="async"
+                      width="488"
+                      height="340"
+                      class="rounded-image-img"
+                      data-c-trln74ua=""
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div id="serviceCards" class="section-anchor">
+        <section
+          class="section"
+          aria-labelledby="services-heading"
+          style="background-color: var(--color-muted); padding-block: 5rem 10rem"
+          data-c-pdbomyic=""
+        >
+          <div class="section-container" data-c-yfwknzfq="">
+            <h2 id="services-heading" class="sr-only">Our Services</h2>
+            <div class="card-grid" data-c-card="">
+              <article class="card" data-c-card="">
+                <div class="card-inner" data-c-card="">
+                  <div class="card-image" data-c-card="">
+                    <img
+                      src="./assets/img/tech-card-01.webp"
+                      alt="AI-Augmented Development Platforms"
+                      loading="lazy"
+                      decoding="async"
+                      width="600"
+                      height="400"
+                      class="card-img"
+                      data-c-card=""
+                    />
+                  </div>
+                  <div class="card-body" data-c-card="">
+                    <h3 class="card-title" data-c-card="">AI-Augmented Development Platforms</h3>
+                    <p class="card-desc" data-c-card="">
+                      13 years of enterprise platform expertise. We deliver AI-Augmented Development, faster, smarter,
+                      and with the governance organisations depend on.
+                    </p>
+                    <a
+                      href="./services/index.html#techStack"
+                      class="arrow-link arrow-link--light card-link"
+                      data-c-bulfszpc=""
+                    >
+                      <span class="arrow-link-label" data-c-bulfszpc="">Learn more</span>
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M5 12h14M12 5l7 7-7 7"></path>
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+              </article>
+              <article class="card" data-c-card="">
+                <div class="card-inner" data-c-card="">
+                  <div class="card-image" data-c-card="">
+                    <img
+                      src="./assets/img/shutterstock-2492367113.webp"
+                      alt="Flexible Engagement Models"
+                      loading="lazy"
+                      decoding="async"
+                      width="600"
+                      height="400"
+                      class="card-img"
+                      data-c-card=""
+                    />
+                  </div>
+                  <div class="card-body" data-c-card="">
+                    <h3 class="card-title" data-c-card="">Flexible Engagement Models</h3>
+                    <p class="card-desc" data-c-card="">
+                      Delivery models tailored to your reality: Fixed Price, Time &amp; Materials, Team Augmentation or
+                      Expert Services.
+                    </p>
+                    <a
+                      href="./services/index.html#howWeWork"
+                      class="arrow-link arrow-link--light card-link"
+                      data-c-bulfszpc=""
+                    >
+                      <span class="arrow-link-label" data-c-bulfszpc="">Learn more</span>
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M5 12h14M12 5l7 7-7 7"></path>
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+              </article>
+              <article class="card" data-c-card="">
+                <div class="card-inner" data-c-card="">
+                  <div class="card-image" data-c-card="">
+                    <img
+                      src="./assets/img/tech-card-03.webp"
+                      alt="High-Impact Use Cases"
+                      loading="lazy"
+                      decoding="async"
+                      width="600"
+                      height="400"
+                      class="card-img"
+                      data-c-card=""
+                    />
+                  </div>
+                  <div class="card-body" data-c-card="">
+                    <h3 class="card-title" data-c-card="">High-Impact Use Cases</h3>
+                    <p class="card-desc" data-c-card="">
+                      Real-world impact on operations, efficiency, and customer experience, proven through 300+ projects
+                      delivered across 17 countries.
+                    </p>
+                    <a
+                      href="./portfolio/index.html#caseStudies"
+                      class="arrow-link arrow-link--light card-link"
+                      data-c-bulfszpc=""
+                    >
+                      <span class="arrow-link-label" data-c-bulfszpc="">Learn more</span>
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M5 12h14M12 5l7 7-7 7"></path>
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+              </article>
+              <article class="card" data-c-card="">
+                <div class="card-inner" data-c-card="">
+                  <div class="card-image" data-c-card="">
+                    <img
+                      src="./assets/img/shutterstock-1794303145.webp"
+                      alt="Strategic Industries"
+                      loading="lazy"
+                      decoding="async"
+                      width="600"
+                      height="400"
+                      class="card-img"
+                      data-c-card=""
+                    />
+                  </div>
+                  <div class="card-body" data-c-card="">
+                    <h3 class="card-title" data-c-card="">Strategic Industries</h3>
+                    <p class="card-desc" data-c-card="">
+                      Deep knowledge in Finance, Retail, Energy and more. We understand your business before writing the
+                      first line of code.
+                    </p>
+                    <a
+                      href="./portfolio/index.html#portfolioHero"
+                      class="arrow-link arrow-link--light card-link"
+                      data-c-bulfszpc=""
+                    >
+                      <span class="arrow-link-label" data-c-bulfszpc="">Learn more</span>
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M5 12h14M12 5l7 7-7 7"></path>
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div id="ourPromise" class="section-anchor">
+        <section
+          class="section"
+          aria-labelledby="promise-heading"
+          style="background-color: var(--color-background)"
+          data-c-pdbomyic=""
+        >
+          <div class="section-container" data-c-yfwknzfq="">
+            <div class="promise-section" data-c-promise-section="">
+              <div
+                class="split-layout split-layout--collapse-lg"
+                style="--split-ratio: 1fr 1fr; --split-gap: 3rem; --split-align: start"
+                data-c-split-layout=""
+              >
+                <div class="split-layout-start" data-c-split-layout="">
+                  <div class="text-block-with-actions">
+                    <div
+                      class="text-block text-block--light"
+                      style="
+                        --tb-heading-size: var(--font-size-display);
+                        --tb-heading-weight: 400;
+                        --tb-body-size: var(--font-size-sub);
+                        --tb-body-line-height: 1.27;
+                        --tb-spacing: 2rem;
+                      "
+                      data-c-wz6xpbld=""
+                    >
+                      <h2 id="promise-heading" class="text-block-heading" data-c-wz6xpbld="">
+                        <strong>Our Promise:</strong> AI-Augmented Delivery. No loose ends.
+                      </h2>
+                      <div class="text-block-body" data-c-wz6xpbld="">
+                        <p data-c-promise-section="">
+                          Human teams amplified by AI, working inside platforms that provide context, guardrails, and
+                          governance. Faster delivery. Higher standards. Every time.
+                        </p>
+                        <p data-c-promise-section="">
+                          Straight to the point: focused on solving your challenge with maximum quality and zero loose
+                          ends. Transparent about the path. Accountable for the outcome.
+                        </p>
+                      </div>
+                    </div>
+                    <div class="text-block-actions" style="margin-block-start: 3rem">
+                      <a href="./about/index.html" class="btn-link btn-link--primary" data-c-rcfgfa7e="">
+                        Discover the Bool Difference
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="split-layout-end" data-c-split-layout="">
+                  <div
+                    class="responsive-grid responsive-grid--cols-2 responsive-grid--collapse-sm promise-models"
+                    style="--grid-gap: 1.5rem"
+                    data-c-r5wcfgzt=""
+                  >
+                    <article class="icon-card icon-card--center icon-card--light" data-c-icon-card="">
+                      <div class="icon-card-content" data-c-icon-card="">
+                        <div class="icon-card-icon icon-card-icon--circle" data-c-icon-card="">
+                          <svg width="32" height="32" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+                            <defs>
+                              <linearGradient
+                                id="grad-413011e4"
+                                x1="14"
+                                y1="0"
+                                x2="14"
+                                y2="28"
+                                gradientUnits="userSpaceOnUse"
+                              >
+                                <stop style="stop-color: var(--color-primary)"></stop>
+                                <stop offset="1" style="stop-color: var(--color-primary-gradient-end)"></stop>
+                              </linearGradient>
+                            </defs>
+                            <path
+                              d="M20.9319 9.57742C20.7681 9.74525 20.5726 9.87891 20.3567 9.97064C20.1408 10.0624 19.9089 10.1104 19.6744 10.1118C19.4398 10.1133 19.2073 10.0682 18.9903 9.97912C18.7734 9.89008 18.5762 9.75886 18.4103 9.59306C18.2444 9.42727 18.113 9.2302 18.0238 9.01328C17.9346 8.79635 17.8894 8.56388 17.8907 8.32934C17.8919 8.09479 17.9398 7.86284 18.0313 7.64691C18.1229 7.43098 18.2565 7.23537 18.4242 7.07142C18.7596 6.7548 19.2053 6.58141 19.6666 6.58808C20.1278 6.59474 20.5683 6.78093 20.8945 7.10712C21.2207 7.4333 21.4068 7.87378 21.4135 8.33502C21.4202 8.79627 21.2468 9.24194 20.9302 9.57742"
+                              fill="url(#grad-413011e4)"
+                            ></path>
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M25.9747 3.04795C25.9233 2.79571 25.7988 2.56418 25.6168 2.38215C25.4348 2.20012 25.2032 2.07564 24.951 2.0242C21.528 1.3242 17.916 1.84045 15.2437 3.4382C14.3302 3.9807 13.5165 4.54595 12.7867 5.1322C12.7371 5.13242 12.6875 5.13476 12.638 5.1392L6.99774 5.7657C6.80735 5.78703 6.62393 5.84978 6.46038 5.94954C6.29682 6.04931 6.15709 6.18367 6.05099 6.3432L1.03724 13.8629C0.920435 14.038 0.847412 14.2385 0.824329 14.4476C0.801246 14.6567 0.82878 14.8684 0.904609 15.0646C0.980438 15.2609 1.10234 15.436 1.26004 15.5753C1.41774 15.7146 1.60661 15.8139 1.81074 15.8649L6.58824 17.0584C6.65106 17.1771 6.73062 17.2862 6.82449 17.3822L10.6167 21.1762C10.7128 21.2701 10.8218 21.3496 10.9405 21.4124L12.1357 26.1899C12.1868 26.3938 12.2862 26.5824 12.4253 26.7399C12.5645 26.8974 12.7394 27.0191 12.9355 27.0949C13.1315 27.1707 13.3428 27.1984 13.5517 27.1755C13.7607 27.1526 13.961 27.0799 14.136 26.9634L21.6575 21.9497C21.8167 21.8434 21.9507 21.7036 22.0502 21.5401C22.1496 21.3765 22.2121 21.1932 22.2332 21.0029L22.8597 15.3627C22.8648 15.3133 22.8677 15.2636 22.8685 15.2139C23.4542 14.4859 24.0188 13.6669 24.5625 12.7569C26.1585 10.0829 26.6747 6.4727 25.9747 3.04795ZM14.2305 23.7452L13.5585 21.0607C15.4485 20.5077 17.2212 19.8269 18.8645 18.8032C19.2238 18.5792 19.5738 18.34 19.9145 18.0857L19.6922 20.1052L14.2305 23.7452ZM6.93824 14.4404C7.49299 12.5504 8.17199 10.7794 9.19749 9.13445C9.42149 8.77512 9.66066 8.42512 9.91499 8.08445L7.89549 8.30845L4.25549 13.7684L6.93824 14.4404ZM16.5895 5.69045C18.4165 4.6002 20.9645 4.11195 23.5492 4.4497C23.887 7.03445 23.4005 9.58245 22.3085 11.4112C20.8105 13.9189 19.2285 15.4817 17.4767 16.5737C15.8772 17.5712 14.0817 18.2134 11.9415 18.7874L9.21149 16.0574C9.78724 13.9172 10.4277 12.1217 11.4252 10.5239C12.5172 8.77045 14.0817 7.18845 16.5895 5.69045Z"
+                              fill="url(#grad-413011e4)"
+                            ></path>
+                            <path
+                              d="M3.07916 19.3027C3.20105 19.1807 3.34577 19.084 3.50507 19.018C3.66436 18.9519 3.8351 18.918 4.00753 18.918C4.17996 18.918 4.3507 18.9519 4.51 19.018C4.66929 19.084 4.81402 19.1807 4.93591 19.3027L8.69666 23.0652C8.82561 23.1853 8.92904 23.3302 9.00077 23.4912C9.07251 23.6522 9.11108 23.826 9.11419 24.0023C9.1173 24.1785 9.08488 24.3536 9.01887 24.517C8.95286 24.6804 8.85461 24.8289 8.72997 24.9535C8.60534 25.0781 8.45688 25.1764 8.29345 25.2424C8.13002 25.3084 7.95497 25.3408 7.77874 25.3377C7.60251 25.3346 7.42871 25.296 7.26772 25.2243C7.10672 25.1526 6.96182 25.0491 6.84166 24.9202L3.07916 21.1577C2.83337 20.9116 2.69531 20.578 2.69531 20.2302C2.69531 19.8824 2.83337 19.5488 3.07916 19.3027Z"
+                              fill="url(#grad-413011e4)"
+                            ></path>
+                          </svg>
+                        </div>
+                        <h3 class="icon-card-title" data-c-icon-card="">Expert Services</h3>
+                        <p class="icon-card-desc" data-c-icon-card="">Talent Growth</p>
+                      </div>
+                      <div class="icon-card-footer" data-c-icon-card="">
+                        <a
+                          href="./services/index.html#howWeWork"
+                          class="arrow-link arrow-link--dark"
+                          data-c-bulfszpc=""
+                        >
+                          <span class="arrow-link-label" data-c-bulfszpc="">Learn more</span>
+                          <svg
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                          >
+                            <path d="M5 12h14M12 5l7 7-7 7"></path>
+                          </svg>
+                        </a>
+                      </div>
+                    </article>
+                    <article class="icon-card icon-card--center icon-card--light" data-c-icon-card="">
+                      <div class="icon-card-content" data-c-icon-card="">
+                        <div class="icon-card-icon icon-card-icon--square" data-c-icon-card="">
+                          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <defs>
+                              <linearGradient
+                                id="grad-4d62beef"
+                                x1="14"
+                                y1="0"
+                                x2="14"
+                                y2="28"
+                                gradientUnits="userSpaceOnUse"
+                              >
+                                <stop style="stop-color: var(--color-primary)"></stop>
+                                <stop offset="1" style="stop-color: var(--color-primary-gradient-end)"></stop>
+                              </linearGradient>
+                              <clipPath id="clip-4d62beef"><rect width="28" height="28" fill="white"></rect></clipPath>
+                            </defs>
+                            <g clip-path="url(#clip-4d62beef)">
+                              <path
+                                fill-rule="evenodd"
+                                clip-rule="evenodd"
+                                d="M7.24266 21.3285L10.6267 23.5845C11.0336 23.8556 11.5117 24.0003 12.0007 24.0003C12.4897 24.0003 12.9677 23.8556 13.3747 23.5845L16.7587 21.3285C18.3088 20.2951 19.597 18.9149 20.5212 17.2973C21.4455 15.6797 21.9804 13.8692 22.0837 12.009L22.4572 5.292C22.4812 4.8615 22.1392 4.497 21.7162 4.419C19.1212 3.933 14.9527 1.404 13.3792 0.405C12.9674 0.141971 12.4893 0.0015041 12.0007 0C11.5117 0 11.0347 0.144 10.6207 0.4065C9.04866 1.4055 4.88166 3.9315 2.28516 4.419C1.86216 4.4985 1.52016 4.8615 1.54416 5.292L1.91916 12.009C2.0224 13.8692 2.55734 15.6797 3.4816 17.2973C4.40585 18.9149 5.69255 20.2951 7.24266 21.3285ZM4.16466 11.8845L3.85566 6.339C4.07766 6.27 4.29966 6.195 4.52466 6.114L16.8202 18.4095C16.4145 18.7955 15.9764 19.1457 15.5107 19.4565L12.1267 21.7125C12.0894 21.7375 12.0455 21.7508 12.0007 21.7508C11.9558 21.7508 11.9119 21.7375 11.8747 21.7125L8.49066 19.455C7.23131 18.6153 6.18477 17.4939 5.43391 16.1796C4.68305 14.8653 4.24849 13.3958 4.16466 11.8845ZM18.2647 16.674C19.1996 15.243 19.7417 13.5912 19.8367 11.8845L20.1457 6.339C18.7882 5.919 17.3452 5.238 16.1212 4.599C14.7755 3.88815 13.4589 3.12354 12.1747 2.307C12.1232 2.27197 12.0629 2.25221 12.0007 2.25C11.9384 2.25221 11.8781 2.27197 11.8267 2.307C10.5424 3.12354 9.22582 3.88816 7.88016 4.599C7.52016 4.7865 7.14516 4.977 6.75516 5.1645L18.2662 16.674H18.2647Z"
+                                fill="url(#grad-4d62beef)"
+                              ></path>
+                            </g>
+                          </svg>
+                        </div>
+                        <h3 class="icon-card-title" data-c-icon-card="">Fixed Price Project</h3>
+                        <p class="icon-card-desc" data-c-icon-card="">On time - On Budget</p>
+                      </div>
+                      <div class="icon-card-footer" data-c-icon-card="">
+                        <a
+                          href="./services/index.html#howWeWork"
+                          class="arrow-link arrow-link--dark"
+                          data-c-bulfszpc=""
+                        >
+                          <span class="arrow-link-label" data-c-bulfszpc="">Learn more</span>
+                          <svg
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                          >
+                            <path d="M5 12h14M12 5l7 7-7 7"></path>
+                          </svg>
+                        </a>
+                      </div>
+                    </article>
+                    <article class="icon-card icon-card--center icon-card--light" data-c-icon-card="">
+                      <div class="icon-card-content" data-c-icon-card="">
+                        <div class="icon-card-icon icon-card-icon--square" data-c-icon-card="">
+                          <svg width="32" height="32" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+                            <defs>
+                              <linearGradient
+                                id="grad-f36d3578"
+                                x1="14"
+                                y1="0"
+                                x2="14"
+                                y2="28"
+                                gradientUnits="userSpaceOnUse"
+                              >
+                                <stop style="stop-color: var(--color-primary)"></stop>
+                                <stop offset="1" style="stop-color: var(--color-primary-gradient-end)"></stop>
+                              </linearGradient>
+                              <clipPath id="clip-f36d3578"><rect width="28" height="28" fill="white"></rect></clipPath>
+                            </defs>
+                            <g clip-path="url(#clip-f36d3578)">
+                              <path
+                                fill-rule="evenodd"
+                                clip-rule="evenodd"
+                                d="M28 14C28 17.713 26.525 21.274 23.8995 23.8995C21.274 26.525 17.713 28 14 28C10.287 28 6.72601 26.525 4.10051 23.8995C1.475 21.274 0 17.713 0 14C0 10.287 1.475 6.72601 4.10051 4.10051C6.72601 1.475 10.287 0 14 0C17.713 0 21.274 1.475 23.8995 4.10051C26.525 6.72601 28 10.287 28 14ZM25.375 14C25.3789 16.564 24.5127 19.0535 22.918 21.0612L21.0455 19.1888C20.5234 19.8969 19.8981 20.5227 19.1905 21.0455L21.063 22.918C19.0547 24.513 16.5646 25.3793 14 25.375C11.436 25.3789 8.94654 24.5127 6.93875 22.918L8.81125 21.0455C10.3135 22.1549 12.1325 22.7525 14 22.75C15.6185 22.75 17.2053 22.3011 18.5839 21.4532C19.9625 20.6053 21.079 19.3917 21.8091 17.9472C22.5392 16.5027 22.8544 14.8841 22.7196 13.2712C22.5848 11.6583 22.0053 10.1145 21.0455 8.81125L22.918 6.93875C24.5127 8.94654 25.3789 11.436 25.375 14ZM21.0612 5.082C19.0535 3.48734 16.564 2.62112 14 2.625C11.436 2.62112 8.94654 3.48734 6.93875 5.082L8.81125 6.9545C10.3134 5.84484 12.1324 5.24729 14 5.25C15.9425 5.25 17.738 5.8835 19.1905 6.9545L21.0612 5.082ZM6.9545 19.1905C5.84437 17.6879 5.2468 15.8682 5.25 14C5.25 12.0575 5.8835 10.262 6.9545 8.81125L5.082 6.93875C3.48734 8.94654 2.62112 11.436 2.625 14C2.625 16.6688 3.54375 19.1222 5.082 21.0612L6.9545 19.1905ZM20.125 14C20.125 15.6245 19.4797 17.1824 18.331 18.331C17.1824 19.4797 15.6245 20.125 14 20.125C12.3755 20.125 10.8176 19.4797 9.66897 18.331C8.52031 17.1824 7.875 15.6245 7.875 14C7.875 12.3755 8.52031 10.8176 9.66897 9.66897C10.8176 8.52031 12.3755 7.875 14 7.875C15.6245 7.875 17.1824 8.52031 18.331 9.66897C19.4797 10.8176 20.125 12.3755 20.125 14Z"
+                                fill="url(#grad-f36d3578)"
+                              ></path>
+                            </g>
+                          </svg>
+                        </div>
+                        <h3 class="icon-card-title" data-c-icon-card="">Time &amp; Materials</h3>
+                        <p class="icon-card-desc" data-c-icon-card="">Scope Flexibility</p>
+                      </div>
+                      <div class="icon-card-footer" data-c-icon-card="">
+                        <a
+                          href="./services/index.html#howWeWork"
+                          class="arrow-link arrow-link--dark"
+                          data-c-bulfszpc=""
+                        >
+                          <span class="arrow-link-label" data-c-bulfszpc="">Learn more</span>
+                          <svg
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                          >
+                            <path d="M5 12h14M12 5l7 7-7 7"></path>
+                          </svg>
+                        </a>
+                      </div>
+                    </article>
+                    <article class="icon-card icon-card--center icon-card--light" data-c-icon-card="">
+                      <div class="icon-card-content" data-c-icon-card="">
+                        <div class="icon-card-icon icon-card-icon--circle" data-c-icon-card="">
+                          <svg width="32" height="32" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+                            <defs>
+                              <linearGradient
+                                id="grad-e8053b3b"
+                                x1="14"
+                                y1="0"
+                                x2="14"
+                                y2="28"
+                                gradientUnits="userSpaceOnUse"
+                              >
+                                <stop style="stop-color: var(--color-primary)"></stop>
+                                <stop offset="1" style="stop-color: var(--color-primary-gradient-end)"></stop>
+                              </linearGradient>
+                              <clipPath id="clip-e8053b3b"><rect width="28" height="28" fill="white"></rect></clipPath>
+                            </defs>
+                            <g clip-path="url(#clip-e8053b3b)">
+                              <path
+                                d="M8.75 15.75C9.67826 15.75 10.5685 16.1187 11.2249 16.7751C11.8813 17.4315 12.25 18.3217 12.25 19.25V24.5C12.25 25.4283 11.8813 26.3185 11.2249 26.9749C10.5685 27.6313 9.67826 28 8.75 28H3.5C2.57174 28 1.6815 27.6313 1.02513 26.9749C0.368749 26.3185 0 25.4283 0 24.5V19.25C0 18.3217 0.368749 17.4315 1.02513 16.7751C1.6815 16.1187 2.57174 15.75 3.5 15.75H8.75ZM23.625 15.75C24.5533 15.75 25.4435 16.1187 26.0999 16.7751C26.7563 17.4315 27.125 18.3217 27.125 19.25V24.5C27.125 25.4283 26.7563 26.3185 26.0999 26.9749C25.4435 27.6313 24.5533 28 23.625 28H18.375C17.4467 28 16.5565 27.6313 15.9001 26.9749C15.2437 26.3185 14.875 25.4283 14.875 24.5V19.25C14.875 18.3217 15.2437 17.4315 15.9001 16.7751C16.5565 16.1187 17.4467 15.75 18.375 15.75H23.625ZM3.5 18.375C3.26794 18.375 3.04538 18.4672 2.88128 18.6313C2.71719 18.7954 2.625 19.0179 2.625 19.25V24.5C2.625 24.7321 2.71719 24.9546 2.88128 25.1187C3.04538 25.2828 3.26794 25.375 3.5 25.375H8.75C8.98206 25.375 9.20462 25.2828 9.36872 25.1187C9.53281 24.9546 9.625 24.7321 9.625 24.5V19.25C9.625 19.0179 9.53281 18.7954 9.36872 18.6313C9.20462 18.4672 8.98206 18.375 8.75 18.375H3.5ZM18.375 18.375C18.1429 18.375 17.9204 18.4672 17.7563 18.6313C17.5922 18.7954 17.5 19.0179 17.5 19.25V24.5C17.5 24.7321 17.5922 24.9546 17.7563 25.1187C17.9204 25.2828 18.1429 25.375 18.375 25.375H23.625C23.8571 25.375 24.0796 25.2828 24.2437 25.1187C24.4078 24.9546 24.5 24.7321 24.5 24.5V19.25C24.5 19.0179 24.4078 18.7954 24.2437 18.6313C24.0796 18.4672 23.8571 18.375 23.625 18.375H18.375ZM21.4375 0C21.7856 0 22.1194 0.138281 22.3656 0.384422C22.6117 0.630564 22.75 0.964403 22.75 1.3125V5.25H26.6875C27.0356 5.25 27.3694 5.38828 27.6156 5.63442C27.8617 5.88056 28 6.2144 28 6.5625C28 6.9106 27.8617 7.24444 27.6156 7.49058C27.3694 7.73672 27.0356 7.875 26.6875 7.875H22.75V12.25C22.75 12.5981 22.6117 12.9319 22.3656 13.1781C22.1194 13.4242 21.7856 13.5625 21.4375 13.5625C21.0894 13.5625 20.7556 13.4242 20.5094 13.1781C20.2633 12.9319 20.125 12.5981 20.125 12.25V7.875H15.75C15.4019 7.875 15.0681 7.73672 14.8219 7.49058C14.5758 7.24444 14.4375 6.9106 14.4375 6.5625C14.4375 6.2144 14.5758 5.88056 14.8219 5.63442C15.0681 5.38828 15.4019 5.25 15.75 5.25H20.125V1.3125C20.125 0.964403 20.2633 0.630564 20.5094 0.384422C20.7556 0.138281 21.0894 0 21.4375 0ZM8.75 0.875C9.67826 0.875 10.5685 1.24375 11.2249 1.90013C11.8813 2.5565 12.25 3.44674 12.25 4.375V9.625C12.25 10.5533 11.8813 11.4435 11.2249 12.0999C10.5685 12.7563 9.67826 13.125 8.75 13.125H3.5C2.57174 13.125 1.6815 12.7563 1.02513 12.0999C0.368749 11.4435 0 10.5533 0 9.625V4.375C0 3.44674 0.368749 2.5565 1.02513 1.90013C1.6815 1.24375 2.57174 0.875 3.5 0.875H8.75ZM3.5 3.5C3.26794 3.5 3.04538 3.59219 2.88128 3.75628C2.71719 3.92038 2.625 4.14294 2.625 4.375V9.625C2.625 9.85706 2.71719 10.0796 2.88128 10.2437C3.04538 10.4078 3.26794 10.5 3.5 10.5H8.75C8.98206 10.5 9.20462 10.4078 9.36872 10.2437C9.53281 10.0796 9.625 9.85706 9.625 9.625V4.375C9.625 4.14294 9.53281 3.92038 9.36872 3.75628C9.20462 3.59219 8.98206 3.5 8.75 3.5H3.5Z"
+                                fill="url(#grad-e8053b3b)"
+                              ></path>
+                            </g>
+                          </svg>
+                        </div>
+                        <h3 class="icon-card-title" data-c-icon-card="">Team Augmentation</h3>
+                        <p class="icon-card-desc" data-c-icon-card="">Enhance Team Capacity</p>
+                      </div>
+                      <div class="icon-card-footer" data-c-icon-card="">
+                        <a
+                          href="./services/index.html#howWeWork"
+                          class="arrow-link arrow-link--dark"
+                          data-c-bulfszpc=""
+                        >
+                          <span class="arrow-link-label" data-c-bulfszpc="">Learn more</span>
+                          <svg
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                          >
+                            <path d="M5 12h14M12 5l7 7-7 7"></path>
+                          </svg>
+                        </a>
+                      </div>
+                    </article>
+                    <article class="icon-card icon-card--center icon-card--light" data-c-icon-card="">
+                      <div class="icon-card-content" data-c-icon-card="">
+                        <div class="icon-card-icon icon-card-icon--circle" data-c-icon-card="">
+                          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <defs>
+                              <linearGradient
+                                id="grad-93158dd6"
+                                x1="14"
+                                y1="0"
+                                x2="14"
+                                y2="28"
+                                gradientUnits="userSpaceOnUse"
+                              >
+                                <stop style="stop-color: var(--color-primary)"></stop>
+                                <stop offset="1" style="stop-color: var(--color-primary-gradient-end)"></stop>
+                              </linearGradient>
+                              <mask
+                                id="mask-93158dd6-1"
+                                style="mask-type: luminance"
+                                maskUnits="userSpaceOnUse"
+                                x="17"
+                                y="0"
+                                width="7"
+                                height="7"
+                              >
+                                <path
+                                  fill-rule="evenodd"
+                                  clip-rule="evenodd"
+                                  d="M17.7852 0H23.9994V6.19615H17.7852V0Z"
+                                  fill="white"
+                                ></path>
+                              </mask>
+                              <mask
+                                id="mask-93158dd6-2"
+                                style="mask-type: luminance"
+                                maskUnits="userSpaceOnUse"
+                                x="0"
+                                y="0"
+                                width="24"
+                                height="25"
+                              >
+                                <path
+                                  fill-rule="evenodd"
+                                  clip-rule="evenodd"
+                                  d="M0 0.976562H23.0964V24.0007H0V0.976562Z"
+                                  fill="white"
+                                ></path>
+                              </mask>
+                            </defs>
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M6.06519 16.2339C5.87913 16.2339 5.69191 16.1748 5.53377 16.0542C5.15235 15.7609 5.08025 15.2149 5.37446 14.8347L8.85487 10.3251C8.99674 10.1408 9.20721 10.0214 9.43746 9.99243C9.67235 9.96229 9.9026 10.0272 10.0852 10.1721L13.3644 12.7399L16.2332 9.04995C16.5285 8.66856 17.0751 8.59784 17.4565 8.89461C17.8379 9.18906 17.9077 9.73508 17.6123 10.1142L14.2051 14.4962C14.0633 14.6793 13.854 14.7987 13.6237 14.8266C13.3912 14.8579 13.1609 14.7906 12.9772 14.648L9.70026 12.0814L6.75709 15.8942C6.58498 16.1168 6.32683 16.2339 6.06519 16.2339Z"
+                              fill="url(#grad-93158dd6)"
+                            ></path>
+                            <g mask="url(#mask-93158dd6-1)">
+                              <path
+                                fill-rule="evenodd"
+                                clip-rule="evenodd"
+                                d="M20.8942 1.73828C20.143 1.73828 19.5314 2.34689 19.5314 3.09694C19.5314 3.84582 20.143 4.45675 20.8942 4.45675C21.6455 4.45675 22.2571 3.84582 22.2571 3.09694C22.2571 2.34689 21.6455 1.73828 20.8942 1.73828ZM20.8942 6.19626C19.1814 6.19626 17.7871 4.80631 17.7871 3.09755C17.7871 1.3888 19.1814 0 20.8942 0C22.6083 0 24.0014 1.3888 24.0014 3.09755C24.0014 4.80631 22.6083 6.19626 20.8942 6.19626Z"
+                                fill="url(#grad-93158dd6)"
+                              ></path>
+                            </g>
+                            <g mask="url(#mask-93158dd6-2)">
+                              <path
+                                fill-rule="evenodd"
+                                clip-rule="evenodd"
+                                d="M16.5509 24.0007H6.54569C2.63037 24.0007 0 21.259 0 17.1784V7.80926C0 3.72286 2.63037 0.976562 6.54569 0.976562H14.9973C15.4787 0.976562 15.8694 1.36608 15.8694 1.84601C15.8694 2.32595 15.4787 2.71546 14.9973 2.71546H6.54569C3.62926 2.71546 1.74428 4.71403 1.74428 7.80926V17.1784C1.74428 20.3142 3.58391 22.2618 6.54569 22.2618H16.5509C19.4673 22.2618 21.3523 20.2667 21.3523 17.1784V9.01837C21.3523 8.53844 21.743 8.14893 22.2244 8.14893C22.7058 8.14893 23.0966 8.53844 23.0966 9.01837V17.1784C23.0966 21.259 20.4662 24.0007 16.5509 24.0007Z"
+                                fill="url(#grad-93158dd6)"
+                              ></path>
+                            </g>
+                          </svg>
+                        </div>
+                        <h3 class="icon-card-title" data-c-icon-card="">Agent-as-a-Service</h3>
+                        <p class="icon-card-desc" data-c-icon-card="">AaaS to become AI Native</p>
+                      </div>
+                      <div class="icon-card-footer" data-c-icon-card="">
+                        <a
+                          href="./services/index.html#howWeWork"
+                          class="arrow-link arrow-link--dark"
+                          data-c-bulfszpc=""
+                        >
+                          <span class="arrow-link-label" data-c-bulfszpc="">Learn more</span>
+                          <svg
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                          >
+                            <path d="M5 12h14M12 5l7 7-7 7"></path>
+                          </svg>
+                        </a>
+                      </div>
+                    </article>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div id="teamPreview" class="section-anchor">
+        <section
+          class="section"
+          aria-labelledby="people-heading"
+          style="background-color: var(--color-surface-warm-dark); padding-block: 0"
+          data-c-pdbomyic=""
+        >
+          <div class="itb-grid" style="--itb-height: 396px; --itb-content-padding: 0 4rem 0 8rem" data-c-go3gtbvf="">
+            <div class="itb-image-wrap" data-c-go3gtbvf="">
+              <img
+                src="./assets/img/dsc05192.webp"
+                alt="Bool team members shaking hands"
+                loading="lazy"
+                decoding="async"
+                width="2000"
+                height="1429"
+                class="itb-img"
+                data-c-go3gtbvf=""
+              />
+            </div>
+            <div class="itb-content" data-c-go3gtbvf="">
+              <div class="text-block-with-actions">
+                <div
+                  class="text-block text-block--dark"
+                  style="
+                    --tb-heading-size: var(--font-size-display);
+                    --tb-heading-weight: 400;
+                    --tb-body-size: var(--font-size-lead);
+                    --tb-body-max-width: 29rem;
+                    --tb-spacing: 1.25rem;
+                  "
+                  data-c-wz6xpbld=""
+                >
+                  <h2 id="people-heading" class="text-block-heading" data-c-wz6xpbld="">Our <strong>people</strong></h2>
+                  <div class="text-block-body" data-c-wz6xpbld="">
+                    <p>
+                      Our team is a diverse group united by one conviction: when we grow together, everyone wins. A
+                      passion for technology. A relentless drive to deliver. And a culture where supporting each other
+                      is not optional, it's how we work.
+                    </p>
+                  </div>
+                </div>
+                <div class="text-block-actions" style="margin-block-start: 2rem">
+                  <div class="action-row" data-c-3s3h5wbb="">
+                    <a href="https://people.bamboohr.com/careers" class="btn-link btn-link--primary" data-c-rcfgfa7e="">
+                      Join our team
+                    </a>
+                    <a href="./people/index.html" class="btn-link btn-link--outline" data-c-rcfgfa7e="">
+                      Meet our team
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div id="contactSection" class="section-anchor">
+        <section
+          class="section contact-section"
+          aria-labelledby="contact-heading"
+          style="background-color: var(--color-surface-dark); min-block-size: 588px; block-size: auto"
+          data-c-pdbomyic=""
+        >
+          <div class="section-container" data-c-yfwknzfq="">
+            <div
+              class="split-layout split-layout--collapse-md"
+              style="--split-ratio: 1fr 1fr; --split-gap: 4rem; --split-align: start"
+              data-c-split-layout=""
+            >
+              <div class="split-layout-start" data-c-split-layout="">
+                <div>
+                  <div class="contact-info contact-info--dark" data-c-contact-info-address="">
+                    <div
+                      class="text-block text-block--dark"
+                      style="
+                        --tb-heading-size: var(--font-size-display);
+                        --tb-heading-weight: 700;
+                        --tb-heading-line-height: 1.1;
+                        --tb-body-size: 1.125rem;
+                        --tb-body-weight: 400;
+                        --tb-body-line-height: 1.22;
+                        --tb-spacing: 1.25rem;
+                      "
+                      data-c-wz6xpbld=""
+                    >
+                      <h2 class="text-block-heading" data-c-wz6xpbld="">Get in touch</h2>
+                      <div class="text-block-body" data-c-wz6xpbld="">
+                        <p data-c-contact-info-address="">
+                          Whether you have a project in mind or just want to explore the possibilities, we're here. We
+                          are always online and ready to connect with you!
+                        </p>
+                      </div>
+                    </div>
+                    <div class="contact-info-address" data-c-contact-info-address="">
+                      <h3 class="contact-info-address-label" data-c-contact-info-address="">To find us</h3>
+                      <address data-c-contact-info-address="">
+                        <p data-c-contact-info-address="">
+                          Office Lisboa<br data-c-contact-info-address="" />R. do Centro Cultural 27A<br
+                            data-c-contact-info-address=""
+                          />1700-106 Lisboa<br data-c-contact-info-address="" />info@bool.pt
+                        </p>
+                        <a
+                          href="#"
+                          class="obfuscated-link contact-info-link"
+                          data-contact="bWFpbHRvOmluZm9AYm9vbC5wdA=="
+                          data-label="aW5mb0Bib29sLnB0"
+                        ></a>
+                      </address>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="split-layout-end" data-c-split-layout="">
+                <div>
+                  <div data-island="ContactForm">
+                    <form class="contact-form__form" aria-label="Contact form">
+                      <div class="contact-form__grid">
+                        <div class="contact-form__field">
+                          <label for="_r14R_0_-firstName" class="contact-form__label">First name</label
+                          ><input
+                            id="_r14R_0_-firstName"
+                            type="text"
+                            placeholder="Enter your first name"
+                            autocomplete="given-name"
+                            class="contact-form__dark-input"
+                            name="firstName"
+                          />
+                        </div>
+                        <div class="contact-form__field">
+                          <label for="_r14R_0_-lastName" class="contact-form__label">Last name</label
+                          ><input
+                            id="_r14R_0_-lastName"
+                            type="text"
+                            placeholder="Enter your last name"
+                            autocomplete="family-name"
+                            class="contact-form__dark-input"
+                            name="lastName"
+                          />
+                        </div>
+                      </div>
+                      <div class="contact-form__grid">
+                        <div class="contact-form__field">
+                          <label for="_r14R_0_-phone" class="contact-form__label">Phone</label
+                          ><input
+                            id="_r14R_0_-phone"
+                            type="tel"
+                            placeholder="Enter your phone number"
+                            autocomplete="tel"
+                            class="contact-form__dark-input"
+                            name="phone"
+                          />
+                        </div>
+                        <div class="contact-form__field">
+                          <label for="_r14R_0_-email" class="contact-form__label">Email</label
+                          ><input
+                            id="_r14R_0_-email"
+                            type="email"
+                            placeholder="Enter your email"
+                            autocomplete="email"
+                            class="contact-form__dark-input"
+                            name="email"
+                          />
+                        </div>
+                      </div>
+                      <div class="contact-form__field">
+                        <label for="_r14R_0_-message" class="contact-form__label">Message</label
+                        ><textarea
+                          id="_r14R_0_-message"
+                          placeholder="Tell us in a few lines what you have in mind"
+                          rows="4"
+                          class="contact-form__dark-textarea contact-form__dark-input"
+                          name="message"
+                        ></textarea>
+                      </div>
+                      <div class="contact-form__captcha-wrap">
+                        <div id="cf-turnstile" style="width: 0; height: 0; overflow: hidden"></div>
+                      </div>
+                      <p class="contact-form__privacy-notice">
+                        Your data will be processed to respond to your inquiry under our legitimate interest, in
+                        accordance with our
+                        <a href="./privacy/index.html" class="contact-form__privacy-link">Privacy Policy</a>.
+                      </p>
+                      <div><button type="submit" class="contact-form__submit-btn">Send message</button></div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div id="newsletterCta" class="section-anchor">
+        <section
+          class="section"
+          aria-labelledby="newsletter-cta-heading"
+          style="background-color: var(--color-surface-charcoal); padding-block: 4rem; min-block-size: 427px"
+          data-c-pdbomyic=""
+        >
+          <div class="newsletter-bg" data-c-gqhmwrgb="">
+            <img
+              src="./assets/img/newsletter-bg.webp"
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              decoding="async"
+              width="2000"
+              height="585"
+              class="newsletter-bg-img"
+              data-c-gqhmwrgb=""
+            />
+          </div>
+          <div class="newsletter-letters-scaler" data-c-gqhmwrgb="">
+            <div class="newsletter-letters" data-c-gqhmwrgb="">
+              <div class="decorative-overlay decorative-overlay--visible" aria-hidden="true" data-c-wrw7cu3v="">
+                <div class="letters-wrap letters-wrap--compact" style="opacity: 1" data-c-bsioup76="">
+                  <div class="letter letter-b" data-c-bsioup76="">
+                    <svg
+                      width="113.74"
+                      height="175"
+                      viewBox="0 0 401 617"
+                      fill="none"
+                      aria-hidden="true"
+                      class="brand-letter"
+                      data-c-uqgx6sio=""
+                    >
+                      <path
+                        d="M228.807 38.8661C236.767 41.3495 241.182 49.7656 238.701 57.7268L198.553 186.509C198.331 186.49 198.02 186.463 197.627 186.436C196.76 186.374 195.49 186.301 193.873 186.258C190.639 186.173 186.014 186.204 180.444 186.67C169.305 187.603 154.37 190.278 139.202 197.252C115.39 208.237 100.868 224.897 92.3007 238.806C90.1472 242.303 88.3691 245.626 86.9145 248.642L131.161 106.71L86.2145 92.6984C81.8697 91.3436 79.5384 85.9674 81.2387 80.513L90.5636 50.6007C91.882 46.3719 95.3376 43.4015 99.0215 43.1116L99.0222 43.1128C105.623 42.6138 116.444 41.0041 127.567 36.1062L128.645 35.6218C135.704 32.3792 144.772 26.6995 151.112 22.6647L151.116 22.6618C155.355 19.9142 160.495 19.0704 165.367 20.1447L165.365 20.1469L166.548 20.4963L228.807 38.8661Z"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        data-c-uqgx6sio=""
+                      ></path>
+                      <path
+                        d="M254.684 221.312C300.589 235.623 333.323 256.371 352.848 283.533C372.36 310.678 376.875 341.245 366.256 375.306L325.009 507.616C316.617 534.536 303.409 554.38 285.422 567.195C267.436 580.01 244.618 585.834 216.938 584.621C196.244 583.625 172.562 579.03 145.92 570.725C97.3837 555.593 63.8889 535.203 45.34 509.607C26.8111 484.04 23.1427 453.203 34.4205 417.026L75.6676 284.716C86.3488 250.453 107.367 227.74 138.748 216.626L138.749 216.625C170.119 205.439 208.779 207.001 254.684 221.312ZM236.605 279.829C216.319 273.505 199.833 272.571 187.19 277.132C174.517 281.704 165.794 291.764 160.979 307.208L117.385 447.047C112.226 463.597 113.557 477.168 121.603 487.573C129.607 497.925 143.773 506.23 164.055 512.553C184.317 518.87 200.802 519.803 213.451 515.244C226.131 510.674 234.868 500.618 239.682 485.173L283.277 345.334C288.437 328.782 287.002 315.181 278.908 304.762L278.907 304.76L278.523 304.276C270.362 294.121 256.376 285.992 236.605 279.829Z"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        data-c-uqgx6sio=""
+                      ></path>
+                    </svg>
+                  </div>
+                  <div class="letter letter-o1" data-c-bsioup76="">
+                    <svg
+                      width="139.15"
+                      height="175"
+                      viewBox="0 0 326 410"
+                      fill="none"
+                      aria-hidden="true"
+                      class="brand-letter"
+                      data-c-uqgx6sio=""
+                    >
+                      <path
+                        d="M135.7,3.7c47.6-7,86.1-2.5,115.4,13.5,29.4,16,46.7,41.6,51.9,76.9l20.2,137.1c4.1,27.9.8,51.5-9.8,70.9-10.6,19.3-28.7,34.5-54.1,45.4-19.1,8.1-42.4,14.2-70,18.3-50.3,7.4-89.3,3.6-117.1-11.4-27.8-15-44.5-41.2-50-78.7L1.9,138.5c-5.2-35.5,3.8-65.1,27.3-88.7h0C52.6,26.1,88.2,10.7,135.7,3.7ZM144.8,64.3c-21,3.1-36.3,9.4-45.7,19-9.4,9.6-12.9,22.5-10.6,38.5l21.4,144.9c2.5,17.1,9.6,28.8,21.4,34.7,11.7,5.9,28.1,7.2,49.1,4.1,21-3.1,36.3-9.4,45.7-19,9.4-9.6,13-22.5,10.6-38.5l-21.4-144.9c-2.5-17.2-9.7-28.8-21.5-34.7h0s-.6-.3-.6-.3c-11.8-5.6-27.9-6.9-48.4-3.8Z"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        data-c-uqgx6sio=""
+                      ></path>
+                    </svg>
+                  </div>
+                  <div class="letter letter-o2" data-c-bsioup76="">
+                    <svg
+                      width="139.15"
+                      height="175"
+                      viewBox="0 0 326 410"
+                      fill="none"
+                      aria-hidden="true"
+                      class="brand-letter"
+                      data-c-uqgx6sio=""
+                    >
+                      <path
+                        d="M135.7,3.7c47.6-7,86.1-2.5,115.4,13.5,29.4,16,46.7,41.6,51.9,76.9l20.2,137.1c4.1,27.9.8,51.5-9.8,70.9-10.6,19.3-28.7,34.5-54.1,45.4-19.1,8.1-42.4,14.2-70,18.3-50.3,7.4-89.3,3.6-117.1-11.4-27.8-15-44.5-41.2-50-78.7L1.9,138.5c-5.2-35.5,3.8-65.1,27.3-88.7h0C52.6,26.1,88.2,10.7,135.7,3.7ZM144.8,64.3c-21,3.1-36.3,9.4-45.7,19-9.4,9.6-12.9,22.5-10.6,38.5l21.4,144.9c2.5,17.1,9.6,28.8,21.4,34.7,11.7,5.9,28.1,7.2,49.1,4.1,21-3.1,36.3-9.4,45.7-19,9.4-9.6,13-22.5,10.6-38.5l-21.4-144.9c-2.5-17.2-9.7-28.8-21.5-34.7h0s-.6-.3-.6-.3c-11.8-5.6-27.9-6.9-48.4-3.8Z"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        data-c-uqgx6sio=""
+                      ></path>
+                    </svg>
+                  </div>
+                  <div class="letter letter-l" data-c-bsioup76="">
+                    <svg
+                      width="105.59"
+                      height="175"
+                      viewBox="0 0 322.8 535"
+                      fill="currentColor"
+                      aria-hidden="true"
+                      class="brand-letter"
+                      data-c-uqgx6sio=""
+                    >
+                      <path
+                        d="M241.7,432.5l.5-.9h0l-.5.9ZM166.5,146.6l-.4-.9-.8.3.2.8,1-.2h0ZM166.8,146.5l.4.9.8-.3-.2-.8-1,.2h0ZM121.1,6.1l-.2-1h0l.2,1ZM59.8,20.3l-.2-1h0l.2,1ZM47.5,29.8l.9.5h0l-.9-.5ZM34.7,51.5l.8.6h0l-.8-.6ZM13.4,71.8l-.6-.8h0l.6.8ZM70.6,111.4l1-.2-.2-1-1,.2.2,1ZM313.2,486.7h-1v.2h0l1-.2ZM308.4,436.4h-1,1ZM302.8,431.8v-1c-7.2.8-20.3,2.2-32.7,2.8-6.2.3-12.2.4-17.2,0-2.5-.1-4.7-.4-6.5-.7-1.8-.4-3.2-.8-4.2-1.4l-.5.9-.5.9c1.2.7,2.9,1.2,4.8,1.6,1.9.4,4.2.6,6.8.8,5.1.3,11.2.2,17.4,0,12.5-.6,25.7-2,32.7-2.8v-1h-.1ZM241.7,432.5l.5-.9c-10.1-5.9-17.2-18-21.2-36.6l-1,.2-1,.2c4,18.8,11.3,31.5,22.1,37.9l.5-.9h0ZM220.1,395.2l1-.2-53.6-248.7-1,.2-1,.2,53.6,248.7,1-.2h0ZM166.5,146.6l.4.9h.2c0-.1-.4-1-.4-1l-.4-.9h-.2c0,.1.4,1,.4,1ZM166.8,146.5l1-.2-27.8-128.7-1,.2-1,.2,27.7,128.7,1-.2h0ZM139.1,17.8l1-.2c-1.9-8.7-10.4-14.3-19.1-12.4l.2,1,.2,1c7.6-1.6,15.1,3.2,16.7,10.9l1-.2h0ZM121.1,6.1l-.2-1-61.3,14.2.2,1,.2,1,61.4-14.2-.2-1h-.1ZM59.8,20.3l-.2-1c-5.5,1.3-10.3,4.9-13,10l.9.5.9.5c2.4-4.5,6.7-7.8,11.7-9l-.2-1h-.1ZM47.5,29.8l-.9-.5c-3.4,6.5-8.3,15.5-12.7,21.5l.8.6.8.6c4.4-6.2,9.4-15.3,12.8-21.8l-.9-.5h.1ZM34.7,51.5l-.8-.6c-7,9.8-15.6,16.5-21.1,20.1l.6.8.6.8c5.6-3.7,14.4-10.6,21.6-20.6l-.8-.6h-.1ZM13.4,71.8l-.6-.8c-3.6,2.4-5.1,7.2-4.1,11.9l1-.2,1-.2c-.9-4.1.5-8,3.3-9.8l-.6-.8h0ZM9.7,82.7l-1,.2,6.4,29.8,1-.2,1-.2-6.4-29.8s-1,.2-1,.2ZM16.1,112.5l-1,.2c1.3,6,6.4,10.2,11.8,9.1l-.2-1-.2-1c-3.9.9-8.3-2.3-9.4-7.5,0,0-1,.2-1,.2ZM26.7,120.8l.2,1,43.9-9.5-.2-1-.2-1-43.9,9.5.2,1ZM70.6,111.4l-1,.2,65.3,303.3,1-.2,1-.2L71.6,111.2l-1,.2ZM135.9,414.6l-1,.2c8.8,41,24.4,68.6,46.9,82.2l.5-.9.5-.9c-21.8-13.3-37.2-40.1-46-80.9l-1,.2h.1ZM182.3,496.2l-.5.9c22.5,13.6,53,16.2,91.4,8l-.2-1-.2-1c-38.2,8.2-68.1,5.6-90-7.7l-.5.9h0ZM273,504.1l.2,1,33.6-7.2-.2-1-.2-1-33.6,7.2.2,1ZM306.6,496.8l.2,1c5.1-1.1,8.4-6.2,7.3-11.3l-1,.2-1,.2c.9,4.1-1.7,8.1-5.7,8.9l.2,1h0ZM313.2,486.7h1l-4.8-50.3h-1l-1,.2,4.8,50.2h1ZM308.4,436.4h1c-.3-3.5-3.4-6-6.8-5.6v1c.1,0,.2,1,.2,1,2.3-.3,4.3,1.4,4.5,3.7h1.1Z"
+                        fill="currentColor"
+                        stroke="none"
+                        data-c-uqgx6sio=""
+                      ></path>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="section-container" data-c-yfwknzfq="">
+            <div class="newsletter-cta-content" data-c-gqhmwrgb="">
+              <div
+                class="text-block text-block--dark"
+                style="
+                  --tb-heading-size: var(--font-size-display);
+                  --tb-heading-weight: 400;
+                  --tb-body-size: 24px;
+                  --tb-body-line-height: 1.2;
+                  --tb-spacing: 1.5rem;
+                "
+                data-c-wz6xpbld=""
+              >
+                <h2 id="newsletter-cta-heading" class="text-block-heading" data-c-wz6xpbld="">
+                  Stay Updated with <strong>Bool</strong>
+                </h2>
+                <div class="text-block-body" data-c-wz6xpbld="">
+                  <p data-c-gqhmwrgb="">
+                    AI-Augmented Development insights, platform shifts, and real cases. No fluff. Just what matters.
+                  </p>
+                </div>
+              </div>
+              <div class="newsletter-cta-form" data-c-gqhmwrgb="">
+                <div data-island="NewsletterForm">
+                  <div>
+                    <div class="newsletter__name-field">
+                      <label for="_r15R_0_" class="newsletter__sr-only">Name</label
+                      ><input
+                        id="_r15R_0_"
+                        type="text"
+                        placeholder="Name"
+                        autocomplete="name"
+                        class="newsletter__name-input"
+                        value=""
+                      />
+                    </div>
+                    <form class="inline-input__wrapper inline-input__wrapper-variant">
+                      <label for="_r15R_7_" class="inline-input__sr-only">Email address</label
+                      ><input
+                        id="_r15R_7_"
+                        type="email"
+                        placeholder="Insert your email"
+                        required=""
+                        class="inline-input__input"
+                        value=""
+                      /><button type="submit" class="inline-input__button inline-input__button-variant">
+                        Subscribe now
+                      </button>
+                    </form>
+                    <label class="newsletter__consent-label newsletter__consent-label-cta"
+                      ><input type="checkbox" class="newsletter__checkbox" /><span
+                        >I agree to receive marketing emails from Bool. See our
+                        <a href="./privacy/index.html" class="newsletter__consent-link">Privacy Policy</a>.</span
+                      ></label
+                    >
+                  </div>
+                  <script type="application/json" data-island-props="">
+                    {
+                      "variant": "cta",
+                      "labels": {
+                        "subscribed": "✓ Check your email to confirm",
+                        "loading": "...",
+                        "ctaBar": "Subscribe",
+                        "ctaCta": "Subscribe now",
+                        "label": "Email address",
+                        "placeholder": "Insert your email",
+                        "nameLabel": "Name",
+                        "namePlaceholder": "Name",
+                        "nameRequired": "Please enter your name.",
+                        "captchaRequired": "Please complete the captcha verification.",
+                        "error": "Subscription failed. Please try again.",
+                        "consentBefore": "I agree to receive marketing emails from Bool. See our ",
+                        "consentLinkText": "Privacy Policy",
+                        "consentAfter": ".",
+                        "consentRequired": "You must agree to receive marketing emails."
+                      }
+                    }
+                  </script>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <footer class="site-footer" data-c-footer-inner="">
+      <div class="footer-inner" data-c-footer-inner="">
+        <!-- Brand + tagline + social -->
+        <div class="footer-brand" data-c-footer-inner="">
+          <p class="footer-tagline" data-c-footer-inner="">
+            <a
+              href="https://codeforall.com/group"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="footer-tagline-link"
+              data-c-footer-inner=""
+            >
+              Part of the Code for All_ Group. AI-Augmented Development, from Portugal to the world.
+            </a>
+          </p>
+          <div class="footer-social" aria-label="Social media links" data-c-footer-inner="">
+            <a
+              href="https://www.facebook.com/BoolPT/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Bool on Facebook"
+              class="social-icon"
+              data-c-footer-inner=""
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+              </svg> </a
+            ><a
+              href="https://instagram.com/wearebool"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Bool on Instagram"
+              class="social-icon"
+              data-c-footer-inner=""
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3"
+                ></path>
+              </svg> </a
+            ><a
+              href="https://www.linkedin.com/company/bool"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Bool on LinkedIn"
+              class="social-icon"
+              data-c-footer-inner=""
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                <path d="M2 9h4v12H2z"></path>
+                <path d="M4 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path>
+              </svg> </a
+            ><a
+              href="https://x.com/wearebool"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Bool on X"
+              class="social-icon"
+              data-c-footer-inner=""
+            >
+              <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true">
+                <path
+                  d="M25.1349 25.3708L17.7196 14.5536L24.5377 6.60806L22.9294 6.59868L17.0005 13.5008L12.2563 6.58827L6.79828 6.5966L13.9595 17.0446L6.81495 25.3694L8.42156 25.3805L14.6789 18.096L19.6918 25.3978L25.1353 25.3704L25.1349 25.3708Z"
+                  fill="currentColor"
+                  stroke="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+                <path
+                  d="M22.9251 24.2123L20.4497 24.2296L9.00586 7.82702L11.4851 7.81348L22.9251 24.2123Z"
+                  fill="var(--color-background)"
+                  stroke="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+              </svg> </a
+            ><a
+              href="https://youtube.com/@bool-pt"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Bool on YouTube"
+              class="social-icon"
+              data-c-footer-inner=""
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"
+                  fill="currentColor"
+                  stroke="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+                <path
+                  d="M9.75 15.02L15.5 12l-5.75-3.02v6.04z"
+                  fill="var(--color-on-dark)"
+                  stroke="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <!-- Quick Links -->
+        <div class="footer-col" data-c-footer-inner="">
+          <h3 class="footer-heading" data-c-footer-inner="">Quick Links</h3>
+          <ul role="list" class="footer-link-list" data-c-footer-inner="">
+            <li data-c-footer-inner="">
+              <a href="./services/index.html" class="footer-link" data-c-footer-inner=""> Services </a>
+            </li>
+            <li data-c-footer-inner="">
+              <a href="./about/index.html" class="footer-link" data-c-footer-inner=""> About us </a>
+            </li>
+            <li data-c-footer-inner="">
+              <a href="./careers/index.html" class="footer-link" data-c-footer-inner=""> Careers </a>
+            </li>
+            <li data-c-footer-inner="">
+              <a href="./contacts/index.html" class="footer-link" data-c-footer-inner=""> Contact us </a>
+            </li>
+            <li data-c-footer-inner="">
+              <a href="./blog/index.html" class="footer-link" data-c-footer-inner=""> Insights </a>
+            </li>
+            <li data-c-footer-inner="">
+              <a href="./portfolio/index.html" class="footer-link" data-c-footer-inner=""> Use Cases </a>
+            </li>
+          </ul>
+        </div>
+        <!-- Legal Links -->
+        <div class="footer-col" data-c-footer-inner="">
+          <h3 class="footer-heading" data-c-footer-inner="">Legal Links</h3>
+          <ul role="list" class="footer-link-list" data-c-footer-inner="">
+            <li data-c-footer-inner="">
+              <a href="./privacy/index.html" class="footer-link" data-c-footer-inner=""> Privacy Policy </a>
+            </li>
+            <li data-c-footer-inner="">
+              <a href="./terms/index.html" class="footer-link" data-c-footer-inner=""> Terms of Service </a>
+            </li>
+            <li data-c-footer-inner="">
+              <a href="https://whistleblowersoftware.com/secure/codeforall" class="footer-link" data-c-footer-inner="">
+                Whistleblower
+              </a>
+            </li>
+            <li data-c-footer-inner="">
+              <a href="./cookies/index.html" class="footer-link" data-c-footer-inner=""> Cookie Policy </a>
+            </li>
+            <li data-c-footer-inner="">
+              <div data-island="CookiePreferencesButton">
+                <button class="cookie-banner__preferences-button">Cookie preferences</button>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <!-- Contact info -->
+        <div class="footer-col" data-c-footer-inner="">
+          <h3 class="footer-heading" data-c-footer-inner="">To find us</h3>
+          <address class="footer-address" data-c-footer-inner="">
+            <p data-c-footer-inner="">Office Lisboa, R. do Centro Cultural 27A, 1700-106 Lisboa</p>
+            <a
+              href="#"
+              class="obfuscated-link footer-link"
+              data-contact="bWFpbHRvOmluZm9AYm9vbC5wdA=="
+              data-label="aW5mb0Bib29sLnB0"
+            ></a>
+          </address>
+        </div>
+      </div>
+      <div class="footer-bottom" data-c-footer-inner="">
+        <div class="footer-bottom-inner" data-c-footer-inner="">
+          <p class="copyright-line" data-c-footer-inner="">
+            <span class="copyright-icon" data-c-footer-inner="">©</span>Copyright 2026 Bool
+          </p>
+          <a
+            class="footer-signature-link"
+            href="./docs/compete2030-incentives.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="COMPETE 2030 co-funding operation fact sheets (PDF, opens in a new tab)"
+            data-c-footer-inner=""
+          >
+            <img
+              src="./assets/img/compete2030-pb.webp"
+              alt="Cofinanciado por COMPETE 2030, Portugal 2030 e União Europeia"
+              loading="lazy"
+              decoding="async"
+              width="384"
+              height="32"
+              class="footer-signature"
+              data-c-footer-inner=""
+            />
+          </a>
+        </div>
+      </div>
+    </footer>
+    <div data-modals="">
+      <dialog class="content-modal" data-modal-key="example" aria-labelledby="modal-example-title">
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+
+        <h2 id="modal-example-title" class="content-modal__title">Example modal</h2>
+        <p class="content-modal__body">
+          This modal opens from any button set to "Open modal". Edit its content in the Modals section, or create new
+          ones from the link picker.
+        </p>
+      </dialog>
+      <dialog
+        class="content-modal"
+        data-modal-key="ai-augmented-delivery"
+        aria-labelledby="modal-ai-augmented-delivery-title"
+      >
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+
+        <h2 id="modal-ai-augmented-delivery-title" class="content-modal__title">AI-Augmented Delivery</h2>
+        <p class="content-modal__body">
+          Anyone can generate code with AI. We make sure it works. Our teams use Claude Code and Cursor on every
+          engagement. The result: 8x faster delivery, 67% leaner teams, same enterprise standard.
+        </p>
+        <a href="./services/index.html" class="content-modal__cta">See our services</a>
+      </dialog>
+      <dialog
+        class="content-modal"
+        data-modal-key="ai-within-applications"
+        aria-labelledby="modal-ai-within-applications-title"
+      >
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+
+        <h2 id="modal-ai-within-applications-title" class="content-modal__title">AI Within Applications</h2>
+        <p class="content-modal__body">
+          I is not a feature to bolt on. It is the operating layer. We embed intelligence into enterprise applications
+          from day one. RAG pipelines, AI agents, autonomous workflows. Built to last, not to demo.
+        </p>
+        <a href="./portfolio/index.html" class="content-modal__cta">See our work</a>
+      </dialog>
+      <dialog
+        class="content-modal"
+        data-modal-key="agentic-systems-engineering"
+        aria-labelledby="modal-agentic-systems-engineering-title"
+      >
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+
+        <h2 id="modal-agentic-systems-engineering-title" class="content-modal__title">Agentic Systems Engineering</h2>
+        <p class="content-modal__body">
+          Copilots assist. Agents deliver. We architect multi-agent systems where specialized AI handles planning,
+          execution, testing, and iteration end-to-end. Humans at the decision points. Not the bottlenecks.
+        </p>
+        <a href="./services/index.html" class="content-modal__cta">See our services</a>
+      </dialog>
+      <dialog
+        class="content-modal"
+        data-modal-key="enterprise-ai-enablement"
+        aria-labelledby="modal-enterprise-ai-enablement-title"
+      >
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+
+        <h2 id="modal-enterprise-ai-enablement-title" class="content-modal__title">Enterprise AI Enablement</h2>
+        <p class="content-modal__body">
+          We set up Claude Code for your stack, write custom instructions for your codebase, and run hands-on workshops
+          with your developers. We do not hand off a tool and leave. The capability stays with your team.
+        </p>
+        <a href="./contacts/index.html" class="content-modal__cta">Talk to us</a>
+      </dialog>
+      <dialog class="content-modal" data-modal-key="ai-governance" aria-labelledby="modal-ai-governance-title">
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+
+        <h2 id="modal-ai-governance-title" class="content-modal__title">AI Governance</h2>
+        <p class="content-modal__body">
+          Moving fast on AI without guardrails is a liability. We classify risk, implement compliance controls, and
+          build oversight frameworks aligned with the EU AI Act. August 2026 is closer than it looks.
+        </p>
+        <a href="./contacts/index.html" class="content-modal__cta">Start with the Diagnostic</a>
+      </dialog>
+      <dialog
+        class="content-modal"
+        data-modal-key="ai-augmented-delivery-2"
+        aria-labelledby="modal-ai-augmented-delivery-2-title"
+      >
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+
+        <h2 id="modal-ai-augmented-delivery-2-title" class="content-modal__title">AI-Augmented Delivery</h2>
+        <p class="content-modal__body">
+          Anyone can generate code with AI. We make sure it works. Our teams use Claude Code and Cursor on every
+          engagement. The result: 8x faster delivery, 67% leaner teams, same enterprise standard.
+        </p>
+        <a href="./services/index.html" class="content-modal__cta">See our services</a>
+      </dialog>
+      <dialog
+        class="content-modal"
+        data-modal-key="ai-within-applications-2"
+        aria-labelledby="modal-ai-within-applications-2-title"
+      >
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+
+        <h2 id="modal-ai-within-applications-2-title" class="content-modal__title">AI Within Applications</h2>
+        <p class="content-modal__body">
+          AI is not a feature to bolt on. It is the operating layer. We embed intelligence into enterprise applications
+          from day one. RAG pipelines, AI agents, autonomous workflows. Built to last, not to demo.
+        </p>
+        <a href="./portfolio/index.html" class="content-modal__cta">See our work</a>
+      </dialog>
+      <dialog
+        class="content-modal"
+        data-modal-key="agentic-systems-engineering-2"
+        aria-labelledby="modal-agentic-systems-engineering-2-title"
+      >
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+
+        <h2 id="modal-agentic-systems-engineering-2-title" class="content-modal__title">Agentic Systems Engineering</h2>
+        <p class="content-modal__body">
+          Copilots assist. Agents deliver. We architect multi-agent systems where specialized AI handles planning,
+          execution, testing, and iteration end-to-end. Humans at the decision points. Not the bottlenecks.
+        </p>
+        <a href="./services/index.html" class="content-modal__cta">See our services</a>
+      </dialog>
+      <dialog
+        class="content-modal"
+        data-modal-key="ai-adoption-and-governance"
+        aria-labelledby="modal-ai-adoption-and-governance-title"
+      >
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+
+        <h2 id="modal-ai-adoption-and-governance-title" class="content-modal__title">AI Adoption &amp; Governance</h2>
+        <p class="content-modal__body">
+          Deploying AI is the easy part. Making it stick is not. We set up Claude Code for your stack, train your
+          developers, and build the oversight frameworks that keep you compliant. Risk classification, EU AI Act
+          alignment, and hands-on enablement. All in one engagement.
+        </p>
+        <a href="./contacts/index.html" class="content-modal__cta">Talk to us</a>
+      </dialog>
+    </div>
+  </body>
+</html>

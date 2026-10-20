@@ -1,0 +1,657 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script>
+      (function () {
+        var theme = localStorage.getItem("theme");
+        if (theme === "dark") {
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+    <link rel="icon" type="image/png" href="../favicon.png" />
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+    <link rel="preconnect" href="https://challenges.cloudflare.com" crossorigin="" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; frame-src 'self' https://challenges.cloudflare.com; worker-src 'self' blob:; img-src 'self' data:; connect-src 'self' https://challenges.cloudflare.com https://api.invalid; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';"
+    />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=()" />
+    <title>Events | Bool</title>
+    <meta name="description" content="Discover upcoming events, conferences, and meetups where Bool participates." />
+    <link rel="canonical" href="https://bool.pt/events/" />
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://bool.pt/events/" />
+    <meta property="og:title" content="Events | Bool" />
+    <meta
+      property="og:description"
+      content="Discover upcoming events, conferences, and meetups where Bool participates."
+    />
+    <meta property="og:image" content="https://bool.pt/og/default.png" />
+    <meta property="og:locale" content="en" />
+    <meta property="og:site_name" content="Bool" />
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@wearebool" />
+    <meta name="twitter:title" content="Events | Bool" />
+    <meta
+      name="twitter:description"
+      content="Discover upcoming events, conferences, and meetups where Bool participates."
+    />
+    <meta name="twitter:image" content="https://bool.pt/og/default.png" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Bool",
+        "url": "https://bool.pt",
+        "sameAs": [
+          "https://www.linkedin.com/company/bool",
+          "https://github.com/bool-pt",
+          "https://x.com/wearebool",
+          "https://instagram.com/wearebool",
+          "https://www.facebook.com/BoolPT/",
+          "https://youtube.com/@bool-pt"
+        ],
+        "contactPoint": { "@type": "ContactPoint", "email": "info@bool.pt", "contactType": "customer service" }
+      }
+    </script>
+    <script type="application/ld+json">
+      { "@context": "https://schema.org", "@type": "WebSite", "name": "Bool", "url": "https://bool.pt" }
+    </script>
+    <link rel="stylesheet" href="../assets/site.css" />
+    <link rel="stylesheet" href="../assets/app.css" />
+    <script src="../assets/app.js" defer=""></script>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-nav">Skip to content</a>
+    <header class="site-header" data-c-header-actions="">
+      <nav aria-label="Main navigation" data-c-header-actions="">
+        <a href="../index.html" class="site-logo" aria-label="Bool home" data-c-header-actions="">
+          <img
+            src="../assets/img/bool-logo-142.svg"
+            alt=""
+            loading="lazy"
+            decoding="async"
+            width="50"
+            height="50"
+            data-c-header-actions=""
+          />
+        </a>
+        <ul class="nav-links" role="list" data-c-header-actions="">
+          <li data-c-header-actions=""><a href="../index.html" class="nav-link" data-c-header-actions=""> Home </a></li>
+          <li data-c-header-actions="">
+            <a href="../about/index.html" class="nav-link" data-c-header-actions=""> About </a>
+          </li>
+          <li data-c-header-actions="">
+            <a href="../services/index.html" class="nav-link" data-c-header-actions=""> Services </a>
+          </li>
+          <li data-c-header-actions="">
+            <a href="../people/index.html" class="nav-link" data-c-header-actions=""> People </a>
+          </li>
+          <li data-c-header-actions="">
+            <a href="../portfolio/index.html" class="nav-link" data-c-header-actions=""> Portfolio </a>
+          </li>
+          <li data-c-header-actions="">
+            <a href="../blog/index.html" class="nav-link" data-c-header-actions=""> Insights </a>
+          </li>
+          <li data-c-header-actions="">
+            <a href="../contacts/index.html" class="nav-link" data-c-header-actions=""> Contacts </a>
+          </li>
+        </ul>
+        <div class="header-actions" data-c-header-actions="">
+          <a href="../contacts/index.html" class="header-cta" data-c-header-actions="">Talk to an Expert</a>
+          <!-- LanguageSelect hidden until multi-locale rollout
+      <LanguageSelect
+        client:load
+        currentLocale={languageSelectLabels.currentLocale}
+        defaultLocale={languageSelectLabels.defaultLocale}
+        locales={languageSelectLabels.locales}
+        ariaLabel={languageSelectLabels.ariaLabel}
+      /> -->
+          <div data-island="MobileNav">
+            <div>
+              <button
+                aria-label="Open menu"
+                aria-expanded="false"
+                aria-controls="mobile-nav"
+                class="hover:bg-muted focus-visible:ring-ring rounded-md p-2 text-white focus-visible:ring-2 focus-visible:outline-none"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-menu h-6 w-6"
+                  aria-hidden="true"
+                >
+                  <path d="M4 5h16"></path>
+                  <path d="M4 12h16"></path>
+                  <path d="M4 19h16"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main id="main-content">
+      <section
+        class="section"
+        aria-labelledby="blog-events-heading"
+        style="background-color: var(--color-muted)"
+        data-c-pdbomyic=""
+      >
+        <div class="section-container" data-c-yfwknzfq="">
+          <div class="section-intro section-intro--light section-intro--start" data-c-w2wcho3q="">
+            <div class="section-tag section-tag--primary" data-c-ibh72olp="">
+              <span class="tag-line" data-c-ibh72olp=""></span> <span class="tag-text" data-c-ibh72olp="">Events</span>
+            </div>
+            <h2 id="blog-events-heading" class="section-intro-heading" data-c-w2wcho3q="">Events</h2>
+            <p class="section-intro-body" style="max-inline-size: 42rem" data-c-w2wcho3q="">
+              Upcoming conferences, meetups, and events where Bool participates.
+            </p>
+          </div>
+          <div class="calendar-event-layout" data-c-calendar-event-layout="">
+            <div class="calendar-event-layout-calendar" data-c-calendar-event-layout="">
+              <div data-island="EventCalendar">
+                <div class="calendar__calendar">
+                  <div class="calendar__header">
+                    <button type="button" class="calendar__nav-btn" aria-label="Previous month">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-chevron-left"
+                        aria-hidden="true"
+                      >
+                        <path d="m15 18-6-6 6-6"></path>
+                      </svg></button
+                    ><span class="calendar__month-label"
+                      >November<!-- -->
+                      <!-- -->2026</span
+                    ><button type="button" class="calendar__nav-btn" aria-label="Next month">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-chevron-right"
+                        aria-hidden="true"
+                      >
+                        <path d="m9 18 6-6-6-6"></path>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="calendar__day-names">
+                    <span class="calendar__day-name">Mon</span><span class="calendar__day-name">Tue</span
+                    ><span class="calendar__day-name">Wed</span><span class="calendar__day-name">Thu</span
+                    ><span class="calendar__day-name">Fri</span><span class="calendar__day-name">Sat</span
+                    ><span class="calendar__day-name">Sun</span>
+                  </div>
+                  <div class="calendar__grid">
+                    <span class="calendar__cell calendar__cell-outside" aria-hidden="true">26</span
+                    ><span class="calendar__cell calendar__cell-outside" aria-hidden="true">27</span
+                    ><span class="calendar__cell calendar__cell-outside" aria-hidden="true">28</span
+                    ><span class="calendar__cell calendar__cell-outside" aria-hidden="true">29</span
+                    ><span class="calendar__cell calendar__cell-outside" aria-hidden="true">30</span
+                    ><span class="calendar__cell calendar__cell-outside" aria-hidden="true">31</span
+                    ><button type="button" class="calendar__cell" aria-label="November 1">1</button
+                    ><button type="button" class="calendar__cell" aria-label="November 2">2</button
+                    ><button type="button" class="calendar__cell" aria-label="November 3">3</button
+                    ><button type="button" class="calendar__cell" aria-label="November 4">4</button
+                    ><button type="button" class="calendar__cell" aria-label="November 5">5</button
+                    ><button type="button" class="calendar__cell" aria-label="November 6">6</button
+                    ><button type="button" class="calendar__cell" aria-label="November 7">7</button
+                    ><button type="button" class="calendar__cell" aria-label="November 8">8</button
+                    ><button type="button" class="calendar__cell" aria-label="November 9">9</button
+                    ><button type="button" class="calendar__cell" aria-label="November 10">10</button
+                    ><button type="button" class="calendar__cell" aria-label="November 11">11</button
+                    ><button type="button" class="calendar__cell" aria-label="November 12">12</button
+                    ><button type="button" class="calendar__cell" aria-label="November 13">13</button
+                    ><button type="button" class="calendar__cell" aria-label="November 14">14</button
+                    ><button
+                      type="button"
+                      class="calendar__cell calendar__cell-event calendar__cell-selected"
+                      style="background-color: #f22800"
+                      aria-label="November 15"
+                    >
+                      15</button
+                    ><button type="button" class="calendar__cell" aria-label="November 16">16</button
+                    ><button type="button" class="calendar__cell" aria-label="November 17">17</button
+                    ><button type="button" class="calendar__cell" aria-label="November 18">18</button
+                    ><button type="button" class="calendar__cell" aria-label="November 19">19</button
+                    ><button type="button" class="calendar__cell" aria-label="November 20">20</button
+                    ><button type="button" class="calendar__cell" aria-label="November 21">21</button
+                    ><button type="button" class="calendar__cell" aria-label="November 22">22</button
+                    ><button type="button" class="calendar__cell" aria-label="November 23">23</button
+                    ><button type="button" class="calendar__cell" aria-label="November 24">24</button
+                    ><button type="button" class="calendar__cell" aria-label="November 25">25</button
+                    ><button type="button" class="calendar__cell" aria-label="November 26">26</button
+                    ><button type="button" class="calendar__cell" aria-label="November 27">27</button
+                    ><button
+                      type="button"
+                      class="calendar__cell calendar__cell-event"
+                      style="background-color: #146ff4"
+                      aria-label="November 28"
+                    >
+                      28</button
+                    ><button type="button" class="calendar__cell" aria-label="November 29">29</button
+                    ><button type="button" class="calendar__cell" aria-label="November 30">30</button
+                    ><span class="calendar__cell calendar__cell-outside" aria-hidden="true">1</span
+                    ><span class="calendar__cell calendar__cell-outside" aria-hidden="true">2</span
+                    ><span class="calendar__cell calendar__cell-outside" aria-hidden="true">3</span
+                    ><span class="calendar__cell calendar__cell-outside" aria-hidden="true">4</span
+                    ><span class="calendar__cell calendar__cell-outside" aria-hidden="true">5</span
+                    ><span class="calendar__cell calendar__cell-outside" aria-hidden="true">6</span>
+                  </div>
+                  <div class="calendar__preview">
+                    <div class="calendar__preview-header">
+                      <span class="calendar__preview-tag" style="background-color: #f22800">OutSystems</span
+                      ><span class="calendar__preview-date">November 15</span>
+                    </div>
+                    <p class="calendar__preview-title">
+                      Event<!-- -->
+                      <!-- -->OutSystems<!-- -->:<!-- -->
+                      <span class="calendar__preview-title-value">OutSystems NextStep 2026</span>
+                    </p>
+                  </div>
+                </div>
+                <script type="application/json" data-island-props="">
+                  {
+                    "events": [
+                      {
+                        "date": "2026-11-15T00:00:00.000Z",
+                        "tag": "OutSystems",
+                        "tagColor": "#F22800",
+                        "title": "OutSystems NextStep 2026 — Europe Edition",
+                        "description": "Join us at the premier OutSystems conference where we will be showcasing our latest AI integrations and delivery frameworks."
+                      },
+                      {
+                        "date": "2026-11-28T00:00:00.000Z",
+                        "tag": "Mendix",
+                        "tagColor": "#146FF4",
+                        "title": "Mendix World 2026 — Low-Code Leadership Summit",
+                        "description": "Our team will be presenting a case study on large-scale enterprise transformation using Mendix in a regulated environment."
+                      }
+                    ],
+                    "ariaLabels": { "prevMonth": "Previous month", "nextMonth": "Next month" },
+                    "dayNames": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+                    "monthNames": [
+                      "January",
+                      "February",
+                      "March",
+                      "April",
+                      "May",
+                      "June",
+                      "July",
+                      "August",
+                      "September",
+                      "October",
+                      "November",
+                      "December"
+                    ],
+                    "eventPrefix": "Event"
+                  }
+                </script>
+              </div>
+            </div>
+            <div class="calendar-event-layout-content" data-c-calendar-event-layout="">
+              <ul class="events-cards" role="list" data-c-3aqe3a6n=""></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer" data-c-footer-inner="">
+      <div class="footer-inner" data-c-footer-inner="">
+        <!-- Brand + tagline + social -->
+        <div class="footer-brand" data-c-footer-inner="">
+          <p class="footer-tagline" data-c-footer-inner="">
+            <a
+              href="https://codeforall.com/group"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="footer-tagline-link"
+              data-c-footer-inner=""
+            >
+              Part of the Code for All_ Group. AI-Augmented Development, from Portugal to the world.
+            </a>
+          </p>
+          <div class="footer-social" aria-label="Social media links" data-c-footer-inner="">
+            <a
+              href="https://www.facebook.com/BoolPT/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Bool on Facebook"
+              class="social-icon"
+              data-c-footer-inner=""
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+              </svg> </a
+            ><a
+              href="https://instagram.com/wearebool"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Bool on Instagram"
+              class="social-icon"
+              data-c-footer-inner=""
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8C4 18.39 5.61 20 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6C20 5.61 18.39 4 16.4 4H7.6m9.65 1.5a1.25 1.25 0 0 1 1.25 1.25A1.25 1.25 0 0 1 17.25 8 1.25 1.25 0 0 1 16 6.75a1.25 1.25 0 0 1 1.25-1.25M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3"
+                ></path>
+              </svg> </a
+            ><a
+              href="https://www.linkedin.com/company/bool"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Bool on LinkedIn"
+              class="social-icon"
+              data-c-footer-inner=""
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                <path d="M2 9h4v12H2z"></path>
+                <path d="M4 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path>
+              </svg> </a
+            ><a
+              href="https://x.com/wearebool"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Bool on X"
+              class="social-icon"
+              data-c-footer-inner=""
+            >
+              <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true">
+                <path
+                  d="M25.1349 25.3708L17.7196 14.5536L24.5377 6.60806L22.9294 6.59868L17.0005 13.5008L12.2563 6.58827L6.79828 6.5966L13.9595 17.0446L6.81495 25.3694L8.42156 25.3805L14.6789 18.096L19.6918 25.3978L25.1353 25.3704L25.1349 25.3708Z"
+                  fill="currentColor"
+                  stroke="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+                <path
+                  d="M22.9251 24.2123L20.4497 24.2296L9.00586 7.82702L11.4851 7.81348L22.9251 24.2123Z"
+                  fill="var(--color-background)"
+                  stroke="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+              </svg> </a
+            ><a
+              href="https://youtube.com/@bool-pt"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Bool on YouTube"
+              class="social-icon"
+              data-c-footer-inner=""
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"
+                  fill="currentColor"
+                  stroke="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+                <path
+                  d="M9.75 15.02L15.5 12l-5.75-3.02v6.04z"
+                  fill="var(--color-on-dark)"
+                  stroke="none"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <!-- Quick Links -->
+        <div class="footer-col" data-c-footer-inner="">
+          <h3 class="footer-heading" data-c-footer-inner="">Quick Links</h3>
+          <ul role="list" class="footer-link-list" data-c-footer-inner="">
+            <li data-c-footer-inner="">
+              <a href="../services/index.html" class="footer-link" data-c-footer-inner=""> Services </a>
+            </li>
+            <li data-c-footer-inner="">
+              <a href="../about/index.html" class="footer-link" data-c-footer-inner=""> About us </a>
+            </li>
+            <li data-c-footer-inner="">
+              <a href="../careers/index.html" class="footer-link" data-c-footer-inner=""> Careers </a>
+            </li>
+            <li data-c-footer-inner="">
+              <a href="../contacts/index.html" class="footer-link" data-c-footer-inner=""> Contact us </a>
+            </li>
+            <li data-c-footer-inner="">
+              <a href="../blog/index.html" class="footer-link" data-c-footer-inner=""> Insights </a>
+            </li>
+            <li data-c-footer-inner="">
+              <a href="../portfolio/index.html" class="footer-link" data-c-footer-inner=""> Use Cases </a>
+            </li>
+          </ul>
+        </div>
+        <!-- Legal Links -->
+        <div class="footer-col" data-c-footer-inner="">
+          <h3 class="footer-heading" data-c-footer-inner="">Legal Links</h3>
+          <ul role="list" class="footer-link-list" data-c-footer-inner="">
+            <li data-c-footer-inner="">
+              <a href="../privacy/index.html" class="footer-link" data-c-footer-inner=""> Privacy Policy </a>
+            </li>
+            <li data-c-footer-inner="">
+              <a href="../terms/index.html" class="footer-link" data-c-footer-inner=""> Terms of Service </a>
+            </li>
+            <li data-c-footer-inner="">
+              <a href="https://whistleblowersoftware.com/secure/codeforall" class="footer-link" data-c-footer-inner="">
+                Whistleblower
+              </a>
+            </li>
+            <li data-c-footer-inner="">
+              <a href="../cookies/index.html" class="footer-link" data-c-footer-inner=""> Cookie Policy </a>
+            </li>
+            <li data-c-footer-inner="">
+              <div data-island="CookiePreferencesButton">
+                <button class="cookie-banner__preferences-button">Cookie preferences</button>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <!-- Contact info -->
+        <div class="footer-col" data-c-footer-inner="">
+          <h3 class="footer-heading" data-c-footer-inner="">To find us</h3>
+          <address class="footer-address" data-c-footer-inner="">
+            <p data-c-footer-inner="">Office Lisboa, R. do Centro Cultural 27A, 1700-106 Lisboa</p>
+            <a
+              href="#"
+              class="obfuscated-link footer-link"
+              data-contact="bWFpbHRvOmluZm9AYm9vbC5wdA=="
+              data-label="aW5mb0Bib29sLnB0"
+            ></a>
+          </address>
+        </div>
+      </div>
+      <div class="footer-bottom" data-c-footer-inner="">
+        <div class="footer-bottom-inner" data-c-footer-inner="">
+          <p class="copyright-line" data-c-footer-inner="">
+            <span class="copyright-icon" data-c-footer-inner="">©</span>Copyright 2026 Bool
+          </p>
+          <a
+            class="footer-signature-link"
+            href="../docs/compete2030-incentives.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="COMPETE 2030 co-funding operation fact sheets (PDF, opens in a new tab)"
+            data-c-footer-inner=""
+          >
+            <img
+              src="../assets/img/compete2030-pb.webp"
+              alt="Cofinanciado por COMPETE 2030, Portugal 2030 e União Europeia"
+              loading="lazy"
+              decoding="async"
+              width="384"
+              height="32"
+              class="footer-signature"
+              data-c-footer-inner=""
+            />
+          </a>
+        </div>
+      </div>
+    </footer>
+    <div data-modals="">
+      <dialog class="content-modal" data-modal-key="example" aria-labelledby="modal-example-title">
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+
+        <h2 id="modal-example-title" class="content-modal__title">Example modal</h2>
+        <p class="content-modal__body">
+          This modal opens from any button set to "Open modal". Edit its content in the Modals section, or create new
+          ones from the link picker.
+        </p>
+      </dialog>
+      <dialog
+        class="content-modal"
+        data-modal-key="ai-augmented-delivery"
+        aria-labelledby="modal-ai-augmented-delivery-title"
+      >
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+
+        <h2 id="modal-ai-augmented-delivery-title" class="content-modal__title">AI-Augmented Delivery</h2>
+        <p class="content-modal__body">
+          Anyone can generate code with AI. We make sure it works. Our teams use Claude Code and Cursor on every
+          engagement. The result: 8x faster delivery, 67% leaner teams, same enterprise standard.
+        </p>
+        <a href="../services/index.html" class="content-modal__cta">See our services</a>
+      </dialog>
+      <dialog
+        class="content-modal"
+        data-modal-key="ai-within-applications"
+        aria-labelledby="modal-ai-within-applications-title"
+      >
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+
+        <h2 id="modal-ai-within-applications-title" class="content-modal__title">AI Within Applications</h2>
+        <p class="content-modal__body">
+          I is not a feature to bolt on. It is the operating layer. We embed intelligence into enterprise applications
+          from day one. RAG pipelines, AI agents, autonomous workflows. Built to last, not to demo.
+        </p>
+        <a href="../portfolio/index.html" class="content-modal__cta">See our work</a>
+      </dialog>
+      <dialog
+        class="content-modal"
+        data-modal-key="agentic-systems-engineering"
+        aria-labelledby="modal-agentic-systems-engineering-title"
+      >
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+
+        <h2 id="modal-agentic-systems-engineering-title" class="content-modal__title">Agentic Systems Engineering</h2>
+        <p class="content-modal__body">
+          Copilots assist. Agents deliver. We architect multi-agent systems where specialized AI handles planning,
+          execution, testing, and iteration end-to-end. Humans at the decision points. Not the bottlenecks.
+        </p>
+        <a href="../services/index.html" class="content-modal__cta">See our services</a>
+      </dialog>
+      <dialog
+        class="content-modal"
+        data-modal-key="enterprise-ai-enablement"
+        aria-labelledby="modal-enterprise-ai-enablement-title"
+      >
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+
+        <h2 id="modal-enterprise-ai-enablement-title" class="content-modal__title">Enterprise AI Enablement</h2>
+        <p class="content-modal__body">
+          We set up Claude Code for your stack, write custom instructions for your codebase, and run hands-on workshops
+          with your developers. We do not hand off a tool and leave. The capability stays with your team.
+        </p>
+        <a href="../contacts/index.html" class="content-modal__cta">Talk to us</a>
+      </dialog>
+      <dialog class="content-modal" data-modal-key="ai-governance" aria-labelledby="modal-ai-governance-title">
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+
+        <h2 id="modal-ai-governance-title" class="content-modal__title">AI Governance</h2>
+        <p class="content-modal__body">
+          Moving fast on AI without guardrails is a liability. We classify risk, implement compliance controls, and
+          build oversight frameworks aligned with the EU AI Act. August 2026 is closer than it looks.
+        </p>
+        <a href="../contacts/index.html" class="content-modal__cta">Start with the Diagnostic</a>
+      </dialog>
+      <dialog
+        class="content-modal"
+        data-modal-key="ai-augmented-delivery-2"
+        aria-labelledby="modal-ai-augmented-delivery-2-title"
+      >
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+
+        <h2 id="modal-ai-augmented-delivery-2-title" class="content-modal__title">AI-Augmented Delivery</h2>
+        <p class="content-modal__body">
+          Anyone can generate code with AI. We make sure it works. Our teams use Claude Code and Cursor on every
+          engagement. The result: 8x faster delivery, 67% leaner teams, same enterprise standard.
+        </p>
+        <a href="../services/index.html" class="content-modal__cta">See our services</a>
+      </dialog>
+      <dialog
+        class="content-modal"
+        data-modal-key="ai-within-applications-2"
+        aria-labelledby="modal-ai-within-applications-2-title"
+      >
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+
+        <h2 id="modal-ai-within-applications-2-title" class="content-modal__title">AI Within Applications</h2>
+        <p class="content-modal__body">
+          AI is not a feature to bolt on. It is the operating layer. We embed intelligence into enterprise applications
+          from day one. RAG pipelines, AI agents, autonomous workflows. Built to last, not to demo.
+        </p>
+        <a href="../portfolio/index.html" class="content-modal__cta">See our work</a>
+      </dialog>
+      <dialog
+        class="content-modal"
+        data-modal-key="agentic-systems-engineering-2"
+        aria-labelledby="modal-agentic-systems-engineering-2-title"
+      >
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+
+        <h2 id="modal-agentic-systems-engineering-2-title" class="content-modal__title">Agentic Systems Engineering</h2>
+        <p class="content-modal__body">
+          Copilots assist. Agents deliver. We architect multi-agent systems where specialized AI handles planning,
+          execution, testing, and iteration end-to-end. Humans at the decision points. Not the bottlenecks.
+        </p>
+        <a href="../services/index.html" class="content-modal__cta">See our services</a>
+      </dialog>
+      <dialog
+        class="content-modal"
+        data-modal-key="ai-adoption-and-governance"
+        aria-labelledby="modal-ai-adoption-and-governance-title"
+      >
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+
+        <h2 id="modal-ai-adoption-and-governance-title" class="content-modal__title">AI Adoption &amp; Governance</h2>
+        <p class="content-modal__body">
+          Deploying AI is the easy part. Making it stick is not. We set up Claude Code for your stack, train your
+          developers, and build the oversight frameworks that keep you compliant. Risk classification, EU AI Act
+          alignment, and hands-on enablement. All in one engagement.
+        </p>
+        <a href="../contacts/index.html" class="content-modal__cta">Talk to us</a>
+      </dialog>
+    </div>
+  </body>
+</html>
