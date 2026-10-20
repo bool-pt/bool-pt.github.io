@@ -422,12 +422,14 @@
         el('nav', { 'aria-label': TEXT.menu.navAria }, [list]),
       ]
     );
+    panel.inert = true; // closed: not focusable, not in the accessibility tree
     document.body.appendChild(overlay);
     document.body.appendChild(panel);
 
     function openMenu() {
       overlay.setAttribute('data-open', '');
       panel.setAttribute('data-open', '');
+      panel.inert = false;
       panel.setAttribute('aria-hidden', 'false');
       button.setAttribute('aria-expanded', 'true');
       document.body.style.overflow = 'hidden';
@@ -437,6 +439,7 @@
     function closeMenu() {
       overlay.removeAttribute('data-open');
       panel.removeAttribute('data-open');
+      panel.inert = true;
       panel.setAttribute('aria-hidden', 'true');
       button.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
