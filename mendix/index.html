@@ -354,7 +354,30 @@ details.scope[open] summary::after{transform:rotate(45deg)}
   .reveal{opacity:1;transform:none;transition:none}
   *{transition:none!important}
 }
+
+/* Cookie banner: drawn by ../assets/app.js (consent, Google Analytics, LinkedIn Insight); same styles as the landing pages */
+.cookie-banner__banner{position:fixed;bottom:1.5rem;left:50%;transform:translate(-50%);z-index:9999;width:min(640px,calc(100vw - 2rem));background:var(--bg-dark-2);color:#fff;border-radius:12px;padding:1.5rem;box-shadow:0 8px 32px #0000004d}
+.cookie-banner__message{font-size:.875rem;line-height:1.6;margin:0 0 1.25rem;color:var(--on-dark-2);text-align:center}
+.cookie-banner__actions{display:flex;flex-wrap:wrap;gap:.75rem}
+.cookie-banner__accept-button,.cookie-banner__reject-button{flex:1 1 8rem;padding:.625rem 1rem;border-radius:9999px;font:600 .875rem/1.2 var(--font);cursor:pointer;color:#fff}
+.cookie-banner__accept-button{border:0;background:var(--red)}
+.cookie-banner__reject-button{border:1.5px solid var(--on-dark-3);background:transparent}
+.cookie-banner__categories{display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.25rem}
+.cookie-banner__category{display:flex;align-items:center;justify-content:space-between;gap:1rem;cursor:pointer}
+.cookie-banner__category-info{display:flex;flex-direction:column;gap:.125rem}
+.cookie-banner__category-label{font-size:.875rem;font-weight:600;color:#fff}
+.cookie-banner__category-description{font-size:.75rem;line-height:1.4;color:var(--on-dark-2)}
+.cookie-banner__toggle{flex-shrink:0;width:2.5rem;height:1.375rem;appearance:none;-webkit-appearance:none;border-radius:9999px;border:1.5px solid var(--on-dark-3);background:transparent;cursor:pointer;position:relative;margin:0;transition:background-color .15s,border-color .15s}
+.cookie-banner__toggle::after{content:"";position:absolute;top:2px;left:2px;width:.875rem;height:.875rem;border-radius:50%;background:var(--on-dark-3);transition:transform .15s,background-color .15s}
+.cookie-banner__toggle:checked{background:var(--red);border-color:var(--red)}
+.cookie-banner__toggle:checked::after{transform:translate(1.125rem);background:#fff}
+.cookie-banner__toggle:disabled{opacity:.5;cursor:not-allowed}
+.cookie-banner__manage-link{display:block;margin:.875rem auto 0;padding:0;border:0;background:none;color:var(--on-dark-2);font:400 .8125rem var(--font);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.cookie-banner__preferences-button{padding:0;border:0;background:none;color:inherit;font:inherit;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.cookie-banner__preferences-button:hover{color:var(--red)}
+[data-island]{display:contents}
 </style>
+<script src="../assets/app.js" defer></script>
 </head>
 <body>
 
@@ -771,6 +794,10 @@ details.scope[open] summary::after{transform:rotate(45deg)}
         <div class="captcha-wrap"><div id="cf-turnstile"></div></div>
         <p class="form-error" id="form-error" role="alert" hidden></p>
         <p class="privacy">Your data will be processed to respond to your inquiry under our legitimate interest, in accordance with our <a href="../privacy/index.html">Privacy Policy</a>.</p>
+        <input type="hidden" name="utm_source">
+        <input type="hidden" name="utm_medium">
+        <input type="hidden" name="utm_campaign">
+        <input type="hidden" name="utm_content">
         <button type="submit" class="submit" id="cf-submit">Send message</button>
       </form>
     </div>
@@ -811,6 +838,7 @@ details.scope[open] summary::after{transform:rotate(45deg)}
           <li><a href="../terms/index.html">Terms of Service</a></li>
           <li><a href="https://whistleblowersoftware.com/secure/codeforall">Whistleblower</a></li>
           <li><a href="../cookies/index.html">Cookie Policy</a></li>
+          <li><div data-island="CookiePreferencesButton"><button type="button" class="cookie-banner__preferences-button">Cookie preferences</button></div></li>
         </ul>
       </div>
       <div>
@@ -889,11 +917,16 @@ details.scope[open] summary::after{transform:rotate(45deg)}
   }
   function resetCaptcha(){token='';try{if(widgetId!==null)turnstile.reset(widgetId)}catch(e){}}
 
+  /* UTMs from the URL are kept in the hidden fields, as on the landing pages */
+  var UTM_KEYS=['utm_source','utm_medium','utm_campaign','utm_content'];
+  var params=new URLSearchParams(location.search);
+  UTM_KEYS.forEach(function(k){form.elements[k].value=(params.get(k)||'').trim().slice(0,100)});
+
   /* Page and UTMs go in the message (the API has no field for them), same as assets/app.js:
      added only while the message stays within 2000 characters; the phone stays last. */
   function withOrigin(message,phone){
-    var params=new URLSearchParams(location.search), lines=['Page: '+location.pathname];
-    ['utm_source','utm_medium','utm_campaign','utm_content'].forEach(function(k){var v=(params.get(k)||'').trim().slice(0,100);if(v)lines.push(k+': '+v)});
+    var lines=['Page: '+location.pathname];
+    UTM_KEYS.forEach(function(k){var v=form.elements[k].value;if(v)lines.push(k+': '+v)});
     var tail=phone?'\n\nPhone: '+phone:'', block='';
     lines.forEach(function(line){var next=block?block+'\n'+line:'\n\n'+line;if((message+next+tail).length<=2000)block=next});
     return message+block+tail;
@@ -937,7 +970,8 @@ details.scope[open] summary::after{transform:rotate(45deg)}
         turnstile_token:tk
       },0);
     }).then(function(){
-      if(typeof window.gtag==='function') window.gtag('event','form_submission',{type:'contact',layout:'full',page:'mendix'});
+      /* Same conversion event as the landing pages; gtag only exists after analytics consent (assets/app.js) */
+      if(typeof window.gtag==='function') window.gtag('event','form_submission',{type:'contact',layout:'full',page:'mendix',utm_source:form.elements.utm_source.value,utm_medium:form.elements.utm_medium.value,utm_campaign:form.elements.utm_campaign.value,utm_content:form.elements.utm_content.value});
       document.getElementById('form-host').innerHTML='<div class="success" role="status"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E7453A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg><p>'+MSG.success+'</p></div>';
     }).catch(function(err){
       formError.textContent=err&&err.status===403?MSG.captcha:MSG.error; formError.hidden=false;
