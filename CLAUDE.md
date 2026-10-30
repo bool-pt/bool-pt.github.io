@@ -79,4 +79,4 @@ Mensagens de commit curtas, em inglês, a dizer o que mudou para quem lê o hist
 
 ## Histórico
 
-Este site substituiu, em outubro de 2026, um monorepo Astro/React com o mesmo conteúdo. O HTML foi gerado a partir do build desse projeto e limpo; o JavaScript foi reescrito à mão. A pasta `tools/` guarda o conversor usado na migração e pode ser apagada quando a migração estiver concluída.
+Este site substituiu, em outubro de 2026, um monorepo Astro/React com o mesmo conteúdo. O HTML foi gerado a partir do build desse projeto e limpo; o JavaScript foi reescrito à mão. O monorepo Astro e o conversor usado na migração ficaram guardados no branch `astro-site`.
