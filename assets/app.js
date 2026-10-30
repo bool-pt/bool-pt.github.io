@@ -705,6 +705,26 @@
   var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   var PHONE_RE = /^\+?[\d\s\-().]{7,20}$/;
 
+  /* The /contact API only takes name, email and message, so the page the lead came from
+     and any UTM parameters are added to the message for the team to see in the e-mail.
+     Lines are added only while the message stays within the API's 2000 characters;
+     the phone stays last, as before. */
+  function withOrigin(message, phone) {
+    var params = new URLSearchParams(location.search);
+    var lines = ['Page: ' + location.pathname];
+    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content'].forEach(function (k) {
+      var v = (params.get(k) || '').trim().slice(0, 100);
+      if (v) lines.push(k + ': ' + v);
+    });
+    var tail = phone ? '\n\nPhone: ' + phone : '';
+    var block = '';
+    lines.forEach(function (line) {
+      var next = block ? block + '\n' + line : '\n\n' + line;
+      if ((message + next + tail).length <= 2000) block = next;
+    });
+    return message + block + tail;
+  }
+
   function initContactForms() {
     document.querySelectorAll('[data-island="ContactForm"] form').forEach(function (form) {
       var isSimple = !!form.querySelector('[name="name"]');
@@ -779,7 +799,7 @@
             if (CONFIG.turnstileSiteKey && !token) throw { captcha: true };
             var name = value('name') || (value('firstName') + ' ' + value('lastName')).trim();
             var phone = value('phone');
-            var message = phone ? value('message') + '\n\nPhone: ' + phone : value('message');
+            var message = withOrigin(value('message'), phone);
             return postJson('/contact', { name: name, email: value('email'), message: message, turnstile_token: token });
           })
           .then(function () {

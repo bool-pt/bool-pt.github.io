@@ -526,7 +526,7 @@
 .tech-card[data-c-featured-tech-wrap] {
   --tech-card-bg: var(--color-background);
   --tech-card-radius: 0.75rem;
-  --tech-card-padding: clamp(0.75rem, 2vw, 1.5rem);
+  --tech-card-padding: clamp(1.25rem, 2.5vw, 2rem) clamp(0.75rem, 2vw, 1.5rem);
   --tech-card-shadow: var(--shadow-card);
   --tech-card-shadow-hover: var(--shadow-overlay);
   position: relative;
@@ -536,10 +536,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
   gap: 1rem;
   inline-size: 100%;
-  aspect-ratio: 1;
   transition: box-shadow 0.2s;
   box-shadow: var(--tech-card-shadow);
   cursor: pointer;
@@ -571,7 +570,6 @@
   font-size: clamp(0.875rem, 2.5vw, var(--font-size-lead));
   font-weight: 700;
   margin: 0;
-  margin-block-end: auto;
   text-align: center;
 }
 .office-carousel__root {
@@ -2389,6 +2387,8 @@
 .icon-card[data-c-icon-card] {
   display: flex;
   flex-direction: column;
+  justify-content: space-evenly;
+  gap: 1.5rem;
   padding: 2rem;
   border-radius: 8px;
   box-shadow: var(--shadow-card);
@@ -2402,11 +2402,6 @@
   position: absolute;
   inset: 0;
 }
-@media (min-width: 640px) {
-  .icon-card[data-c-icon-card] {
-    aspect-ratio: 1 / 1;
-  }
-}
 .icon-card--light[data-c-icon-card] {
   background-color: var(--color-background);
 }
@@ -2417,7 +2412,6 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  flex: 1;
 }
 .icon-card--center[data-c-icon-card] {
   text-align: center;
@@ -2447,10 +2441,6 @@
 }
 .icon-card-icon--square[data-c-icon-card] {
   border-radius: var(--radius-lg);
-}
-.icon-card-footer[data-c-icon-card] {
-  margin-block-start: auto;
-  padding-block-start: 1.5rem;
 }
 .icon-card-title[data-c-icon-card] {
   font-family: var(--font-display);
@@ -3938,7 +3928,7 @@
 .highlight-card[data-c-service-highlights-wrap] {
   --highlight-card-bg: var(--color-background);
   --highlight-card-radius: 0.75rem;
-  --highlight-card-padding: clamp(0.75rem, 2vw, 1.5rem);
+  --highlight-card-padding: clamp(1.25rem, 2.5vw, 2rem) clamp(0.75rem, 2vw, 1.5rem);
   --highlight-card-shadow: var(--shadow-card);
   --highlight-card-shadow-hover: var(--shadow-overlay);
   position: relative;
@@ -3948,10 +3938,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
   gap: 1rem;
   inline-size: 100%;
-  aspect-ratio: 1;
   transition: box-shadow 0.2s;
   box-shadow: var(--highlight-card-shadow);
   cursor: pointer;
@@ -3977,7 +3966,6 @@
   font-weight: 700;
   color: var(--color-foreground);
   margin: 0;
-  margin-block-end: auto;
   text-align: center;
 }
 .heroBg[data-c-herocontentwrap] {

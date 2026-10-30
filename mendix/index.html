@@ -567,7 +567,7 @@ details.scope[open] summary::after{transform:rotate(45deg)}
     <div class="training">
       <div class="reveal">
         <h3 class="sub">Reskilling and training.</h3>
-        <p class="lead-sm">We don't only help you get the most from Mendix: we help you scale a team, fast. Bool has been an official Mendix certified training partner for over three years, training new resources, junior and senior developers and architects.</p>
+        <p class="lead-sm">We don't only help you get the most from Mendix: we help you scale a team, fast. Bool has been an official Mendix certified training partner for over four years, training new resources, junior and senior developers and architects.</p>
         <div class="big-num">
           <div><b>14</b><span>week reskilling bootcamps</span></div>
           <div><b>6</b><span>week corporate training programme</span></div>
@@ -890,6 +890,16 @@ details.scope[open] summary::after{transform:rotate(45deg)}
   }
   function resetCaptcha(){token='';try{if(widgetId!==null)turnstile.reset(widgetId)}catch(e){}}
 
+  /* Page and UTMs go in the message (the API has no field for them), same as assets/app.js:
+     added only while the message stays within 2000 characters; the phone stays last. */
+  function withOrigin(message,phone){
+    var params=new URLSearchParams(location.search), lines=['Page: '+location.pathname];
+    ['utm_source','utm_medium','utm_campaign','utm_content'].forEach(function(k){var v=(params.get(k)||'').trim().slice(0,100);if(v)lines.push(k+': '+v)});
+    var tail=phone?'\n\nPhone: '+phone:'', block='';
+    lines.forEach(function(line){var next=block?block+'\n'+line:'\n\n'+line;if((message+next+tail).length<=2000)block=next});
+    return message+block+tail;
+  }
+
   var rules={
     firstName:function(v){return v.length<2?'First name must be at least 2 characters':v.length>50?'First name must be at most 50 characters':''},
     lastName:function(v){return v.length<2?'Last name must be at least 2 characters':v.length>50?'Last name must be at most 50 characters':''},
@@ -924,7 +934,7 @@ details.scope[open] summary::after{transform:rotate(45deg)}
       return post({
         name:d.firstName+' '+d.lastName,
         email:d.email,
-        message:d.phone?d.message+'\n\nPhone: '+d.phone:d.message,
+        message:withOrigin(d.message,d.phone),
         turnstile_token:tk
       },0);
     }).then(function(){
