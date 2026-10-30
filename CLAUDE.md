@@ -66,6 +66,10 @@ O banner, a memória da decisão e o carregamento do Google Analytics e do Linke
 
 Os formulários fazem POST para a API em `CONFIG.apiBase` (`/contact`, `/subscribe`, `/event`) com um token do Cloudflare Turnstile. Só funcionam em bool.pt: do disco ou de localhost o captcha não carrega e o envio falha. Isso é esperado.
 
+### Content-Security-Policy
+
+Cada página tem uma `<meta http-equiv="Content-Security-Policy">` que lista os domínios externos com que o site pode comunicar: a API dos formulários, o Turnstile, o Google Analytics e o LinkedIn. O browser bloqueia tudo o que não estiver na lista, sem aviso visível ("Failed to fetch"). Se mudar o URL da API ou entrar uma ferramenta nova, acrescentar o domínio à diretiva certa nas 13 páginas e confirmar com `grep` que ficaram todas iguais.
+
 ## Testar
 
 1. Abrir o `index.html` da página no browser, a partir do disco. Texto, imagens, layout, menu mobile, carrosséis e modais funcionam assim.
