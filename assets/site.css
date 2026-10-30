@@ -5007,7 +5007,9 @@ nav[data-c-header-actions] {
 @layer theme {
   :root,
   :host {
-    --font-sans: "Degular", ui-sans-serif, system-ui, sans-serif;
+    --font-sans: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+    /* Width 94 keeps Bricolage as wide as the old Degular, so layouts do not shift */
+    --default-font-variation-settings: "wdth" 94;
     --font-mono: "JetBrains Mono", ui-monospace, monospace;
     --color-black: #000;
     --color-white: #fff;
@@ -5098,7 +5100,7 @@ nav[data-c-header-actions] {
     --primary-8: #e5353514;
     --border-warm-dark: #2b2926b3;
     --color-primary-gradient-end: #812720;
-    --font-display: "Degular", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
     --radius-full: 9999px;
     --shadow-card: 2px 4px 10px #00000026;
     --shadow-subtle: 0 4px 4px #0000001a;
@@ -6136,47 +6138,25 @@ nav[data-c-header-actions] {
     }
   }
 }
+/* Bricolage Grotesque (SIL Open Font License, see fonts/bricolage-grotesque-ofl.txt).
+   Replaces the Degular demo cut, which has no accented letters and is not licensed for production. */
 @font-face {
-  font-family: Degular;
-  src: url(fonts/fonnts-com-degulardemo-light.woff2) format("woff2");
-  font-weight: 300;
+  font-family: "Bricolage Grotesque";
+  src: url(fonts/bricolage-grotesque-latin-ext.woff2) format("woff2");
+  font-weight: 200 800;
+  font-stretch: 75% 100%;
   font-style: normal;
   font-display: swap;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
-  font-family: Degular;
-  src: url(fonts/fonnts-com-degulardemo-regular.woff2) format("woff2");
-  font-weight: 400;
+  font-family: "Bricolage Grotesque";
+  src: url(fonts/bricolage-grotesque-latin.woff2) format("woff2");
+  font-weight: 200 800;
+  font-stretch: 75% 100%;
   font-style: normal;
   font-display: swap;
-}
-@font-face {
-  font-family: Degular;
-  src: url(fonts/fonnts-com-degulardemo-medium.woff2) format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: Degular;
-  src: url(fonts/fonnts-com-degulardemo-semibold.woff2) format("woff2");
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: Degular;
-  src: url(fonts/fonnts-com-degulardemo-bold.woff2) format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: Degular;
-  src: url(fonts/fonnts-com-degulardemo-black.woff2) format("woff2");
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
   font-family: Oxanium;
@@ -6283,8 +6263,8 @@ nav[data-c-header-actions] {
   --color-accent-navy: #003781;
   --color-accent-dark-green: #006134;
   --color-primary-gradient-end: #812720;
-  --font-sans: "Degular", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Degular", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
   --font-accent: "Oxanium", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
   --radius-xs: 0.25rem;
@@ -6404,7 +6384,7 @@ body {
   color: var(--color-foreground);
   font-family: var(
     --font-sans,
-    "Degular",
+    "Bricolage Grotesque",
     ui-sans-serif,
     system-ui,
     sans-serif
