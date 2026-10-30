@@ -75,6 +75,8 @@ p{margin:0}
 .brand{display:flex;align-items:center;gap:14px;text-decoration:none;color:#fff}
 .brand img{width:44px;height:44px}
 .brand-tag{font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--on-dark-2);border-left:1px solid var(--line-dark);padding-left:14px}
+a.brand-tag{text-decoration:none;transition:color .14s}
+a.brand-tag:hover{color:#fff}
 .nav{display:flex;align-items:center;gap:26px}
 .nav a{color:#fff;text-decoration:none;font-size:15px;font-weight:500;opacity:.85;transition:opacity .14s,color .14s}
 .nav a:hover{opacity:1;color:var(--red)}
@@ -384,10 +386,10 @@ details.scope[open] summary::after{transform:rotate(45deg)}
 <!-- ================= HEADER ================= -->
 <header class="header" id="top">
   <div class="wrap">
-    <a class="brand" href="../index.html" aria-label="Bool home">
-      <img src="../assets/img/bool-logo-142.svg" alt="Bool" width="44" height="44">
-      <span class="brand-tag">Mendix</span>
-    </a>
+    <div class="brand">
+      <a href="../index.html" target="_blank" rel="noopener" aria-label="Bool: open bool.pt in a new tab"><img src="../assets/img/bool-logo-142.svg" alt="Bool" width="44" height="44"></a>
+      <a class="brand-tag" href="#home">Mendix</a>
+    </div>
     <button class="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="nav">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
@@ -406,7 +408,7 @@ details.scope[open] summary::after{transform:rotate(45deg)}
 
 <main>
 <!-- ================= HERO ================= -->
-<section class="hero" aria-labelledby="hero-title">
+<section class="hero" id="home" aria-labelledby="hero-title">
   <div class="hero-bg" aria-hidden="true">
     <img src="../assets/img/hero-background.webp" alt="" width="2000" height="1333">
     <div class="hero-overlay"></div>
