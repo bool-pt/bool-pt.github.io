@@ -97,6 +97,9 @@
 
 /* Content modals: <dialog class="content-modal"> opened from href="modal:<key>" */
 .content-modal {
+  /* site.css resets every margin to 0, which pins the dialog to the top-left corner;
+     margin: auto puts it back in the centre of the screen */
+  margin: auto;
   inline-size: min(92vw, 40rem);
   max-block-size: 88vh;
   padding: clamp(1.5rem, 4vw, 2.5rem);

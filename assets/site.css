@@ -3531,6 +3531,18 @@
     border-inline-start: 2px dashed var(--white-50);
     border-inline-end: none;
   }
+  /* Side by side, the image takes the height of the text card. With the fixed aspect ratio
+     a taller card made the image wider than its column, so it covered the text. */
+  .beyond-row[data-c-beyond-text] .beyond-image[data-c-beyond-text] {
+    position: relative;
+    aspect-ratio: auto;
+    min-inline-size: 0;
+  }
+  /* The photo fills the cell without adding height of its own, so the row stays as tall as the text */
+  .beyond-row[data-c-beyond-text] .culture-img[data-c-beyond-text] {
+    position: absolute;
+    inset: 0;
+  }
 }
 .beyond-image[data-c-beyond-text] {
   border-radius: 8px;
@@ -5007,9 +5019,7 @@ nav[data-c-header-actions] {
 @layer theme {
   :root,
   :host {
-    --font-sans: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
-    /* Width 94 keeps Bricolage as wide as the old Degular, so layouts do not shift */
-    --default-font-variation-settings: "wdth" 94;
+    --font-sans: "Schibsted Grotesk", ui-sans-serif, system-ui, sans-serif;
     --font-mono: "JetBrains Mono", ui-monospace, monospace;
     --color-black: #000;
     --color-white: #fff;
@@ -5100,7 +5110,7 @@ nav[data-c-header-actions] {
     --primary-8: #e5353514;
     --border-warm-dark: #2b2926b3;
     --color-primary-gradient-end: #812720;
-    --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Schibsted Grotesk", ui-sans-serif, system-ui, sans-serif;
     --radius-full: 9999px;
     --shadow-card: 2px 4px 10px #00000026;
     --shadow-subtle: 0 4px 4px #0000001a;
@@ -6138,25 +6148,14 @@ nav[data-c-header-actions] {
     }
   }
 }
-/* Bricolage Grotesque (SIL Open Font License, see fonts/bricolage-grotesque-ofl.txt).
-   Replaces the Degular demo cut, which has no accented letters and is not licensed for production. */
+/* Schibsted Grotesk (SIL Open Font License, see fonts/schibsted-grotesk-ofl.txt).
+   Chosen by the design team in November 2026; variable font, weights 400 to 900. */
 @font-face {
-  font-family: "Bricolage Grotesque";
-  src: url(fonts/bricolage-grotesque-latin-ext.woff2) format("woff2");
-  font-weight: 200 800;
-  font-stretch: 75% 100%;
+  font-family: "Schibsted Grotesk";
+  src: url(fonts/schibsted-grotesk-variable.ttf) format("truetype");
+  font-weight: 400 900;
   font-style: normal;
   font-display: swap;
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-@font-face {
-  font-family: "Bricolage Grotesque";
-  src: url(fonts/bricolage-grotesque-latin.woff2) format("woff2");
-  font-weight: 200 800;
-  font-stretch: 75% 100%;
-  font-style: normal;
-  font-display: swap;
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 @font-face {
   font-family: Oxanium;
@@ -6263,8 +6262,8 @@ nav[data-c-header-actions] {
   --color-accent-navy: #003781;
   --color-accent-dark-green: #006134;
   --color-primary-gradient-end: #812720;
-  --font-sans: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Schibsted Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Schibsted Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-accent: "Oxanium", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
   --radius-xs: 0.25rem;
@@ -6384,7 +6383,7 @@ body {
   color: var(--color-foreground);
   font-family: var(
     --font-sans,
-    "Bricolage Grotesque",
+    "Schibsted Grotesk",
     ui-sans-serif,
     system-ui,
     sans-serif
@@ -14388,3 +14387,35 @@ video {
   flex-wrap: wrap;
   gap: var(--action-row-gap, 1rem);
 }
+
+/* Headings 2px smaller (November 2026, with Schibsted Grotesk). Each rule repeats a heading
+   font-size rule from above, minus 2px, so every title keeps its original proportions.
+   :is(h1,h2,h3) limits it to headings and makes it win over the original rule.
+   When a heading size above changes, change it here too. */
+:is(h1,h2,h3):is(.tech-name[data-c-featured-tech-wrap]){font-size:calc(clamp(0.875rem, 2.5vw, var(--font-size-lead)) - 2px)}
+:is(h1,h2,h3):is(.pcv2-detail-title[data-c-pcv2-detail]){font-size:calc(var(--font-size-h3) - 2px)}
+:is(h1,h2,h3):is(.case-modal__title){font-size:calc(clamp(1.25rem, 4vw, 2rem) - 2px)}
+:is(h1,h2,h3):is(.contact-info-address-label[data-c-contact-info-address]){font-size:calc(var(--font-size-body-lg) - 2px)}
+:is(h1,h2,h3):is(.hero__heading){font-size:calc(var(--font-size-hero) - 2px)}
+:is(h1,h2,h3):is(.icon-card-title[data-c-icon-card]){font-size:calc(1.25rem - 2px)}
+:is(h1,h2,h3):is(.card-title[data-c-card]){font-size:calc(var(--font-size-lead) - 2px)}
+:is(h1,h2,h3):is(.insight-modal__title){font-size:calc(clamp(1.25rem, 4vw, 2rem) - 2px)}
+:is(h1,h2,h3):is(.insight-modal__about-heading){font-size:calc(0.8125rem - 2px)}
+:is(h1,h2,h3):is(.culture-card-title[data-c-beyond-text]){font-size:calc(var(--font-size-lead) - 2px)}
+:is(h1,h2,h3):is(.numbered-card-title[data-c-numbered-card-inner]){font-size:calc(clamp(1.5rem, 4vw, 36px) - 2px)}
+:is(h1,h2,h3):is(.uc-heading[data-c-uc-track]){font-size:calc(var(--font-size-display) - 2px)}
+:is(h1,h2,h3):is(.hwwHeading[data-c-hwwheading]){font-size:calc(clamp(2.5rem, 6vw, 5.625rem) - 2px)}
+:is(h1,h2,h3):is(.hwwCardTitle[data-c-hwwheading]){font-size:calc(1.25rem - 2px)}
+:is(h1,h2,h3):is(.highlight-title[data-c-service-highlights-wrap]){font-size:calc(clamp(0.875rem, 2.5vw, var(--font-size-lead)) - 2px)}
+:is(h1,h2,h3):is(.solutionsHeading[data-c-solutionsheader]){font-size:calc(var(--font-size-display) - 2px)}
+:is(h1,h2,h3):is(.content-modal__title){font-size:calc(clamp(1.5rem, 4vw, 2rem) - 2px)}
+:is(h1,h2,h3):is(.footer-heading[data-c-footer-inner]){font-size:calc(1.125rem - 2px)}
+:is(h1,h2,h3):is(.flip-card__back-title){font-size:calc(clamp(1.125rem, 3vw, 20px) - 2px)}
+:is(h1,h2,h3):is(.not-found-subtitle[data-c-e5whhb5f]){font-size:calc(clamp(1.5rem, 4vw, 2.25rem) - 2px)}
+:is(h1,h2,h3):is(.text-block-heading[data-c-wz6xpbld]){font-size:calc(var(--tb-heading-size, var(--font-size-display)) - 2px)}
+:is(h1,h2,h3):is(.card-title[data-c-ngfmhtlq]){font-size:calc(var(--ct-size, var(--font-size-body-lg)) - 2px)}
+:is(h1,h2,h3):is(.section-intro-heading[data-c-w2wcho3q]){font-size:calc(var(--si-heading-size, var(--font-size-display)) - 2px)}
+:is(h1,h2,h3):is(.careers-cta .text-block-heading){font-size:calc(48px - 2px)!important}
+:is(h1,h2,h3):is(.legal-content[data-c-nqyftovm] h2){font-size:calc(1.25rem - 2px)}
+:is(h1,h2,h3):is(.legal-content[data-c-nqyftovm] h3){font-size:calc(1.0625rem - 2px)}
+:is(h1,h2,h3):is(.lets-build .text-block-heading){font-size:calc(48px - 2px)!important}
