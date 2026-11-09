@@ -1,0 +1,1012 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta
+  http-equiv="Content-Security-Policy"
+  content="default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://*.googletagmanager.com https://snap.licdn.com; style-src 'self' 'unsafe-inline'; frame-src 'self' https://challenges.cloudflare.com; worker-src 'self' blob:; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com https://px.ads.linkedin.com https://px4.ads.linkedin.com https://www.linkedin.com; connect-src 'self' https://challenges.cloudflare.com https://upci9flznj.execute-api.eu-west-3.amazonaws.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://stats.g.doubleclick.net https://px.ads.linkedin.com https://px4.ads.linkedin.com; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';"
+/>
+<meta name="referrer" content="strict-origin-when-cross-origin" />
+<meta http-equiv="X-Content-Type-Options" content="nosniff" />
+<meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=()" />
+<title>OutSystems | AI-Augmented Development on OutSystems | Bool</title>
+<meta name="description" content="Bool is an OutSystems Gold Partner since 2019. AI-Augmented Development on OutSystems and ODC: certified teams, apps and AI agents, modernization and training from Portugal to the world.">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="canonical" href="https://bool.pt/outsystems/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bool.pt/outsystems/">
+<meta property="og:title" content="OutSystems | Bool">
+<meta property="og:description" content="Bool is an OutSystems Gold Partner since 2019. AI-Augmented Development on OutSystems and ODC: certified teams, apps and AI agents, modernization and training from Portugal to the world.">
+<meta property="og:image" content="https://bool.pt/og/default.png">
+<meta property="og:locale" content="en">
+<meta property="og:site_name" content="Bool">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+/* Schibsted Grotesk (SIL Open Font License, see assets/fonts/schibsted-grotesk-ofl.txt). Variable font, weights 400 to 900. */
+@font-face{font-family:'Schibsted Grotesk';font-style:normal;font-weight:400 900;font-display:swap;src:url('../assets/fonts/schibsted-grotesk-variable.ttf') format('truetype')}
+
+:root{
+  --mendix-blue:#146FF4; /* Mendix brand blue (PMS 2194 C) — partner name only */
+  --red:#E7453A; --red-600:#D2352B; --red-700:#B82A21; --red-100:#FCE0DC; --red-050:#FDF1EF;
+  --ink:#141414; --ink-2:#4D4D4D; --ink-3:#8A8A8A; --line:#E6E6E6; --line-2:#F1F1F1;
+  /* surfaces match bool.pt: white / muted #F5F5F5 / surface-dark #0A0A0A / charcoal #1A1A1A */
+  --bg:#FFFFFF; --bg-warm:#F5F5F5; --bg-dark:#0A0A0A; --bg-dark-2:#1A1A1A; --line-dark:#2E2E2E;
+  --on-dark-2:#BDBDBD; --on-dark-3:#8A8A8A;
+  --font:'Schibsted Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --r-sm:10px; --r-md:16px; --r-lg:24px; --r-pill:999px;
+  --shadow-md:0 4px 12px rgba(20,20,20,.08),0 2px 4px rgba(20,20,20,.05);
+  --shadow-lg:0 16px 40px rgba(20,20,20,.12),0 4px 10px rgba(20,20,20,.06);
+  --shadow-red:0 10px 30px rgba(231,69,58,.30);
+  --ease:cubic-bezier(.22,1,.36,1);
+  --wrap:1200px;
+  /* Type scale: one responsive size per role, used across every section */
+  --fs-title:clamp(28px,4.2vw,54px);
+  --fs-subtitle:clamp(24px,2.6vw,32px);
+  --fs-card:clamp(19px,1.5vw,22px);
+  --fs-lead:clamp(17px,1.4vw,19px);
+  --fs-text:16px;
+  --fs-label:13px;
+  --fs-number:clamp(36px,4.4vw,54px); --gutter:clamp(16px,4vw,40px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img,svg{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3,h4{font-family:var(--font);margin:0;line-height:1.1;letter-spacing:-.01em}
+p{margin:0}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--gutter)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- Buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:10px;font:600 16px/1 var(--font);padding:15px 26px;border-radius:var(--r-pill);text-decoration:none;border:1.5px solid transparent;cursor:pointer;transition:background var(--ease) .26s,box-shadow var(--ease) .26s,transform var(--ease) .26s,color .26s,border-color .26s}
+.btn-primary{background:var(--red);color:#fff}
+.btn-primary:hover{background:var(--red-600);box-shadow:var(--shadow-red);transform:translateY(-2px)}
+.btn-primary:active{transform:scale(.97);background:var(--red-700)}
+.btn-ghost{border-color:var(--red);color:var(--red);background:transparent}
+.btn-ghost:hover{background:var(--red);color:#fff}
+.btn-ghost-light{border-color:rgba(255,255,255,.4);color:#fff}
+.btn-ghost-light:hover{border-color:#fff;background:#fff;color:var(--ink)}
+.btn svg{width:18px;height:18px}
+
+/* ---------- Header ---------- */
+.header{position:fixed;inset:0 0 auto 0;z-index:50;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.header .wrap{display:flex;align-items:center;justify-content:space-between;height:76px;gap:24px}
+.brand{display:flex;align-items:center;gap:14px;text-decoration:none;color:#fff}
+.brand img{width:44px;height:44px}
+.brand-tag{font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--on-dark-2);border-left:1px solid var(--line-dark);padding-left:14px}
+a.brand-tag{text-decoration:none;transition:color .14s}
+a.brand-tag:hover{color:#fff}
+.nav{display:flex;align-items:center;gap:26px}
+.nav a{color:#fff;text-decoration:none;font-size:15px;font-weight:500;opacity:.85;transition:opacity .14s,color .14s}
+.nav a:hover{opacity:1;color:var(--red)}
+.nav .btn{opacity:1;padding:12px 20px;font-size:15px}
+.nav .btn:hover{color:#fff}
+.menu-btn{display:none;background:none;border:0;color:#fff;padding:8px;cursor:pointer}
+@media (max-width:1080px){
+  .nav{position:fixed;inset:76px 0 auto 0;flex-direction:column;align-items:flex-start;gap:0;background:var(--bg-dark);padding:8px var(--gutter) 24px;border-top:1px solid var(--line-dark);display:none}
+  .nav.open{display:flex}
+  .nav a{padding:14px 0;width:100%;border-bottom:1px solid var(--line-dark);font-size:17px}
+  .nav .btn{margin-top:18px;width:auto;border:0}
+  .menu-btn{display:block}
+}
+@media (max-width:520px){.brand-tag{display:none}}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;background:var(--bg-dark);color:#fff;overflow:hidden;padding:170px 0 120px;isolation:isolate}
+/* Background identical to bool.pt hero: grayscale photo + 80% black overlay + outlined "bool" letters */
+.hero-bg{position:absolute;inset:0;z-index:-2;overflow:hidden}
+.hero-bg img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) blur(1px)}
+.hero-overlay{position:absolute;inset:0;background:rgba(0,0,0,.8)}
+.hero-letters-scaler{position:absolute;inset:auto 0 0 0;height:0;z-index:-1;pointer-events:none;color:#fff;filter:blur(1.5px);container-type:inline-size}
+.hero-letters-wrap{position:absolute;bottom:0;right:0;width:100cqi;aspect-ratio:1440/518;overflow:visible}
+.letters-wrap{position:absolute;inset:0;opacity:.4}
+.letter{position:absolute}
+.letter svg{display:block;width:auto}
+.letter-b{left:-4.03cqi;top:2.85cqi;rotate:1deg}.letter-b svg{height:45.14cqi}
+.letter-o1{left:27.99cqi;top:15.49cqi;rotate:-5deg}.letter-o1 svg{height:32.29cqi}
+.letter-o2{left:57.01cqi;top:21.6cqi;rotate:20deg}.letter-o2 svg{height:32.29cqi}
+.letter-l{left:80.97cqi;top:8.26cqi;rotate:-5deg}.letter-l svg{height:41.32cqi}
+.hero-inner{max-width:720px}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:var(--fs-label);font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+.eyebrow::before{content:"";width:28px;height:2px;background:currentColor}
+.hero h1{font-size:clamp(44px,7vw,84px);font-weight:700;margin:22px 0 24px;line-height:1.02}
+.hero h1 em{font-style:normal;color:var(--mendix-blue)}
+.hero .lead{font-size:var(--fs-lead);color:var(--on-dark-2);max-width:600px}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:14px;margin-top:38px}
+.partner{display:inline-flex;align-items:stretch;margin-top:56px;border-radius:12px;overflow:hidden;border:1px solid var(--line-dark);background:#1A1A1A}
+.partner img{width:56px;height:56px;padding:8px}
+.partner span{display:flex;flex-direction:column;justify-content:center;padding:0 18px;font-size:13px;color:var(--on-dark-2);line-height:1.3}
+.partner strong{color:#fff;font-size:16px;font-weight:700}
+@media (max-width:860px){.hero{padding:140px 0 90px}}
+
+/* ---------- Stats ---------- */
+.stats{background:var(--bg-dark);color:#fff;border-top:1px solid var(--line-dark)}
+.stats .wrap{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+.stat{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 16px;border-left:1px solid var(--line-dark)}
+.stat:first-child{border-left:0}
+.stat b{display:block;font-size:var(--fs-number);font-weight:700;line-height:1;color:#fff}
+.stat b span{color:var(--red)}
+.stat small{display:block;margin-top:10px;font-size:15px;line-height:1.3;color:var(--on-dark-2)}
+@media (max-width:860px){
+  .stats .wrap{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stat{border-left:0;border-top:1px solid var(--line-dark);padding:32px 16px}
+  .stat:nth-child(even){border-left:1px solid var(--line-dark)}
+  .stat:nth-child(-n+2){border-top:0}
+  .stat:last-child{grid-column:1/-1}
+}
+
+/* ---------- Sections ---------- */
+.section{padding:clamp(72px,10vw,128px) 0}
+.section.warm{background:var(--bg-warm)}
+.section.dark{background:var(--bg-dark);color:#fff}
+.sec-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px 64px;align-items:end;margin-bottom:56px}
+.sec-head.single{grid-template-columns:minmax(0,1fr);max-width:820px}
+.chapter{display:flex;align-items:center;gap:12px;font-size:var(--fs-label);font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:18px}
+.chapter b{color:var(--red);font-weight:700}
+.chapter i{width:28px;height:1px;background:currentColor;font-style:normal}
+.dark .chapter{color:var(--on-dark-3)}
+.sec-head h2{font-size:var(--fs-title);font-weight:700}
+.sec-head h2 em{font-style:normal;color:var(--red)}
+.sec-head h2 em.mx{color:var(--mendix-blue)}
+/* exactly two lines: each span/em is one unbreakable line; size scales with the column */
+.sec-head h2.two-lines > span{display:block;white-space:nowrap}
+.sec-head p{font-size:var(--fs-lead);color:var(--ink-2)}
+.dark .sec-head p{color:var(--on-dark-2)}
+@media (max-width:860px){.sec-head{grid-template-columns:minmax(0,1fr);margin-bottom:40px}}
+
+/* ---------- About ---------- */
+.about-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:start}
+.about-copy p{font-size:var(--fs-lead);color:var(--ink-2)}
+.about-copy p+p{margin-top:20px}
+.about-copy strong{color:var(--ink)}
+.quote{margin-top:36px;padding:28px 0 0;border-top:1px solid var(--line);font-size:var(--fs-subtitle);font-weight:700;line-height:1.2}
+.quote em{font-style:normal;color:var(--red)}
+.facts{display:grid;gap:16px}
+.fact{display:grid;grid-template-columns:48px 1fr;gap:18px;padding:24px;border-radius:var(--r-lg);background:#fff;box-shadow:var(--shadow-md);transition:transform .26s var(--ease),box-shadow .26s var(--ease)}
+.fact:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.ico{width:48px;height:48px;border-radius:14px;background:var(--red-050);color:var(--red);display:grid;place-items:center}
+.ico svg{width:24px;height:24px}
+.fact h3{font-size:var(--fs-card);font-weight:700;margin-bottom:6px}
+.fact p{color:var(--ink-2);font-size:var(--fs-text)}
+.offices{margin-top:20px;font-size:var(--fs-label);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+@media (max-width:860px){.about-grid{grid-template-columns:minmax(0,1fr);gap:40px}}
+
+/* ---------- Technology ---------- */
+.cards-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{background:#fff;border-radius:var(--r-lg);padding:32px;box-shadow:var(--shadow-md);transition:transform .26s var(--ease),box-shadow .26s var(--ease)}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.card .ico{margin-bottom:24px}
+.card h3{font-size:var(--fs-card);font-weight:700;margin-bottom:10px}
+.card p{color:var(--ink-2);font-size:var(--fs-text)}
+.compare{margin-top:20px;display:grid;grid-template-columns:1fr 1fr;border-radius:var(--r-lg);overflow:hidden;background:var(--bg-dark);color:#fff}
+.compare > div{padding:36px}
+.compare > div + div{background:var(--red)}
+.compare small{display:block;font-size:var(--fs-label);font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.75;margin-bottom:12px}
+.compare h3{font-size:var(--fs-subtitle);font-weight:700;margin-bottom:10px}
+.compare p{font-size:var(--fs-text);opacity:.88}
+@media (max-width:960px){.cards-3{grid-template-columns:minmax(0,1fr)}.compare{grid-template-columns:minmax(0,1fr)}}
+
+/* ---------- Why Bool ---------- */
+.why-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:1px solid var(--line-dark);border-bottom:1px solid var(--line-dark)}
+.why{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;padding:40px 32px}
+.why + .why{border-left:1px solid var(--line-dark)}
+.why b{display:flex;align-items:baseline;justify-content:center}
+.why b{display:block;font-size:clamp(56px,7vw,96px);font-weight:700;line-height:.95;color:var(--red)}
+.why b small{font-size:.4em;color:#fff;font-weight:600;margin-left:6px}
+.why h3{font-size:var(--fs-card);font-weight:700;margin:16px 0 8px}
+.why p{color:var(--on-dark-2);font-size:var(--fs-text)}
+.why-copy{display:grid;grid-template-columns:1fr 1fr;gap:24px 64px;margin-top:48px}
+.why-copy p{color:var(--on-dark-2);font-size:var(--fs-lead)}
+.why-copy strong{color:#fff}
+@media (max-width:860px){
+  .why-grid{grid-template-columns:minmax(0,1fr)}
+  .why,.why+.why{padding:40px 16px;border-left:0}
+  .why+.why{border-top:1px solid var(--line-dark)}
+  .why-copy{grid-template-columns:minmax(0,1fr)}
+}
+
+/* ---------- Teams ---------- */
+.profiles{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.profile{position:relative;border:1px solid var(--line);border-radius:var(--r-lg);padding:28px;background:#fff;display:flex;flex-direction:column;transition:border-color .26s,transform .26s var(--ease),box-shadow .26s var(--ease)}
+.profile:hover{border-color:transparent;transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.profile .num{font-size:15px;font-weight:700;color:var(--red)}
+.profile h3{font-size:var(--fs-card);font-weight:700;margin:14px 0 10px}
+.profile p{color:var(--ink-2);font-size:var(--fs-text);flex:1}
+.level{display:flex;gap:6px;margin-top:22px}
+.level i{height:6px;flex:1;border-radius:3px;background:var(--line)}
+.level i.on{background:var(--red)}
+.level-label{margin-top:8px;font-size:13px;color:var(--ink-3)}
+@media (max-width:1080px){.profiles{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:620px){.profiles{grid-template-columns:minmax(0,1fr)}}
+
+.training{margin-top:80px;display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:start}
+.training h3.sub{font-size:var(--fs-subtitle);font-weight:700;margin-bottom:18px}
+.training .lead-sm{font-size:var(--fs-lead);color:var(--ink-2)}
+.pill-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:var(--r-pill);background:var(--red-050);color:var(--red-700);font-size:14px;font-weight:600}
+.big-num{display:flex;gap:40px;margin-top:36px}
+.big-num b{display:block;font-size:var(--fs-number);font-weight:700;line-height:1;color:var(--ink)}
+.big-num span{font-size:15px;color:var(--ink-2)}
+.courses{display:grid;gap:12px}
+.course{display:grid;grid-template-columns:1fr auto;gap:6px 20px;padding:20px 24px;border-radius:var(--r-md);background:var(--bg-warm);transition:background .26s}
+.course:hover{background:var(--red-050)}
+.course h4{font-size:var(--fs-card);font-weight:700}
+.course p{grid-column:1/-1;color:var(--ink-2);font-size:var(--fs-text)}
+.course .tag{font-size:13px;color:var(--ink-3);align-self:center;text-align:right}
+details.scope{margin-top:12px;border:1px solid var(--line);border-radius:var(--r-md);padding:0 24px}
+details.scope summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;padding:20px 0;font-weight:700;font-size:var(--fs-card)}
+details.scope summary::-webkit-details-marker{display:none}
+details.scope summary::after{content:"+";font-size:26px;color:var(--red);font-weight:400;transition:transform .26s var(--ease)}
+details.scope[open] summary::after{transform:rotate(45deg)}
+.scope-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px 32px;padding:4px 0 26px}
+.scope-grid h5{margin:0 0 8px;font-size:var(--fs-label);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red)}
+.scope-grid ul{margin:0;padding:0;list-style:none;display:grid;gap:4px;font-size:15px;color:var(--ink-2)}
+@media (max-width:960px){.training{grid-template-columns:minmax(0,1fr)}.scope-grid{grid-template-columns:minmax(0,1fr)}}
+
+/* ---------- Delivery ---------- */
+.models{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.model{background:#fff;border-radius:var(--r-lg);padding:30px;box-shadow:var(--shadow-md);display:flex;flex-direction:column;transition:transform .26s var(--ease),box-shadow .26s var(--ease)}
+.model:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.model small{font-size:var(--fs-label);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red)}
+.model h3{font-size:var(--fs-card);font-weight:700;margin:10px 0 12px}
+.model p{color:var(--ink-2);font-size:var(--fs-text)}
+@media (max-width:1080px){.models{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:620px){.models{grid-template-columns:minmax(0,1fr)}}
+.collab{margin-top:20px;display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:0;background:var(--bg-dark);color:#fff;border-radius:var(--r-lg);overflow:hidden}
+.collab > div{padding:40px}
+.collab > div + div{border-left:1px solid var(--line-dark)}
+.collab h3{font-size:var(--fs-subtitle);font-weight:700}
+.collab h4{font-size:var(--fs-card);font-weight:700;margin-bottom:10px}
+.collab p{color:var(--on-dark-2);font-size:var(--fs-text)}
+.collab .lead-in{margin-top:14px}
+@media (max-width:960px){.collab{grid-template-columns:minmax(0,1fr)}.collab>div+div{border-left:0;border-top:1px solid var(--line-dark)}}
+
+/* ---------- Success stories ---------- */
+.stories{display:grid;grid-template-columns:repeat(6,1fr);gap:20px}
+.story{grid-column:span 2;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--r-lg);padding:30px;background:#fff;transition:border-color .26s,transform .26s var(--ease),box-shadow .26s var(--ease)}
+.story:hover{border-color:transparent;transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.story.wide{grid-column:span 3}
+.story.feature{grid-column:span 3;background:var(--bg-dark);color:#fff;border-color:var(--bg-dark)}
+.story.feature p{color:var(--on-dark-2)}
+.story-top{display:flex;flex-direction:column-reverse;align-items:flex-start;gap:10px;margin-bottom:14px}
+.client{font-size:var(--fs-card);font-weight:700;line-height:1.15;letter-spacing:-.01em}
+.sector{font-size:var(--fs-label);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red);white-space:nowrap}
+.story p{color:var(--ink-2);font-size:var(--fs-text)}
+.story .where{margin-top:auto;padding-top:20px;font-size:14px;color:var(--ink-3)}
+.story.feature .where{color:var(--on-dark-3)}
+@media (max-width:1080px){.stories{grid-template-columns:repeat(2,1fr)}.story,.story.feature,.story.wide{grid-column:span 1}}
+@media (max-width:620px){.stories{grid-template-columns:minmax(0,1fr)}}
+
+/* ---------- Use cases ---------- */
+.uc-tabs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:28px}
+.uc-tab{font:600 16px/1 var(--font);padding:13px 22px;border-radius:var(--r-pill);border:1.5px solid var(--line-dark);background:transparent;color:#fff;cursor:pointer;transition:all .26s var(--ease)}
+.uc-tab:hover{border-color:var(--red)}
+.uc-tab[aria-selected="true"]{background:var(--red);border-color:var(--red)}
+.uc-panel{display:grid;grid-template-columns:auto 1fr;gap:48px;align-items:center;padding:48px;border-radius:var(--r-lg);background:var(--bg-dark-2);border:1px solid var(--line-dark)}
+.uc-panel[hidden]{display:none}
+.uc-index{font-size:clamp(80px,12vw,160px);font-weight:800;line-height:.8;color:var(--red)}
+.uc-panel h3{font-size:var(--fs-subtitle);font-weight:700;margin-bottom:14px}
+.uc-panel p{color:var(--on-dark-2);font-size:var(--fs-lead);max-width:720px}
+.uc-points{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.uc-points span{font-size:14px;font-weight:600;padding:7px 14px;border-radius:var(--r-pill);border:1px solid var(--line-dark);color:#fff}
+@media (max-width:760px){.uc-panel{grid-template-columns:minmax(0,1fr);gap:20px;padding:30px}}
+
+/* ---------- CTA band ---------- */
+.cta-band{background:var(--red);color:#fff;padding:64px 0}
+.cta-band .wrap{display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap}
+.cta-band h2{font-size:var(--fs-title);font-weight:700;max-width:760px}
+.cta-band .btn{background:#fff;color:var(--ink)}
+.cta-band .btn:hover{background:var(--ink);color:#fff;transform:translateY(-2px)}
+
+/* ---------- Contact (mirrors bool.pt ContactForm, dark variant) ---------- */
+.contact{background:var(--bg-dark);color:#fff}
+.contact-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:72px}
+.contact h2{font-size:var(--fs-title);font-weight:700;margin-bottom:18px}
+.contact .intro{color:var(--on-dark-2);font-size:var(--fs-lead)}
+.find{margin-top:40px;padding-top:28px;border-top:1px solid var(--line-dark)}
+.find h3{font-size:var(--fs-label);font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--on-dark-3);margin-bottom:12px}
+.find p{color:#fff;font-size:17px;line-height:1.6}
+.find a{color:var(--red);text-decoration:none}
+.find a:hover{text-decoration:underline}
+.form{display:grid;gap:20px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.field{display:grid;gap:8px}
+.field label{font-size:15px;font-weight:600;color:#fff}
+.field input,.field textarea{width:100%;font:400 16px/1.4 var(--font);color:#fff;background:var(--bg-dark-2);border:1.5px solid var(--line-dark);border-radius:12px;padding:15px 16px;transition:border-color .14s,background .14s;outline:none}
+.field textarea{resize:vertical;min-height:132px}
+.field input::placeholder,.field textarea::placeholder{color:#6F6F6F}
+.field input:focus,.field textarea:focus{border-color:var(--red);background:#202020}
+.field.invalid input,.field.invalid textarea{border-color:var(--red)}
+.field-error{font-size:14px;color:var(--red);min-height:0}
+.form-error{font-size:15px;color:#fff;background:rgba(231,69,58,.16);border:1px solid var(--red);border-radius:12px;padding:12px 16px}
+.privacy{font-size:14px;color:var(--on-dark-3)}
+.privacy a{color:var(--on-dark-2)}
+.privacy a:hover{color:var(--red)}
+.submit{justify-self:start;font:600 16px/1 var(--font);padding:16px 32px;border-radius:var(--r-pill);border:0;background:var(--red);color:#fff;cursor:pointer;transition:background .26s var(--ease),box-shadow .26s var(--ease),transform .26s var(--ease)}
+.submit:hover:not(:disabled){background:var(--red-600);box-shadow:var(--shadow-red);transform:translateY(-2px)}
+.submit:disabled{opacity:.6;cursor:wait}
+.success{display:flex;flex-direction:column;align-items:flex-start;gap:16px;padding:40px;border-radius:var(--r-lg);background:var(--bg-dark-2);border:1px solid var(--line-dark)}
+.success p{font-size:var(--fs-subtitle);font-weight:600}
+.captcha-wrap{min-height:0}
+@media (max-width:960px){.contact-grid{grid-template-columns:minmax(0,1fr);gap:48px}}
+@media (max-width:560px){.form-grid{grid-template-columns:minmax(0,1fr)}}
+
+/* ---------- Footer (mirrors bool.pt) ---------- */
+.footer{background:var(--bg-dark);color:var(--on-dark-2);padding:72px 0 32px;font-size:15px}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:40px}
+.footer h4{font-size:var(--fs-label);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;margin-bottom:16px}
+.footer ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.footer a{text-decoration:none;transition:color .14s}
+.footer a:hover{color:var(--red)}
+.footer .about-f img{width:52px;height:52px;margin-bottom:18px}
+.socials{display:flex;gap:10px;margin-top:22px}
+.socials a{width:40px;height:40px;border-radius:50%;border:1px solid var(--line-dark);display:grid;place-items:center;color:#fff}
+.socials a:hover{border-color:var(--red);color:var(--red)}
+.socials svg{width:18px;height:18px}
+.footer-bottom{margin-top:56px;padding-top:24px;border-top:1px solid var(--line-dark);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:14px;color:var(--on-dark-3)}
+@media (max-width:860px){.footer-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.footer-grid{grid-template-columns:minmax(0,1fr)}}
+
+/* ---------- Reveal ---------- */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .42s var(--ease),transform .42s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none;transition:none}
+  *{transition:none!important}
+}
+
+/* Cookie banner: drawn by ../assets/app.js (consent, Google Analytics, LinkedIn Insight); same styles as the landing pages */
+.cookie-banner__banner{position:fixed;bottom:1.5rem;left:50%;transform:translate(-50%);z-index:9999;width:min(640px,calc(100vw - 2rem));background:var(--bg-dark-2);color:#fff;border-radius:12px;padding:1.5rem;box-shadow:0 8px 32px #0000004d}
+.cookie-banner__message{font-size:.875rem;line-height:1.6;margin:0 0 1.25rem;color:var(--on-dark-2);text-align:center}
+.cookie-banner__actions{display:flex;flex-wrap:wrap;gap:.75rem}
+.cookie-banner__accept-button,.cookie-banner__reject-button{flex:1 1 8rem;padding:.625rem 1rem;border-radius:9999px;font:600 .875rem/1.2 var(--font);cursor:pointer;color:#fff}
+.cookie-banner__accept-button{border:0;background:var(--red)}
+.cookie-banner__reject-button{border:1.5px solid var(--on-dark-3);background:transparent}
+.cookie-banner__categories{display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.25rem}
+.cookie-banner__category{display:flex;align-items:center;justify-content:space-between;gap:1rem;cursor:pointer}
+.cookie-banner__category-info{display:flex;flex-direction:column;gap:.125rem}
+.cookie-banner__category-label{font-size:.875rem;font-weight:600;color:#fff}
+.cookie-banner__category-description{font-size:.75rem;line-height:1.4;color:var(--on-dark-2)}
+.cookie-banner__toggle{flex-shrink:0;width:2.5rem;height:1.375rem;appearance:none;-webkit-appearance:none;border-radius:9999px;border:1.5px solid var(--on-dark-3);background:transparent;cursor:pointer;position:relative;margin:0;transition:background-color .15s,border-color .15s}
+.cookie-banner__toggle::after{content:"";position:absolute;top:2px;left:2px;width:.875rem;height:.875rem;border-radius:50%;background:var(--on-dark-3);transition:transform .15s,background-color .15s}
+.cookie-banner__toggle:checked{background:var(--red);border-color:var(--red)}
+.cookie-banner__toggle:checked::after{transform:translate(1.125rem);background:#fff}
+.cookie-banner__toggle:disabled{opacity:.5;cursor:not-allowed}
+.cookie-banner__manage-link{display:block;margin:.875rem auto 0;padding:0;border:0;background:none;color:var(--on-dark-2);font:400 .8125rem var(--font);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.cookie-banner__preferences-button{padding:0;border:0;background:none;color:inherit;font:inherit;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.cookie-banner__preferences-button:hover{color:var(--red)}
+[data-island]{display:contents}
+/* Headings 2px smaller (November 2026, with Schibsted Grotesk): each heading size above, minus 2px,
+   so every title keeps its original proportions. Same block in the landing pages and Mendix. */
+.hero h1{font-size:calc(clamp(44px,7vw,84px) - 2px)}
+.sec-head h2,.cta-band h2,.contact h2{font-size:calc(var(--fs-title) - 2px)}
+.compare h3,.training h3.sub,.collab h3,.uc-panel h3{font-size:calc(var(--fs-subtitle) - 2px)}
+.fact h3,.card h3,.why h3,.profile h3,.model h3{font-size:calc(var(--fs-card) - 2px)}
+.find h3{font-size:calc(var(--fs-label) - 2px)}
+
+/* ================= Ajustes da LP OutSystems (sobre a base da LP Mendix) ================= */
+/* Nome do parceiro a vermelho Bool: a cor da marca OutSystems (#E4002B) é quase igual e não se distinguiria */
+.hero h1 em{color:var(--red)}
+/* Badge oficial OutSystems Partner Gold no hero, no lugar do selo .partner da página Mendix */
+.partner-badge{margin-top:56px;width:222px;height:auto}
+/* Quatro cards de tecnologia em 2 colunas */
+.cards-3.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:960px){.cards-3.two{grid-template-columns:minmax(0,1fr)}}
+/* Listas dentro do bloco comparativo (pressão sobre IT / resposta OutSystems) */
+.compare ul{margin:16px 0 0;padding:0;list-style:none;display:grid;gap:10px;font-size:var(--fs-text)}
+.compare li{position:relative;padding-left:20px;opacity:.9}
+.compare li::before{content:"";position:absolute;left:0;top:.75em;width:10px;height:2px;background:currentColor}
+/* Painel escuro com seis pontos (ODC e nearshore) */
+.panel6{margin-top:20px;background:var(--bg-dark);color:#fff;border-radius:var(--r-lg);padding:40px}
+.panel6 h3{font-size:calc(var(--fs-subtitle) - 2px);font-weight:700}
+.panel6 > p{margin-top:12px;max-width:720px;color:var(--on-dark-2);font-size:var(--fs-lead)}
+.panel6-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 40px;margin-top:32px;padding-top:32px;border-top:1px solid var(--line-dark)}
+.panel6-grid h4{font-size:calc(var(--fs-card) - 2px);font-weight:700;margin-bottom:8px}
+.panel6-grid p{color:var(--on-dark-2);font-size:var(--fs-text)}
+@media (max-width:960px){.panel6{padding:30px}.panel6-grid{grid-template-columns:minmax(0,1fr)}}
+/* Certificações por perfil, por baixo dos três números grandes */
+.cert-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-bottom:1px solid var(--line-dark)}
+.cert{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:28px 12px}
+.cert + .cert{border-left:1px solid var(--line-dark)}
+.cert b{font-size:var(--fs-subtitle);font-weight:700;line-height:1;color:#fff}
+.cert span{font-size:15px;line-height:1.3;color:var(--on-dark-2)}
+@media (max-width:860px){
+  .cert-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cert,.cert+.cert{border-left:0;border-top:1px solid var(--line-dark)}
+  .cert:nth-child(even){border-left:1px solid var(--line-dark)}
+  .cert:last-child{grid-column:1/-1}
+}
+/* Casos: subtítulo e lista de benefícios */
+.story h4{margin:22px 0 10px;font-size:var(--fs-label);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red)}
+.story ul{margin:0;padding:0;list-style:none;display:grid;gap:8px;font-size:var(--fs-text);color:var(--ink-2)}
+.story.feature ul{color:var(--on-dark-2)}
+.story.feature ul strong{color:#fff}
+.stories-cta{display:flex;justify-content:center;margin-top:40px}
+</style>
+<script src="../assets/app.js" defer></script>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="header" id="top">
+  <div class="wrap">
+    <div class="brand">
+      <a href="../index.html" target="_blank" rel="noopener" aria-label="Bool: open bool.pt in a new tab"><img src="../assets/img/bool-logo-142.svg" alt="Bool" width="44" height="44"></a>
+      <a class="brand-tag" href="#home">OutSystems</a>
+    </div>
+    <button class="menu-btn" aria-label="Open menu" aria-expanded="false" aria-controls="nav">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="#about">About</a>
+      <a href="#technology">Technology</a>
+      <a href="#why">Why Bool</a>
+      <a href="#services">Services</a>
+      <a href="#delivery">Delivery</a>
+      <a href="#stories">Success Stories</a>
+      <a class="btn btn-primary" href="#contact">Talk to an Expert</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<!-- ================= HERO ================= -->
+<section class="hero" id="home" aria-labelledby="hero-title">
+  <div class="hero-bg" aria-hidden="true">
+    <img src="../assets/img/hero-background.webp" alt="" width="2000" height="1333">
+    <div class="hero-overlay"></div>
+  </div>
+  <div class="hero-letters-scaler" aria-hidden="true"><div class="hero-letters-wrap"><div class="letters-wrap">
+    <div class="letter letter-b"><svg width="584.93" height="900" viewBox="0 0 401 617" fill="none"><path d="M228.807 38.8661C236.767 41.3495 241.182 49.7656 238.701 57.7268L198.553 186.509C198.331 186.49 198.02 186.463 197.627 186.436C196.76 186.374 195.49 186.301 193.873 186.258C190.639 186.173 186.014 186.204 180.444 186.67C169.305 187.603 154.37 190.278 139.202 197.252C115.39 208.237 100.868 224.897 92.3007 238.806C90.1472 242.303 88.3691 245.626 86.9145 248.642L131.161 106.71L86.2145 92.6984C81.8697 91.3436 79.5384 85.9674 81.2387 80.513L90.5636 50.6007C91.882 46.3719 95.3376 43.4015 99.0215 43.1116L99.0222 43.1128C105.623 42.6138 116.444 41.0041 127.567 36.1062L128.645 35.6218C135.704 32.3792 144.772 26.6995 151.112 22.6647L151.116 22.6618C155.355 19.9142 160.495 19.0704 165.367 20.1447L165.365 20.1469L166.548 20.4963L228.807 38.8661Z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M254.684 221.312C300.589 235.623 333.323 256.371 352.848 283.533C372.36 310.678 376.875 341.245 366.256 375.306L325.009 507.616C316.617 534.536 303.409 554.38 285.422 567.195C267.436 580.01 244.618 585.834 216.938 584.621C196.244 583.625 172.562 579.03 145.92 570.725C97.3837 555.593 63.8889 535.203 45.34 509.607C26.8111 484.04 23.1427 453.203 34.4205 417.026L75.6676 284.716C86.3488 250.453 107.367 227.74 138.748 216.626L138.749 216.625C170.119 205.439 208.779 207.001 254.684 221.312ZM236.605 279.829C216.319 273.505 199.833 272.571 187.19 277.132C174.517 281.704 165.794 291.764 160.979 307.208L117.385 447.047C112.226 463.597 113.557 477.168 121.603 487.573C129.607 497.925 143.773 506.23 164.055 512.553C184.317 518.87 200.802 519.803 213.451 515.244C226.131 510.674 234.868 500.618 239.682 485.173L283.277 345.334C288.437 328.782 287.002 315.181 278.908 304.762L278.907 304.76L278.523 304.276C270.362 294.121 256.376 285.992 236.605 279.829Z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+    <div class="letter letter-o1"><svg width="715.61" height="900" viewBox="0 0 326 410" fill="none"><path d="M135.7,3.7c47.6-7,86.1-2.5,115.4,13.5,29.4,16,46.7,41.6,51.9,76.9l20.2,137.1c4.1,27.9.8,51.5-9.8,70.9-10.6,19.3-28.7,34.5-54.1,45.4-19.1,8.1-42.4,14.2-70,18.3-50.3,7.4-89.3,3.6-117.1-11.4-27.8-15-44.5-41.2-50-78.7L1.9,138.5c-5.2-35.5,3.8-65.1,27.3-88.7h0C52.6,26.1,88.2,10.7,135.7,3.7ZM144.8,64.3c-21,3.1-36.3,9.4-45.7,19-9.4,9.6-12.9,22.5-10.600,38.5l21.4,144.9c2.5,17.1,9.6,28.8,21.4,34.7,11.7,5.9,28.1,7.2,49.1,4.1,21-3.1,36.3-9.4,45.7-19,9.4-9.6,13-22.5,10.6-38.5l-21.4-144.9c-2.5-17.2-9.7-28.8-21.5-34.7h0s-.6-.3-.6-.3c-11.8-5.6-27.9-6.9-48.4-3.8Z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+    <div class="letter letter-o2"><svg width="715.61" height="900" viewBox="0 0 326 410" fill="none"><path d="M135.7,3.7c47.6-7,86.1-2.5,115.4,13.5,29.4,16,46.7,41.6,51.9,76.9l20.2,137.1c4.1,27.9.8,51.5-9.8,70.9-10.6,19.3-28.7,34.5-54.1,45.4-19.1,8.1-42.4,14.2-70,18.3-50.3,7.4-89.3,3.6-117.1-11.4-27.8-15-44.5-41.2-50-78.7L1.9,138.5c-5.2-35.5,3.8-65.1,27.3-88.7h0C52.6,26.1,88.2,10.7,135.7,3.7ZM144.8,64.3c-21,3.1-36.3,9.4-45.7,19-9.4,9.6-12.9,22.5-10.6,38.5l21.4,144.9c2.5,17.1,9.6,28.8,21.4,34.7,11.7,5.9,28.1,7.2,49.1,4.1,21-3.1,36.3-9.4,45.7-19,9.4-9.6,13-22.5,10.6-38.5l-21.4-144.9c-2.5-17.2-9.7-28.8-21.5-34.7h0s-.6-.3-.6-.3c-11.8-5.6-27.9-6.9-48.4-3.8Z" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+    <div class="letter letter-l"><svg width="543.03" height="900" viewBox="0 0 322.8 535" fill="currentColor"><path d="M241.7,432.5l.5-.9h0l-.5.9ZM166.5,146.6l-.4-.9-.8.3.2.8,1-.2h0ZM166.8,146.5l.4.9.8-.3-.2-.8-1,.2h0ZM121.1,6.1l-.2-1h0l.2,1ZM59.8,20.3l-.2-1h0l.2,1ZM47.5,29.8l.9.5h0l-.9-.5ZM34.7,51.5l.8.6h0l-.8-.6ZM13.4,71.8l-.6-.8h0l.6.8ZM70.6,111.4l1-.2-.2-1-1,.2.2,1ZM313.2,486.7h-1v.2h0l1-.2ZM308.4,436.4h-1,1ZM302.8,431.8v-1c-7.2.8-20.3,2.2-32.7,2.8-6.2.3-12.2.4-17.2,0-2.5-.1-4.7-.4-6.5-.7-1.8-.4-3.2-.8-4.2-1.4l-.5.9-.5.9c1.2.7,2.9,1.2,4.8,1.6,1.9.4,4.2.6,6.8.8,5.1.3,11.2.2,17.4,0,12.5-.6,25.7-2,32.7-2.8v-1h-.1ZM241.7,432.5l.5-.9c-10.1-5.9-17.2-18-21.2-36.6l-1,.2-1,.2c4,18.8,11.3,31.5,22.1,37.9l.5-.9h0ZM220.1,395.2l1-.2-53.6-248.7-1,.2-1,.2,53.6,248.7,1-.2h0ZM166.5,146.6l.4.9h.2c0-.1-.4-1-.4-1l-.4-.9h-.2c0,.1.4,1,.4,1ZM166.8,146.5l1-.2-27.8-128.7-1,.2-1,.2,27.7,128.7,1-.2h0ZM139.1,17.8l1-.2c-1.9-8.7-10.4-14.300-19.1-12.4l.2,1,.2,1c7.6-1.6,15.1,3.2,16.7,10.9l1-.2h0ZM121.1,6.1l-.2-1-61.3,14.2.2,1,.2,1,61.4-14.2-.2-1h-.1ZM59.8,20.3l-.2-1c-5.5,1.3-10.3,4.9-13,10l.9.5.9.5c2.4-4.5,6.7-7.8,11.700-9l-.2-1h-.1ZM47.5,29.8l-.9-.5c-3.4,6.5-8.3,15.5-12.7,21.5l.8.6.8.6c4.4-6.2,9.4-15.3,12.8-21.8l-.9-.5h.1ZM34.7,51.5l-.8-.6c-7,9.8-15.6,16.5-21.1,20.1l.6.8.6.8c5.6-3.7,14.4-10.6,21.6-20.6l-.8-.6h-.1ZM13.4,71.8l-.6-.8c-3.6,2.4-5.1,7.2-4.1,11.9l1-.2,1-.2c-.9-4.1.5-8,3.3-9.8l-.6-.8h0ZM9.7,82.7l-1,.2,6.4,29.8,1-.2,1-.2-6.4-29.8s-1,.2-1,.2ZM16.1,112.5l-1,.2c1.3,6,6.4,10.2,11.8,9.1l-.2-1-.2-1c-3.9.9-8.3-2.3-9.4-7.5,0,0-1,.2-1,.2ZM26.7,120.8l.2,1,43.9-9.5-.2-1-.2-1-43.9,9.5.2,1ZM70.6,111.4l-1,.2,65.3,303.3,1-.2,1-.2L71.6,111.2l-1,.2ZM135.9,414.6l-1,.2c8.8,41,24.4,68.6,46.9,82.2l.5-.9.5-.9c-21.8-13.3-37.2-40.1-46-80.9l-1,.2h.1ZM182.3,496.2l-.5.9c22.5,13.6,53,16.2,91.4,8l-.2-1-.2-1c-38.2,8.2-68.1,5.6-90-7.7l-.5.9h0ZM273,504.1l.2,1,33.6-7.2-.2-1-.2-1-33.6,7.2.2,1ZM306.6,496.8l.2,1c5.1-1.1,8.4-6.2,7.3-11.3l-1,.2-1,.2c.9,4.1-1.700,8.1-5.7,8.9l.2,1h0ZM313.2,486.7h1l-4.8-50.3h-1l-1,.2,4.8,50.2h1ZM308.4,436.4h1c-.3-3.5-3.4-6-6.8-5.6v1c.1,0,.2,1,.2,1,2.3-.3,4.3,1.4,4.5,3.7h1.1Z" stroke="none"/></svg></div>
+  </div></div></div>
+  <div class="wrap">
+    <div class="hero-inner">
+      <span class="eyebrow">OutSystems Gold Partner</span>
+      <h1 id="hero-title">AI-Augmented Development on <em>OutSystems</em>.</h1>
+      <p class="lead">OutSystems is now an agentic systems platform for apps and AI agents. AI accelerates every stage of delivery. We bring the context, governance and architectural depth to make it work across a real application landscape.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="#contact">Talk to an expert
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn-ghost-light" href="#stories">See our work</a>
+      </div>
+      <!-- Badge recortada da apresentação Bool OutSystems 2026 (slide 1) -->
+      <img class="partner-badge" src="../assets/img/outsystems-gold-partner.png" alt="OutSystems Partner Gold, Sales and Delivery designations" width="222" height="72">
+    </div>
+  </div>
+</section>
+
+<!-- ================= STATS ================= -->
+<section class="stats" aria-label="Bool in numbers">
+  <div class="wrap">
+    <div class="stat"><b>13</b><small>Years</small></div>
+    <div class="stat"><b>150<span>+</span></b><small>Team members</small></div>
+    <div class="stat"><b>300<span>+</span></b><small>Projects delivered</small></div>
+    <div class="stat"><b>17<span>+</span></b><small>Countries</small></div>
+    <div class="stat"><b>750<span>+</span></b><small>Certifications</small></div>
+  </div>
+</section>
+
+<!-- ================= 01 ABOUT ================= -->
+<section class="section" id="about" aria-labelledby="about-title">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="chapter"><b>01</b><i></i>About Bool</div>
+        <h2 id="about-title">OutSystems is <em>where we started.</em></h2>
+      </div>
+      <p>An AI-Augmented Development consultancy, built for enterprise scale. Founded in 2013 and part of the Code for All_ Group.</p>
+    </div>
+    <div class="about-grid">
+      <div class="about-copy reveal">
+        <p><strong>OutSystems is our origin and our deepest practice.</strong> We combine certified OutSystems teams with AI-Augmented delivery to build, modernize and evolve mission-critical applications.</p>
+        <p>We deliver critical custom solutions from Portugal to the world, bringing governance, context and execution to the table, because speed without structure is risk. Our clients work across Retail, Banking, Finance, Insurance, Travel, Government, NGOs, Telecommunications, Energy, Health and Airlines.</p>
+        <div class="quote">Human Teams. <em>AI Amplified.</em></div>
+        <div class="offices">Lisboa · Porto · Açores · Castelo Branco</div>
+      </div>
+      <div class="facts">
+        <div class="fact reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"/><circle cx="12" cy="8" r="6"/></svg></div>
+          <div><h3>Gold Partner since 2019</h3><p>OutSystems Gold Partner with Sales and Delivery designations.</p></div>
+        </div>
+        <div class="fact reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg></div>
+          <div><h3>5.0 customer rating</h3><p>Average score in 15 verified customer reviews on the OutSystems partner page.</p></div>
+        </div>
+        <div class="fact reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg></div>
+          <div><h3>Training in-house</h3><p>8 OutSystems Certified Trainers on the Bool team, training developers from first steps to architecture.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 02 TECHNOLOGY ================= -->
+<section class="section warm" id="technology" aria-labelledby="tech-title">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="chapter"><b>02</b><i></i>The Technology</div>
+        <h2 id="tech-title">Agentic platform. <em>AI-Augmented</em> team.</h2>
+      </div>
+      <p>We help OutSystems clients move from AI experiments to governed agentic systems in production. The platform provides the lifecycle and governance tools; we bring the experience to apply them across a real application landscape.</p>
+    </div>
+    <div class="cards-3 two">
+      <article class="card reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M15 2v2M15 20v2M2 15h2M2 9h2M20 15h2M20 9h2M9 2v2M9 20v2"/></svg></div>
+        <h3>Apps and agents, together</h3>
+        <p>We design and deliver custom apps and AI agents on the same platform, integrated with your core systems and data.</p>
+      </article>
+      <article class="card reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg></div>
+        <h3>Any coding agent, governed</h3>
+        <p>We work with OutSystems Agent Experience, so teams can use tools like Claude Code, Cursor or Codex inside the platform's guardrails.</p>
+      </article>
+      <article class="card reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></div>
+        <h3>Legacy modernization</h3>
+        <p>We modernize legacy processes and systems without adding complexity or risk.</p>
+      </article>
+      <article class="card reveal">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></div>
+        <h3>Governance for AI use</h3>
+        <p>We define how AI is used across your portfolio, building on the lifecycle and governance tools OutSystems provides.</p>
+      </article>
+    </div>
+    <div class="compare reveal">
+      <div>
+        <small>The pressure on IT today</small>
+        <h3>AI pilots that never scale</h3>
+        <ul>
+          <li><strong>Disconnected AI efforts.</strong> Isolated initiatives drive up costs, duplicate work and increase risk.</li>
+          <li><strong>Legacy and complexity.</strong> Legacy systems must be modernized without adding complexity or risk.</li>
+          <li><strong>Speed with governance.</strong> Teams must deliver faster without compromising quality, security or governance.</li>
+        </ul>
+      </div>
+      <div>
+        <small>How OutSystems solves it</small>
+        <h3>From pilots to production, with full control</h3>
+        <ul>
+          <li><strong>Full enterprise context:</strong> AI understands, acts on and improves your systems.</li>
+          <li><strong>Open to any coding agent:</strong> your preferred tools and models, no vendor lock-in.</li>
+          <li><strong>Production-ready apps and agents:</strong> pilots become governed systems that scale.</li>
+          <li><strong>Unified orchestration:</strong> agents, apps and workflows with guardrails and human oversight.</li>
+          <li><strong>Centralized governance:</strong> the entire lifecycle in one place.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="panel6 reveal">
+      <h3>ODC: cloud-native, secure and open to AI.</h3>
+      <p>OutSystems Developer Cloud is the cloud-native foundation to build, run and evolve apps and agents at enterprise scale.</p>
+      <div class="panel6-grid">
+        <div><h4>Rapid development, elastic scale</h4><p>Accelerated delivery on a cloud-native architecture that scales with demand.</p></div>
+        <div><h4>Integrated identity</h4><p>Built-in identity provider capabilities for robust, secure user management.</p></div>
+        <div><h4>Security by design</h4><p>Application security best practices built in, supporting GDPR compliance.</p></div>
+        <div><h4>Flexible and customizable</h4><p>Solutions tailored to each business need, without the limits of off-the-shelf software.</p></div>
+        <div><h4>Open integration</h4><p>Connects to existing data, services and enterprise architecture, and to external AI services.</p></div>
+        <div><h4>Ready for coding agents</h4><p>OutSystems Agent Experience brings tools like Claude Code, Cursor, Codex and Kiro into governed delivery.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 03 WHY BOOL ================= -->
+<section class="section dark" id="why" aria-labelledby="why-title">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="chapter"><b>03</b><i></i>Why Bool</div>
+        <h2 id="why-title" class="two-lines"><span>Certified OutSystems</span> <span>expertise, <em>at scale.</em></span></h2>
+      </div>
+      <p>One of the deepest OutSystems benches in Europe, with direct access for the businesses we work with.</p>
+    </div>
+    <div class="why-grid reveal">
+      <div class="why"><b>516</b><h3>OutSystems certifications</h3><p>Held by the Bool team across OutSystems 11 and ODC.</p></div>
+      <div class="why"><b>54</b><h3>Architecture Specialists</h3><p>Architects who design scalable, governed application landscapes.</p></div>
+      <div class="why"><b>5.0</b><h3>Customer rating</h3><p>Average score in 15 verified reviews on the OutSystems partner page.</p></div>
+    </div>
+    <div class="cert-row reveal" aria-label="Certifications by profile">
+      <div class="cert"><b>71</b><span>Mobile Developer Specialist</span></div>
+      <div class="cert"><b>37</b><span>Tech Lead</span></div>
+      <div class="cert"><b>27</b><span>Expert Developer</span></div>
+      <div class="cert"><b>8</b><span>OutSystems Certified Trainers</span></div>
+      <div class="cert"><b>4</b><span>Agentic AI Specialist</span></div>
+    </div>
+    <div class="why-copy reveal">
+      <p>Certifications cover <strong>OutSystems 11 and ODC</strong>, from Associate Developer to Security, DevOps, Platform Ops and Delivery Specialist.</p>
+      <p>Simple to complex projects with multiple dependencies and integrations, <strong>delivered remotely or on site</strong> for enterprise leaders across Europe and beyond.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 04 SERVICES ================= -->
+<section class="section" id="services" aria-labelledby="services-title">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="chapter"><b>04</b><i></i>Services</div>
+        <h2 id="services-title">What we build <em>with OutSystems.</em></h2>
+      </div>
+      <p>From the systems that run your business to the agents that automate it, built on one platform and integrated with what you already have.</p>
+    </div>
+    <div class="profiles">
+      <article class="profile reveal">
+        <span class="num">01</span>
+        <h3>Core systems</h3>
+        <p>Core systems tailored to your business, without the struggle of traditional development or the lock-in of off-the-shelf solutions.</p>
+      </article>
+      <article class="profile reveal">
+        <span class="num">02</span>
+        <h3>Customer portals</h3>
+        <p>Pixel-perfect, secure and scalable portals and mobile apps for your customers.</p>
+      </article>
+      <article class="profile reveal">
+        <span class="num">03</span>
+        <h3>Internal apps</h3>
+        <p>Clear the internal backlog, overcome legacy limits and bridge gaps between systems.</p>
+      </article>
+      <article class="profile reveal">
+        <span class="num">04</span>
+        <h3>AI agents</h3>
+        <p>Agents that automate complex workflows, integrated with your core systems and data.</p>
+      </article>
+    </div>
+
+    <div class="training">
+      <div class="reveal">
+        <h3 class="sub">Main benefits for your business.</h3>
+        <p class="lead-sm">OutSystems brings business and IT into the same delivery process. Bool makes sure that speed comes with structure, so what you build today is easy to change tomorrow.</p>
+        <div class="pill-row">
+          <span class="pill">OutSystems 11</span><span class="pill">ODC</span><span class="pill">Agent Experience</span><span class="pill">Mobile</span>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="courses">
+          <div class="course"><h4>Increased agility</h4><p>Pivot quickly to new solutions that respond to market changes.</p></div>
+          <div class="course"><h4>Maximized productivity</h4><p>Automation of repetitive work and AI assistance let teams do more with the same resources.</p></div>
+          <div class="course"><h4>Better experiences</h4><p>New products that meet customer expectations and make employees more efficient.</p></div>
+          <div class="course"><h4>Business and IT together</h4><p>Visual development brings business stakeholders into the delivery process.</p></div>
+          <div class="course"><h4>Easy change and maintenance</h4><p>Reusable components and modules mean no project starts from scratch.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 05 DELIVERY ================= -->
+<section class="section warm" id="delivery" aria-labelledby="delivery-title">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="chapter"><b>05</b><i></i>Delivery</div>
+        <h2 id="delivery-title" class="two-lines"><span>Engagement models</span> <span>built for <em>your reality.</em></span></h2>
+      </div>
+      <p>We are a specialist software house, and our expertise is backed by our ability to teach the technologies we work with. Choose the model that fits; we stay accountable for the outcome.</p>
+    </div>
+    <div class="models">
+      <article class="model reveal"><small>Scope flexibility</small><h3>Time &amp; Materials</h3><p>A fixed team with a continuous development pipeline, technically supported by our mentors' knowledge pool.</p></article>
+      <article class="model reveal"><small>On time, on budget</small><h3>Fixed Price Project</h3><p>Support at any stage: requirements with the business, implementation, maintenance and app factory support.</p></article>
+      <article class="model reveal"><small>New talent</small><h3>OutSystems Reskilling</h3><p>Our intensive bootcamp turns career changers into certified OutSystems developers, ready to join your team.</p></article>
+      <article class="model reveal"><small>Team capability</small><h3>Corporate Training</h3><p>8 OutSystems Certified Trainers train new hires, junior and senior developers and architects to become proficient fast.</p></article>
+    </div>
+    <div class="panel6 reveal">
+      <h3>Nearshore from Portugal, built for collaboration.</h3>
+      <p>Your domain knowledge combined with our OutSystems depth, in the same time zone as your teams.</p>
+      <div class="panel6-grid">
+        <div><h4>Dedicated teams</h4><p>Certified professionals focused on your project, backed by our internal excellence center.</p></div>
+        <div><h4>Same working hours</h4><p>Time-zone alignment with Europe for real-time communication and fast decisions.</p></div>
+        <div><h4>Agile by default</h4><p>Short iterations and quick response to change as business needs evolve.</p></div>
+        <div><h4>Cost efficiency</h4><p>Competitive pricing without compromising on quality, maximizing return on investment.</p></div>
+        <div><h4>Scales with you</h4><p>Start small and grow the team as demand increases.</p></div>
+        <div><h4>Close to your market</h4><p>Easy travel to major European markets, high English proficiency and strong cultural affinity.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 06 SUCCESS STORIES ================= -->
+<section class="section" id="stories" aria-labelledby="stories-title">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div>
+        <div class="chapter"><b>06</b><i></i>Success Stories</div>
+        <h2 id="stories-title">OutSystems delivery for <em>enterprise</em> clients.</h2>
+      </div>
+      <p>Small, senior teams solving problems that sit at the heart of the business.</p>
+    </div>
+    <!-- Sem nomes nem logótipos de clientes nestes casos. Destaques da apresentação (Enbridge US, Ahold NL);
+         restantes do portfolio/ (Crown Agents Bank UK, IRN Portugal, Jerónimo Martins PT) -->
+    <div class="stories">
+      <article class="story feature reveal">
+        <div class="story-top"><span class="client">Energy cost prediction</span><span class="sector">Energy · United States</span></div>
+        <p>Station delivery costs were hard to forecast, and teams relied on gut instinct to estimate them. We built an app to store and edit pipeline fuel flow rates, energy and component costs, using historical operational data to predict the cost of future fuel deliveries at every station.</p>
+        <h4>The benefits</h4>
+        <ul>
+          <li><strong>Improved profit margins:</strong> accurate cost predictions support better pricing at each station.</li>
+          <li><strong>Operational efficiency:</strong> knowing the real cost drivers helps optimize schedules, routes and maintenance.</li>
+          <li><strong>Data-driven planning:</strong> better seasonal forecasts and long-term decisions on network expansion.</li>
+        </ul>
+        <div class="where">OutSystems 11 · Data platform integration · 1 Tech Lead, 1 Developer, 1 Business Analyst</div>
+      </article>
+      <article class="story feature reveal">
+        <div class="story-top"><span class="client">E-returns system</span><span class="sector">Retail · Netherlands</span></div>
+        <p>Online purchases can see return rates of 20 to 40%, against under 10% in store. We built a centralized returns web app with role-specific workflows for warehouse, front office, back office and finance, including refund workflows and a financial dashboard.</p>
+        <h4>The benefits</h4>
+        <ul>
+          <li><strong>Faster processing:</strong> no manual handoffs, return-to-refund time cut from days to hours.</li>
+          <li><strong>Financial control:</strong> full visibility of refund costs, fraud prevention through approvals and accurate forecasting.</li>
+          <li><strong>Inventory accuracy:</strong> real-time stock updates across distribution centers as returns are registered.</li>
+        </ul>
+        <div class="where">Azure · REST APIs · 1 Tech Lead, 1 Developer · 18 months</div>
+      </article>
+      <article class="story reveal">
+        <div class="story-top"><span class="client">Award-winning banking portal</span><span class="sector">Banking · United Kingdom</span></div>
+        <p>A web portal for an international bank, recognized with the OutSystems Innovation Award 2021. Automated workflows cut manual tasks and minimize errors and revenue leakage.</p>
+        <div class="where">OutSystems 11 · Web portal</div>
+      </article>
+      <article class="story reveal">
+        <div class="story-top"><span class="client">Company creation in minutes</span><span class="sector">Government · Portugal</span></div>
+        <p>A public services portal where businesses register a company online in minutes, with guided workflows, state-sponsored login and digital signatures.</p>
+        <div class="where">OutSystems 11 · Web portal</div>
+      </article>
+      <article class="story reveal">
+        <div class="story-top"><span class="client">Next-generation store</span><span class="sector">Retail · Portugal</span></div>
+        <p>Experimental retail technology for frictionless shopping: faster digital transactions, real-time staff monitoring and an advanced back office, integrated with SAP.</p>
+        <div class="where">OutSystems &amp; SAP · Mobile PWA</div>
+      </article>
+    </div>
+    <div class="stories-cta reveal"><a class="btn btn-ghost" href="../portfolio/index.html">See our portfolio</a></div>
+  </div>
+</section>
+
+<!-- ================= CTA ================= -->
+<section class="cta-band" aria-label="Call to action">
+  <div class="wrap">
+    <h2>Anyone can generate code with AI. We make sure it works on OutSystems.</h2>
+    <a class="btn" href="#contact">Talk to an expert</a>
+  </div>
+</section>
+
+<!-- ================= 07 CONTACT ================= -->
+<section class="section contact" id="contact" aria-labelledby="contact-title">
+  <div class="wrap contact-grid">
+    <div class="reveal">
+      <div class="chapter"><b>07</b><i></i>Contact</div>
+      <h2 id="contact-title">Get in touch</h2>
+      <p class="intro">Whether you have an OutSystems project in mind, a legacy system to modernize or AI agents to take into production, we're here. Talk to an expert.</p>
+      <div class="find">
+        <h3>To find us</h3>
+        <p>Office Lisboa<br>R. do Centro Cultural 27A<br>1700-106 Lisboa<br><a href="mailto:sales@bool.pt">sales@bool.pt</a></p>
+      </div>
+    </div>
+    <div class="reveal" id="form-host">
+      <!-- Same fields, validation, endpoint and payload as the bool.pt ContactForm -->
+      <form class="form" id="contact-form" aria-label="Contact form" novalidate>
+        <div class="form-grid">
+          <div class="field">
+            <label for="cf-firstName">First name</label>
+            <input id="cf-firstName" name="firstName" type="text" placeholder="Enter your first name" autocomplete="given-name">
+            <p class="field-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="cf-lastName">Last name</label>
+            <input id="cf-lastName" name="lastName" type="text" placeholder="Enter your last name" autocomplete="family-name">
+            <p class="field-error" aria-live="polite"></p>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label for="cf-phone">Phone</label>
+            <input id="cf-phone" name="phone" type="tel" placeholder="Enter your phone number" autocomplete="tel">
+            <p class="field-error" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="cf-email">Email</label>
+            <input id="cf-email" name="email" type="email" placeholder="Enter your email" autocomplete="email">
+            <p class="field-error" aria-live="polite"></p>
+          </div>
+        </div>
+        <div class="field">
+          <label for="cf-message">Message</label>
+          <textarea id="cf-message" name="message" rows="4" placeholder="Tell us in a few lines what you have in mind"></textarea>
+          <p class="field-error" aria-live="polite"></p>
+        </div>
+        <div class="captcha-wrap"><div id="cf-turnstile"></div></div>
+        <p class="form-error" id="form-error" role="alert" hidden></p>
+        <p class="privacy">Your data will be processed to respond to your inquiry under our legitimate interest, in accordance with our <a href="../privacy/index.html">Privacy Policy</a>.</p>
+        <input type="hidden" name="utm_source">
+        <input type="hidden" name="utm_medium">
+        <input type="hidden" name="utm_campaign">
+        <input type="hidden" name="utm_content">
+        <button type="submit" class="submit" id="cf-submit">Send message</button>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="about-f">
+        <img src="../assets/img/bool-logo-142.svg" alt="Bool" width="52" height="52" loading="lazy">
+        <p><a href="https://codeforall.com/group">Part of the Code for All_ Group.</a> AI-Augmented Development, from Portugal to the world.</p>
+        <div class="socials">
+          <a href="https://www.linkedin.com/company/bool" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg></a>
+          <a href="https://instagram.com/wearebool" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><path d="M17.5 6.5h.01"/></svg></a>
+          <a href="https://www.facebook.com/BoolPT/" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="https://x.com/wearebool" aria-label="X"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l16 16M20 4 4 20"/></svg></a>
+          <a href="https://youtube.com/@bool-pt" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="../services/index.html">Services</a></li>
+          <li><a href="../about/index.html">About us</a></li>
+          <li><a href="../people/index.html#careersCta">Careers</a></li>
+          <li><a href="../contacts/index.html">Contact us</a></li>
+          <li><a href="../blog/index.html">Insights</a></li>
+          <li><a href="../portfolio/index.html">Use Cases</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Legal Links</h4>
+        <ul>
+          <li><a href="../privacy/index.html">Privacy Policy</a></li>
+          <li><a href="../terms/index.html">Terms of Service</a></li>
+          <li><a href="https://whistleblowersoftware.com/secure/codeforall">Whistleblower</a></li>
+          <li><a href="../cookies/index.html">Cookie Policy</a></li>
+          <li><div data-island="CookiePreferencesButton"><button type="button" class="cookie-banner__preferences-button">Cookie preferences</button></div></li>
+        </ul>
+      </div>
+      <div>
+        <h4>To find us</h4>
+        <p>Office Lisboa, R. do Centro Cultural 27A, 1700-106 Lisboa</p>
+        <p style="margin-top:10px"><a href="mailto:info@bool.pt">info@bool.pt</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© Copyright 2026 Bool</span>
+      <a href="../index.html">bool.pt</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ---------- Header + mobile nav ---------- */
+(function(){
+  var header=document.querySelector('.header'), btn=document.querySelector('.menu-btn'), nav=document.getElementById('nav');
+  function onScroll(){header.classList.toggle('scrolled',window.scrollY>20)}
+  onScroll(); window.addEventListener('scroll',onScroll,{passive:true});
+  btn.addEventListener('click',function(){var o=nav.classList.toggle('open');btn.setAttribute('aria-expanded',o);header.classList.add('scrolled')});
+  nav.addEventListener('click',function(e){if(e.target.tagName==='A'){nav.classList.remove('open');btn.setAttribute('aria-expanded','false')}});
+})();
+
+/* ---------- Reveal on scroll ---------- */
+(function(){
+  var els=document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return}
+  var io=new IntersectionObserver(function(entries){entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}})},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+  els.forEach(function(e){io.observe(e)});
+})();
+
+/* ---------- Use-case tabs ---------- */
+(function(){
+  var tabs=[].slice.call(document.querySelectorAll('.uc-tab'));
+  function select(t){
+    tabs.forEach(function(x){var on=x===t;x.setAttribute('aria-selected',on);x.tabIndex=on?0:-1;var p=document.getElementById(x.getAttribute('aria-controls'));p.hidden=!on;if(on)p.classList.add('in')});
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){select(t)});
+    t.addEventListener('keydown',function(e){var d=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;if(d){var n=tabs[(i+d+tabs.length)%tabs.length];select(n);n.focus()}});
+  });
+})();
+
+/* ---------- Contact form ----------
+   Mirrors bool.pt ContactForm: same validation rules, same endpoint, same payload
+   ({name, email, message (+ "\n\nPhone: …"), turnstile_token}) and same Cloudflare Turnstile site key. */
+(function(){
+  var API_BASE='https://upci9flznj.execute-api.eu-west-3.amazonaws.com';
+  var SITE_KEY='0x4AAAAAADhfDpOEAsGxwkyt';
+  var MSG={success:"Message sent! We'll be in touch soon.",captcha:'Please complete the captcha verification.',error:'Something went wrong. Please try again.'};
+
+  var form=document.getElementById('contact-form'), submit=document.getElementById('cf-submit'), formError=document.getElementById('form-error');
+  var widgetId=null, token='', pending=null;
+
+  window.onloadTurnstileCallback=function(){
+    widgetId=turnstile.render('#cf-turnstile',{
+      sitekey:SITE_KEY, execution:'execute', appearance:'interaction-only', theme:'dark',
+      callback:function(t){token=t;if(pending){pending(t);pending=null}},
+      'expired-callback':function(){token=''},
+      'error-callback':function(){if(pending){pending('');pending=null}}
+    });
+  };
+  var s=document.createElement('script');
+  s.src='https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback&render=explicit';
+  s.async=true; s.defer=true; document.head.appendChild(s);
+
+  function getToken(){
+    if(token) return Promise.resolve(token);
+    if(!window.turnstile||widgetId===null) return Promise.resolve('');
+    return new Promise(function(res){
+      pending=res; try{turnstile.execute(widgetId)}catch(e){res('')}
+      setTimeout(function(){if(pending===res){pending=null;res('')}},30000);
+    });
+  }
+  function resetCaptcha(){token='';try{if(widgetId!==null)turnstile.reset(widgetId)}catch(e){}}
+
+  /* UTMs from the URL are kept in the hidden fields, as on the landing pages */
+  var UTM_KEYS=['utm_source','utm_medium','utm_campaign','utm_content'];
+  var params=new URLSearchParams(location.search);
+  UTM_KEYS.forEach(function(k){form.elements[k].value=(params.get(k)||'').trim().slice(0,100)});
+
+  /* Page and UTMs go in the message (the API has no field for them), same as assets/app.js:
+     added only while the message stays within 2000 characters; the phone stays last. */
+  function withOrigin(message,phone){
+    var lines=['Page: '+location.pathname];
+    UTM_KEYS.forEach(function(k){var v=form.elements[k].value;if(v)lines.push(k+': '+v)});
+    var tail=phone?'\n\nPhone: '+phone:'', block='';
+    lines.forEach(function(line){var next=block?block+'\n'+line:'\n\n'+line;if((message+next+tail).length<=2000)block=next});
+    return message+block+tail;
+  }
+
+  var rules={
+    firstName:function(v){return v.length<2?'First name must be at least 2 characters':v.length>50?'First name must be at most 50 characters':''},
+    lastName:function(v){return v.length<2?'Last name must be at least 2 characters':v.length>50?'Last name must be at most 50 characters':''},
+    email:function(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)?'':'Invalid email address'},
+    phone:function(v){return v===''||/^\+?[\d\s\-().]{7,20}$/.test(v)?'':'Invalid phone number'},
+    message:function(v){return v.length<10?'Message must be at least 10 characters':v.length>2000?'Message must be at most 2000 characters':''}
+  };
+  function validate(){
+    var ok=true, data={};
+    Object.keys(rules).forEach(function(k){
+      var el=form.elements[k], v=el.value.trim(), err=rules[k](v), f=el.closest('.field');
+      data[k]=v; f.classList.toggle('invalid',!!err); f.querySelector('.field-error').textContent=err;
+      el.setAttribute('aria-invalid',!!err); if(err&&ok){ok=false;el.focus()}
+    });
+    return ok?data:null;
+  }
+  form.addEventListener('input',function(e){var f=e.target.closest('.field');if(f&&f.classList.contains('invalid')){var err=rules[e.target.name](e.target.value.trim());if(!err){f.classList.remove('invalid');f.querySelector('.field-error').textContent=''}}});
+
+  function post(body,attempt){
+    var ctrl=new AbortController(), t=setTimeout(function(){ctrl.abort()},15000);
+    return fetch(API_BASE+'/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:ctrl.signal})
+      .then(function(r){clearTimeout(t);if(r.ok)return r.json().catch(function(){return{}});var e=new Error('HTTP '+r.status);e.status=r.status;throw e})
+      .catch(function(e){clearTimeout(t);var retry=(e.status===429||!e.status)&&attempt<2;if(retry)return new Promise(function(r){setTimeout(r,1000*Math.pow(2,attempt))}).then(function(){return post(body,attempt+1)});throw e});
+  }
+
+  form.addEventListener('submit',function(e){
+    e.preventDefault(); formError.hidden=true;
+    var d=validate(); if(!d) return;
+    submit.disabled=true; submit.textContent='Sending...';
+    getToken().then(function(tk){
+      if(!tk){var err=new Error('captcha');err.status=403;throw err}
+      return post({
+        name:d.firstName+' '+d.lastName,
+        email:d.email,
+        message:withOrigin(d.message,d.phone),
+        turnstile_token:tk
+      },0);
+    }).then(function(){
+      /* Same conversion event as the landing pages; gtag only exists after analytics consent (assets/app.js) */
+      if(typeof window.gtag==='function') window.gtag('event','form_submission',{type:'contact',layout:'full',page:'outsystems',utm_source:form.elements.utm_source.value,utm_medium:form.elements.utm_medium.value,utm_campaign:form.elements.utm_campaign.value,utm_content:form.elements.utm_content.value});
+      document.getElementById('form-host').innerHTML='<div class="success" role="status"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#E7453A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg><p>'+MSG.success+'</p></div>';
+    }).catch(function(err){
+      formError.textContent=err&&err.status===403?MSG.captcha:MSG.error; formError.hidden=false;
+      resetCaptcha(); submit.disabled=false; submit.textContent='Send message';
+    });
+  });
+})();
+</script>
+</body>
+</html>
