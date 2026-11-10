@@ -56,7 +56,17 @@ Guardar em `assets/img/`, nome em minúsculas e com hífens, já otimizadas: Web
 
 ### Novo artigo, nova página
 
-Para uma página nova, copiar a pasta de uma página parecida, mudar o conteúdo, o `<title>`, a `meta description`, o `canonical` e as meta tags Open Graph, e acrescentar o link onde fizer sentido. Para um artigo, o mesmo a partir de uma página de artigo existente.
+Para uma página nova, copiar a pasta de uma página parecida, mudar o conteúdo, o `<title>`, a `meta description`, o `canonical` e as meta tags Open Graph, e acrescentar o link onde fizer sentido.
+
+Cada artigo da área Insights é uma página própria em `blog/<slug>/index.html` (slug em inglês, minúsculas e hífens), feita a partir de um artigo existente. O texto vem do artigo publicado no LinkedIn da Bool, sem alterações. Ao publicar um artigo novo, atualizar também:
+
+1. a grelha em `blog/index.html` (secção `knowledgeCenter`): um cartão novo no topo, os artigos ficam do mais recente para o mais antigo;
+2. a secção `insightsPreview` da homepage (`index.html`): mostra sempre os 3 artigos mais recentes, por isso o novo entra em primeiro e o mais antigo dos três sai;
+3. os "Related insights" de 2 ou 3 artigos do mesmo tema, se fizer sentido.
+
+A capa de cada artigo é única: não repetir uma imagem já usada noutra página do site.
+
+A secção `newsUpdates` de `blog/index.html` junta notícias da Bool, eventos e comunidade a partir dos posts do LinkedIn: um `<li>` por post, do mais recente para o mais antigo, com `data-f0` igual a `Event`, `Community` ou `Bool News` (é o que os filtros usam). A imagem do post é copiada para `assets/img/news/`; nunca usar o link `media.licdn.com`, que expira.
 
 ### Consentimento de cookies
 
