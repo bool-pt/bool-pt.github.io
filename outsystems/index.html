@@ -393,7 +393,7 @@ details.scope[open] summary::after{transform:rotate(45deg)}
 /* Nome do parceiro a vermelho Bool: a cor da marca OutSystems (#E4002B) é quase igual e não se distinguiria */
 .hero h1 em{color:var(--red)}
 /* Badge oficial OutSystems Partner Gold no hero, no lugar do selo .partner da página Mendix */
-.partner-badge{margin-top:56px;width:222px;height:auto}
+.partner-badge{margin-top:56px;width:242px;height:auto}
 /* Quatro cards de tecnologia em 2 colunas */
 .cards-3.two{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media (max-width:960px){.cards-3.two{grid-template-columns:minmax(0,1fr)}}
@@ -427,6 +427,15 @@ details.scope[open] summary::after{transform:rotate(45deg)}
 .story.feature ul{color:var(--on-dark-2)}
 .story.feature ul strong{color:#fff}
 .stories-cta{display:flex;justify-content:center;margin-top:40px}
+/* Why Bool com 4 números (profissionais OutSystems à cabeça); 2x2 em ecrãs médios */
+.why-grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.why-grid.four .why{padding:40px 20px}
+@media (min-width:861px) and (max-width:1080px){
+  .why-grid.four{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .why-grid.four .why:nth-child(3){border-left:0}
+  .why-grid.four .why:nth-child(n+3){border-top:1px solid var(--line-dark)}
+}
+@media (max-width:860px){.why-grid.four{grid-template-columns:minmax(0,1fr)}}
 </style>
 <script src="../assets/app.js" defer></script>
 </head>
@@ -478,7 +487,7 @@ details.scope[open] summary::after{transform:rotate(45deg)}
         <a class="btn btn-ghost-light" href="#stories">See our work</a>
       </div>
       <!-- Badge recortada da apresentação Bool OutSystems 2026 (slide 1) -->
-      <img class="partner-badge" src="../assets/img/outsystems-gold-partner.png" alt="OutSystems Partner Gold, Sales and Delivery designations" width="222" height="72">
+      <img class="partner-badge" src="../assets/img/outsystems-gold-partner-training.png" alt="OutSystems Partner Gold, Sales, Delivery and Training designations" width="242" height="72">
     </div>
   </div>
 </section>
@@ -608,7 +617,8 @@ details.scope[open] summary::after{transform:rotate(45deg)}
       </div>
       <p>One of the deepest OutSystems benches in Europe, with direct access for the businesses we work with.</p>
     </div>
-    <div class="why-grid reveal">
+    <div class="why-grid four reveal">
+      <div class="why"><b>80+</b><h3>OutSystems professionals</h3><p>Developers, tech leads and architects working on OutSystems every day.</p></div>
       <div class="why"><b>516</b><h3>OutSystems certifications</h3><p>Held by the Bool team across OutSystems 11 and ODC.</p></div>
       <div class="why"><b>54</b><h3>Architecture Specialists</h3><p>Architects who design scalable, governed application landscapes.</p></div>
       <div class="why"><b>5.0</b><h3>Customer rating</h3><p>Average score in 15 verified reviews on the OutSystems partner page.</p></div>
