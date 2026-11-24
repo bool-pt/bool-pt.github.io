@@ -330,6 +330,13 @@
   color: var(--color-primary);
 }
 
+.content-modal__note {
+  margin: 1.25rem 0 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
 .content-modal__cta {
   display: inline-flex;
   align-items: center;
