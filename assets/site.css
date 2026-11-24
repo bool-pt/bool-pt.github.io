@@ -14528,6 +14528,15 @@ video {
   .dark-page-hero[data-c-bv6iqeog] { min-block-size: auto; }
 }
 
+/* Latest insights on the homepage: the title stays left like the other sections; the cards are centred,
+   equal in size, and wrap 3 / 2 / 1 per row (a card left alone on a row stays centred) */
+#insightsPreview .article-related__grid[data-c-article] { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; }
+#insightsPreview .article-related__grid[data-c-article] > li { flex: 0 0 100%; }
+@media (min-width: 640px) { #insightsPreview .article-related__grid[data-c-article] > li { flex-basis: calc((100% - 1.5rem) / 2); } }
+@media (min-width: 1024px) { #insightsPreview .article-related__grid[data-c-article] > li { flex-basis: calc((100% - 3rem) / 3); } }
+#insightsPreview .article-card[data-c-article] img { aspect-ratio: 16 / 10; }
+#insightsPreview .article-card__title[data-c-article] { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+
 /* News & Updates cards (blog/index.html): article card plus a short summary and a link label */
 .news-grid[data-c-article] { margin-block-start: 2rem; }
 .news-card__summary[data-c-article] { padding-inline: 1.25rem; font-size: 0.9375rem; line-height: 1.55; color: var(--color-muted-foreground); display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }

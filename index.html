@@ -93,20 +93,55 @@
               Home
             </a>
           </li>
-          <li data-c-header-actions="">
+          <li class="nav-item--has-sub" data-c-header-actions="">
             <a href="./about/index.html" class="nav-link" data-c-header-actions=""> About </a>
+            <button type="button" class="nav-sub-toggle" aria-expanded="false" aria-label="About sections"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <ul class="nav-submenu" role="list">
+                <li><a href="./about/index.html#aboutHero">Who we are</a></li>
+                <li><a href="./about/index.html#featuredTech">Technologies</a></li>
+                <li><a href="./about/index.html#teamGrid">Leadership</a></li>
+                <li><a href="./about/index.html#officeLocations">Offices</a></li>
+            </ul>
           </li>
-          <li data-c-header-actions="">
+          <li class="nav-item--has-sub" data-c-header-actions="">
             <a href="./services/index.html" class="nav-link" data-c-header-actions=""> Services </a>
+            <button type="button" class="nav-sub-toggle" aria-expanded="false" aria-label="Services sections"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <ul class="nav-submenu" role="list">
+                <li><a href="./services/index.html#serviceHighlights">What we deliver</a></li>
+                <li><a href="./services/index.html#techPlatforms">Tech stack</a></li>
+                <li class="nav-submenu__child"><a href="./outsystems/index.html" target="_blank" rel="noopener">OutSystems</a></li>
+                <li class="nav-submenu__child"><a href="./mendix/index.html" target="_blank" rel="noopener">Mendix</a></li>
+                <li class="nav-submenu__child"><a href="./services/index.html#techStack-microsoft-power-platform">Power Platform</a></li>
+                <li class="nav-submenu__child"><a href="./ai-engineering/index.html" target="_blank" rel="noopener">AI Engineering</a></li>
+                <li><a href="./services/index.html#howWeWork">How we work</a></li>
+            </ul>
           </li>
-          <li data-c-header-actions="">
+          <li class="nav-item--has-sub" data-c-header-actions="">
             <a href="./people/index.html" class="nav-link" data-c-header-actions=""> People </a>
+            <button type="button" class="nav-sub-toggle" aria-expanded="false" aria-label="People sections"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <ul class="nav-submenu" role="list">
+                <li><a href="./people/index.html#coreValues">Our values</a></li>
+                <li><a href="./people/index.html#beyondWork">Beyond the Sprint</a></li>
+                <li><a href="./people/index.html#careersCta">Careers</a></li>
+            </ul>
           </li>
-          <li data-c-header-actions="">
+          <li class="nav-item--has-sub" data-c-header-actions="">
             <a href="./portfolio/index.html" class="nav-link" data-c-header-actions=""> Portfolio </a>
+            <button type="button" class="nav-sub-toggle" aria-expanded="false" aria-label="Portfolio sections"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <ul class="nav-submenu" role="list">
+                <li><a href="./portfolio/index.html#caseStudies">Case studies</a></li>
+                <li><a href="./portfolio/index.html#certifications">Certifications</a></li>
+                <li><a href="./portfolio/index.html#clientLogos">Clients</a></li>
+            </ul>
           </li>
-          <li data-c-header-actions="">
+          <li class="nav-item--has-sub" data-c-header-actions="">
             <a href="./blog/index.html" class="nav-link" data-c-header-actions=""> Insights </a>
+            <button type="button" class="nav-sub-toggle" aria-expanded="false" aria-label="Insights sections"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button>
+            <ul class="nav-submenu" role="list">
+                <li><a href="./blog/index.html#newsletterBar">Newsletter</a></li>
+                <li><a href="./blog/index.html#knowledgeCenter">Articles</a></li>
+                <li><a href="./blog/index.html#newsUpdates">News &amp; Updates</a></li>
+            </ul>
           </li>
           <li data-c-header-actions="">
             <a href="./contacts/index.html" class="nav-link" data-c-header-actions=""> Contacts </a>
@@ -581,7 +616,7 @@
                       and with the governance organisations depend on.
                     </p>
                     <a
-                      href="./services/index.html#techStack"
+                      href="./services/index.html#techPlatforms"
                       class="arrow-link arrow-link--light card-link"
                       data-c-bulfszpc=""
                     >
@@ -736,11 +771,185 @@
           </div>
         </section>
       </div>
+      <!-- Technologies: same block as about/index.html#featuredTech (keep both in step) -->
+      <div id="featuredTech" class="section-anchor">
+        <div class="featured-tech-wrap" data-c-featured-tech-wrap="">
+          <section
+            class="section"
+            aria-labelledby="tech-heading"
+            style="background-color: var(--color-background)"
+            data-c-pdbomyic=""
+          >
+            <div class="section-container" data-c-yfwknzfq="">
+              <div
+                class="section-intro section-intro--light section-intro--center"
+                style="--si-heading-size: var(--font-size-display); --si-margin-block-end: 3.5rem"
+                data-c-w2wcho3q=""
+              >
+                <h2 id="tech-heading" class="section-intro-heading" data-c-w2wcho3q="">
+                  AI-Augmented Development Platforms
+                </h2>
+                <p class="section-intro-body" style="max-inline-size: 50rem" data-c-w2wcho3q="">
+                  We work across the enterprise platforms that power AI-Augmented Development. Context, governance, and
+                  delivery at scale.
+                </p>
+                <div class="section-intro-action" data-c-w2wcho3q=""></div>
+              </div>
+              <div
+                class="responsive-grid responsive-grid--cols-4 responsive-grid--collapse-sm"
+                style="--grid-gap: 1.5rem"
+                data-c-r5wcfgzt=""
+              >
+                <article class="tech-card" data-c-featured-tech-wrap="">
+                  <div class="tech-logo-wrap" data-c-featured-tech-wrap="">
+                    <img
+                      src="./assets/img/outsystems.webp"
+                      alt="OutSystems logo"
+                      loading="lazy"
+                      decoding="async"
+                      width="70"
+                      height="70"
+                      class="tech-logo-img"
+                      data-c-featured-tech-wrap=""
+                    />
+                  </div>
+                  <h3 class="tech-name" style="color: #e4002b" data-c-featured-tech-wrap="">OutSystems</h3>
+                  <a
+                    href="./outsystems/index.html"
+                    class="arrow-link arrow-link--light"
+                    data-c-bulfszpc=""
+                   target="_blank" rel="noopener">
+                    <span class="arrow-link-label" data-c-bulfszpc="">Learn more</span>
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M5 12h14M12 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                </article>
+                <article class="tech-card" data-c-featured-tech-wrap="">
+                  <div class="tech-logo-wrap" data-c-featured-tech-wrap="">
+                    <img
+                      src="./assets/img/mendix.webp"
+                      alt="Mendix logo"
+                      loading="lazy"
+                      decoding="async"
+                      width="70"
+                      height="70"
+                      class="tech-logo-img"
+                      data-c-featured-tech-wrap=""
+                    />
+                  </div>
+                  <h3 class="tech-name" style="color: #2264e6" data-c-featured-tech-wrap="">Mendix</h3>
+                  <a
+                    href="./mendix/index.html"
+                    class="arrow-link arrow-link--light"
+                    data-c-bulfszpc=""
+                   target="_blank" rel="noopener">
+                    <span class="arrow-link-label" data-c-bulfszpc="">Learn more</span>
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M5 12h14M12 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                </article>
+                <article class="tech-card" data-c-featured-tech-wrap="">
+                  <div class="tech-logo-wrap" data-c-featured-tech-wrap="">
+                    <img
+                      src="./assets/img/power-platform.webp"
+                      alt="Power Platform logo"
+                      loading="lazy"
+                      decoding="async"
+                      width="70"
+                      height="70"
+                      class="tech-logo-img"
+                      data-c-featured-tech-wrap=""
+                    />
+                  </div>
+                  <h3 class="tech-name" style="color: #2e997e" data-c-featured-tech-wrap="">Power Platform</h3>
+                  <a
+                    href="./services/index.html#techStack-microsoft-power-platform"
+                    class="arrow-link arrow-link--light"
+                    data-c-bulfszpc=""
+                  >
+                    <span class="arrow-link-label" data-c-bulfszpc="">Learn more</span>
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M5 12h14M12 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                </article>
+                <article class="tech-card" data-c-featured-tech-wrap="">
+                  <div class="tech-logo-wrap" data-c-featured-tech-wrap="">
+                    <img
+                      src="./assets/img/ai-engineering.svg"
+                      alt="AI Engineering logo"
+                      loading="lazy"
+                      decoding="async"
+                      width="70"
+                      height="70"
+                      class="tech-logo-img"
+                      data-c-featured-tech-wrap=""
+                    />
+                  </div>
+                  <h3 class="tech-name" style="color: #7b6fde" data-c-featured-tech-wrap="">AI Engineering</h3>
+                  <a
+                    href="./ai-engineering/index.html"
+                    class="arrow-link arrow-link--light"
+                    data-c-bulfszpc=""
+                   target="_blank" rel="noopener">
+                    <span class="arrow-link-label" data-c-bulfszpc="">Learn more</span>
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M5 12h14M12 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                </article>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
       <div id="ourPromise" class="section-anchor">
         <section
           class="section"
           aria-labelledby="promise-heading"
-          style="background-color: var(--color-background)"
+          style="background-color: var(--color-muted)"
           data-c-pdbomyic=""
         >
           <div class="section-container" data-c-yfwknzfq="">
@@ -828,7 +1037,7 @@
                       </div>
                       <div class="icon-card-footer" data-c-icon-card="">
                         <a
-                          href="./services/index.html#howWeWork"
+                          href="modal:promise-expert-services"
                           class="arrow-link arrow-link--dark"
                           data-c-bulfszpc=""
                         >
@@ -882,7 +1091,7 @@
                       </div>
                       <div class="icon-card-footer" data-c-icon-card="">
                         <a
-                          href="./services/index.html#howWeWork"
+                          href="modal:promise-fixed-price"
                           class="arrow-link arrow-link--dark"
                           data-c-bulfszpc=""
                         >
@@ -936,7 +1145,7 @@
                       </div>
                       <div class="icon-card-footer" data-c-icon-card="">
                         <a
-                          href="./services/index.html#howWeWork"
+                          href="modal:promise-time-materials"
                           class="arrow-link arrow-link--dark"
                           data-c-bulfszpc=""
                         >
@@ -988,7 +1197,7 @@
                       </div>
                       <div class="icon-card-footer" data-c-icon-card="">
                         <a
-                          href="./services/index.html#howWeWork"
+                          href="modal:promise-team-augmentation"
                           class="arrow-link arrow-link--dark"
                           data-c-bulfszpc=""
                         >
@@ -1087,7 +1296,7 @@
                       </div>
                       <div class="icon-card-footer" data-c-icon-card="">
                         <a
-                          href="./services/index.html#howWeWork"
+                          href="modal:promise-agent-as-a-service"
                           class="arrow-link arrow-link--dark"
                           data-c-bulfszpc=""
                         >
@@ -1162,7 +1371,7 @@
                     <a href="https://people.bamboohr.com/careers" target="_blank" rel="noopener" class="btn-link btn-link--primary" data-c-rcfgfa7e="">
                       Join our team
                     </a>
-                    <a href="./people/index.html" class="btn-link btn-link--outline" data-c-rcfgfa7e="">
+                    <a href="./about/index.html#teamGrid" class="btn-link btn-link--outline" data-c-rcfgfa7e="">
                       Meet our team
                     </a>
                   </div>
@@ -1781,6 +1990,56 @@
       </div>
     </footer>
     <div data-modals="">
+      <dialog class="content-modal" data-modal-key="promise-expert-services" aria-labelledby="modal-promise-expert-services-title">
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+        <h2 id="modal-promise-expert-services-title" class="content-modal__title">Expert Services</h2>
+        <p class="content-modal__body">Specialized consulting engagements for critical technical initiatives including architecture, performance, security, platform migration, Bool's senior experts provide strategic guidance and hands-on expertise for your most challenging decisions.</p>
+        <ul class="content-modal__list">
+          <li>Access to senior-to-level expertise for critical technical decisions</li>
+          <li>Independent assessment and validation of your technology strategy</li>
+          <li>Accelerated resolution of complex technical challenges</li>
+        </ul>
+        <a href="./services/index.html#howWeWork" class="content-modal__cta">See how we work</a>
+      </dialog>
+      <dialog class="content-modal" data-modal-key="promise-fixed-price" aria-labelledby="modal-promise-fixed-price-title">
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+        <h2 id="modal-promise-fixed-price-title" class="content-modal__title">Fixed Price Project</h2>
+        <p class="content-modal__body">A defined scope, a fixed budget, and a predictable timeline. We assume full accountability for delivery so you can plan with confidence.</p>
+        <ul class="content-modal__list">
+          <li>Fixed budget with no cost surprises</li>
+          <li>Predictable timeline and defined deliverables</li>
+          <li>We assume project risk and accountability</li>
+        </ul>
+        <a href="./services/index.html#howWeWork" class="content-modal__cta">See how we work</a>
+      </dialog>
+      <dialog class="content-modal" data-modal-key="promise-time-materials" aria-labelledby="modal-promise-time-materials-title">
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+        <h2 id="modal-promise-time-materials-title" class="content-modal__title">Time &amp; Materials</h2>
+        <p class="content-modal__body">A dedicated team with the flexibility to shift direction as your priorities evolve. Bool provides ongoing technical mentorship to ensure quality throughout.</p>
+        <ul class="content-modal__list">
+          <li>Maximum flexibility to change direction and priorities</li>
+          <li>Dedicated mentor ensuring quality and best practices</li>
+          <li>Ability to start quickly without extensive upfront planning</li>
+        </ul>
+        <a href="./services/index.html#howWeWork" class="content-modal__cta">See how we work</a>
+      </dialog>
+      <dialog class="content-modal" data-modal-key="promise-team-augmentation" aria-labelledby="modal-promise-team-augmentation-title">
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+        <h2 id="modal-promise-team-augmentation-title" class="content-modal__title">Team Augmentation</h2>
+        <p class="content-modal__body">Bool professionals integrate directly into your existing team, giving you access to specialised skills without the overhead of permanent hiring.</p>
+        <ul class="content-modal__list">
+          <li>Access specialised skills without recruitment delays</li>
+          <li>Retain full control over tasks and priorities</li>
+          <li>Flexibility to convert to a permanent hire if desired</li>
+        </ul>
+        <a href="./services/index.html#howWeWork" class="content-modal__cta">See how we work</a>
+      </dialog>
+      <dialog class="content-modal" data-modal-key="promise-agent-as-a-service" aria-labelledby="modal-promise-agent-as-a-service-title">
+        <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
+        <h2 id="modal-promise-agent-as-a-service-title" class="content-modal__title">Agent-as-a-Service</h2>
+        <p class="content-modal__body">Copilots assist. Agents deliver. We architect multi-agent systems where specialized AI handles planning, execution, testing, and iteration end-to-end. Humans at the decision points. Not the bottlenecks.</p>
+        <a href="./services/index.html#serviceHighlights" class="content-modal__cta">See our services</a>
+      </dialog>
       <dialog class="content-modal" data-modal-key="example" aria-labelledby="modal-example-title">
         <button type="button" class="content-modal__close" data-modal-close="" aria-label="Close">×</button>
 
