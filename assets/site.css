@@ -14528,6 +14528,11 @@ video {
   .dark-page-hero[data-c-bv6iqeog] { min-block-size: auto; }
 }
 
+/* Services: use cases under each platform card (cards come from the Portfolio case studies) */
+.platform-use-cases { margin-block: 0 2.5rem; scroll-margin-block-start: 7rem; }
+.platform-use-cases .uc-header[data-c-uc-track] { margin-block-end: 2rem; }
+.platform-use-cases .uc-heading[data-c-uc-track] { margin: 0.5rem 0 0; font-size: clamp(1.5rem, 3vw, 2rem); }
+
 /* Latest insights on the homepage: the title stays left like the other sections; the cards are centred,
    equal in size, and wrap 3 / 2 / 1 per row (a card left alone on a row stays centred) */
 #insightsPreview .article-related__grid[data-c-article] { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; }
@@ -14543,3 +14548,45 @@ video {
 .news-card__more[data-c-article] { margin-block-start: auto; padding: 0.5rem 1.25rem 0; font-size: 0.875rem; font-weight: 700; color: var(--color-primary); }
 
 .article-related__all[data-c-article] { display: inline-block; margin-block-start: 2rem; font-weight: 700; color: var(--color-foreground); text-underline-offset: 3px; }
+
+/* Services: each platform (card + its use cases) is a band; bands alternate grey and white
+   across the full screen width so the four stacks read as separate blocks */
+.tech-cards[data-c-readinesscontent]:has(> .platform-stack) { gap: 0; }
+.platform-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding-block: 3.5rem;
+}
+.platform-stack:first-child { padding-block-start: 0; }
+.platform-stack:nth-child(even) {
+  background-color: var(--color-background);
+  box-shadow: 0 0 0 100vmax var(--color-background);
+  clip-path: inset(0 -100vmax);
+}
+.platform-stack:nth-child(even) .techCard[data-c-techcardpersonwrap] { background-color: var(--color-muted); }
+.platform-stack .platform-use-cases { margin-block-end: 0; }
+/* The last band (white) runs straight into "How we work", with no grey strip in between */
+#techStack > .section:has(.platform-stack:last-child:nth-child(even)) { padding-block-end: 0 !important; }
+/* Header at the top of each platform band: platform name, outside the card */
+.platform-stack__header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding-block-end: 1.25rem;
+  border-block-end: 1px solid var(--color-border);
+}
+.platform-stack__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--font-size-display);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--color-surface-dark);
+}
+/* Links to a platform card (e.g. the Power Platform item in the menu) land on the band header */
+.platform-stack .techCard[data-c-techcardpersonwrap] { scroll-margin-block-start: 13rem; }
+/* Use-case carousels: centred when every card fits (e.g. 3 AI cases); "safe" falls back to the
+   start when there are more cards, so the first card is never cut off */
+.platform-use-cases .uc-track[data-c-uc-track] { justify-content: safe center; }

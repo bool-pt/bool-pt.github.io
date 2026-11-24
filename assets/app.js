@@ -582,6 +582,13 @@
       }
       if (prev) prev.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
       if (next) next.addEventListener('click', function () { track.scrollBy({ left: step(), behavior: 'smooth' }); });
+      // Hide the arrows when every card already fits on screen
+      var nav = prev && prev.parentElement;
+      function updateNav() {
+        if (nav) nav.style.visibility = track.scrollWidth > track.clientWidth + 1 ? '' : 'hidden';
+      }
+      updateNav();
+      window.addEventListener('resize', updateNav);
     });
   }
 
