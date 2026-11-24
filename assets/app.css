@@ -95,6 +95,160 @@
   }
 }
 
+/* Header submenus: each menu item with sections shows a dropdown on hover, on keyboard focus,
+   or when its arrow button is pressed (touch screens). */
+.nav-item--has-sub {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.nav-sub-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-inline-start: -0.75rem;
+  padding: 0.375rem;
+  border: none;
+  background: none;
+  color: var(--color-on-dark);
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.nav-sub-toggle svg {
+  transition: transform 150ms;
+}
+
+.nav-sub-toggle[aria-expanded='true'] svg {
+  transform: rotate(180deg);
+}
+
+.nav-submenu {
+  position: absolute;
+  inset-block-start: calc(100% + 0.75rem);
+  inset-inline-start: 0.25rem;
+  z-index: 50;
+  min-inline-size: 14rem;
+  margin: 0;
+  padding: 0.5rem;
+  list-style: none;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: var(--color-surface-dark, #0a0a0a);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(4px);
+  transition: opacity 150ms, transform 150ms, visibility 0s 150ms;
+}
+
+/* Invisible bridge so the pointer can move from the menu item to the dropdown */
+.nav-submenu::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 100%;
+  block-size: 0.75rem;
+}
+
+.nav-item--has-sub:hover > .nav-submenu,
+.nav-item--has-sub:has(:focus-visible) > .nav-submenu,
+.nav-item--has-sub[data-open] > .nav-submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity 150ms, transform 150ms;
+}
+
+.nav-submenu a {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  color: var(--color-on-dark);
+  font-size: 0.9375rem;
+  line-height: 1.3;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 150ms;
+}
+
+.nav-submenu a:hover,
+.nav-submenu a:focus-visible {
+  background-color: var(--color-surface-charcoal);
+}
+
+.nav-submenu__child a {
+  padding-inline-start: 1.75rem;
+  font-size: 0.875rem;
+  opacity: 0.85;
+}
+
+/* The full menu needs about 1100px. Between 768px and 1179px (tablets, small laptops)
+   use the hamburger menu instead, so the logo and the CTA never leave the screen. */
+@media (min-width: 768px) and (max-width: 1179px) {
+  .nav-links[data-c-header-actions] {
+    display: none;
+  }
+  .header-actions[data-c-header-actions] > [data-island]:last-child {
+    display: block;
+  }
+}
+
+/* Mobile menu: sections open under each item */
+.mobile-nav-row {
+  display: flex;
+  align-items: center;
+}
+
+.mobile-nav-row > a {
+  flex: 1;
+}
+
+.mobile-nav-sub-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  border: none;
+  border-radius: 0.375rem;
+  background: none;
+  color: var(--color-on-dark);
+  cursor: pointer;
+}
+
+.mobile-nav-sub-toggle svg {
+  transition: transform 150ms;
+}
+
+.mobile-nav-sub-toggle[aria-expanded='true'] svg {
+  transform: rotate(180deg);
+}
+
+.mobile-nav-sublist {
+  list-style: none;
+  margin: 0 0 0.25rem;
+  padding: 0 0 0 0.75rem;
+}
+
+.mobile-nav-list .mobile-nav-sublist a {
+  font-weight: 400;
+  opacity: 0.85;
+}
+
+.mobile-nav-list .mobile-nav-sublist .nav-submenu__child a {
+  padding-inline-start: 1.75rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-submenu,
+  .nav-sub-toggle svg,
+  .mobile-nav-sub-toggle svg {
+    transition: none;
+  }
+}
+
 /* Content modals: <dialog class="content-modal"> opened from href="modal:<key>" */
 .content-modal {
   /* site.css resets every margin to 0, which pins the dialog to the top-left corner;
@@ -163,6 +317,17 @@
   line-height: 1.6;
   margin: 0;
   white-space: pre-line;
+}
+
+.content-modal__list {
+  margin: 1.25rem 0 0;
+  padding-inline-start: 1.25rem;
+  font-size: var(--font-size-body);
+  line-height: 1.6;
+}
+
+.content-modal__list li::marker {
+  color: var(--color-primary);
 }
 
 .content-modal__cta {
