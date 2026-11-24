@@ -14573,8 +14573,6 @@ video {
   display: flex;
   align-items: baseline;
   gap: 1rem;
-  padding-block-end: 1.25rem;
-  border-block-end: 1px solid var(--color-border);
 }
 .platform-stack__title {
   margin: 0;
