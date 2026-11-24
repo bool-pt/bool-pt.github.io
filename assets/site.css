@@ -14588,3 +14588,6 @@ video {
 /* Use-case carousels: centred when every card fits (e.g. 3 AI cases); "safe" falls back to the
    start when there are more cards, so the first card is never cut off */
 .platform-use-cases .uc-track[data-c-uc-track] { justify-content: safe center; }
+/* Services platform cards: "Available for consultation" on its own line, the two buttons side by side below */
+.platform-stack .techCardActions { gap: 1rem; }
+.platform-stack .techCardActions .techCardConsultation { flex-basis: 100%; }
