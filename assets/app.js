@@ -15,6 +15,7 @@
      8. Dialogs            content modals, insight and case-study modals, share
      9. Filter grids       Insights and Portfolio filters, flip cards
     10. Event calendar
+    11. Clean URLs        drop "index.html" from links and the address bar on a web server
    ------------------------------------------------------------------ */
 (function () {
   'use strict';
@@ -1186,7 +1187,29 @@
     });
   }
 
+  /* 11. Clean URLs -------------------------------------------------- */
+  // The HTML links point to ".../index.html" so the site also works when opened from disk.
+  // On a web server (bool.pt, localhost) "services/" opens the same page, so drop the
+  // "index.html" from the links and from the address bar: bool.pt/services/ instead of
+  // bool.pt/services/index.html. From disk (file://) nothing changes.
+  function initCleanUrls() {
+    if (location.protocol !== 'http:' && location.protocol !== 'https:') return;
+    var INDEX = /(^|\/)index\.html(?=$|[?#])/;
+    document.querySelectorAll('a[href]').forEach(function (a) {
+      var href = a.getAttribute('href');
+      if (/^[a-z][a-z0-9+.-]*:/i.test(href) || href.charAt(0) === '#') return; // external, mailto:, modal:, in-page
+      if (!INDEX.test(href)) return;
+      var clean = href.replace(INDEX, '$1');
+      if (clean === '' || clean.charAt(0) === '#' || clean.charAt(0) === '?') clean = './' + clean;
+      a.setAttribute('href', clean);
+    });
+    if (/\/index\.html$/.test(location.pathname) && window.history && history.replaceState) {
+      history.replaceState(history.state, '', location.pathname.replace(/index\.html$/, '') + location.search + location.hash);
+    }
+  }
+
   /* Boot ------------------------------------------------------------ */
+  initCleanUrls();
   initCookieBanner();
   initGoogleAnalytics();
   initLinkedInInsight();
