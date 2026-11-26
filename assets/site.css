@@ -14591,3 +14591,33 @@ video {
 /* Services platform cards: "Available for consultation" on its own line, the two buttons side by side below */
 .platform-stack .techCardActions { gap: 1rem; }
 .platform-stack .techCardActions .techCardConsultation { flex-basis: 100%; }
+
+/* Tablet fixes (768px to 1099px): no horizontal scroll */
+/* Split layouts: both columns may shrink below their content's natural width (contact form at 820px) */
+.split-layout-start[data-c-split-layout],
+.split-layout-end[data-c-split-layout] { min-inline-size: 0; }
+/* How we work: the 384px cards only fit side by side with the heading from 1100px; below that,
+   heading on top and the four cards in a 2x2 grid */
+@media (min-width: 768px) and (max-width: 1099px) {
+  .hwwGrid[data-c-hwwheading] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto;
+    block-size: auto;
+  }
+  .hwwHeading[data-c-hwwheading] { grid-column: 1 / -1; grid-row: auto; }
+  .hwwCard[data-c-hwwheading] { inline-size: auto; block-size: auto; }
+}
+/* Contact form fields fill their grid cell and may shrink with it (inputs have a natural minimum width) */
+.contact-form__field { min-inline-size: 0; }
+.contact-form__field > input,
+.contact-form__field > select,
+.contact-form__field > textarea { inline-size: 100%; min-inline-size: 0; }
+/* Contact form next to the address column (768px to 1279px): one field per row,
+   so the inputs keep a usable width */
+@media (min-width: 768px) and (max-width: 1279px) {
+  .split-layout-end[data-c-split-layout] .contact-form__grid { grid-template-columns: 1fr; }
+}
+/* Legal pages: wide tables scroll inside their own box on small screens */
+.legal-content table { display: block; max-inline-size: 100%; overflow-x: auto; }
+/* Portfolio: the slanted recognitions card pushed its corners past the screen edge on tablets */
+#portfolioStats > .section { overflow-x: clip; }
