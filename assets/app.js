@@ -8,13 +8,14 @@
      1. Config             public identifiers (safe to publish)
      2. Consent            cookie banner, stored decision, events
      3. Trackers           Google Analytics, LinkedIn Insight (consent-gated)
-     4. Mobile menu
+     4. Menus              mobile menu, header submenus
      5. Small behaviours   person cards, obfuscated e-mail links, use-case track
      6. Carousels          office carousel, hero carousel
      7. Forms              Cloudflare Turnstile, contact form, newsletter
      8. Dialogs            content modals, insight and case-study modals, share
      9. Filter grids       Insights and Portfolio filters, flip cards
     10. Event calendar
+    11. Clean URLs        drop "index.html" from links and the address bar on a web server
    ------------------------------------------------------------------ */
 (function () {
   'use strict';
@@ -388,20 +389,55 @@
     if (c && c.analytics && typeof window.gtag === 'function') window.gtag('event', name, params);
   }
 
-  /* 4. Mobile menu ------------------------------------------------- */
+  /* 4. Mobile menu and header submenus ------------------------------ */
   function initMobileNav() {
     var button = document.querySelector('[data-island="MobileNav"] button[aria-controls="mobile-nav"]');
     if (!button) return;
-    var desktopLinks = document.querySelectorAll('.site-header .nav-links a');
+    var desktopItems = document.querySelectorAll('.site-header .nav-links > li');
     var logo = document.querySelector('.site-header .site-logo');
     var logoImg = logo && logo.querySelector('img');
+    var chevron =
+      '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
 
     var overlay = el('div', { class: 'mobile-nav-overlay', onclick: closeMenu });
     var list = el('ul', { class: 'mobile-nav-list', role: 'list' });
-    desktopLinks.forEach(function (a) {
+    // Same items as the desktop menu; items with a submenu get an arrow that opens their sections
+    desktopItems.forEach(function (item, i) {
+      var a = item.querySelector(':scope > a');
+      if (!a) return;
       var link = el('a', { href: a.getAttribute('href'), text: a.textContent.trim(), onclick: closeMenu });
       if (a.getAttribute('aria-current')) link.setAttribute('aria-current', 'page');
-      list.appendChild(el('li', {}, [link]));
+      var subLinks = item.querySelectorAll('.nav-submenu li');
+      if (!subLinks.length) {
+        list.appendChild(el('li', {}, [link]));
+        return;
+      }
+      var subId = 'mobile-sub-' + i;
+      var sublist = el('ul', { class: 'mobile-nav-sublist', role: 'list', id: subId, hidden: '' });
+      subLinks.forEach(function (li) {
+        var s = li.querySelector('a');
+        var subLink = el('a', { href: s.getAttribute('href'), text: s.textContent.trim(), onclick: closeMenu });
+        // Technology pages open in a new tab, as in the desktop menu
+        if (s.getAttribute('target')) {
+          subLink.setAttribute('target', s.getAttribute('target'));
+          subLink.setAttribute('rel', s.getAttribute('rel') || 'noopener');
+        }
+        sublist.appendChild(el('li', { class: li.className }, [subLink]));
+      });
+      var toggle = el('button', {
+        type: 'button',
+        class: 'mobile-nav-sub-toggle',
+        'aria-expanded': 'false',
+        'aria-controls': subId,
+        'aria-label': a.textContent.trim() + ' sections',
+        html: chevron,
+        onclick: function () {
+          var open = toggle.getAttribute('aria-expanded') !== 'true';
+          toggle.setAttribute('aria-expanded', String(open));
+          sublist.hidden = !open;
+        },
+      });
+      list.appendChild(el('li', {}, [el('div', { class: 'mobile-nav-row' }, [link, toggle]), sublist]));
     });
     var panel = el(
       'aside',
@@ -450,6 +486,42 @@
         closeMenu();
         button.focus();
       }
+    });
+  }
+
+  // Header submenus on desktop: hover and keyboard focus are handled in app.css;
+  // the arrow button opens and closes them on touch screens.
+  function initSubmenus() {
+    var items = document.querySelectorAll('.site-header .nav-item--has-sub');
+    if (!items.length) return;
+    function closeAll(except) {
+      items.forEach(function (item) {
+        if (item === except) return;
+        item.removeAttribute('data-open');
+        var t = item.querySelector('.nav-sub-toggle');
+        if (t) t.setAttribute('aria-expanded', 'false');
+      });
+    }
+    items.forEach(function (item) {
+      var toggle = item.querySelector('.nav-sub-toggle');
+      if (!toggle) return;
+      toggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var open = !item.hasAttribute('data-open');
+        closeAll(item);
+        if (open) item.setAttribute('data-open', '');
+        else item.removeAttribute('data-open');
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+    });
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.nav-item--has-sub')) closeAll();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      var open = document.querySelector('.site-header .nav-item--has-sub[data-open]');
+      closeAll();
+      if (open) open.querySelector('.nav-sub-toggle').focus();
     });
   }
 
@@ -511,6 +583,13 @@
       }
       if (prev) prev.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
       if (next) next.addEventListener('click', function () { track.scrollBy({ left: step(), behavior: 'smooth' }); });
+      // Hide the arrows when every card already fits on screen
+      var nav = prev && prev.parentElement;
+      function updateNav() {
+        if (nav) nav.style.visibility = track.scrollWidth > track.clientWidth + 1 ? '' : 'hidden';
+      }
+      updateNav();
+      window.addEventListener('resize', updateNav);
     });
   }
 
@@ -1108,11 +1187,34 @@
     });
   }
 
+  /* 11. Clean URLs -------------------------------------------------- */
+  // The HTML links point to ".../index.html" so the site also works when opened from disk.
+  // On a web server (bool.pt, localhost) "services/" opens the same page, so drop the
+  // "index.html" from the links and from the address bar: bool.pt/services/ instead of
+  // bool.pt/services/index.html. From disk (file://) nothing changes.
+  function initCleanUrls() {
+    if (location.protocol !== 'http:' && location.protocol !== 'https:') return;
+    var INDEX = /(^|\/)index\.html(?=$|[?#])/;
+    document.querySelectorAll('a[href]').forEach(function (a) {
+      var href = a.getAttribute('href');
+      if (/^[a-z][a-z0-9+.-]*:/i.test(href) || href.charAt(0) === '#') return; // external, mailto:, modal:, in-page
+      if (!INDEX.test(href)) return;
+      var clean = href.replace(INDEX, '$1');
+      if (clean === '' || clean.charAt(0) === '#' || clean.charAt(0) === '?') clean = './' + clean;
+      a.setAttribute('href', clean);
+    });
+    if (/\/index\.html$/.test(location.pathname) && window.history && history.replaceState) {
+      history.replaceState(history.state, '', location.pathname.replace(/index\.html$/, '') + location.search + location.hash);
+    }
+  }
+
   /* Boot ------------------------------------------------------------ */
+  initCleanUrls();
   initCookieBanner();
   initGoogleAnalytics();
   initLinkedInInsight();
   initMobileNav();
+  initSubmenus();
   initPersonCards();
   initObfuscatedLinks();
   initUseCaseTracks();
