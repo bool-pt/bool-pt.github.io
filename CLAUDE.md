@@ -20,7 +20,7 @@ assets/img/             Imagens. Nomes em minúsculas com hífens
 assets/fonts/           Fontes WOFF2 do site
 docs/                   PDFs públicos
 og/default.png          Imagem de partilha nas redes sociais
-favicon.svg, favicon.png, apple-touch-icon.png, robots.txt, CNAME
+favicon.svg, favicon.png, apple-touch-icon.png, robots.txt, sitemap.xml, CNAME
 ```
 
 ## Regras
@@ -56,13 +56,14 @@ Guardar em `assets/img/`, nome em minúsculas e com hífens, já otimizadas: Web
 
 ### Novo artigo, nova página
 
-Para uma página nova, copiar a pasta de uma página parecida, mudar o conteúdo, o `<title>`, a `meta description`, o `canonical` e as meta tags Open Graph, e acrescentar o link onde fizer sentido.
+Para uma página nova, copiar a pasta de uma página parecida, mudar o conteúdo, o `<title>`, a `meta description`, o `canonical` e as meta tags Open Graph, e acrescentar o link onde fizer sentido. Se a página for pública, acrescentá-la também ao `sitemap.xml` (o `robots.txt` aponta para ele). Ficam fora do sitemap a 404, as páginas escondidas (Events, Careers) e as landing pages de campanha em `lp/`.
 
 Cada artigo da área Insights é uma página própria em `blog/<slug>/index.html` (slug em inglês, minúsculas e hífens), feita a partir de um artigo existente. O texto vem do artigo publicado no LinkedIn da Bool, sem alterações. Ao publicar um artigo novo, atualizar também:
 
 1. a grelha em `blog/index.html` (secção `knowledgeCenter`): um cartão novo no topo, os artigos ficam do mais recente para o mais antigo;
 2. a secção `insightsPreview` da homepage (`index.html`): mostra sempre os 3 artigos mais recentes, por isso o novo entra em primeiro e o mais antigo dos três sai;
-3. os "Related insights" de 2 ou 3 artigos do mesmo tema, se fizer sentido.
+3. os "Related insights" de 2 ou 3 artigos do mesmo tema, se fizer sentido;
+4. o `sitemap.xml`: uma linha `<url>` nova com o endereço `https://bool.pt/blog/<slug>/` e a data do dia em `<lastmod>`.
 
 A capa de cada artigo é única: não repetir uma imagem já usada noutra página do site.
 
