@@ -1,0 +1,36 @@
+# Bool
+
+> Bool is a Portuguese software consultancy founded in 2013 and part of the Code for All_ Group. It delivers AI-Augmented Development: enterprise software, AI agents and AI applications built by senior teams with governance by design. Bool is an OutSystems Gold Partner (since 2019), a Mendix Official Partner and part of the Claude Partner Network.
+
+Key facts:
+
+- Founded in 2013, part of the Code for All_ Group
+- 150+ team members, 300+ projects delivered, 750+ certifications
+- Offices in Lisbon, Porto, Azores and Castelo Branco (Portugal); clients across Europe
+- Head office: R. do Centro Cultural 27A, 1700-106 Lisboa, Portugal
+- Contact: info@bool.pt
+
+## Services
+
+- [Services](https://bool.pt/services/): overview of what Bool delivers, how it works and the platforms it uses
+- [AI Engineering](https://bool.pt/ai-engineering/): design, build and governance of AI agents and AI applications in production
+- [OutSystems](https://bool.pt/outsystems/): AI-Augmented Development on OutSystems and ODC, modernization, certified teams and training
+- [Mendix](https://bool.pt/mendix/): AI-Augmented Development on Mendix, expert services, training and enterprise delivery
+
+## Company
+
+- [About](https://bool.pt/about/): who Bool is, leadership and offices
+- [People](https://bool.pt/people/): culture and team
+- [Portfolio](https://bool.pt/portfolio/): client case studies by industry
+- [Contacts](https://bool.pt/contacts/): how to reach Bool
+
+## Insights
+
+- [Insights](https://bool.pt/blog/): articles on AI, low-code and software delivery
+- [The technical debt hiding in a 10-year-old OutSystems factory](https://bool.pt/blog/technical-debt-10-year-old-outsystems-factory/)
+- [Writing the test was never the hard part](https://bool.pt/blog/writing-the-test-was-never-the-hard-part/)
+- [Does the contract cover it? AI scope comparison with Mendix](https://bool.pt/blog/ai-assisted-scope-comparison-mendix/)
+- [A new kind of AI model, running by Wednesday](https://bool.pt/blog/new-ai-model-running-by-wednesday/)
+- [ONE 2026: OutSystems bets on the agentic era](https://bool.pt/blog/outsystems-one-2026-agentic-era/)
+- [Low-code gave us speed. AI is taking us further, faster.](https://bool.pt/blog/low-code-gave-us-speed-ai-takes-us-further/)
+- [Adding AI to your low-code stack: where to start](https://bool.pt/blog/adding-ai-to-your-low-code-stack/)
